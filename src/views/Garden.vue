@@ -56,53 +56,11 @@
         </div>
       </div>
 
-      <!-- 게임 스타일 스테이터스 바 -->
-      <div class="status-bar" :class="{ expanded: isStatsExpanded }">
-        <!-- 축소된 상태 -->
-        <div class="status-compact" @click="toggleStats" v-if="!isStatsExpanded">
-          <button class="month-nav" @click.stop="changeMonth(-1)">◀</button>
-          <div class="month-display" @click.stop="openDatePicker">{{ currentYear }}년 {{ currentMonth }}월</div>
-          <button class="month-nav" @click.stop="changeMonth(1)">▶</button>
-          <div class="quick-stats">
-            <div class="quick-stat" v-for="emotion in topEmotions" :key="emotion.name">
-              <span class="quick-stat-icon">{{ emotion.icon }}</span>
-              <span class="quick-stat-count">{{ emotion.count }}</span>
-            </div>
-          </div>
-          <button class="expand-btn">▲</button>
-        </div>
-
-        <!-- 확장된 상태 -->
-        <div class="status-expanded" v-if="isStatsExpanded">
-          <div class="stats-header-expanded" @click="toggleStats">
-            <button class="month-nav" @click.stop="changeMonth(-1)">◀</button>
-            <div class="month-display-large" @click.stop="openDatePicker">{{ currentYear }}년 {{ currentMonth }}월 감정 통계</div>
-            <button class="month-nav" @click.stop="changeMonth(1)">▶</button>
-            <button class="collapse-btn">▼</button>
-          </div>
-          <div class="stats-grid-expanded">
-            <div class="stat-card stat-card-joy">
-              <div class="stat-icon">😊</div>
-              <div class="stat-name">기쁨</div>
-              <div class="stat-count">1일</div>
-            </div>
-            <div class="stat-card stat-card-peace">
-              <div class="stat-icon">😌</div>
-              <div class="stat-name">평온</div>
-              <div class="stat-count">2일</div>
-            </div>
-            <div class="stat-card stat-card-love">
-              <div class="stat-icon">❤️</div>
-              <div class="stat-name">사랑</div>
-              <div class="stat-count">3일</div>
-            </div>
-            <div class="stat-card stat-card-hope">
-              <div class="stat-icon">🌟</div>
-              <div class="stat-name">희망</div>
-              <div class="stat-count">4일</div>
-            </div>
-          </div>
-        </div>
+      <!-- 월 선택 바 (하단 고정) -->
+      <div class="month-selector-bar">
+        <button class="month-nav" @click="changeMonth(-1)">◀</button>
+        <div class="month-display" @click="openDatePicker">{{ currentYear }}년 {{ currentMonth }}월</div>
+        <button class="month-nav" @click="changeMonth(1)">▶</button>
       </div>
     </div>
 
@@ -135,15 +93,16 @@
           <button class="close-btn" @click="closeWriteModal">&times;</button>
         </div>
         <div class="modal-body">
-          <form class="diary-form" @submit.prevent="saveDiary">
+          <form class="diary-form" @submit.prevent>
             <textarea
               v-model="diaryContent"
               placeholder="오늘은 어떤 하루였나요?&#10;당신의 이야기를 들려주세요...&#10;AI가 당신의 감정을 분석하여 어울리는 꽃을 심어드립니다 🌸"
               required
             ></textarea>
             <div class="flex justify-end gap-3 mt-4">
-              <button type="button" class="px-6 py-2 text-gray-600 hover:text-gray-800" @click="closeWriteModal">취소</button>
-              <button type="submit" class="save-btn">저장하기</button>
+              <button type="button" class="cancel-btn" @click="closeWriteModal">취소</button>
+              <button type="button" class="save-btn test-btn" @click="saveDiary(true)">테스트 (랜덤)</button>
+              <button type="button" class="save-btn" @click="saveDiary(false)">AI 분석</button>
             </div>
           </form>
         </div>
@@ -239,21 +198,12 @@ const alertIcon = ref('🌸')
 // const selectedEmotion = ref('기쁨') // AI 감정 분석으로 대체됨
 const currentYear = ref(new Date().getFullYear())
 const currentMonth = ref(12)
-const isStatsExpanded = ref(false)
 const showDatePicker = ref(false)
 const selectedYear = ref(new Date().getFullYear())
 const selectedMonth = ref(12)
 
-// 일기 데이터 - 이제 감정 코드는 영어(JOY, PEACE 등)로 저장됨
-const diaryData = ref({
-  1: { date: '12월 1일', emotion: 'JOY', content: '오늘은 정말 좋은 일이 있었다! 오랜만에 친구들을 만나서 맛있는 음식도 먹고 이야기도 많이 나눴다.' },
-  2: { date: '12월 2일', emotion: 'PEACE', content: '조용한 하루를 보냈다. 집에서 책을 읽으며 편안한 시간을 가졌다.' },
-  3: { date: '12월 3일', emotion: 'LOVE', content: '가족들과 함께 저녁을 먹었다. 함께하는 시간이 얼마나 소중한지 느낀다.' },
-  4: { date: '12월 4일', emotion: 'HOPE', content: '새로운 프로젝트를 시작했다. 앞으로 어떻게 될지 기대가 된다.' },
-  5: { date: '12월 5일', emotion: 'GRATITUDE', content: '예상치 못한 도움을 받았다. 작은 친절이지만 정말 감사했다.' },
-  6: { date: '12월 6일', emotion: 'HAPPINESS', content: '새로운 아이디어가 떠올라서 밤늦게까지 작업했다.' },
-  7: { date: '12월 7일', emotion: 'EXCITEMENT', content: '길을 걷다가 예쁜 꽃을 발견했다. 작은 것들에 감동하는 내 모습이 좋았다.' }
-})
+// 일기 데이터 - API에서 로드됨
+const diaryData = ref({})
 
 // Computed
 const currentDiary = computed(() => {
@@ -261,15 +211,7 @@ const currentDiary = computed(() => {
 })
 
 const writeModalDate = computed(() => {
-  return currentDay.value ? `12월 ${currentDay.value}일` : '오늘의 일기'
-})
-
-const topEmotions = computed(() => {
-  return [
-    { icon: '😊', name: '기쁨', count: 1 },
-    { icon: '😌', name: '평온', count: 2 },
-    { icon: '❤️', name: '사랑', count: 3 }
-  ]
+  return currentDay.value ? `${currentMonth.value}월 ${currentDay.value}일` : '오늘의 일기'
 })
 
 const yearOptions = computed(() => {
@@ -280,6 +222,36 @@ const yearOptions = computed(() => {
   }
   return years
 })
+
+// 월별 일기 목록 로드
+const loadMonthlyDiaries = async () => {
+  try {
+    const yearMonth = `${currentYear.value}-${String(currentMonth.value).padStart(2, '0')}`
+    const response = await diaryApi.getDiaries(yearMonth)
+
+    console.log('월별 일기 목록:', response)
+
+    // 일기 데이터 초기화 후 새로 채우기
+    diaryData.value = {}
+
+    response.diaries.forEach(diary => {
+      const day = new Date(diary.date).getDate()
+      diaryData.value[day] = {
+        id: diary.id,
+        date: `${currentMonth.value}월 ${day}일`,
+        emotion: diary.coreEmotion,
+        content: diary.content,
+        summary: diary.summary,
+        flower: diary.flower,
+        floriography: diary.floriography
+      }
+    })
+  } catch (error) {
+    console.error('월별 일기 로드 에러:', error)
+    // 에러 시 빈 데이터로 초기화
+    diaryData.value = {}
+  }
+}
 
 // 월 변경
 const changeMonth = (delta) => {
@@ -292,11 +264,9 @@ const changeMonth = (delta) => {
     currentMonth.value = 1
     currentYear.value += 1
   }
-}
 
-// 통계 토글
-const toggleStats = () => {
-  isStatsExpanded.value = !isStatsExpanded.value
+  // 월이 변경되면 일기 목록 다시 로드
+  loadMonthlyDiaries()
 }
 
 // 날짜 선택 모달
@@ -322,6 +292,9 @@ const confirmDate = () => {
   currentYear.value = selectedYear.value
   currentMonth.value = selectedMonth.value
   closeDatePicker()
+
+  // 날짜가 변경되면 일기 목록 다시 로드
+  loadMonthlyDiaries()
 }
 
 // 심기 시작 (애니메이션 + 모달)
@@ -350,40 +323,47 @@ const closeWriteModal = () => {
 }
 
 // 일기 저장
-const saveDiary = async () => {
+const saveDiary = async (isTest = true) => {
   if (!currentDay.value) return
+  if (!diaryContent.value.trim()) {
+    showCustomAlert('일기 내용을 입력해주세요!', '📝')
+    return
+  }
 
   console.log(`${currentDay.value}일 일기 저장:`, diaryContent.value)
+  console.log(`분석 모드: ${isTest ? '테스트(랜덤)' : 'Claude AI'}`)
 
   // 로딩 화면 표시
   showWriteModal.value = false
   showLoading.value = true
 
   try {
-    // AI API 호출하여 감정 분석
+    // 1. 일기 작성 API 호출
     const diaryDate = `${currentYear.value}-${String(currentMonth.value).padStart(2, '0')}-${String(currentDay.value).padStart(2, '0')}`
 
-    // diaryId는 임시로 현재 날짜를 사용 (실제로는 백엔드에서 생성된 ID 사용)
-    const diaryId = currentDay.value
+    const createdDiary = await diaryApi.createDiary({
+      diaryDate: diaryDate,
+      content: diaryContent.value
+    })
 
-    const result = await diaryApi.analyzeDiary(diaryId, diaryContent.value, diaryDate)
+    console.log('일기 생성 성공:', createdDiary)
 
-    // API 응답 구조:
-    // {
-    //   summary: "일기 요약",
-    //   emotions: [{emotion: "JOY", percent: 60}, ...],
-    //   coreEmotion: "JOY",
-    //   reason: "선택 이유",
-    //   flower: "해바라기",
-    //   floriography: "당신을 보면 행복해요"
-    // }
+    // 2. 감정 분석 API 호출 (테스트 or Claude AI)
+    const analyzedDiary = isTest
+      ? await diaryApi.analyzeDiaryTest(createdDiary.diaryId)
+      : await diaryApi.analyzeDiary(createdDiary.diaryId)
 
+    console.log('감정 분석 결과:', analyzedDiary)
+
+    // 3. 화면에 표시
     diaryData.value[currentDay.value] = {
+      id: analyzedDiary.id,
       date: `${currentMonth.value}월 ${currentDay.value}일`,
-      emotion: result.coreEmotion, // 영어 코드 (JOY, PEACE 등)
-      content: diaryContent.value,
-      summary: result.summary,
-      emotions: result.emotions
+      emotion: analyzedDiary.coreEmotion, // 영어 코드 (JOY, PEACE 등)
+      content: analyzedDiary.content,
+      summary: analyzedDiary.summary,
+      flower: analyzedDiary.flower,
+      floriography: analyzedDiary.floriography
     }
 
     showLoading.value = false
@@ -393,15 +373,7 @@ const saveDiary = async () => {
   } catch (error) {
     console.error('일기 저장 에러:', error)
     showLoading.value = false
-
-    // 에러 시에도 일기는 저장하되, 기본 감정으로 설정
-    diaryData.value[currentDay.value] = {
-      date: `${currentMonth.value}월 ${currentDay.value}일`,
-      emotion: 'PEACE', // 기본 감정
-      content: diaryContent.value
-    }
-
-    showCustomAlert('일기는 저장되었지만, 감정 분석에 실패했습니다.\n기본 감정(평온)으로 저장되었습니다.', '🌱')
+    showCustomAlert(`일기 저장에 실패했습니다.\n${error.message}`, '😢')
     currentDay.value = null
     diaryContent.value = ''
   }
@@ -458,6 +430,9 @@ const handleEscKey = (e) => {
 
 onMounted(() => {
   document.addEventListener('keydown', handleEscKey)
+
+  // 페이지 로드 시 현재 월의 일기 목록 로드
+  loadMonthlyDiaries()
 })
 
 onUnmounted(() => {
@@ -831,48 +806,39 @@ onUnmounted(() => {
   animation: plantTrowel 0.6s ease-out forwards;
 }
 
-/* 게임 스타일 스테이터스 바 */
-.status-bar {
+/* 월 선택 바 (하단 고정) */
+.month-selector-bar {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
   z-index: 100;
-  transition: all 0.3s ease;
-}
-
-/* 축소된 상태 */
-.status-compact {
   background: rgba(139, 111, 71, 0.95);
   backdrop-filter: blur(10px);
-  padding: 10px 15px;
+  padding: 16px 20px;
   display: flex;
   align-items: center;
-  gap: 12px;
+  justify-content: center;
+  gap: 30px;
   box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
-  border-top: 3px solid #ffd700;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.status-compact:hover {
-  background: rgba(139, 111, 71, 1);
+  border-top: 3px solid #E8CD8E;
 }
 
 .month-nav {
   background: rgba(255, 255, 255, 0.2);
   border: 2px solid rgba(255, 255, 255, 0.5);
   color: white;
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 14px;
+  font-size: 16px;
   cursor: pointer;
   transition: all 0.2s ease;
   flex-shrink: 0;
+  font-weight: bold;
 }
 
 .month-nav:hover {
@@ -881,179 +847,24 @@ onUnmounted(() => {
 }
 
 .month-display {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 800;
   color: white;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-  min-width: 100px;
+  min-width: 160px;
   text-align: center;
   flex-shrink: 0;
   cursor: pointer;
-  padding: 4px 8px;
-  border-radius: 8px;
+  padding: 8px 16px;
+  border-radius: 10px;
   transition: background 0.2s ease;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.2);
 }
 
 .month-display:hover {
-  background: rgba(255, 255, 255, 0.1);
-}
-
-.quick-stats {
-  display: flex;
-  gap: 12px;
-  flex: 1;
-  justify-content: center;
-  overflow-x: auto;
-}
-
-.quick-stat {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  background: rgba(255, 255, 255, 0.2);
-  padding: 4px 10px;
-  border-radius: 12px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-}
-
-.quick-stat-icon {
-  font-size: 20px;
-}
-
-.quick-stat-count {
-  font-size: 14px;
-  font-weight: 700;
-  color: white;
-}
-
-.expand-btn,
-.collapse-btn {
-  background: rgba(255, 215, 0, 0.3);
-  border: 2px solid rgba(255, 215, 0, 0.6);
-  color: white;
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  flex-shrink: 0;
-}
-
-.expand-btn:hover,
-.collapse-btn:hover {
-  background: rgba(255, 215, 0, 0.5);
-  transform: scale(1.1);
-}
-
-/* 확장된 상태 */
-.status-expanded {
-  background: rgba(139, 111, 71, 0.98);
-  backdrop-filter: blur(15px);
-  padding: 20px 15px;
-  box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.4);
-  border-top: 4px solid #ffd700;
-  max-height: 70vh;
-  overflow-y: auto;
-}
-
-.stats-header-expanded {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 20px;
-  cursor: pointer;
-}
-
-.month-display-large {
-  flex: 1;
-  font-size: 20px;
-  font-weight: 800;
-  color: white;
-  text-align: center;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-  cursor: pointer;
-  padding: 4px 8px;
-  border-radius: 8px;
-  transition: background 0.2s ease;
-}
-
-.month-display-large:hover {
-  background: rgba(255, 255, 255, 0.1);
-}
-
-.stats-grid-expanded {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-  max-width: 480px;
-  margin: 0 auto;
-}
-
-.stat-card {
-  background: white;
-  border-radius: 16px;
-  padding: 15px 10px;
-  text-align: center;
-  box-shadow:
-    0 4px 8px rgba(0,0,0,0.2),
-    inset 0 -3px 0 rgba(0,0,0,0.1);
-  border: 3px solid;
-  transition: all 0.3s ease;
-  cursor: pointer;
-}
-
-.stat-card:hover {
-  transform: translateY(-3px);
-  box-shadow:
-    0 6px 12px rgba(0,0,0,0.3),
-    inset 0 -3px 0 rgba(0,0,0,0.1);
-}
-
-.stat-card-joy {
-  border-color: #FFD700;
-  background: #FFF9E6;
-}
-
-.stat-card-peace {
-  border-color: #B8A8D8;
-  background: #F3E5FF;
-}
-
-.stat-card-love {
-  border-color: #FFB6C1;
-  background: #FFE4F0;
-}
-
-.stat-card-hope {
-  border-color: #87CEEB;
-  background: #E0ECFF;
-}
-
-.stat-icon {
-  font-size: 36px;
-  margin-bottom: 8px;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
-}
-
-.stat-name {
-  font-size: 16px;
-  font-weight: 700;
-  color: #333;
-  margin-bottom: 4px;
-}
-
-.stat-count {
-  font-size: 14px;
-  font-weight: 600;
-  color: #666;
-  background: rgba(255, 255, 255, 0.7);
-  padding: 4px 12px;
-  border-radius: 12px;
-  display: inline-block;
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
 }
 
 /* 모달 스타일 */
@@ -1270,23 +1081,51 @@ onUnmounted(() => {
   font-size: 18px;
 }
 
+.cancel-btn {
+  font-family: 'LeeSeoyun', cursive;
+  background: transparent;
+  color: #8B7355;
+  padding: 8px 16px;
+  border: 2px solid #E8CD8E;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cancel-btn:hover {
+  background: #FFF9E6;
+  border-color: #D4B87A;
+  transform: translateY(-1px);
+}
+
 .save-btn {
   background: #8B6F47;
   color: white;
-  padding: 12px 28px;
+  padding: 8px 16px;
   border: none;
-  border-radius: 12px;
-  font-size: 18px;
+  border-radius: 8px;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
 .save-btn:hover {
   background: #6F5835;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0,0,0,0.25);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.25);
+}
+
+.test-btn {
+  background: #A68B6A;
+  border: 2px dashed #8B6F47;
+}
+
+.test-btn:hover {
+  background: #8B7355;
 }
 
 /* 날짜 선택 모달 */

@@ -44,28 +44,41 @@ apiClient.interceptors.response.use(
 );
 
 /**
- * 일기 감정 분석 요청
+ * 일기 감정 분석 요청 (테스트용 - 랜덤)
  * @param {number} diaryId - 일기 ID
- * @param {string} content - 일기 내용
- * @param {string} date - 일기 작성 날짜 (YYYY-MM-DD)
  * @returns {Promise} - 감정 분석 결과
  */
-export async function analyzeDiary(diaryId, content, date) {
+export async function analyzeDiaryTest(diaryId) {
   try {
-    const response = await apiClient.post(`/diaries/${diaryId}/analyze`, {
-      diaryContent: content,
-      diaryDate: date
-    });
+    const response = await apiClient.post(`/diaries/${diaryId}/analyze-test`);
     return response.data;
   } catch (error) {
     if (error.response?.status === 400) {
-      // 입력 값 검증 실패
       throw new Error('일기 내용이 너무 길거나 잘못되었습니다.');
     } else if (error.response?.status === 429) {
-      // Rate Limit
       throw new Error('너무 많은 요청을 보냈습니다. 잠시 후 다시 시도해주세요.');
     } else if (error.response?.status === 500) {
-      // AI 분석 실패
+      throw new Error('감정 분석에 실패했습니다. 다시 시도해주세요.');
+    }
+    throw new Error('일기 분석 중 문제가 발생했습니다.');
+  }
+}
+
+/**
+ * 일기 감정 분석 요청 (Claude AI)
+ * @param {number} diaryId - 일기 ID
+ * @returns {Promise} - 감정 분석 결과
+ */
+export async function analyzeDiary(diaryId) {
+  try {
+    const response = await apiClient.post(`/diaries/${diaryId}/analyze`);
+    return response.data;
+  } catch (error) {
+    if (error.response?.status === 400) {
+      throw new Error('일기 내용이 너무 길거나 잘못되었습니다.');
+    } else if (error.response?.status === 429) {
+      throw new Error('너무 많은 요청을 보냈습니다. 잠시 후 다시 시도해주세요.');
+    } else if (error.response?.status === 500) {
       throw new Error('감정 분석에 실패했습니다. 다시 시도해주세요.');
     }
     throw new Error('일기 분석 중 문제가 발생했습니다.');
@@ -110,7 +123,7 @@ export async function getDiaryDetail(diaryId) {
 
 /**
  * 일기 작성
- * @param {object} diaryData - 일기 데이터
+ * @param {object} diaryData - 일기 데이터 { diaryDate: 'YYYY-MM-DD', content: '일기 내용' }
  * @returns {Promise} - 생성된 일기 정보
  */
 export async function createDiary(diaryData) {
@@ -122,6 +135,23 @@ export async function createDiary(diaryData) {
       throw new Error('일기 내용이 올바르지 않습니다.');
     }
     throw new Error('일기 작성 중 문제가 발생했습니다.');
+  }
+}
+
+/**
+ * 특정 날짜 일기 조회
+ * @param {string} date - 날짜 (YYYY-MM-DD)
+ * @returns {Promise} - 일기 정보
+ */
+export async function getDiaryByDate(date) {
+  try {
+    const response = await apiClient.get(`/diaries/date/${date}`);
+    return response.data;
+  } catch (error) {
+    if (error.response?.status === 404) {
+      return null; // 일기가 없으면 null 반환
+    }
+    throw new Error('일기를 불러오는 중 문제가 발생했습니다.');
   }
 }
 
@@ -162,8 +192,10 @@ export async function deleteDiary(diaryId) {
 
 export default {
   analyzeDiary,
+  analyzeDiaryTest,
   getDiaries,
   getDiaryDetail,
+  getDiaryByDate,
   createDiary,
   updateDiary,
   deleteDiary
