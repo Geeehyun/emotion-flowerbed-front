@@ -36,7 +36,7 @@
                       <div class="tooltip-flower-name">{{ getFlowerInfo(diaryData[day].emotion).name }}</div>
                       <div class="tooltip-meaning">"{{ getFlowerInfo(diaryData[day].emotion).meaning }}"</div>
                       <div class="tooltip-date">{{ diaryData[day].date }}</div>
-                      <div class="tooltip-emotion">{{ diaryData[day].emotion }}</div>
+                      <div class="tooltip-emotion">{{ getEmotionName(diaryData[day].emotion) }}</div>
                     </div>
                   </div>
                 </div>
@@ -113,7 +113,7 @@
           <div>
             <h2 class="text-2xl font-bold text-gray-800">{{ currentDiary?.date }}</h2>
             <p class="text-sm text-gray-500 mt-1" v-if="currentDiary">
-              {{ getFlowerInfo(currentDiary.emotion).name }} · {{ currentDiary.emotion }}
+              {{ getFlowerInfo(currentDiary.emotion).name }} · {{ getEmotionName(currentDiary.emotion) }}
             </p>
           </div>
           <button class="close-btn" @click="closeDiaryModal">&times;</button>
@@ -224,6 +224,8 @@
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { getFlowerImage, getFlowerInfo, getEmotionName, EMOTION_KR_MAP } from '../utils/flowerMapper.js'
+import * as diaryApi from '../services/diaryApi.js'
 
 // 상태 관리
 const currentDay = ref(null)
@@ -242,56 +244,16 @@ const showDatePicker = ref(false)
 const selectedYear = ref(new Date().getFullYear())
 const selectedMonth = ref(12)
 
-// 감정-꽃 매핑 데이터
-const emotionFlowerMap = {
-  '기쁨': { name: '해바라기', meaning: '당신을 보면 행복해요', image: 'sunflower.png', icon: '😊' },
-  '행복': { name: '코스모스', meaning: '평화로운 사랑', image: 'cosmos.png', icon: '😄' },
-  '감사': { name: '핑크 장미', meaning: '감사, 존경', image: 'pink-rose.png', icon: '🙏' },
-  '설렘': { name: '프리지아', meaning: '순수한 마음', image: 'freesia.png', icon: '💗' },
-  '평온': { name: '은방울꽃', meaning: '행복의 재림', image: 'lily-valley.png', icon: '😌' },
-  '성취감': { name: '노란 튤립', meaning: '성공, 명성', image: 'yellow-tulip.png', icon: '🏆' },
-  '사랑': { name: '빨간 장미', meaning: '사랑, 애정', image: 'red-rose.png', icon: '❤️' },
-  '희망': { name: '데이지', meaning: '희망, 순수', image: 'daisy.png', icon: '🌟' },
-  '활력': { name: '거베라', meaning: '희망, 도전', image: 'gerbera.png', icon: '⚡' },
-  '재미': { name: '스위트피', meaning: '즐거운 추억', image: 'sweet-pea.png', icon: '😆' },
-  '슬픔': { name: '파란 수국', meaning: '진심, 이해', image: 'blue-hydrangea.png', icon: '😢' },
-  '외로움': { name: '물망초', meaning: '나를 잊지 말아요', image: 'forget-me-not.png', icon: '😔' },
-  '불안': { name: '라벤더', meaning: '침묵, 의심', image: 'lavender.png', icon: '😰' },
-  '분노': { name: '노란 카네이션', meaning: '경멸, 거절', image: 'yellow-carnation.png', icon: '😠' },
-  '피곤': { name: '민트', meaning: '휴식, 상쾌함', image: 'mint.png', icon: '😫' },
-  '후회': { name: '보라색 팬지', meaning: '생각, 추억', image: 'purple-pansy.png', icon: '😞' },
-  '무기력': { name: '백합', meaning: '순수, 재생', image: 'lily.png', icon: '😶' },
-  '혼란': { name: '아네모네', meaning: '기대, 진실', image: 'anemone.png', icon: '😵' },
-  '실망': { name: '노란 수선화', meaning: '불확실한 사랑', image: 'yellow-daffodil.png', icon: '😞' },
-  '지루함': { name: '흰 카모마일', meaning: '역경 속의 평온', image: 'white-chamomile.png', icon: '😑' }
-}
-
-// 일기 데이터
+// 일기 데이터 - 이제 감정 코드는 영어(JOY, PEACE 등)로 저장됨
 const diaryData = ref({
-  1: { date: '12월 1일', emotion: '기쁨', content: '오늘은 정말 좋은 일이 있었다! 오랜만에 친구들을 만나서 맛있는 음식도 먹고 이야기도 많이 나눴다.' },
-  2: { date: '12월 2일', emotion: '평온', content: '조용한 하루를 보냈다. 집에서 책을 읽으며 편안한 시간을 가졌다.' },
-  3: { date: '12월 3일', emotion: '사랑', content: '가족들과 함께 저녁을 먹었다. 함께하는 시간이 얼마나 소중한지 느낀다.' },
-  4: { date: '12월 4일', emotion: '희망', content: '새로운 프로젝트를 시작했다. 앞으로 어떻게 될지 기대가 된다.' },
-  5: { date: '12월 5일', emotion: '감사', content: '예상치 못한 도움을 받았다. 작은 친절이지만 정말 감사했다.' },
-  6: { date: '12월 6일', emotion: '행복', content: '새로운 아이디어가 떠올라서 밤늦게까지 작업했다.' },
-  7: { date: '12월 7일', emotion: '설렘', content: '길을 걷다가 예쁜 꽃을 발견했다. 작은 것들에 감동하는 내 모습이 좋았다.' }
+  1: { date: '12월 1일', emotion: 'JOY', content: '오늘은 정말 좋은 일이 있었다! 오랜만에 친구들을 만나서 맛있는 음식도 먹고 이야기도 많이 나눴다.' },
+  2: { date: '12월 2일', emotion: 'PEACE', content: '조용한 하루를 보냈다. 집에서 책을 읽으며 편안한 시간을 가졌다.' },
+  3: { date: '12월 3일', emotion: 'LOVE', content: '가족들과 함께 저녁을 먹었다. 함께하는 시간이 얼마나 소중한지 느낀다.' },
+  4: { date: '12월 4일', emotion: 'HOPE', content: '새로운 프로젝트를 시작했다. 앞으로 어떻게 될지 기대가 된다.' },
+  5: { date: '12월 5일', emotion: 'GRATITUDE', content: '예상치 못한 도움을 받았다. 작은 친절이지만 정말 감사했다.' },
+  6: { date: '12월 6일', emotion: 'HAPPINESS', content: '새로운 아이디어가 떠올라서 밤늦게까지 작업했다.' },
+  7: { date: '12월 7일', emotion: 'EXCITEMENT', content: '길을 걷다가 예쁜 꽃을 발견했다. 작은 것들에 감동하는 내 모습이 좋았다.' }
 })
-
-// 감정에 따른 꽃 정보 가져오기
-const getFlowerInfo = (emotion) => {
-  return emotionFlowerMap[emotion] || { name: '알 수 없음', meaning: '분석 중', image: 'unknown.png', icon: '🌱' }
-}
-
-// 꽃 이미지 경로 가져오기 (없으면 unknown.png로 fallback)
-const getFlowerImage = (emotion) => {
-  const flower = getFlowerInfo(emotion)
-  try {
-    return new URL(`../assets/images/flowers/${flower.image}`, import.meta.url).href
-  } catch (error) {
-    // 이미지 파일이 없는 경우 unknown.png 사용
-    return new URL(`../assets/images/flowers/unknown.png`, import.meta.url).href
-  }
-}
 
 // Computed
 const currentDiary = computed(() => {
@@ -398,17 +360,30 @@ const saveDiary = async () => {
   showLoading.value = true
 
   try {
-    // TODO: AI API 호출하여 감정 분석
-    // const analyzedEmotion = await analyzeEmotionWithAI(diaryContent.value)
+    // AI API 호출하여 감정 분석
+    const diaryDate = `${currentYear.value}-${String(currentMonth.value).padStart(2, '0')}-${String(currentDay.value).padStart(2, '0')}`
 
-    // 임시 시뮬레이션 (2초 대기)
-    await new Promise(resolve => setTimeout(resolve, 2000))
-    const analyzedEmotion = '기쁨'
+    // diaryId는 임시로 현재 날짜를 사용 (실제로는 백엔드에서 생성된 ID 사용)
+    const diaryId = currentDay.value
+
+    const result = await diaryApi.analyzeDiary(diaryId, diaryContent.value, diaryDate)
+
+    // API 응답 구조:
+    // {
+    //   summary: "일기 요약",
+    //   emotions: [{emotion: "JOY", percent: 60}, ...],
+    //   coreEmotion: "JOY",
+    //   reason: "선택 이유",
+    //   flower: "해바라기",
+    //   floriography: "당신을 보면 행복해요"
+    // }
 
     diaryData.value[currentDay.value] = {
       date: `${currentMonth.value}월 ${currentDay.value}일`,
-      emotion: analyzedEmotion,
-      content: diaryContent.value
+      emotion: result.coreEmotion, // 영어 코드 (JOY, PEACE 등)
+      content: diaryContent.value,
+      summary: result.summary,
+      emotions: result.emotions
     }
 
     showLoading.value = false
@@ -416,8 +391,19 @@ const saveDiary = async () => {
     currentDay.value = null
     diaryContent.value = ''
   } catch (error) {
+    console.error('일기 저장 에러:', error)
     showLoading.value = false
-    showCustomAlert('일기 저장 중 오류가 발생했습니다.', '😢')
+
+    // 에러 시에도 일기는 저장하되, 기본 감정으로 설정
+    diaryData.value[currentDay.value] = {
+      date: `${currentMonth.value}월 ${currentDay.value}일`,
+      emotion: 'PEACE', // 기본 감정
+      content: diaryContent.value
+    }
+
+    showCustomAlert('일기는 저장되었지만, 감정 분석에 실패했습니다.\n기본 감정(평온)으로 저장되었습니다.', '🌱')
+    currentDay.value = null
+    diaryContent.value = ''
   }
 }
 
