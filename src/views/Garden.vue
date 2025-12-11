@@ -12,6 +12,24 @@
       <!-- 상단 타이틀 -->
       <div class="header-section">
         <h1 class="page-title">나의 감정 화단</h1>
+        <!-- 물뿌리개 버튼 -->
+        <button class="watering-can-btn" @click="startWatering" :class="{ watering: isWatering }" title="물주기">
+          <img src="../assets/images/waterting-can.png" alt="물주기" class="watering-can-icon" />
+        </button>
+      </div>
+
+      <!-- 물방울 효과 -->
+      <div class="water-drops-container">
+        <div
+          v-for="drop in waterDrops"
+          :key="drop.id"
+          class="water-drop"
+          :style="{
+            left: `${drop.left}%`,
+            animationDelay: `${drop.delay}s`,
+            animationDuration: `${drop.duration}s`
+          }"
+        >💧</div>
       </div>
 
       <!-- 화단 영역 -->
@@ -27,24 +45,31 @@
               <div class="grid-cell" v-if="diaryData[day]" :data-day="day">
                 <div class="flower relative" @click="openDiary(day)">
                   <img
-                    :src="getFlowerImage(diaryData[day].emotion)"
-                    :alt="getFlowerInfo(diaryData[day].emotion).name"
+                    :src="getFlowerImageUrl(day)"
+                    :alt="getFlowerName(day)"
                     class="flower-image"
                   >
                   <div class="tooltip">
                     <div class="tooltip-card">
-                      <div class="tooltip-flower-name">{{ getFlowerInfo(diaryData[day].emotion).name }}</div>
-                      <div class="tooltip-meaning">"{{ getFlowerInfo(diaryData[day].emotion).meaning }}"</div>
+                      <div class="tooltip-flower-name">{{ getFlowerName(day) }}</div>
+                      <div class="tooltip-meaning">"{{ getFlowerMeaning(day) }}"</div>
                       <div class="tooltip-date">{{ diaryData[day].date }}</div>
-                      <div class="tooltip-emotion">{{ getEmotionName(diaryData[day].emotion) }}</div>
+                      <div class="tooltip-emotion">{{ getEmotionNameKr(day) }}</div>
                     </div>
                   </div>
                 </div>
               </div>
               <!-- 빈 칸 -->
               <div class="grid-cell" v-else :data-day="day">
-                <div class="empty-slot" @click="startPlanting(day)">?</div>
-                <img src="../assets/images/trowel.png" alt="모종삽" class="trowel">
+                <div class="empty-slot" @click="startPlanting(day)">
+                  {{ day }}
+                  <!-- 날짜 툴팁 -->
+                  <div class="date-tooltip">
+                    <div class="date-tooltip-card">
+                      {{ currentMonth }}월 {{ day }}일
+                    </div>
+                  </div>
+                </div>
               </div>
             </template>
 
@@ -58,133 +83,120 @@
 
       <!-- 월 선택 바 (하단 고정) -->
       <div class="month-selector-bar">
+        <button class="encyclopedia-btn" @click="openEncyclopedia" title="감정 도감">
+          <BookOpenIcon class="w-6 h-6" />
+        </button>
         <button class="month-nav" @click="changeMonth(-1)">◀</button>
         <div class="month-display" @click="openDatePicker">{{ currentYear }}년 {{ currentMonth }}월</div>
         <button class="month-nav" @click="changeMonth(1)">▶</button>
+        <button class="write-diary-btn" @click="openWriteDiaryWithDatePicker" title="일기 작성">
+          <img src="../assets/images/trowel.png" alt="일기 작성" class="trowel-icon" />
+        </button>
       </div>
     </div>
 
     <!-- 일기 읽기 모달 -->
-    <div v-if="showDiaryModal" class="modal active" @click="handleModalBackgroundClick('diary', $event)">
-      <div class="modal-content">
-        <div class="modal-header">
-          <div>
-            <h2 class="text-2xl font-bold text-gray-800">{{ currentDiary?.date }}</h2>
-            <p class="text-sm text-gray-500 mt-1" v-if="currentDiary">
-              {{ getFlowerInfo(currentDiary.emotion).name }} · {{ getEmotionName(currentDiary.emotion) }}
-            </p>
-          </div>
-          <button class="close-btn" @click="closeDiaryModal">&times;</button>
-        </div>
-        <div class="modal-body">
-          <div class="diary-content">{{ currentDiary?.content }}</div>
-        </div>
-      </div>
-    </div>
+    <DiaryReadModal
+      v-model="showDiaryModal"
+      :diary="currentDiary"
+      :flower-detail="currentFlowerDetail"
+      :is-flipped="isFlipped"
+      :is-unanalyzed="isUnanalyzed"
+      :postit-positions="postitPositions"
+      :realistic-image="currentDiaryRealisticImage"
+      :get-emotion-color="getEmotionColor"
+      :all-emotions-data="allEmotionsData"
+      @close="closeDiaryModal"
+      @toggle-flip="toggleFlip"
+      @save-image="saveFlowerAsImage"
+      @reanalyze="reanalyzeDiary"
+      @reanalyze-test="reanalyzeDiaryTest"
+      @delete="deleteDiaryEntry"
+      @highlight-emotion="highlightEmotion"
+      @unhighlight-emotion="unhighlightEmotion"
+      @drag-start="startDrag"
+    />
+
 
     <!-- 일기 작성 모달 -->
-    <div v-if="showWriteModal" class="modal active" @click="handleModalBackgroundClick('write', $event)">
-      <div class="modal-content">
-        <div class="modal-header">
-          <div>
-            <h2 class="text-2xl font-bold text-gray-800">{{ writeModalDate }}</h2>
-            <p class="text-sm text-gray-500 mt-1">오늘 하루를 기록해보세요</p>
-          </div>
-          <button class="close-btn" @click="closeWriteModal">&times;</button>
-        </div>
-        <div class="modal-body">
-          <form class="diary-form" @submit.prevent>
-            <textarea
-              v-model="diaryContent"
-              placeholder="오늘은 어떤 하루였나요?&#10;당신의 이야기를 들려주세요...&#10;AI가 당신의 감정을 분석하여 어울리는 꽃을 심어드립니다 🌸"
-              required
-            ></textarea>
-            <div class="flex justify-end gap-3 mt-4">
-              <button type="button" class="cancel-btn" @click="closeWriteModal">취소</button>
-              <button type="button" class="save-btn test-btn" @click="saveDiary(true)">테스트 (랜덤)</button>
-              <button type="button" class="save-btn" @click="saveDiary(false)">AI 분석</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
+    <DiaryWriteModal
+      v-model="showWriteModal"
+      :date="writeModalDate"
+      v-model:content="diaryContent"
+      @close="closeWriteModal"
+      @save="saveDiary"
+    />
 
     <!-- AI 로딩 모달 -->
-    <div v-if="showLoading" class="modal active loading-modal">
-      <div class="loading-content">
-        <div class="loading-flower">🌱</div>
-        <div class="loading-text">AI가 당신의 감정을 분석하고 있어요...</div>
-        <div class="loading-spinner">
-          <div class="flower-grow"></div>
-        </div>
-      </div>
-    </div>
+    <LoadingModal v-model="showLoading" />
 
     <!-- 커스텀 알럿 모달 -->
-    <div v-if="showAlert" class="modal active alert-modal">
-      <div class="alert-content">
-        <div class="alert-icon">{{ alertIcon }}</div>
-        <div class="alert-message">{{ alertMessage }}</div>
-        <button class="alert-button" @click="closeAlert">확인</button>
-      </div>
-    </div>
+    <AlertModal
+      v-model="showAlert"
+      :message="alertMessage"
+      :icon="alertIcon"
+      @close="closeAlert"
+    />
 
-    <!-- 날짜 선택 모달 -->
-    <div v-if="showDatePicker" class="modal active" @click="handleModalBackgroundClick('date', $event)">
-      <div class="date-picker-content">
-        <div class="date-picker-header">
-          <h2 class="text-xl font-bold text-gray-800">날짜 선택</h2>
-          <button class="close-btn" @click="closeDatePicker">&times;</button>
-        </div>
-        <div class="date-picker-body">
-          <!-- 연도 선택 -->
-          <div class="date-section">
-            <label class="date-label">연도</label>
-            <div class="year-grid">
-              <button
-                v-for="year in yearOptions"
-                :key="year"
-                type="button"
-                class="year-btn"
-                :class="{ active: year === selectedYear }"
-                @click="selectYear(year)"
-              >
-                {{ year }}
-              </button>
-            </div>
-          </div>
+    <!-- 감정 도감 모달 -->
+    <EncyclopediaModal
+      v-model="showEncyclopedia"
+      :acquired-emotions="acquiredEmotions"
+      :all-emotions="allEmotionsData"
+      :selected-emotion="selectedEncyclopediaEmotion"
+      :get3d-image="get3dImageFromDetail"
+      :get-realistic-image="getRealisticImageFromDetail"
+      @close="closeEncyclopedia"
+      @select-emotion="selectEncyclopediaEmotion"
+    />
 
-          <!-- 월 선택 -->
-          <div class="date-section">
-            <label class="date-label">월</label>
-            <div class="month-grid">
-              <button
-                v-for="month in 12"
-                :key="month"
-                type="button"
-                class="month-btn"
-                :class="{ active: month === selectedMonth }"
-                @click="selectMonth(month)"
-              >
-                {{ month }}월
-              </button>
-            </div>
-          </div>
 
-          <!-- 확인 버튼 -->
-          <button class="confirm-date-btn" @click="confirmDate">
-            확인
-          </button>
-        </div>
-      </div>
-    </div>
+    <!-- 이미지 미리보기 모달 -->
+    <ImagePreviewModal
+      v-model="showImagePreview"
+      :image-url="previewImageUrl"
+      v-model:include-details="includeDetailsInCapture"
+      @close="closeImagePreview"
+      @download="downloadImage"
+      @update:include-details="recaptureImage"
+    />
+
+    <!-- 날짜 선택 모달 (모바일 친화적) -->
+    <DatePickerModal
+      v-model="showDatePicker"
+      :year="selectedYear"
+      :month="selectedMonth"
+      :day="selectedDay"
+      :is-write-mode="isWriteDiaryMode"
+      :days-in-month="daysInSelectedMonth"
+      @close="closeDatePicker"
+      @confirm="confirmDate"
+      @change-year="changeSelectedYear"
+      @change-month="changeSelectedMonth"
+      @select-day="selectDay"
+    />
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue'
-import { getFlowerImage, getFlowerInfo, getEmotionName, EMOTION_KR_MAP } from '../utils/flowerMapper.js'
+import { ref, computed, onMounted, onUnmounted, watch, nextTick } from 'vue'
+import { get3dImageFromDetail, getRealisticImageFromDetail, getEmotionData, UNKNOWN_EMOTION } from '../utils/flowerMapper.js'
 import * as diaryApi from '../services/diaryApi.js'
+import { Chart, ArcElement, Tooltip, Legend } from 'chart.js'
+import { ArrowPathIcon, XMarkIcon, PlusCircleIcon, ArrowDownTrayIcon, BookOpenIcon } from '@heroicons/vue/24/outline'
+import html2canvas from 'html2canvas'
+
+// 모달 컴포넌트 import
+import LoadingModal from '@/components/modals/LoadingModal.vue'
+import AlertModal from '@/components/modals/AlertModal.vue'
+import ImagePreviewModal from '@/components/modals/ImagePreviewModal.vue'
+import DiaryWriteModal from '@/components/modals/DiaryWriteModal.vue'
+import DatePickerModal from '@/components/modals/DatePickerModal.vue'
+import DiaryReadModal from '@/components/modals/DiaryReadModal.vue'
+import EncyclopediaModal from '@/components/modals/EncyclopediaModal.vue'
+
+// Chart.js 요소 등록
+Chart.register(ArcElement, Tooltip, Legend)
 
 // 상태 관리
 const currentDay = ref(null)
@@ -201,9 +213,225 @@ const currentMonth = ref(12)
 const showDatePicker = ref(false)
 const selectedYear = ref(new Date().getFullYear())
 const selectedMonth = ref(12)
+const selectedDay = ref(new Date().getDate())
+const isFlipped = ref(false) // 일기 모달 뒤집기 상태
+const isWriteDiaryMode = ref(false) // 일기 작성 버튼으로 날짜 선택 모드
+const isWatering = ref(false) // 물뿌리기 효과 상태
+const waterDrops = ref([]) // 물방울 배열
+const showEncyclopedia = ref(false) // 도감 모달 표시 상태
+const selectedEncyclopediaEmotion = ref(null) // 도감에서 선택한 감정
+const allEmotionsData = ref([]) // 전체 감정 데이터 (API에서 로드)
+const myEmotionsData = ref([]) // 내가 획득한 감정 데이터
+const showImagePreview = ref(false) // 이미지 미리보기 모달
+const previewImageUrl = ref('') // 미리보기 이미지 URL
+const includeDetailsInCapture = ref(false) // 포스트잇과 상세설명 포함 여부
+
+// 포스트잇 드래그 상태
+const postitPositions = ref({
+  name: {},
+  meaning: {}
+})
+const dragState = ref({
+  isDragging: false,
+  currentPostit: null,
+  startX: 0,
+  startY: 0,
+  initialLeft: 0,
+  initialRight: 0,
+  initialBottom: 0
+})
 
 // 일기 데이터 - API에서 로드됨
 const diaryData = ref({})
+
+// 현재 일기의 상세 꽃 정보
+const currentFlowerDetail = computed(() => {
+  return currentDiary.value?.flowerDetail || null
+})
+
+// 현재 일기의 realistic 이미지
+const currentDiaryRealisticImage = computed(() => {
+  if (!currentDiary.value) return ''
+
+  // flowerDetail이 있으면 사용
+  if (currentFlowerDetail.value) {
+    return getRealisticImageFromDetail(currentFlowerDetail.value.imageFileRealistic)
+  }
+
+  // emotion 코드로 API 데이터에서 찾기
+  if (currentDiary.value.emotion) {
+    const emotionData = getEmotionData(allEmotionsData.value, currentDiary.value.emotion)
+    if (emotionData) {
+      return getRealisticImageFromDetail(emotionData.imageFileRealistic)
+    }
+  }
+
+  return getRealisticImageFromDetail(UNKNOWN_EMOTION.imageFileRealistic)
+})
+
+// 분석 안된 일기인지 확인
+const isUnanalyzed = computed(() => {
+  return currentDiary.value && !currentDiary.value.emotion
+})
+
+// 획득한 감정 목록 (전체 기간 기준 - API 데이터)
+const acquiredEmotions = computed(() => {
+  const emotions = new Set()
+  myEmotionsData.value.forEach(item => {
+    // emotionCode는 flowerDetail 안에 있음
+    const code = item.flowerDetail?.emotionCode || item.emotion
+    if (code) {
+      emotions.add(code)
+    }
+  })
+  return emotions
+})
+
+// 모든 감정 목록 (API 데이터)
+const allEmotions = computed(() => {
+  return allEmotionsData.value.map(emotion => emotion.emotionCode)
+})
+
+// 특정 날짜의 일기에서 꽃 데이터 가져오기
+const getFlowerDataForDay = (day) => {
+  const diary = diaryData.value[day]
+  if (!diary) return UNKNOWN_EMOTION
+
+  // flowerDetail이 있으면 우선 사용
+  if (diary.flowerDetail) {
+    return diary.flowerDetail
+  }
+
+  // emotion 코드로 API 데이터에서 찾기
+  if (diary.emotion) {
+    const emotionData = getEmotionData(allEmotionsData.value, diary.emotion)
+    if (emotionData) return emotionData
+  }
+
+  return UNKNOWN_EMOTION
+}
+
+// 특정 날짜의 꽃 이미지 URL 가져오기
+const getFlowerImageUrl = (day) => {
+  const flowerData = getFlowerDataForDay(day)
+  return get3dImageFromDetail(flowerData.imageFile3d)
+}
+
+// 특정 날짜의 꽃 이름 가져오기
+const getFlowerName = (day) => {
+  const flowerData = getFlowerDataForDay(day)
+  return flowerData.flowerNameKr || '알 수 없음'
+}
+
+// 특정 날짜의 꽃말 가져오기
+const getFlowerMeaning = (day) => {
+  const flowerData = getFlowerDataForDay(day)
+  return flowerData.flowerMeaning || '감정을 분석할 수 없어요'
+}
+
+// 특정 날짜의 감정명 가져오기
+const getEmotionNameKr = (day) => {
+  const flowerData = getFlowerDataForDay(day)
+  return flowerData.emotionNameKr || '알 수 없음'
+}
+
+// Chart.js 관련
+const emotionChart = ref(null)
+let chartInstance = null
+
+// 감정별 색상 맵 (감정에 어울리는 색상)
+const EMOTION_COLOR_MAP = {
+  'JOY': '#FFD700',           // 금색
+  'HAPPINESS': '#FFB6C1',     // 연분홍
+  'GRATITUDE': '#FF69B4',     // 핫핑크
+  'EXCITEMENT': '#FFA07A',    // 라이트 새먼
+  'PEACE': '#98FB98',         // 연두색
+  'ACHIEVEMENT': '#FFD700',   // 노란색
+  'LOVE': '#FF0000',          // 빨간색
+  'HOPE': '#87CEEB',          // 스카이블루
+  'VITALITY': '#FF6347',      // 토마토
+  'FUN': '#FF69B4',           // 핑크
+  'SADNESS': '#4169E1',       // 로얄블루
+  'LONELINESS': '#6495ED',    // 콘플라워블루
+  'ANXIETY': '#9370DB',       // 미디엄퍼플
+  'ANGER': '#FFD700',         // 노란색
+  'FATIGUE': '#98D8C8',       // 민트
+  'REGRET': '#9370DB',        // 보라색
+  'LETHARGY': '#F8F8FF',      // 고스트화이트
+  'CONFUSION': '#FFC0CB',     // 연핑크
+  'DISAPPOINTMENT': '#FFD700', // 노란색
+  'BOREDOM': '#F0E68C'        // 카키
+}
+
+// 감정 색상 가져오기
+const getEmotionColor = (emotionCode) => {
+  return EMOTION_COLOR_MAP[emotionCode] || '#CCCCCC'
+}
+
+// 이미지 경로 생성 함수들은 flowerMapper.js에서 import하여 사용
+
+// 도넛 차트 생성
+const createEmotionChart = () => {
+  if (!emotionChart.value || !currentDiary.value?.emotions) return
+
+  // 이전 차트 인스턴스 제거
+  if (chartInstance) {
+    chartInstance.destroy()
+  }
+
+  // const ctx = emotionChart.value.getContext('2d')
+  const ctx = document.getElementById('myChart');
+  const emotions = currentDiary.value.emotions
+
+  chartInstance = new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels: emotions.map(e => {
+        const emotionData = getEmotionData(allEmotionsData.value, e.emotion)
+        return emotionData?.emotionNameKr || e.emotion
+      }),
+      datasets: [{
+        data: emotions.map(e => e.percent),
+        backgroundColor: emotions.map(e => getEmotionColor(e.emotion)),
+        borderColor: '#FFFFFF',
+        borderWidth: 2
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      plugins: {
+        legend: {
+          display: false // 커스텀 레전드 사용
+        },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              return `${context.label}: ${context.parsed}%`
+            }
+          },
+          backgroundColor: 'rgba(0, 0, 0, 0.8)',
+          titleColor: '#FFFFFF',
+          bodyColor: '#FFFFFF',
+          padding: 12,
+          cornerRadius: 8,
+          displayColors: true
+        }
+      }
+    }
+  })
+}
+
+// 감정 하이라이트
+const highlightEmotion = (emotionCode) => {
+  if (!chartInstance) return
+  // 차트 세그먼트에 호버 효과 추가 가능
+}
+
+const unhighlightEmotion = () => {
+  if (!chartInstance) return
+  // 차트 호버 효과 제거
+}
 
 // Computed
 const currentDiary = computed(() => {
@@ -221,6 +449,12 @@ const yearOptions = computed(() => {
     years.push(i)
   }
   return years
+})
+
+// 선택된 월의 일 수 계산
+const daysInSelectedMonth = computed(() => {
+  const days = new Date(selectedYear.value, selectedMonth.value, 0).getDate()
+  return Array.from({ length: days }, (_, i) => i + 1)
 })
 
 // 월별 일기 목록 로드
@@ -243,7 +477,10 @@ const loadMonthlyDiaries = async () => {
         content: diary.content,
         summary: diary.summary,
         flower: diary.flower,
-        floriography: diary.floriography
+        floriography: diary.floriography,
+        emotions: diary.emotions || [],
+        reason: diary.reason || '',
+        flowerDetail: diary.flowerDetail || null
       }
     })
   } catch (error) {
@@ -278,6 +515,7 @@ const openDatePicker = () => {
 
 const closeDatePicker = () => {
   showDatePicker.value = false
+  isWriteDiaryMode.value = false
 }
 
 const selectYear = (year) => {
@@ -288,31 +526,88 @@ const selectMonth = (month) => {
   selectedMonth.value = month
 }
 
-const confirmDate = () => {
-  currentYear.value = selectedYear.value
-  currentMonth.value = selectedMonth.value
-  closeDatePicker()
-
-  // 날짜가 변경되면 일기 목록 다시 로드
-  loadMonthlyDiaries()
+const selectDay = (day) => {
+  selectedDay.value = day
 }
 
-// 심기 시작 (애니메이션 + 모달)
-const startPlanting = (day) => {
-  const cell = document.querySelector(`[data-day="${day}"]`)
-  const trowel = cell?.querySelector('.trowel')
-
-  if (trowel) {
-    // 모종삽 애니메이션
-    trowel.classList.add('planting')
-
-    // 애니메이션 끝나면 모달 열기
-    setTimeout(() => {
-      currentDay.value = day
-      showWriteModal.value = true
-      trowel.classList.remove('planting')
-    }, 600)
+// 선택된 연도 변경
+const changeSelectedYear = (delta) => {
+  selectedYear.value += delta
+  // 연도 범위 제한 (현재 연도 기준 ±10년)
+  const currentYearValue = new Date().getFullYear()
+  if (selectedYear.value < currentYearValue - 10) {
+    selectedYear.value = currentYearValue - 10
   }
+  if (selectedYear.value > currentYearValue + 10) {
+    selectedYear.value = currentYearValue + 10
+  }
+}
+
+// 선택된 월 변경
+const changeSelectedMonth = (delta) => {
+  selectedMonth.value += delta
+  if (selectedMonth.value < 1) {
+    selectedMonth.value = 12
+    changeSelectedYear(-1)
+  }
+  if (selectedMonth.value > 12) {
+    selectedMonth.value = 1
+    changeSelectedYear(1)
+  }
+}
+
+const confirmDate = () => {
+  if (isWriteDiaryMode.value) {
+    // 일기 작성 모드: 선택한 날짜로 일기 작성 또는 조회
+    handleWriteDiaryFromDatePicker()
+  } else {
+    // 일반 모드: 월 변경
+    currentYear.value = selectedYear.value
+    currentMonth.value = selectedMonth.value
+    closeDatePicker()
+    loadMonthlyDiaries()
+  }
+}
+
+// 일기 작성 버튼 클릭
+const openWriteDiaryWithDatePicker = () => {
+  isWriteDiaryMode.value = true
+  selectedYear.value = currentYear.value
+  selectedMonth.value = currentMonth.value
+  selectedDay.value = new Date().getDate()
+  showDatePicker.value = true
+}
+
+// 날짜 선택 후 일기 작성/조회 처리
+const handleWriteDiaryFromDatePicker = async () => {
+  const year = selectedYear.value
+  const month = selectedMonth.value
+  const day = selectedDay.value
+
+  closeDatePicker()
+  isWriteDiaryMode.value = false
+
+  // 선택한 월로 이동 (다른 월 선택 시)
+  if (currentYear.value !== year || currentMonth.value !== month) {
+    currentYear.value = year
+    currentMonth.value = month
+    await loadMonthlyDiaries()
+  }
+
+  // 해당 날짜에 일기가 있는지 확인
+  if (diaryData.value[day]) {
+    // 일기가 있으면 조회
+    openDiary(day)
+  } else {
+    // 일기가 없으면 작성
+    startPlanting(day)
+  }
+}
+
+// 심기 시작 (모달 열기)
+const startPlanting = (day) => {
+  currentDay.value = day
+  showWriteModal.value = true
 }
 
 // 일기 작성 모달 닫기
@@ -363,7 +658,10 @@ const saveDiary = async (isTest = true) => {
       content: analyzedDiary.content,
       summary: analyzedDiary.summary,
       flower: analyzedDiary.flower,
-      floriography: analyzedDiary.floriography
+      floriography: analyzedDiary.floriography,
+      emotions: analyzedDiary.emotions || [],
+      reason: analyzedDiary.reason || '',
+      flowerDetail: analyzedDiary.flowerDetail || null
     }
 
     showLoading.value = false
@@ -392,6 +690,80 @@ const openDiary = (day) => {
 const closeDiaryModal = () => {
   showDiaryModal.value = false
   currentDay.value = null
+  isFlipped.value = false // 뒤집기 상태 초기화
+}
+
+// 일기 모달 뒤집기
+const toggleFlip = () => {
+  isFlipped.value = !isFlipped.value
+  // 뒤집을 때 포스트잇 위치 초기화
+  if (isFlipped.value) {
+    postitPositions.value = {
+      name: {},
+      meaning: {}
+    }
+  }
+}
+
+// 포스트잇 드래그 시작
+const startDrag = (event, postitType) => {
+  event.preventDefault()
+  dragState.value.isDragging = true
+  dragState.value.currentPostit = postitType
+  dragState.value.startX = event.clientX
+  dragState.value.startY = event.clientY
+
+  const element = event.currentTarget
+  const rect = element.getBoundingClientRect()
+  const parent = element.offsetParent.getBoundingClientRect()
+
+  // name은 left 기준, meaning은 right 기준
+  if (postitType === 'name') {
+    dragState.value.initialLeft = rect.left - parent.left
+  } else if (postitType === 'meaning') {
+    dragState.value.initialRight = parent.right - rect.right
+  }
+  dragState.value.initialBottom = parent.bottom - rect.bottom
+
+  document.addEventListener('mousemove', onDrag)
+  document.addEventListener('mouseup', stopDrag)
+}
+
+// 드래그 중
+const onDrag = (event) => {
+  if (!dragState.value.isDragging) return
+
+  const deltaX = event.clientX - dragState.value.startX
+  const deltaY = event.clientY - dragState.value.startY
+
+  const newBottom = dragState.value.initialBottom - deltaY
+
+  // name은 left 기준, meaning은 right 기준
+  if (dragState.value.currentPostit === 'name') {
+    const newLeft = dragState.value.initialLeft + deltaX
+    postitPositions.value[dragState.value.currentPostit] = {
+      left: `${newLeft}px`,
+      bottom: `${newBottom}px`,
+      right: 'auto',
+      top: 'auto'
+    }
+  } else if (dragState.value.currentPostit === 'meaning') {
+    const newRight = dragState.value.initialRight - deltaX
+    postitPositions.value[dragState.value.currentPostit] = {
+      right: `${newRight}px`,
+      bottom: `${newBottom}px`,
+      left: 'auto',
+      top: 'auto'
+    }
+  }
+}
+
+// 드래그 종료
+const stopDrag = () => {
+  dragState.value.isDragging = false
+  dragState.value.currentPostit = null
+  document.removeEventListener('mousemove', onDrag)
+  document.removeEventListener('mouseup', stopDrag)
 }
 
 // 모달 배경 클릭 시 닫기
@@ -403,6 +775,8 @@ const handleModalBackgroundClick = (type, event) => {
       closeWriteModal()
     } else if (type === 'date') {
       closeDatePicker()
+    } else if (type === 'encyclopedia') {
+      closeEncyclopedia()
     }
   }
 }
@@ -418,6 +792,250 @@ const closeAlert = () => {
   showAlert.value = false
 }
 
+// 꽃 정보를 이미지로 저장 (미리보기)
+const saveFlowerAsImage = async (includeDetails = false) => {
+  // includeDetails가 false면 꽃 이미지만, true면 포스트잇과 상세설명까지 포함
+  const targetElement = includeDetails
+    ? document.querySelector('.flower-catalog')
+    : document.querySelector('.flower-catalog-image')
+
+  if (!targetElement) return
+
+  try {
+    const canvas = await html2canvas(targetElement, {
+      backgroundColor: null, // 투명 배경
+      scale: 2, // 고해상도
+      useCORS: true,
+      logging: false
+    })
+
+    // 캔버스를 Data URL로 변환하여 미리보기에 표시
+    previewImageUrl.value = canvas.toDataURL('image/png')
+    showImagePreview.value = true
+  } catch (error) {
+    console.error('이미지 저장 에러:', error)
+    showCustomAlert('이미지 저장에 실패했습니다.', '😢')
+  }
+}
+
+// 미리보기 모달 닫기
+const closeImagePreview = () => {
+  showImagePreview.value = false
+  previewImageUrl.value = ''
+  includeDetailsInCapture.value = false // 초기화
+}
+
+// 옵션 변경 후 재캡쳐
+const recaptureImage = async () => {
+  showImagePreview.value = false // 일단 모달 닫기
+  await saveFlowerAsImage(includeDetailsInCapture.value)
+}
+
+// 이미지 다운로드 (데스크톱/안드로이드용)
+const downloadImage = () => {
+  const link = document.createElement('a')
+
+  // 파일명 생성
+  let flowerName = '알 수 없음'
+  if (currentFlowerDetail.value) {
+    flowerName = currentFlowerDetail.value.flowerNameKr
+  } else if (currentDiary.value.emotion) {
+    const emotionData = getEmotionData(allEmotionsData.value, currentDiary.value.emotion)
+    flowerName = emotionData?.flowerNameKr || '알 수 없음'
+  }
+
+  const fileName = `${flowerName}_${currentDiary.value.date}.png`
+  link.download = fileName
+  link.href = previewImageUrl.value
+  link.click()
+  showCustomAlert('이미지가 저장되었습니다!', '📸')
+}
+
+// 일기 재분석 요청 (테스트)
+const reanalyzeDiaryTest = async () => {
+  if (!currentDiary.value?.id) return
+
+  showLoading.value = true
+  closeDiaryModal()
+
+  try {
+    const analyzedDiary = await diaryApi.analyzeDiaryTest(currentDiary.value.id)
+
+    // 화면 업데이트
+    if (currentDay.value) {
+      diaryData.value[currentDay.value] = {
+        id: analyzedDiary.id,
+        date: diaryData.value[currentDay.value].date,
+        emotion: analyzedDiary.coreEmotion,
+        content: analyzedDiary.content,
+        summary: analyzedDiary.summary,
+        flower: analyzedDiary.flower,
+        floriography: analyzedDiary.floriography,
+        emotions: analyzedDiary.emotions || [],
+        reason: analyzedDiary.reason || '',
+        flowerDetail: analyzedDiary.flowerDetail || null
+      }
+    }
+
+    showLoading.value = false
+    showCustomAlert('일기가 재분석되었습니다!', '🌸')
+  } catch (error) {
+    console.error('재분석 에러:', error)
+    showLoading.value = false
+    showCustomAlert(`재분석에 실패했습니다.\n${error.message}`, '😢')
+  }
+}
+
+// 일기 재분석 요청 (AI)
+const reanalyzeDiary = async () => {
+  if (!currentDiary.value?.id) return
+
+  showLoading.value = true
+  closeDiaryModal()
+
+  try {
+    const analyzedDiary = await diaryApi.analyzeDiary(currentDiary.value.id)
+
+    // 화면 업데이트
+    if (currentDay.value) {
+      diaryData.value[currentDay.value] = {
+        id: analyzedDiary.id,
+        date: diaryData.value[currentDay.value].date,
+        emotion: analyzedDiary.coreEmotion,
+        content: analyzedDiary.content,
+        summary: analyzedDiary.summary,
+        flower: analyzedDiary.flower,
+        floriography: analyzedDiary.floriography,
+        emotions: analyzedDiary.emotions || [],
+        reason: analyzedDiary.reason || '',
+        flowerDetail: analyzedDiary.flowerDetail || null
+      }
+    }
+
+    showLoading.value = false
+    showCustomAlert('일기가 재분석되었습니다!', '🌸')
+  } catch (error) {
+    console.error('재분석 에러:', error)
+    showLoading.value = false
+    showCustomAlert(`재분석에 실패했습니다.\n${error.message}`, '😢')
+  }
+}
+
+// 일기 삭제
+const deleteDiaryEntry = async () => {
+  if (!currentDiary.value?.id) return
+
+  // 확인 요청
+  if (!confirm('정말로 이 일기를 삭제하시겠습니까?')) {
+    return
+  }
+
+  try {
+    await diaryApi.deleteDiary(currentDiary.value.id)
+
+    // 화면에서 제거
+    if (currentDay.value) {
+      delete diaryData.value[currentDay.value]
+    }
+
+    closeDiaryModal()
+    showCustomAlert('일기가 삭제되었습니다.', '🗑️')
+  } catch (error) {
+    console.error('삭제 에러:', error)
+    showCustomAlert(`일기 삭제에 실패했습니다.\n${error.message}`, '😢')
+  }
+}
+
+// 물뿌리기 효과
+const startWatering = () => {
+  if (isWatering.value) return
+
+  isWatering.value = true
+  waterDrops.value = []
+
+  // 물방울 생성 (30개)
+  for (let i = 0; i < 30; i++) {
+    setTimeout(() => {
+      const drop = {
+        id: Date.now() + i,
+        left: Math.random() * 100, // 0~100%
+        delay: Math.random() * 0.5, // 0~0.5초 지연
+        duration: 1 + Math.random() * 0.5 // 1~1.5초 지속
+      }
+      waterDrops.value.push(drop)
+
+      // 물방울 제거 (애니메이션 끝난 후)
+      setTimeout(() => {
+        waterDrops.value = waterDrops.value.filter(d => d.id !== drop.id)
+      }, (drop.duration + drop.delay) * 1000)
+    }, i * 50) // 각 물방울을 50ms 간격으로 생성
+  }
+
+  // 물뿌리기 종료
+  setTimeout(() => {
+    isWatering.value = false
+  }, 2000)
+}
+
+// 전체 감정 데이터 로드
+const loadAllEmotions = async () => {
+  try {
+    const response = await diaryApi.getAllEmotions()
+    allEmotionsData.value = response.emotions || []
+  } catch (error) {
+    console.error('전체 감정 로드 에러:', error)
+    allEmotionsData.value = []
+  }
+}
+
+// 내 감정 데이터 로드
+const loadMyEmotions = async () => {
+  try {
+    const response = await diaryApi.getMyEmotions()
+    myEmotionsData.value = response.items || []
+    console.log('📊 내가 획득한 감정 데이터:', myEmotionsData.value)
+    console.log('📊 획득한 감정 코드:', Array.from(acquiredEmotions.value))
+  } catch (error) {
+    console.error('내 감정 로드 에러:', error)
+    myEmotionsData.value = []
+  }
+}
+
+// 도감 열기/닫기
+const openEncyclopedia = async () => {
+  showEncyclopedia.value = true
+  selectedEncyclopediaEmotion.value = null
+
+  // 도감 데이터 로드
+  await Promise.all([
+    loadAllEmotions(),
+    loadMyEmotions()
+  ])
+}
+
+const closeEncyclopedia = () => {
+  showEncyclopedia.value = false
+  selectedEncyclopediaEmotion.value = null
+}
+
+// 도감에서 감정 선택
+const selectEncyclopediaEmotion = (emotionCode) => {
+  selectedEncyclopediaEmotion.value = emotionCode
+
+  // 상세 정보로 자동 스크롤
+  nextTick(() => {
+    const detailElement = document.querySelector('.encyclopedia-detail')
+    if (detailElement) {
+      detailElement.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+  })
+}
+
+// 감정 획득 여부 확인
+const isEmotionAcquired = (emotionCode) => {
+  return acquiredEmotions.value.has(emotionCode)
+}
+
 // ESC 키로 모달 닫기
 const handleEscKey = (e) => {
   if (e.key === 'Escape') {
@@ -425,8 +1043,20 @@ const handleEscKey = (e) => {
     closeWriteModal()
     closeDatePicker()
     closeAlert()
+    closeEncyclopedia()
   }
 }
+
+// 모달이 열릴 때 차트 생성
+watch(showDiaryModal, async (isOpen) => {
+  if (isOpen && currentDiary.value?.emotions) {
+    await nextTick()
+    // createEmotionChart()
+  } else if (!isOpen && chartInstance) {
+    chartInstance.destroy()
+    chartInstance = null
+  }
+})
 
 onMounted(() => {
   document.addEventListener('keydown', handleEscKey)
@@ -437,1034 +1067,11 @@ onMounted(() => {
 
 onUnmounted(() => {
   document.removeEventListener('keydown', handleEscKey)
+
+  // 차트 인스턴스 정리
+  if (chartInstance) {
+    chartInstance.destroy()
+    chartInstance = null
+  }
 })
 </script>
-
-<style scoped>
-@font-face {
-  font-family: 'Cafe24Ssurround';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2105_2@1.0/Cafe24Ssurround.woff') format('woff');
-  font-weight: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'LeeSeoyun';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2202-2@1.0/LeeSeoyun.woff') format('woff');
-  font-weight: normal;
-  font-display: swap;
-}
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-/* 움직이는 물방울 배경 */
-.polka-dot-bg {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-  background-color: #F4E4C1;
-  overflow: hidden;
-}
-
-.dots-layer {
-  position: absolute;
-  top: -50px;
-  left: -50px;
-  width: calc(100% + 100px);
-  height: calc(100% + 100px);
-  background-size: 50px 50px;
-}
-
-/* 레이어 1 - 노란 베이지 */
-.dots-layer-1 {
-  background-image:
-    radial-gradient(circle at center, rgba(232, 205, 142, 0.4) 6px, transparent 6px);
-  background-position: 0 0, 25px 25px;
-  animation: moveDots1 20s linear infinite;
-}
-
-/* 레이어 2 - 연한 핑크 */
-.dots-layer-2 {
-  background-image:
-    radial-gradient(circle at center, rgba(255, 182, 193, 0.3) 5px, transparent 5px);
-  background-size: 60px 60px;
-  background-position: 15px 30px;
-  animation: moveDots2 15s linear infinite;
-}
-
-/* 레이어 3 - 연한 퍼플 */
-.dots-layer-3 {
-  background-image:
-    radial-gradient(circle at center, rgba(184, 168, 216, 0.25) 7px, transparent 7px);
-  background-size: 70px 70px;
-  background-position: 35px 15px;
-  animation: moveDots3 25s linear infinite;
-}
-
-/* 레이어 4 - 연한 오렌지 */
-.dots-layer-4 {
-  background-image:
-    radial-gradient(circle at center, rgba(255, 218, 185, 0.35) 4px, transparent 4px);
-  background-size: 45px 45px;
-  background-position: 20px 10px;
-  animation: moveDots4 18s linear infinite;
-}
-
-@keyframes moveDots1 {
-  0% {
-    transform: translate(0, 0);
-  }
-  100% {
-    transform: translate(50px, 50px);
-  }
-}
-
-@keyframes moveDots2 {
-  0% {
-    transform: translate(0, 0);
-  }
-  100% {
-    transform: translate(-60px, 60px);
-  }
-}
-
-@keyframes moveDots3 {
-  0% {
-    transform: translate(0, 0);
-  }
-  100% {
-    transform: translate(70px, -70px);
-  }
-}
-
-@keyframes moveDots4 {
-  0% {
-    transform: translate(0, 0);
-  }
-  100% {
-    transform: translate(-45px, -45px);
-  }
-}
-
-.main-container {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  z-index: 1;
-  max-width: 480px;
-  margin: 0 auto;
-  width: 100%;
-}
-
-/* 상단 타이틀 */
-.header-section {
-  padding: 20px 20px 10px;
-  text-align: center;
-  position: relative;
-  /* z-index 제거: 툴팁이 타이틀 위에 표시되도록 */
-}
-
-.page-title {
-  font-family: 'Cafe24Ssurround', sans-serif;
-  font-size: 48px;
-  font-weight: 900;
-  color: white;
-  text-shadow:
-    1px 1px 0px #E8CD8E,
-    2px 2px 0px #E8CD8E,
-    3px 3px 0px #D4B87A,
-    4px 4px 0px #D4B87A,
-    5px 5px 0px #C0A466,
-    6px 6px 0px #C0A466,
-    7px 7px 0px #AC9052,
-    8px 8px 10px rgba(0, 0, 0, 0.4),
-    10px 10px 20px rgba(0, 0, 0, 0.3);
-  letter-spacing: 3px;
-  animation: titleBounce 2s ease-in-out infinite;
-  transform-style: preserve-3d;
-}
-
-@keyframes titleBounce {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-5px);
-  }
-}
-
-.flower {
-  transition: transform 0.3s ease;
-  cursor: pointer;
-}
-
-.flower:hover {
-  transform: scale(1.15);
-}
-
-.tooltip {
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%) translateY(10px);
-  margin-bottom: 10px;
-  opacity: 0;
-  pointer-events: none;
-  z-index: 1000; /* 타이틀보다 위에 표시 */
-  transition: all 0.3s ease;
-}
-
-.flower:hover .tooltip {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
-}
-
-.tooltip-card {
-  background: linear-gradient(135deg, #FFFBF0 0%, #FFF4E0 100%);
-  border: 3px solid #E8CD8E;
-  border-radius: 16px;
-  padding: 10px 14px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-  text-align: center;
-  white-space: nowrap;
-  font-family: 'LeeSeoyun', cursive;
-  min-width: 140px;
-  position: relative;
-}
-
-.tooltip-card::after {
-  content: '';
-  position: absolute;
-  bottom: -8px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 0;
-  height: 0;
-  border-left: 8px solid transparent;
-  border-right: 8px solid transparent;
-  border-top: 8px solid #E8CD8E;
-}
-
-.tooltip-flower-name {
-  font-size: 18px;
-  font-weight: bold;
-  color: #5D4E37;
-  margin-bottom: 6px;
-}
-
-.tooltip-meaning {
-  font-size: 13px;
-  color: #8B7355;
-  margin-bottom: 6px;
-  line-height: 1.4;
-}
-
-.tooltip-date {
-  font-size: 13px;
-  color: #A68B6A;
-  margin-bottom: 3px;
-}
-
-.tooltip-emotion {
-  font-size: 12px;
-  color: #5D4E37;
-  background: rgba(232, 205, 142, 0.3);
-  padding: 2px 10px;
-  border-radius: 10px;
-  display: inline-block;
-  margin-top: 4px;
-}
-
-.garden-section {
-  flex: 1;
-  padding: 10px 5px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 10vh; /* 하단 스테이터스에 겹치지 않도록 */
-}
-
-.garden-wrapper {
-  position: relative;
-  width: 100%;
-  max-width: 100%;
-}
-
-.garden-bg-image {
-  width: 100%;
-  height: auto;
-  display: block;
-  border-radius: 12px;
-}
-
-/* 격자 그리드 */
-.flower-grid {
-  position: absolute;
-  top: 18%;
-  left: 8%;
-  width: 84%;
-  height: 62%;
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  grid-template-rows: repeat(5, 1fr);
-  gap: 1%;
-  padding: 2% 4%;
-  align-items: end;
-  z-index: 10; /* 툴팁이 타이틀 위에 표시되도록 */
-}
-
-.grid-cell {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-}
-
-/* 꽃 이미지 */
-.flower-image {
-  width: 100%;
-  height: 100%;
-  max-width: 60px;
-  object-fit: contain;
-  filter: drop-shadow(0 3px 6px rgba(0,0,0,0.3));
-}
-
-/* 빈 칸 */
-.empty-slot {
-  width: 100%;
-  height: 100%;
-  max-width: 45px;
-  max-height: 45px;
-  border-radius: 50%;
-  background: linear-gradient(145deg, rgba(139, 111, 71, 0.25), rgba(107, 84, 57, 0.25));
-  border: 2px dashed rgba(139, 111, 71, 0.4);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 22px;
-  color: rgba(139, 111, 71, 0.5);
-  font-weight: bold;
-  box-shadow:
-    inset 0 2px 4px rgba(0,0,0,0.15),
-    0 2px 4px rgba(0,0,0,0.1);
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.empty-slot:hover {
-  background: linear-gradient(145deg, rgba(139, 111, 71, 0.35), rgba(107, 84, 57, 0.35));
-  border-color: rgba(139, 111, 71, 0.6);
-}
-
-/* 모종삽 - 오른쪽에서 시작 */
-.trowel {
-  position: absolute;
-  width: 45px;
-  height: 45px;
-  object-fit: contain;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  z-index: 50;
-  transform: translate(20%, -120%) rotate(-25deg) scaleX(-1);
-  filter: drop-shadow(0 3px 6px rgba(0,0,0,0.3));
-}
-
-.empty-slot:hover + .trowel {
-  opacity: 1;
-}
-
-/* 꽂히는 애니메이션 - 오른쪽에서 */
-@keyframes plantTrowel {
-  0% {
-    transform: translate(20%, -120%) rotate(-25deg) scaleX(-1);
-    opacity: 1;
-  }
-  50% {
-    transform: translate(0%, -20%) rotate(-15deg) scaleX(-1);
-    opacity: 1;
-  }
-  70% {
-    transform: translate(0%, -10%) rotate(-10deg) scaleX(-1);
-    opacity: 1;
-  }
-  100% {
-    transform: translate(0%, -20%) rotate(-15deg) scaleX(-1);
-    opacity: 0;
-  }
-}
-
-.trowel.planting {
-  animation: plantTrowel 0.6s ease-out forwards;
-}
-
-/* 월 선택 바 (하단 고정) */
-.month-selector-bar {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 100;
-  background: rgba(139, 111, 71, 0.95);
-  backdrop-filter: blur(10px);
-  padding: 16px 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 30px;
-  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
-  border-top: 3px solid #E8CD8E;
-}
-
-.month-nav {
-  background: rgba(255, 255, 255, 0.2);
-  border: 2px solid rgba(255, 255, 255, 0.5);
-  color: white;
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  flex-shrink: 0;
-  font-weight: bold;
-}
-
-.month-nav:hover {
-  background: rgba(255, 255, 255, 0.3);
-  transform: scale(1.1);
-}
-
-.month-display {
-  font-size: 20px;
-  font-weight: 800;
-  color: white;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-  min-width: 160px;
-  text-align: center;
-  flex-shrink: 0;
-  cursor: pointer;
-  padding: 8px 16px;
-  border-radius: 10px;
-  transition: background 0.2s ease;
-  background: rgba(255, 255, 255, 0.05);
-  border: 2px solid rgba(255, 255, 255, 0.2);
-}
-
-.month-display:hover {
-  background: rgba(255, 255, 255, 0.15);
-  border-color: rgba(255, 255, 255, 0.3);
-}
-
-/* 모달 스타일 */
-.modal {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.6);
-  z-index: 1000;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-}
-
-.modal.active {
-  display: flex;
-}
-
-.modal-content {
-  background-image: url('../assets/images/note.png');
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
-  background-position: center;
-  border-radius: 16px;
-  max-width: 500px;
-  width: 90%;
-  height: 600px; /* 고정 높이 */
-  max-height: 85vh;
-  overflow: hidden; /* 외부 스크롤 숨김 */
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-  animation: modalSlideIn 0.3s ease-out;
-  padding: 20px 40px 40px 75px; /* 왼쪽 구멍 피하기 */
-  display: flex;
-  flex-direction: column;
-}
-
-@keyframes modalSlideIn {
-  from {
-    transform: translateY(-50px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-.modal-header {
-  padding: 0 0 20px 0;
-  border-bottom: none;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  flex-shrink: 0; /* 헤더 크기 고정 */
-}
-
-.modal-header h2 {
-  font-family: 'LeeSeoyun', cursive;
-  font-size: 28px;
-  color: #5D4E37;
-  text-shadow: none;
-}
-
-.modal-header p {
-  font-family: 'LeeSeoyun', cursive;
-  color: #8B7355;
-}
-
-.modal-body {
-  padding: 20px 0 0 0;
-  font-family: 'LeeSeoyun', cursive;
-  line-height: 2.2;
-  flex: 1;
-  overflow-y: auto; /* 내부 스크롤 */
-  overflow-x: hidden;
-  min-height: 0; /* flex 스크롤을 위해 필요 */
-}
-
-/* 스크롤바 스타일링 */
-.modal-body::-webkit-scrollbar {
-  width: 8px;
-}
-
-.modal-body::-webkit-scrollbar-track {
-  background: rgba(232, 205, 142, 0.2);
-  border-radius: 10px;
-}
-
-.modal-body::-webkit-scrollbar-thumb {
-  background: rgba(139, 111, 71, 0.5);
-  border-radius: 10px;
-}
-
-.modal-body::-webkit-scrollbar-thumb:hover {
-  background: rgba(139, 111, 71, 0.7);
-}
-
-.diary-content {
-  font-size: 20px;
-  color: #5D4E37;
-  line-height: 1.5;
-  white-space: pre-wrap;
-  word-break: keep-all;
-  min-height: 350px; /* 최소 높이로 일기 작성 화면과 맞춤 */
-}
-
-.close-btn {
-  background: none;
-  border: none;
-  font-size: 32px;
-  cursor: pointer;
-  color: #8B7355;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  transition: all 0.2s;
-  font-weight: bold;
-}
-
-.close-btn:hover {
-  background: rgba(139, 115, 85, 0.1);
-  transform: scale(1.1);
-}
-
-/* 감정 선택기 */
-.emotion-selector {
-  margin-bottom: 20px;
-}
-
-.emotion-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
-  max-height: 280px;
-  overflow-y: auto;
-  padding: 4px;
-}
-
-.emotion-btn {
-  padding: 10px 6px;
-  border: 2px solid #E8CD8E;
-  background: white;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.emotion-btn:hover {
-  background: #FFF9E6;
-  border-color: #D4B87A;
-  transform: scale(1.05);
-}
-
-.emotion-btn.active {
-  background: #E8CD8E;
-  border-color: #C0A466;
-  color: white;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-  transform: scale(1.05);
-}
-
-.emotion-icon {
-  font-size: 24px;
-  line-height: 1;
-}
-
-.emotion-name {
-  font-size: 12px;
-  font-weight: 600;
-  color: #8B6F47;
-  text-align: center;
-}
-
-.emotion-btn.active .emotion-name {
-  color: white;
-}
-
-/* 일기 작성 폼 */
-.diary-form textarea {
-  width: 100%;
-  min-height: 300px;
-  padding: 0;
-  border: none;
-  background: transparent;
-  font-size: 20px;
-  line-height: 1.5;
-  resize: none;
-  font-family: 'LeeSeoyun', cursive;
-  color: #5D4E37;
-}
-
-.diary-form textarea::placeholder {
-  color: #B8A89A;
-  opacity: 0.8;
-}
-
-.diary-form textarea:focus {
-  outline: none;
-}
-
-.diary-form button {
-  font-family: 'LeeSeoyun', cursive;
-  font-size: 18px;
-}
-
-.cancel-btn {
-  font-family: 'LeeSeoyun', cursive;
-  background: transparent;
-  color: #8B7355;
-  padding: 8px 16px;
-  border: 2px solid #E8CD8E;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.cancel-btn:hover {
-  background: #FFF9E6;
-  border-color: #D4B87A;
-  transform: translateY(-1px);
-}
-
-.save-btn {
-  background: #8B6F47;
-  color: white;
-  padding: 8px 16px;
-  border: none;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-}
-
-.save-btn:hover {
-  background: #6F5835;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.25);
-}
-
-.test-btn {
-  background: #A68B6A;
-  border: 2px dashed #8B6F47;
-}
-
-.test-btn:hover {
-  background: #8B7355;
-}
-
-/* 날짜 선택 모달 */
-.date-picker-content {
-  background: white;
-  border-radius: 20px;
-  max-width: 400px;
-  width: 90%;
-  max-height: 80vh;
-  overflow-y: auto;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-  animation: modalSlideIn 0.3s ease-out;
-}
-
-.date-picker-header {
-  padding: 20px;
-  border-bottom: 2px solid #f0f0f0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: #F4E4C1;
-  border-radius: 20px 20px 0 0;
-}
-
-.date-picker-header h2 {
-  color: #8B6F47;
-  font-weight: 800;
-}
-
-.date-picker-body {
-  padding: 20px;
-}
-
-.date-section {
-  margin-bottom: 25px;
-}
-
-.date-label {
-  display: block;
-  font-size: 16px;
-  font-weight: 700;
-  color: #8B6F47;
-  margin-bottom: 12px;
-}
-
-.year-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-}
-
-.year-btn {
-  padding: 12px;
-  border: 2px solid #E8CD8E;
-  background: white;
-  border-radius: 12px;
-  font-size: 14px;
-  font-weight: 600;
-  color: #8B6F47;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.year-btn:hover {
-  background: #FFF9E6;
-  border-color: #D4B87A;
-  transform: scale(1.05);
-}
-
-.year-btn.active {
-  background: #E8CD8E;
-  border-color: #D4B87A;
-  color: white;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-}
-
-.month-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-}
-
-.month-btn {
-  padding: 12px 8px;
-  border: 2px solid #E8CD8E;
-  background: white;
-  border-radius: 12px;
-  font-size: 14px;
-  font-weight: 600;
-  color: #8B6F47;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.month-btn:hover {
-  background: #FFF9E6;
-  border-color: #D4B87A;
-  transform: scale(1.05);
-}
-
-.month-btn.active {
-  background: #E8CD8E;
-  border-color: #D4B87A;
-  color: white;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-}
-
-.confirm-date-btn {
-  width: 100%;
-  padding: 14px;
-  background: #8B6F47;
-  color: white;
-  border: none;
-  border-radius: 12px;
-  font-size: 16px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-  margin-top: 10px;
-}
-
-.confirm-date-btn:hover {
-  background: #6F5835;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0,0,0,0.3);
-}
-
-/* 커스텀 알럿 */
-.alert-modal {
-  background: rgba(0, 0, 0, 0.6);
-}
-
-.alert-content {
-  background: linear-gradient(135deg, #FFFBF0 0%, #FFF4E0 100%);
-  border-radius: 20px;
-  padding: 40px 30px;
-  text-align: center;
-  box-shadow: 0 15px 40px rgba(0,0,0,0.4);
-  animation: modalSlideIn 0.3s ease-out;
-  border: 3px solid #E8CD8E;
-  max-width: 320px;
-  width: 90%;
-}
-
-.alert-icon {
-  font-size: 60px;
-  margin-bottom: 20px;
-  animation: alertBounce 0.6s ease-out;
-}
-
-@keyframes alertBounce {
-  0% {
-    transform: scale(0);
-  }
-  50% {
-    transform: scale(1.2);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-
-.alert-message {
-  font-family: 'LeeSeoyun', cursive;
-  font-size: 22px;
-  color: #5D4E37;
-  margin-bottom: 30px;
-  line-height: 1.6;
-  font-weight: bold;
-}
-
-.alert-button {
-  background: #8B6F47;
-  color: white;
-  padding: 12px 40px;
-  border: none;
-  border-radius: 12px;
-  font-size: 18px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-  font-family: 'LeeSeoyun', cursive;
-}
-
-.alert-button:hover {
-  background: #6F5835;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0,0,0,0.25);
-}
-
-/* AI 로딩 화면 */
-.loading-modal {
-  background: rgba(0, 0, 0, 0.8);
-}
-
-.loading-content {
-  background: linear-gradient(135deg, #F4E4C1 0%, #E8D5B5 100%);
-  border-radius: 24px;
-  padding: 50px 40px;
-  text-align: center;
-  box-shadow: 0 15px 40px rgba(0,0,0,0.4);
-  animation: modalSlideIn 0.3s ease-out;
-}
-
-.loading-flower {
-  font-size: 80px;
-  animation: flowerBounce 1.5s ease-in-out infinite;
-  margin-bottom: 20px;
-}
-
-@keyframes flowerBounce {
-  0%, 100% {
-    transform: translateY(0) scale(1);
-  }
-  50% {
-    transform: translateY(-20px) scale(1.1);
-  }
-}
-
-.loading-text {
-  font-family: 'LeeSeoyun', cursive;
-  font-size: 24px;
-  color: #5D4E37;
-  margin-bottom: 30px;
-  font-weight: bold;
-}
-
-.loading-spinner {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-}
-
-.flower-grow {
-  width: 60px;
-  height: 60px;
-  border: 5px solid #E8CD8E;
-  border-top-color: #8B6F47;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-/* 모바일 최적화 */
-@media (max-width: 480px) {
-  .page-title {
-    font-size: 36px;
-  }
-
-  .flower-image {
-    max-width: 50px;
-  }
-
-  .empty-slot {
-    max-width: 40px;
-    max-height: 40px;
-    font-size: 20px;
-  }
-
-  .trowel {
-    width: 40px;
-    height: 40px;
-    transform: translate(15%, -120%) rotate(-25deg) scaleX(-1);
-  }
-
-  .stats-title {
-    font-size: 18px;
-  }
-
-  .stat-icon {
-    font-size: 32px;
-  }
-
-  .stat-name {
-    font-size: 14px;
-  }
-
-  /* 모바일에서 일기장 크기 조정 */
-  .modal-content {
-    height: 550px;
-    padding: 30px 35px 30px 45px;
-  }
-
-  .modal-header h2 {
-    font-size: 24px;
-  }
-
-  .diary-content {
-    font-size: 18px;
-    min-height: 300px;
-  }
-
-  .diary-form textarea {
-    font-size: 18px;
-    min-height: 250px;
-  }
-
-  .loading-text {
-    font-size: 20px;
-  }
-
-  .alert-message {
-    font-size: 20px;
-  }
-
-  /* 모바일 툴팁 크기 조정 */
-  .tooltip-card {
-    min-width: 120px;
-    padding: 8px 10px;
-  }
-
-  .tooltip-flower-name {
-    font-size: 16px;
-    margin-bottom: 4px;
-  }
-
-  .tooltip-meaning {
-    font-size: 11px;
-    margin-bottom: 4px;
-  }
-
-  .tooltip-date {
-    font-size: 11px;
-  }
-
-  .tooltip-emotion {
-    font-size: 10px;
-    padding: 2px 6px;
-  }
-}
-</style>
