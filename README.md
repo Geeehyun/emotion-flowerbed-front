@@ -1,4 +1,7 @@
 # 감정 화단 (Emotion Flowerbed) - Frontend
+<img width="400" height="600" alt="image" src="https://github.com/user-attachments/assets/ed109f8f-1fad-41b8-a712-9c5b6d98060a" />
+<img width="400" height="600" alt="image" src="https://github.com/user-attachments/assets/92ba0362-e724-4e2d-add2-5607668718a3" />
+
 
 Vue 3로 구현된 감정 일기 서비스의 프론트엔드입니다.
 사용자가 작성한 일기를 AI가 분석하여 감정에 맞는 꽃을 화단에 심어줍니다.
