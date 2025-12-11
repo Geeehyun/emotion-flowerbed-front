@@ -190,6 +190,32 @@ export async function deleteDiary(diaryId) {
   }
 }
 
+/**
+ * 내가 획득한 감정 목록 조회
+ * @returns {Promise} - 획득한 감정 목록
+ */
+export async function getMyEmotions() {
+  try {
+    const response = await apiClient.get('/flowers/my-emotions');
+    return response.data;
+  } catch (error) {
+    throw new Error('감정 목록을 불러오는 중 문제가 발생했습니다.');
+  }
+}
+
+/**
+ * 전체 감정 목록 조회
+ * @returns {Promise} - 전체 감정 목록
+ */
+export async function getAllEmotions() {
+  try {
+    const response = await apiClient.get('/flowers/all-emotions');
+    return response.data;
+  } catch (error) {
+    throw new Error('전체 감정 목록을 불러오는 중 문제가 발생했습니다.');
+  }
+}
+
 export default {
   analyzeDiary,
   analyzeDiaryTest,
@@ -198,5 +224,7 @@ export default {
   getDiaryByDate,
   createDiary,
   updateDiary,
-  deleteDiary
+  deleteDiary,
+  getMyEmotions,
+  getAllEmotions
 };

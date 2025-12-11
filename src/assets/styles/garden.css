@@ -1,0 +1,2439 @@
+/*
+===============================================
+  감정 화단 (Garden) 스타일시트
+===============================================
+*/
+
+/* ============================================
+   1. 폰트 및 기본 스타일
+============================================ */
+@font-face {
+  font-family: 'Cafe24Ssurround';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2105_2@1.0/Cafe24Ssurround.woff') format('woff');
+  font-weight: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'LeeSeoyun';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2202-2@1.0/LeeSeoyun.woff') format('woff');
+  font-weight: normal;
+  font-display: swap;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ============================================
+   2. 배경 및 레이아웃
+============================================ */
+
+/* 움직이는 물방울 배경 */
+.polka-dot-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  background-color: #F4E4C1;
+  overflow: hidden;
+}
+
+.dots-layer {
+  position: absolute;
+  top: -50px;
+  left: -50px;
+  width: calc(100% + 100px);
+  height: calc(100% + 100px);
+  background-size: 50px 50px;
+}
+
+/* 레이어 1 - 노란 베이지 */
+.dots-layer-1 {
+  background-image:
+    radial-gradient(circle at center, rgba(232, 205, 142, 0.4) 6px, transparent 6px);
+  background-position: 0 0, 25px 25px;
+  animation: moveDots1 20s linear infinite;
+}
+
+/* 레이어 2 - 연한 핑크 */
+.dots-layer-2 {
+  background-image:
+    radial-gradient(circle at center, rgba(255, 182, 193, 0.3) 5px, transparent 5px);
+  background-size: 60px 60px;
+  background-position: 15px 30px;
+  animation: moveDots2 15s linear infinite;
+}
+
+/* 레이어 3 - 연한 퍼플 */
+.dots-layer-3 {
+  background-image:
+    radial-gradient(circle at center, rgba(184, 168, 216, 0.25) 7px, transparent 7px);
+  background-size: 70px 70px;
+  background-position: 35px 15px;
+  animation: moveDots3 25s linear infinite;
+}
+
+/* 레이어 4 - 연한 오렌지 */
+.dots-layer-4 {
+  background-image:
+    radial-gradient(circle at center, rgba(255, 218, 185, 0.35) 4px, transparent 4px);
+  background-size: 45px 45px;
+  background-position: 20px 10px;
+  animation: moveDots4 18s linear infinite;
+}
+
+.main-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 1;
+  max-width: 480px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* ============================================
+   3. 상단 헤더 (타이틀, 물뿌리개 버튼)
+============================================ */
+
+/* 상단 타이틀 */
+.header-section {
+  padding: 20px 20px 10px;
+  text-align: center;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* z-index 제거: 툴팁이 타이틀 위에 표시되도록 */
+}
+
+.page-title {
+  font-family: 'Cafe24Ssurround', sans-serif;
+  font-size: 48px;
+  font-weight: 900;
+  color: white;
+  text-shadow:
+    1px 1px 0px #E8CD8E,
+    2px 2px 0px #E8CD8E,
+    3px 3px 0px #D4B87A,
+    4px 4px 0px #D4B87A,
+    5px 5px 0px #C0A466,
+    6px 6px 0px #C0A466,
+    7px 7px 0px #AC9052,
+    8px 8px 10px rgba(0, 0, 0, 0.4),
+    10px 10px 20px rgba(0, 0, 0, 0.3);
+  letter-spacing: 3px;
+  animation: titleBounce 2s ease-in-out infinite;
+  transform-style: preserve-3d;
+}
+
+/* 물뿌리개 버튼 */
+.watering-can-btn {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 60px;
+  height: 60px;
+  background: rgba(135, 206, 250, 0.3);
+  border: 3px solid rgba(135, 206, 250, 0.6);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.watering-can-icon {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: all 0.3s ease;
+}
+
+.watering-can-btn:hover {
+  background: rgba(135, 206, 250, 0.5);
+  border-color: rgba(100, 180, 240, 0.8);
+  transform: translateY(-50%) scale(1.1) rotate(-15deg);
+  box-shadow: 0 6px 15px rgba(135, 206, 250, 0.4);
+}
+
+.watering-can-btn.watering {
+  animation: wateringShake 0.5s ease-in-out infinite;
+}
+
+/* 물방울 컨테이너 */
+.water-drops-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 999;
+  overflow: hidden;
+}
+
+.water-drop {
+  position: absolute;
+  top: -20px;
+  font-size: 24px;
+  animation: dropFall linear forwards;
+  opacity: 0;
+}
+
+/* ============================================
+   4. 화단 (Garden) 영역
+============================================ */
+
+.flower {
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+
+.tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  margin-bottom: 30px; /* 꽃을 안 가리도록 더 위로 */
+  opacity: 0;
+  pointer-events: none;
+  z-index: 1000; /* 타이틀보다 위에 표시 */
+  transition: all 0.3s ease;
+}
+
+.flower:hover .tooltip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.tooltip-card {
+  background: linear-gradient(135deg, #FFFBF0 0%, #FFF4E0 100%);
+  border: 3px solid #E8CD8E;
+  border-radius: 16px;
+  padding: 10px 14px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  white-space: nowrap;
+  font-family: 'LeeSeoyun', cursive;
+  min-width: 140px;
+  position: relative;
+}
+
+.tooltip-card::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 8px solid #E8CD8E;
+}
+
+.tooltip-flower-name {
+  font-size: 18px;
+  font-weight: bold;
+  color: #5D4E37;
+  margin-bottom: 6px;
+}
+
+.tooltip-meaning {
+  font-size: 13px;
+  color: #8B7355;
+  margin-bottom: 6px;
+  line-height: 1.4;
+}
+
+.tooltip-date {
+  font-size: 13px;
+  color: #A68B6A;
+  margin-bottom: 3px;
+}
+
+.tooltip-emotion {
+  font-size: 12px;
+  color: #5D4E37;
+  background: rgba(232, 205, 142, 0.3);
+  padding: 2px 10px;
+  border-radius: 10px;
+  display: inline-block;
+  margin-top: 4px;
+}
+
+.garden-section {
+  flex: 1;
+  padding: 10px 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10vh; /* 하단 스테이터스에 겹치지 않도록 */
+}
+
+.garden-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+}
+
+.garden-bg-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 12px;
+}
+
+/* 격자 그리드 - 고정 레이어 구조 */
+.flower-grid {
+  position: absolute;
+  top: 25%;
+  left: 8%;
+  width: 84%;
+  height: 55%;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: repeat(5, 1fr);
+  gap: 2%;
+  padding: 2% 4%;
+  z-index: 10;
+}
+
+.grid-cell {
+  position: relative;
+  overflow: visible;
+  /* Grid가 자동으로 크기 계산 - 모든 셀이 동일한 크기 */
+}
+
+/* 행별 z-index - 아래 행이 위로 */
+.grid-cell:nth-child(n+1):nth-child(-n+7) { z-index: 1; } /* 1행 */
+.grid-cell:nth-child(n+8):nth-child(-n+14) { z-index: 2; } /* 2행 */
+.grid-cell:nth-child(n+15):nth-child(-n+21) { z-index: 3; } /* 3행 */
+.grid-cell:nth-child(n+22):nth-child(-n+28) { z-index: 4; } /* 4행 */
+.grid-cell:nth-child(n+29):nth-child(-n+35) { z-index: 5; } /* 5행 */
+
+/* 꽃 컨테이너 - absolute로 셀 기준 배치 */
+.flower {
+  position: absolute;
+  bottom: 0; /* 셀 하단 기준 */
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  width: 50px; /* 기본 영역 */
+  height: 50px;
+}
+
+.flower-image {
+  width: auto;
+  height: auto;
+  max-width: 50px; /* 꽃 이미지 최대 크기 */
+  max-height: 100px;
+  object-fit: contain;
+  filter: drop-shadow(0 3px 6px rgba(0,0,0,0.3));
+}
+
+/* 꽃 호버 시 앞으로 나오기 */
+.flower:hover {
+  transform: translateX(-50%) scale(1.15);
+  z-index: 100;
+}
+
+/* 빈 칸 */
+.empty-slot {
+  position: absolute;
+  bottom: 0; /* 셀 하단 기준 */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, rgba(139, 111, 71, 0.25), rgba(107, 84, 57, 0.25));
+  border: 2px dashed rgba(139, 111, 71, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: rgba(232, 205, 142, 0.9); /* 밝은 베이지색 */
+  font-weight: bold;
+  box-shadow:
+    inset 0 2px 4px rgba(0,0,0,0.15),
+    0 2px 4px rgba(0,0,0,0.1);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.empty-slot:hover {
+  background: linear-gradient(145deg, rgba(80, 60, 40, 0.6), rgba(60, 45, 30, 0.7));
+  border-color: rgba(80, 60, 40, 0.8);
+  box-shadow:
+    inset 0 4px 8px rgba(0,0,0,0.4),
+    0 1px 2px rgba(0,0,0,0.2);
+}
+
+/* 날짜 툴팁 */
+.date-tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  margin-bottom: 10px;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 1000;
+  transition: all 0.3s ease;
+}
+
+.empty-slot:hover .date-tooltip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.date-tooltip-card {
+  background: linear-gradient(135deg, #FFFBF0 0%, #FFF4E0 100%);
+  border: 3px solid #E8CD8E;
+  border-radius: 12px;
+  padding: 8px 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  white-space: nowrap;
+  font-family: 'LeeSeoyun', cursive;
+  font-size: 14px;
+  font-weight: bold;
+  color: #A68B6A; /* 꽃 툴팁 날짜와 동일한 색상 */
+  position: relative;
+}
+
+.date-tooltip-card::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 8px solid #E8CD8E;
+}
+
+/* ============================================
+   5. 하단 바 (월 선택, 일기 작성, 도감 버튼)
+============================================ */
+
+/* 월 선택 바 (하단 고정) */
+.month-selector-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: rgba(139, 111, 71, 0.95);
+  backdrop-filter: blur(10px);
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
+  border-top: 3px solid #E8CD8E;
+}
+
+.month-nav {
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  font-weight: bold;
+}
+
+.month-nav:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+.month-display {
+  font-size: 20px;
+  font-weight: 800;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  min-width: 160px;
+  text-align: center;
+  flex-shrink: 0;
+  cursor: pointer;
+  padding: 8px 16px;
+  border-radius: 10px;
+  transition: background 0.2s ease;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.month-display:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* 일기 작성 버튼 */
+.write-diary-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  color: white;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+  margin-left: auto;
+  padding: 8px;
+}
+
+.trowel-icon {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+  transition: all 0.3s ease;
+}
+
+.write-diary-btn:hover {
+  background: rgba(255, 255, 255, 0.35);
+  transform: scale(1.15) rotate(-15deg);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
+}
+
+.write-diary-btn:hover .trowel-icon {
+  filter: brightness(0) invert(1) drop-shadow(0 0 8px rgba(255, 255, 255, 0.8));
+}
+
+.write-diary-btn:active {
+  transform: scale(1.05) rotate(-10deg);
+}
+
+/* 도감 버튼 */
+.encyclopedia-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+  margin-right: auto;
+}
+
+.encyclopedia-btn:hover {
+  background: rgba(255, 255, 255, 0.35);
+  transform: scale(1.1);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+}
+
+/* ============================================
+   6. 모달 공통 스타일
+============================================ */
+
+/* 모달 스타일 */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.modal.active {
+  display: flex;
+}
+
+.modal-content {
+  background-image: url('../images/note.png');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  border-radius: 16px;
+  max-width: 500px;
+  width: 90%;
+  height: 600px; /* 고정 높이 */
+  max-height: 85vh;
+  overflow: hidden; /* 외부 스크롤 숨김 */
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  padding: 20px 40px 40px 75px;
+  animation: modalSlideIn 0.15s ease-out;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 3D 플립 카드 컨테이너 */
+.flip-card-container {
+  perspective: 1500px;
+  max-width: 500px;
+  width: 90%;
+  height: 600px;
+  max-height: 85vh;
+}
+
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+}
+
+.flip-card-inner.is-flipped {
+  transform: rotateY(180deg);
+}
+
+.flip-card-front,
+.flip-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  pointer-events: none;
+}
+
+.flip-card-front.active,
+.flip-card-back.active {
+  pointer-events: auto;
+}
+
+.flip-card-inner:not(.is-flipped) .flip-card-front {
+  pointer-events: auto;
+}
+
+.flip-card-inner.is-flipped .flip-card-back {
+  pointer-events: auto;
+}
+
+.flip-card-back {
+  transform: rotateY(180deg);
+}
+
+/* 일기 읽기 모달 - 스크롤 작동하도록 */
+.diary-read-modal {
+  display: flex;
+  flex-direction: column;
+}
+
+/* 꽃 수채화 배경 이미지 (투명) */
+.flower-watercolor-bg {
+  position: absolute;
+  top: 10%;
+  left: 8%;
+  max-width: 300px;
+  height: auto;
+  max-height: 350px;
+  z-index: -1; /* 폰트보다 뒤로 가도록 */
+  pointer-events: none;
+}
+
+.watercolor-bg-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: 0.35; /* 투명하게 */
+}
+
+.modal-header {
+  padding: 0 0 20px 0;
+  border-bottom: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-shrink: 0; /* 헤더 크기 고정 */
+  position: relative;
+  z-index: 10;
+}
+
+.header-buttons {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.modal-header h2 {
+  font-family: 'LeeSeoyun', cursive;
+  font-size: 28px;
+  color: #5D4E37;
+  text-shadow: none;
+}
+
+.modal-header p {
+  font-family: 'LeeSeoyun', cursive;
+  color: #8B7355;
+}
+
+.modal-body {
+  padding: 20px 0 0 0;
+  font-family: 'LeeSeoyun', cursive;
+  line-height: 2.2;
+  flex: 1;
+  overflow-y: auto; /* 내부 스크롤 */
+  overflow-x: hidden;
+  min-height: 0; /* flex 스크롤을 위해 필요 */
+  position: relative; /* 꽃 배경 위치 기준 */
+  z-index: 1;
+}
+
+/* 스크롤바 스타일링 */
+.modal-body::-webkit-scrollbar {
+  width: 8px;
+}
+
+.modal-body::-webkit-scrollbar-track {
+  background: rgba(232, 205, 142, 0.2);
+  border-radius: 10px;
+}
+
+.modal-body::-webkit-scrollbar-thumb {
+  background: rgba(139, 111, 71, 0.5);
+  border-radius: 10px;
+}
+
+.modal-body::-webkit-scrollbar-thumb:hover {
+  background: rgba(139, 111, 71, 0.7);
+}
+
+.diary-content {
+  font-size: 20px;
+  color: #5D4E37;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: keep-all;
+  min-height: 200px;
+  margin-bottom: 30px;
+}
+
+/* 분석 안된 일기 액션 */
+.unanalyzed-actions {
+  border-top: 2px dashed #E8CD8E;
+  padding-top: 24px;
+  margin-top: 20px;
+}
+
+.unanalyzed-message {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.unanalyzed-icon {
+  font-size: 60px;
+  margin-bottom: 10px;
+}
+
+.unanalyzed-text {
+  font-family: 'LeeSeoyun', cursive;
+  font-size: 18px;
+  color: #8B6F47;
+  font-weight: bold;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.reanalyze-btn {
+  background: #8B6F47;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  font-family: 'LeeSeoyun', cursive;
+}
+
+.reanalyze-btn:hover {
+  background: #6F5835;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.25);
+}
+
+.reanalyze-btn.test-btn {
+  background: #A68B6A;
+  border: 2px dashed #8B6F47;
+}
+
+.reanalyze-btn.test-btn:hover {
+  background: #8B7355;
+}
+
+.delete-btn {
+  background: #D32F2F;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  font-family: 'LeeSeoyun', cursive;
+}
+
+.delete-btn:hover {
+  background: #B71C1C;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.25);
+}
+
+/* AI 분석 섹션 */
+.ai-analysis-section {
+  border-top: 2px dashed #E8CD8E;
+  padding-top: 24px;
+  margin-top: 20px;
+}
+
+.analysis-title {
+  font-family: 'LeeSeoyun', cursive;
+  font-size: 24px;
+  font-weight: bold;
+  color: #8B6F47;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.analysis-item {
+  margin-bottom: 20px;
+}
+
+.analysis-label {
+  font-family: 'LeeSeoyun', cursive;
+  font-size: 16px;
+  font-weight: 700;
+  color: #8B6F47;
+  margin-bottom: 8px;
+}
+
+.analysis-value {
+  font-family: 'LeeSeoyun', cursive;
+  font-size: 18px;
+  color: #5D4E37;
+  line-height: 1.6;
+  padding: 12px;
+  background: rgba(232, 205, 142, 0.1);
+  border-radius: 8px;
+  border-left: 4px solid #E8CD8E;
+}
+
+.analysis-value.highlight {
+  background: rgba(232, 205, 142, 0.25);
+  font-weight: bold;
+  font-size: 20px;
+  text-align: center;
+  border-left: none;
+  border: 2px solid #E8CD8E;
+}
+
+/* 차트 컨테이너 */
+.chart-container {
+  width: 100%;
+  max-width: 250px;
+  margin: 16px auto;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* 감정 레전드 */
+.emotion-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.legend-item:hover {
+  background: rgba(232, 205, 142, 0.3);
+  transform: translateX(4px);
+}
+
+.legend-color {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  border: 2px solid white;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+.legend-text {
+  font-family: 'LeeSeoyun', cursive;
+  font-size: 15px;
+  color: #5D4E37;
+  font-weight: 600;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #8B7355;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s;
+}
+
+.close-btn:hover {
+  background: rgba(139, 115, 85, 0.1);
+  transform: scale(1.1);
+}
+
+/* 이미지 저장 버튼 */
+.save-image-btn {
+  background: rgba(139, 195, 74, 0.3);
+  border: 2px solid #8BC34A;
+  cursor: pointer;
+  color: #558B2F;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.3s;
+}
+
+.save-image-btn:hover {
+  background: rgba(139, 195, 74, 0.6);
+  transform: scale(1.1);
+}
+
+/* 뒤집기 버튼 */
+.flip-btn {
+  background: rgba(232, 205, 142, 0.3);
+  border: 2px solid #E8CD8E;
+  cursor: pointer;
+  color: #8B7355;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.3s;
+}
+
+.flip-btn:hover {
+  background: rgba(232, 205, 142, 0.6);
+  transform: scale(1.1) rotate(180deg);
+}
+
+/* ============================================
+   7. 꽃 도감 (Catalog) 스타일
+============================================ */
+
+/* 도감 스타일 - 꽃 정보 */
+.flower-catalog {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flower-catalog-bg {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flower-catalog-image {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+  max-height: 450px;
+  object-fit: contain;
+}
+
+/* 포스트잇 스타일 */
+.postit {
+  position: absolute;
+  background: #FFE66D;
+  padding: 12px 20px;
+  box-shadow:
+    0 2px 4px rgba(0,0,0,0.1),
+    0 4px 8px rgba(0,0,0,0.05);
+  font-family: 'LeeSeoyun', cursive;
+  transform: rotate(-3deg);
+  transition: box-shadow 0.2s ease;
+}
+
+/* 드래그 가능 */
+.draggable {
+  cursor: move;
+  user-select: none;
+}
+
+.draggable:hover {
+  box-shadow:
+    0 4px 8px rgba(0,0,0,0.15),
+    0 6px 12px rgba(0,0,0,0.1);
+  z-index: 1000;
+}
+
+.draggable:active {
+  cursor: grabbing;
+  box-shadow:
+    0 6px 12px rgba(0,0,0,0.2),
+    0 8px 16px rgba(0,0,0,0.15);
+}
+
+/* 꽃 이름 포스트잇 (왼쪽 하단) */
+.postit-name {
+  bottom: 30px;
+  left: 30px;
+  background: #FFE66D;
+  transform: rotate(-5deg);
+}
+
+.postit-name .postit-text {
+  font-size: 24px;
+  font-weight: bold;
+  color: #5D4E37;
+}
+
+.postit-name .latin-name {
+  display: block;
+  font-size: 14px;
+  font-weight: normal;
+  font-style: italic;
+  color: #8B7355;
+  margin-top: 4px;
+}
+
+/* 꽃말 포스트잇 (오른쪽 하단) */
+.postit-meaning {
+  bottom: 30px;
+  right: 30px;
+  background: #FFB4D5;
+  transform: rotate(8deg);
+}
+
+.postit-meaning .postit-text {
+  font-size: 18px;
+  font-weight: 600;
+  color: #8B3A62;
+  line-height: 1.6;
+}
+
+/* 하단 상세 정보 */
+.flower-detail-info {
+  border-top: 2px dashed #E8CD8E;
+  padding-top: 24px;
+  margin-top: 20px;
+}
+
+.detail-section {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  margin-bottom: 15px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 12px;
+  border-left: 4px solid #E8CD8E;
+  transition: all 0.2s ease;
+}
+
+.detail-section:hover {
+  background: rgba(255, 255, 255, 0.8);
+  transform: translateX(5px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.detail-section.story-section {
+  border-left-color: #FFB4D5;
+}
+
+.detail-icon {
+  font-size: 24px;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.detail-content {
+  flex: 1;
+}
+
+.detail-title {
+  font-family: 'LeeSeoyun', cursive;
+  font-size: 13px;
+  font-weight: 700;
+  color: #8B6F47;
+  margin-bottom: 4px;
+}
+
+.detail-text {
+  font-family: 'LeeSeoyun', cursive;
+  font-size: 15px;
+  color: #5D4E37;
+  line-height: 1.5;
+  word-break: keep-all;
+}
+
+/* 긴 텍스트 (유래, 재미있는 사실) */
+.detail-text.story-text {
+  font-size: 14px;
+  line-height: 1.7;
+  max-height: 150px;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+/* 색상 팔레트 */
+.color-palette {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+.color-chip {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15), inset 0 1px 2px rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.color-chip:hover {
+  transform: scale(1.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+/* 색상 코드 툴팁 */
+.color-chip::after {
+  content: attr(title);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: 8px;
+  padding: 4px 8px;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  font-size: 11px;
+  font-family: monospace;
+  border-radius: 4px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.color-chip:hover::after {
+  opacity: 1;
+}
+
+/* 스크롤바 스타일 */
+.flower-detail-info::-webkit-scrollbar {
+  width: 6px;
+}
+
+.flower-detail-info::-webkit-scrollbar-track {
+  background: rgba(232, 205, 142, 0.2);
+  border-radius: 10px;
+}
+
+.flower-detail-info::-webkit-scrollbar-thumb {
+  background: rgba(139, 111, 71, 0.5);
+  border-radius: 10px;
+}
+
+.flower-detail-info::-webkit-scrollbar-thumb:hover {
+  background: rgba(139, 111, 71, 0.7);
+}
+
+/* ============================================
+   8. 일기 작성 모달
+============================================ */
+
+/* 감정 선택기 */
+.emotion-selector {
+  margin-bottom: 20px;
+}
+
+.emotion-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  max-height: 280px;
+  overflow-y: auto;
+  padding: 4px;
+}
+
+.emotion-btn {
+  padding: 10px 6px;
+  border: 2px solid #E8CD8E;
+  background: white;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.emotion-btn:hover {
+  background: #FFF9E6;
+  border-color: #D4B87A;
+  transform: scale(1.05);
+}
+
+.emotion-btn.active {
+  background: #E8CD8E;
+  border-color: #C0A466;
+  color: white;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  transform: scale(1.05);
+}
+
+.emotion-icon {
+  font-size: 24px;
+  line-height: 1;
+}
+
+.emotion-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: #8B6F47;
+  text-align: center;
+}
+
+.emotion-btn.active .emotion-name {
+  color: white;
+}
+
+/* 일기 작성 폼 */
+.diary-form textarea {
+  width: 100%;
+  min-height: 300px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  font-size: 20px;
+  line-height: 1.5;
+  resize: none;
+  font-family: 'LeeSeoyun', cursive;
+  color: #5D4E37;
+}
+
+.diary-form textarea::placeholder {
+  color: #B8A89A;
+  opacity: 0.8;
+}
+
+.diary-form textarea:focus {
+  outline: none;
+}
+
+.diary-form button {
+  font-family: 'LeeSeoyun', cursive;
+  font-size: 18px;
+}
+
+.cancel-btn {
+  font-family: 'LeeSeoyun', cursive;
+  background: transparent;
+  color: #8B7355;
+  padding: 8px 16px;
+  border: 2px solid #E8CD8E;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cancel-btn:hover {
+  background: #FFF9E6;
+  border-color: #D4B87A;
+  transform: translateY(-1px);
+}
+
+.save-btn {
+  background: #8B6F47;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.save-btn:hover {
+  background: #6F5835;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.25);
+}
+
+.test-btn {
+  background: #A68B6A;
+  border: 2px dashed #8B6F47;
+}
+
+.test-btn:hover {
+  background: #8B7355;
+}
+
+/* ============================================
+   9. 날짜 선택 모달
+============================================ */
+
+/* 날짜 선택 모달 */
+.date-picker-content {
+  background: white;
+  border-radius: 20px;
+  max-width: 400px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+  animation: modalSlideIn 0.3s ease-out;
+}
+
+.date-picker-header {
+  padding: 20px;
+  border-bottom: 2px solid #f0f0f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #F4E4C1;
+  border-radius: 20px 20px 0 0;
+}
+
+.date-picker-header h2 {
+  color: #8B6F47;
+  font-weight: 800;
+}
+
+.date-picker-body {
+  padding: 20px;
+}
+
+.date-section {
+  margin-bottom: 25px;
+}
+
+.date-label {
+  display: block;
+  font-size: 16px;
+  font-weight: 700;
+  color: #8B6F47;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+/* 컴팩트 날짜 선택 섹션 */
+.date-compact-section {
+  margin-bottom: 25px;
+}
+
+.date-selector-row {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 15px;
+  justify-content: center;
+}
+
+.year-selector,
+.month-selector {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  background: linear-gradient(135deg, #FFFBF0 0%, #FFF4E0 100%);
+  border: 2px solid #E8CD8E;
+  border-radius: 16px;
+  padding: 12px 16px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.nav-arrow {
+  background: rgba(232, 205, 142, 0.3);
+  border: 2px solid #E8CD8E;
+  color: #8B6F47;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.nav-arrow:hover {
+  background: rgba(232, 205, 142, 0.6);
+  transform: scale(1.1);
+}
+
+.nav-arrow:active {
+  transform: scale(0.95);
+}
+
+.selected-value {
+  font-size: 20px;
+  font-weight: 800;
+  color: #8B6F47;
+  min-width: 90px;
+  text-align: center;
+  font-family: 'LeeSeoyun', cursive;
+}
+
+/* 캘린더 그리드 (일 선택) */
+.calendar-section {
+  margin-bottom: 20px;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  max-height: 280px;
+  overflow-y: auto;
+  padding: 4px;
+}
+
+.calendar-day-btn {
+  aspect-ratio: 1;
+  padding: 8px;
+  border: 2px solid #E8CD8E;
+  background: white;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #8B6F47;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'LeeSeoyun', cursive;
+}
+
+.calendar-day-btn:hover {
+  background: #FFF9E6;
+  border-color: #D4B87A;
+  transform: scale(1.05);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+.calendar-day-btn.active {
+  background: #E8CD8E;
+  border-color: #D4B87A;
+  color: white;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  transform: scale(1.08);
+}
+
+.calendar-grid::-webkit-scrollbar {
+  width: 6px;
+}
+
+.calendar-grid::-webkit-scrollbar-track {
+  background: rgba(232, 205, 142, 0.2);
+  border-radius: 10px;
+}
+
+.calendar-grid::-webkit-scrollbar-thumb {
+  background: rgba(139, 111, 71, 0.5);
+  border-radius: 10px;
+}
+
+.calendar-grid::-webkit-scrollbar-thumb:hover {
+  background: rgba(139, 111, 71, 0.7);
+}
+
+.confirm-date-btn {
+  width: 100%;
+  padding: 14px;
+  background: #8B6F47;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  margin-top: 10px;
+}
+
+.confirm-date-btn:hover {
+  background: #6F5835;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+}
+
+/* ============================================
+   10. 알럿/로딩/미리보기 모달
+============================================ */
+
+/* 커스텀 알럿 */
+.alert-modal {
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.alert-content {
+  background: linear-gradient(135deg, #FFFBF0 0%, #FFF4E0 100%);
+  border-radius: 20px;
+  padding: 40px 30px;
+  text-align: center;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+  animation: modalSlideIn 0.3s ease-out;
+  border: 3px solid #E8CD8E;
+  max-width: 320px;
+  width: 90%;
+}
+
+.alert-icon {
+  font-size: 60px;
+  margin-bottom: 20px;
+  animation: alertBounce 0.6s ease-out;
+}
+
+.alert-message {
+  font-family: 'LeeSeoyun', cursive;
+  font-size: 22px;
+  color: #5D4E37;
+  margin-bottom: 30px;
+  line-height: 1.6;
+  font-weight: bold;
+}
+
+.alert-button {
+  background: #8B6F47;
+  color: white;
+  padding: 12px 40px;
+  border: none;
+  border-radius: 12px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  font-family: 'LeeSeoyun', cursive;
+}
+
+.alert-button:hover {
+  background: #6F5835;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.25);
+}
+
+/* 이미지 미리보기 모달 */
+.image-preview-modal {
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 1100;
+}
+
+.image-preview-content {
+  background: linear-gradient(135deg, #FFFBF0 0%, #FFF8E7 100%);
+  border-radius: 20px;
+  padding: 0;
+  max-width: 800px;
+  width: 90%;
+  max-height: 90vh;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  animation: modalSlideIn 0.3s ease-out;
+  border: 3px solid #E8CD8E;
+  display: flex;
+  flex-direction: column;
+}
+
+.image-preview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 25px;
+  border-bottom: 2px solid #E8CD8E;
+  background: rgba(255, 251, 240, 0.95);
+}
+
+.image-preview-header h3 {
+  margin: 0;
+  font-family: 'LeeSeoyun', cursive;
+  color: #5D4E37;
+}
+
+.image-preview-body {
+  padding: 30px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.preview-image {
+  max-width: 100%;
+  max-height: 60vh;
+  border-radius: 12px;
+  /* box-shadow: 0 8px 24px rgba(0,0,0,0.3); */
+  border: 2px solid #E8CD8E;
+  padding: 20px 10px;
+  background-image: url('@/assets/images/note.png');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+/* 캡쳐 옵션 */
+.capture-options {
+  width: 100%;
+  padding: 12px 16px;
+  background: rgba(255, 248, 231, 0.5);
+  border: 1px dashed #E8CD8E;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+}
+
+.option-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: #5D4E37;
+  font-family: 'LeeSeoyun', cursive;
+}
+
+.option-label input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: #8B6F47;
+}
+
+.option-label:hover {
+  color: #8B6F47;
+}
+
+.image-preview-info {
+  background: rgba(255, 236, 179, 0.3);
+  border: 1px solid #FFE0B2;
+  border-radius: 12px;
+  padding: 15px 20px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.image-preview-info p {
+  margin: 0;
+  line-height: 1.6;
+}
+
+.download-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #8B6F47 0%, #6F5835 100%);
+  color: white;
+  padding: 14px 32px;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  font-family: 'LeeSeoyun', cursive;
+  width: 100%;
+  max-width: 300px;
+}
+
+.download-btn:hover {
+  background: linear-gradient(135deg, #6F5835 0%, #5D4E37 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+}
+
+.download-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+}
+
+@media (max-width: 640px) {
+  .image-preview-content {
+    max-width: 95%;
+    width: 95%;
+  }
+
+  .image-preview-body {
+    padding: 20px;
+  }
+
+  .preview-image {
+    max-height: 50vh;
+  }
+
+  .image-preview-info {
+    padding: 12px 15px;
+  }
+
+  .download-btn {
+    font-size: 14px;
+    padding: 12px 24px;
+  }
+}
+
+/* AI 로딩 화면 */
+.loading-modal {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.loading-content {
+  background: linear-gradient(135deg, #F4E4C1 0%, #E8D5B5 100%);
+  border-radius: 24px;
+  padding: 50px 40px;
+  text-align: center;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+  animation: modalSlideIn 0.3s ease-out;
+}
+
+.loading-flower {
+  font-size: 80px;
+  animation: flowerBounce 1.5s ease-in-out infinite;
+  margin-bottom: 20px;
+}
+
+.loading-text {
+  font-family: 'LeeSeoyun', cursive;
+  font-size: 24px;
+  color: #5D4E37;
+  margin-bottom: 30px;
+  font-weight: bold;
+}
+
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.flower-grow {
+  width: 60px;
+  height: 60px;
+  border: 5px solid #E8CD8E;
+  border-top-color: #8B6F47;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* ============================================
+   11. 감정 도감 모달
+============================================ */
+
+/* 감정 도감 모달 */
+.encyclopedia-content {
+  background: white;
+  border-radius: 20px;
+  max-width: 900px;
+  width: 95%;
+  max-height: 90vh;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+  animation: modalSlideIn 0.3s ease-out;
+  display: flex;
+  flex-direction: column;
+}
+
+.encyclopedia-header {
+  padding: 20px;
+  border-bottom: 2px solid #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(135deg, #F4E4C1 0%, #E8D5B5 100%);
+  border-radius: 20px 20px 0 0;
+  position: relative;
+}
+
+.encyclopedia-header h2 {
+  color: #8B6F47;
+  font-weight: 800;
+  font-family: 'LeeSeoyun', cursive;
+}
+
+.encyclopedia-subtitle {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 14px;
+  font-weight: 600;
+  color: #A68B6A;
+  font-family: 'LeeSeoyun', cursive;
+}
+
+.encyclopedia-body {
+  padding: 20px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.encyclopedia-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.encyclopedia-card {
+  background: linear-gradient(135deg, #FFFBF0 0%, #FFF4E0 100%);
+  border: 3px solid #E8CD8E;
+  border-radius: 16px;
+  padding: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.encyclopedia-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  border-color: #D4B87A;
+}
+
+.encyclopedia-card.selected {
+  border-color: #8B6F47;
+  background: linear-gradient(135deg, #FFE9AE 0%, #FFD88A 100%);
+  box-shadow: 0 8px 20px rgba(139, 111, 71, 0.3);
+}
+
+.encyclopedia-card.acquired {
+  border-color: #8BC34A;
+}
+
+/* 긍정 감정 스타일 - 미획득 (연한 색상) */
+.encyclopedia-card.positive {
+  background: linear-gradient(135deg, #FFFBF0 0%, #FFF8E7 100%);
+  border-color: #FFE0B2;
+}
+
+.encyclopedia-card.positive:hover {
+  border-color: #FFCC80;
+}
+
+/* 긍정 감정 스타일 - 획득 (진한 색상) */
+.encyclopedia-card.positive.acquired {
+  background: linear-gradient(135deg, #FFF9E6 0%, #FFECB3 100%);
+  border-color: #FFB74D;
+  box-shadow: 0 4px 12px rgba(255, 183, 77, 0.3);
+}
+
+.encyclopedia-card.positive.acquired:hover {
+  border-color: #FF9800;
+  box-shadow: 0 8px 20px rgba(255, 152, 0, 0.4);
+}
+
+/* 부정 감정 스타일 - 미획득 (연한 색상) */
+.encyclopedia-card.negative {
+  background: linear-gradient(135deg, #FAFBFC 0%, #F0F2F7 100%);
+  border-color: #C5CAE9;
+}
+
+.encyclopedia-card.negative:hover {
+  border-color: #B0B8D4;
+}
+
+/* 부정 감정 스타일 - 획득 (진한 색상) */
+.encyclopedia-card.negative.acquired {
+  background: linear-gradient(135deg, #F3F5F9 0%, #E8EAF6 100%);
+  border-color: #9FA8DA;
+  box-shadow: 0 4px 12px rgba(159, 168, 218, 0.3);
+}
+
+.encyclopedia-card.negative.acquired:hover {
+  border-color: #7986CB;
+  box-shadow: 0 8px 20px rgba(121, 134, 203, 0.4);
+}
+
+.card-image-container {
+  width: 100%;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+.card-flower-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: all 0.3s ease;
+}
+
+.card-flower-image.silhouette {
+  filter: brightness(0) opacity(0.3);
+}
+
+.card-info {
+  text-align: center;
+}
+
+.card-flower-name {
+  font-family: 'LeeSeoyun', cursive;
+  font-size: 13px;
+  font-weight: bold;
+  color: #5D4E37;
+  margin-bottom: 2px;
+}
+
+.card-emotion-name {
+  font-family: 'LeeSeoyun', cursive;
+  font-size: 11px;
+  color: #8B7355;
+}
+
+.lock-icon {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  font-size: 16px;
+  opacity: 0.6;
+}
+
+/* 도감 상세 정보 */
+.encyclopedia-detail {
+  background: linear-gradient(135deg, #FFFBF0 0%, #FFF8E7 100%);
+  border: 3px solid #E8CD8E;
+  border-radius: 20px;
+  padding: 25px;
+  margin-bottom: 30px;
+  box-shadow: 0 8px 24px rgba(139, 111, 71, 0.15);
+  animation: slideDown 0.3s ease-out;
+}
+
+/* 긍정 감정 상세 정보 */
+.encyclopedia-detail.detail-positive {
+  background: linear-gradient(135deg, #FFFBF0 0%, #FFECB3 100%);
+  border-color: #FFB74D;
+  box-shadow: 0 8px 24px rgba(255, 183, 77, 0.25);
+}
+
+.encyclopedia-detail.detail-positive .detail-title {
+  color: #E65100;
+}
+
+.encyclopedia-detail.detail-positive .detail-subtitle {
+  color: #F57C00;
+}
+
+.encyclopedia-detail.detail-positive .detail-value {
+  color: #E65100;
+}
+
+.encyclopedia-detail.detail-positive .detail-label {
+  color: #F57C00;
+}
+
+/* 부정 감정 상세 정보 */
+.encyclopedia-detail.detail-negative {
+  background: linear-gradient(135deg, #F5F7FA 0%, #E8EAF6 100%);
+  border-color: #9FA8DA;
+  box-shadow: 0 8px 24px rgba(159, 168, 218, 0.25);
+}
+
+.encyclopedia-detail.detail-negative .detail-title {
+  color: #3949AB;
+}
+
+.encyclopedia-detail.detail-negative .detail-subtitle {
+  color: #5C6BC0;
+}
+
+.encyclopedia-detail.detail-negative .detail-value {
+  color: #283593;
+}
+
+.encyclopedia-detail.detail-negative .detail-label {
+  color: #3949AB;
+}
+
+.detail-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.detail-title {
+  font-family: 'LeeSeoyun', cursive;
+  font-size: 28px;
+  font-weight: bold;
+  color: #5D4E37;
+  margin-bottom: 5px;
+}
+
+.detail-name-en {
+  font-size: 18px;
+  font-weight: normal;
+  opacity: 0.7;
+  margin-left: 8px;
+}
+
+.detail-subtitle {
+  font-family: 'LeeSeoyun', cursive;
+  font-size: 16px;
+  color: #8B7355;
+}
+
+.detail-body {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.detail-image {
+  flex: 1;
+  max-width: 300px;
+}
+
+.detail-flower-image {
+  width: 100%;
+  height: auto;
+  border-radius: 16px;
+  /* 수채화 이미지 자체에 그림자가 있어서 box-shadow 제거 */
+}
+
+.detail-flower-image.silhouette {
+  filter: brightness(0) opacity(0.3);
+}
+
+.detail-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* 상세 정보 섹션 (꽃말 그룹, 기본 정보 그룹 등) */
+.detail-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 15px;
+  border-radius: 12px;
+  border-left: 4px solid #E8CD8E;
+  background: rgba(255, 255, 255, 0.4);
+}
+
+/* 긍정 감정 섹션 */
+.encyclopedia-detail.detail-positive .detail-section {
+  background: rgba(255, 236, 179, 0.2);
+  border-left-color: #FFB74D;
+}
+
+/* 부정 감정 섹션 */
+.encyclopedia-detail.detail-negative .detail-section {
+  background: rgba(197, 202, 233, 0.15);
+  border-left-color: #7986CB;
+}
+
+/* 그리드 레이아웃 (색상, 원산지, 향기) */
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+}
+
+.detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.detail-item.compact {
+  gap: 3px;
+}
+
+.detail-label {
+  font-family: 'LeeSeoyun', cursive;
+  font-size: 14px;
+  font-weight: 700;
+  color: #8B6F47;
+}
+
+.detail-value {
+  font-family: 'LeeSeoyun', cursive;
+  font-size: 16px;
+  color: #5D4E37;
+  padding: 8px 10px;
+  background: transparent;
+  border-radius: 8px;
+  /* border-left: 2px solid rgba(232, 205, 142, 0.3); */
+}
+
+/* 강조된 값 (꽃말) - 배경 유지 */
+.detail-value.highlight {
+  font-size: 18px;
+  font-weight: bold;
+  padding: 12px 15px;
+  /* background: rgba(255, 255, 255, 0.5);
+  border-left: 3px solid rgba(232, 205, 142, 0.5); */
+}
+
+/* 긍정 감정의 강조 값 */
+.encyclopedia-detail.detail-positive .detail-value.highlight {
+  /* background: rgba(255, 236, 179, 0.3);
+  border-left-color: rgba(255, 183, 77, 0.6); */
+}
+
+/* 부정 감정의 강조 값 */
+.encyclopedia-detail.detail-negative .detail-value.highlight {
+  /* background: rgba(197, 202, 233, 0.3);
+  border-left-color: rgba(121, 134, 203, 0.6); */
+}
+
+/* 긴 텍스트(유래, 재미있는 사실) 스타일 */
+.detail-value.story {
+  font-size: 14px;
+  line-height: 1.6;
+  max-height: 200px;
+  overflow-y: auto;
+  white-space: pre-line;
+}
+
+/* compact 버전의 detail-item */
+.detail-item.compact .detail-label {
+  font-size: 12px;
+}
+
+.detail-item.compact .detail-value {
+  font-size: 14px;
+  padding: 6px 8px;
+  /* border-left-width: 2px;
+  background: rgba(255, 255, 255, 0.3); */
+}
+
+.detail-negative .not-acquired-message {
+
+}
+
+.not-acquired-message {
+  margin-top: 15px;
+  padding: 15px;
+  background: rgba(255, 193, 7, 0.1);
+  border: 2px dashed #FFC107;
+  border-radius: 12px;
+  text-align: center;
+  font-family: 'LeeSeoyun', cursive;
+  font-size: 14px;
+  color: #F57C00;
+  font-weight: bold;
+}
+
+/* ============================================
+   12. 애니메이션
+============================================ */
+
+@keyframes moveDots1 {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(50px, 50px);
+  }
+}
+
+@keyframes moveDots2 {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(-60px, 60px);
+  }
+}
+
+@keyframes moveDots3 {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(70px, -70px);
+  }
+}
+
+@keyframes moveDots4 {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(-45px, -45px);
+  }
+}
+
+@keyframes titleBounce {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes wateringShake {
+  0%, 100% {
+    transform: translateY(-50%) rotate(-10deg);
+  }
+  25% {
+    transform: translateY(-50%) rotate(-20deg);
+  }
+  75% {
+    transform: translateY(-50%) rotate(0deg);
+  }
+}
+
+@keyframes dropFall {
+  0% {
+    opacity: 1;
+    transform: translateY(0) rotate(0deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(100vh) rotate(360deg);
+  }
+}
+
+@keyframes modalSlideIn {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes alertBounce {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes flowerBounce {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-20px) scale(1.1);
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================
+   13. 모바일 반응형
+============================================ */
+
+/* 모바일 최적화 */
+@media (max-width: 480px) {
+  .page-title {
+    font-size: 36px;
+  }
+
+  .encyclopedia-grid {
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 10px;
+  }
+
+  .detail-body {
+    flex-direction: column;
+  }
+
+  .detail-image {
+    max-width: 100%;
+  }
+
+  .flower-image {
+    max-width: 50px;
+  }
+
+  .empty-slot {
+    max-width: 40px;
+    max-height: 40px;
+    font-size: 20px;
+  }
+
+  .trowel {
+    width: 40px;
+    height: 40px;
+    transform: translate(15%, -120%) rotate(-25deg) scaleX(-1);
+  }
+
+  .stats-title {
+    font-size: 18px;
+  }
+
+  .stat-icon {
+    font-size: 32px;
+  }
+
+  .stat-name {
+    font-size: 14px;
+  }
+
+  /* 모바일에서 일기장 크기 조정 */
+  .modal-content {
+    height: 550px;
+    padding: 30px 35px 30px 45px;
+  }
+
+  .modal-header h2 {
+    font-size: 24px;
+  }
+
+  .diary-content {
+    font-size: 18px;
+    min-height: 300px;
+  }
+
+  .diary-form textarea {
+    font-size: 18px;
+    min-height: 250px;
+  }
+
+  .loading-text {
+    font-size: 20px;
+  }
+
+  .alert-message {
+    font-size: 20px;
+  }
+
+  /* 모바일 툴팁 크기 조정 */
+  .tooltip-card {
+    min-width: 120px;
+    padding: 8px 10px;
+  }
+
+  .tooltip-flower-name {
+    font-size: 16px;
+    margin-bottom: 4px;
+  }
+
+  .tooltip-meaning {
+    font-size: 11px;
+    margin-bottom: 4px;
+  }
+
+  .tooltip-date {
+    font-size: 11px;
+  }
+
+  .tooltip-emotion {
+    font-size: 10px;
+    padding: 2px 6px;
+  }
+}
