@@ -178,6 +178,11 @@
       v-model="showLetterNotification"
       @confirm="openLetter"
     />
+
+    <!-- 감정 무드미터 가이드 모달 -->
+    <MoodMeterGuideModal
+      v-model="showMoodMeterGuide"
+    />
   </div>
 </template>
 
@@ -201,6 +206,7 @@ import DatePickerModal from '@/components/modals/DatePickerModal.vue'
 import DiaryReadModal from '@/components/modals/DiaryReadModal.vue'
 import EncyclopediaModal from '@/components/modals/EncyclopediaModal.vue'
 import LetterNotificationModal from '@/components/modals/LetterNotificationModal.vue'
+import MoodMeterGuideModal from '@/components/modals/MoodMeterGuideModal.vue'
 
 // Chart.js 요소 등록
 Chart.register(ArcElement, Tooltip, Legend)
@@ -236,6 +242,7 @@ const showSidebar = ref(false) // 사이드바 메뉴 표시 상태
 // GET /letters/has-new 같은 엔드포인트로 새 레터 여부 확인
 const hasNewLetter = ref(true) // 임시로 true 설정, 나중에 API로 확인
 const showLetterNotification = ref(false) // 레터 알림 모달 표시 상태
+const showMoodMeterGuide = ref(false) // 무드미터 가이드 모달 표시 상태
 
 // 포스트잇 드래그 상태
 const postitPositions = ref({
@@ -1033,8 +1040,6 @@ const toggleSidebar = () => {
 
 // 메뉴 선택 처리
 const handleMenuSelect = (menuId) => {
-  console.log('메뉴 선택:', menuId)
-
   switch (menuId) {
     case 'garden':
       // 이미 화단 화면이므로 아무것도 하지 않음
@@ -1046,7 +1051,7 @@ const handleMenuSelect = (menuId) => {
       openWriteDiaryWithDatePicker()
       break
     case 'mood-meter':
-      showCustomAlert('감정 무드미터 기능은 준비 중입니다!', '🎨')
+      showMoodMeterGuide.value = true
       break
     case 'training':
       showCustomAlert('감정 관리 훈련 기능은 준비 중입니다!', '💪')
@@ -1077,6 +1082,7 @@ const handleEscKey = (e) => {
     closeAlert()
     closeEncyclopedia()
     showSidebar.value = false
+    showMoodMeterGuide.value = false
   }
 }
 
@@ -1098,13 +1104,10 @@ onMounted(() => {
   loadMonthlyDiaries()
 
   // 새 레터가 있으면 알림 모달 표시
-  console.log('hasNewLetter:', hasNewLetter.value)
   if (hasNewLetter.value) {
     // 약간의 딜레이를 주고 모달 표시 (자연스러운 효과)
     setTimeout(() => {
-      console.log('레터 모달 표시:', showLetterNotification.value)
       showLetterNotification.value = true
-      console.log('레터 모달 표시 후:', showLetterNotification.value)
     }, 500)
   }
 })

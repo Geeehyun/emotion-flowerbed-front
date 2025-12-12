@@ -1,14 +1,15 @@
 <template>
-  <div v-if="modelValue" class="modal active" @click="handleBackgroundClick">
-    <div class="encyclopedia-content">
-      <div class="encyclopedia-header">
-        <h2 class="text-xl font-bold text-gray-800">감정 도감</h2>
-        <p class="encyclopedia-subtitle">{{ acquiredCount }} / {{ totalCount }} 획득</p>
-        <button class="close-btn" @click="$emit('close')">
-          <XMarkIcon class="w-6 h-6" />
-        </button>
-      </div>
-      <div class="encyclopedia-body">
+  <BaseModal
+    v-model="isOpen"
+    max-width="900px"
+    @close="$emit('close')"
+  >
+    <template #header>
+      <h2 class="text-xl font-bold text-gray-800">감정 도감</h2>
+      <p class="encyclopedia-subtitle">{{ acquiredCount }} / {{ totalCount }} 획득</p>
+    </template>
+
+    <template #default>
         <!-- 선택한 꽃 상세 정보 (그리드 위로 이동) -->
         <div
           v-if="selectedEmotion && selectedEmotionData"
@@ -119,14 +120,13 @@
             <div v-if="!isAcquired(emotion.emotionCode)" class="lock-icon">🔒</div>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
+    </template>
+  </BaseModal>
 </template>
 
 <script setup>
 import { computed } from 'vue'
-import { XMarkIcon } from '@heroicons/vue/24/outline'
+import BaseModal from './BaseModal.vue'
 
 const props = defineProps({
   modelValue: {
@@ -157,6 +157,13 @@ const props = defineProps({
 
 const emit = defineEmits(['close', 'select-emotion'])
 
+const isOpen = computed({
+  get: () => props.modelValue,
+  set: (value) => {
+    if (!value) emit('close')
+  }
+})
+
 const acquiredCount = computed(() => props.acquiredEmotions.size)
 const totalCount = computed(() => props.allEmotions.length)
 
@@ -172,11 +179,5 @@ const selectedEmotionImage = computed(() => {
 
 const isAcquired = (emotionCode) => {
   return props.acquiredEmotions.has(emotionCode)
-}
-
-const handleBackgroundClick = (event) => {
-  if (event.target.classList.contains('modal')) {
-    emit('close')
-  }
 }
 </script>

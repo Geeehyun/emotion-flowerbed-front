@@ -29,8 +29,6 @@
 </template>
 
 <script setup>
-import { watch } from 'vue'
-
 const props = defineProps({
   modelValue: {
     type: Boolean,
@@ -39,11 +37,6 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['update:modelValue', 'confirm'])
-
-// 디버깅: modelValue 변경 감지
-watch(() => props.modelValue, (newVal) => {
-  console.log('LetterNotificationModal modelValue 변경:', newVal)
-})
 
 const handleBackgroundClick = (e) => {
   if (e.target.classList.contains('modal')) {

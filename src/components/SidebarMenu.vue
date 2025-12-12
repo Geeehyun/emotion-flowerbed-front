@@ -16,11 +16,11 @@
         class="sidebar-container fixed top-0 left-0 h-full w-80 bg-white shadow-2xl z-50 flex flex-col"
       >
         <!-- 헤더 -->
-        <div class="flex items-center justify-between p-6 border-b border-gray-200">
-          <h2 class="sidebar-title text-2xl font-bold text-gray-800">메뉴</h2>
+        <div class="sidebar-header flex items-center justify-between p-5 border-b-2 border-gray-200">
+          <h2 class="sidebar-title text-xl font-bold">메뉴</h2>
           <button
             @click="$emit('update:modelValue', false)"
-            class="text-gray-500 hover:text-gray-700 transition-colors"
+            class="close-btn"
           >
             <XMarkIcon class="w-6 h-6" />
           </button>
@@ -46,8 +46,8 @@
           </button>
         </nav>
 
-        <!-- 푸터 (선택사항) -->
-        <div class="p-6 border-t border-gray-200 text-center text-sm text-gray-500 footer-text">
+        <!-- 푸터 -->
+        <div class="sidebar-footer p-5 border-t-2 border-gray-200 text-center text-sm footer-text">
           감정 화단 v1.0
         </div>
       </div>

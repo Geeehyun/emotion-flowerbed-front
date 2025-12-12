@@ -1584,86 +1584,329 @@
 }
 
 .letter-notification-content {
-  background: linear-gradient(135deg, #FFF9ED 0%, #FFF4E0 100%);
-  border-radius: 24px;
-  padding: 40px 30px;
+  background: white;
+  border-radius: 20px;
+  padding: 35px 30px;
   text-align: center;
-  box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.3);
   animation: modalSlideIn 0.3s ease-out;
-  border: 3px solid #FFD54F;
   max-width: 400px;
   width: 90%;
 }
 
 .letterbox-animation {
-  margin-bottom: 30px;
+  margin-bottom: 25px;
   animation: letterboxShake 0.8s ease-in-out;
 }
 
 .letterbox-img {
-  width: 120px;
+  width: 100px;
   height: auto;
 }
 
 .letter-title {
   font-family: 'Cafe24Ssurround', sans-serif;
-  font-size: 24px;
-  color: #5D4E37;
-  margin-bottom: 15px;
-  font-weight: bold;
+  font-size: 22px;
+  color: #8B6F47;
+  margin-bottom: 12px;
+  font-weight: 700;
 }
 
 .letter-message {
-  font-family: 'LeeSeoyun', sans-serif;
-  font-size: 18px;
-  color: #8B7355;
-  margin-bottom: 30px;
-  line-height: 1.6;
+  font-family: 'LeeSeoyun', cursive;
+  font-size: 16px;
+  color: #5D4E37;
+  margin-bottom: 25px;
+  line-height: 1.7;
 }
 
 .letter-buttons {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 
 .letter-btn {
   font-family: 'Cafe24Ssurround', sans-serif;
-  padding: 14px 32px;
+  padding: 12px 30px;
   border: none;
-  border-radius: 12px;
-  font-size: 16px;
+  border-radius: 10px;
+  font-size: 15px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
 }
 
 .letter-btn.primary {
-  background: linear-gradient(135deg, #FFB74D 0%, #FF9800 100%);
+  background: linear-gradient(135deg, #8B6F47 0%, #6B5437 100%);
   color: white;
 }
 
 .letter-btn.primary:hover {
-  background: linear-gradient(135deg, #FF9800 0%, #F57C00 100%);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(255, 152, 0, 0.4);
+  background: linear-gradient(135deg, #6B5437 0%, #5B4427 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.25);
 }
 
 .letter-btn.secondary {
   background: white;
-  color: #8B7355;
+  color: #8B6F47;
   border: 2px solid #E8CD8E;
 }
 
 .letter-btn.secondary:hover {
-  background: #FFF9E6;
+  background: #F9F6F0;
   border-color: #D4B87A;
-  transform: translateY(-2px);
+  transform: translateY(-1px);
 }
 
 /* ============================================
-   11. 알럿/로딩/미리보기 모달
+   11. 베이스 모달 (공통)
+============================================ */
+
+.base-modal-content {
+  background: white;
+  border-radius: 20px;
+  width: 90%;
+  max-height: 85vh;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+  animation: modalSlideIn 0.3s ease-out;
+  display: flex;
+  flex-direction: column;
+}
+
+.base-modal-header {
+  padding: 20px;
+  border-bottom: 2px solid #f0f0f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(135deg, #F4E4C1 0%, #E8D5B5 100%);
+  border-radius: 20px 20px 0 0;
+}
+
+.base-modal-header h2 {
+  color: #8B6F47;
+  font-weight: 800;
+}
+
+.base-modal-body {
+  padding: 25px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.base-modal-footer {
+  padding: 15px 20px;
+  border-top: 2px solid #f0f0f0;
+  display: flex;
+  justify-content: center;
+}
+
+/* ============================================
+   12. 감정 무드미터 모달 (내용 스타일)
+============================================ */
+
+.guide-section {
+  margin-bottom: 25px;
+}
+
+.section-title {
+  font-family: 'Cafe24Ssurround', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #8B6F47;
+  margin-bottom: 12px;
+}
+
+.section-text {
+  font-family: 'LeeSeoyun', cursive;
+  font-size: 15px;
+  color: #5D4E37;
+  line-height: 1.7;
+}
+
+.section-text strong {
+  color: #8B6F47;
+  font-weight: 700;
+}
+
+/* 4가지 감정 영역 */
+.mood-quadrants {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.quadrant {
+  padding: 15px;
+  border-radius: 12px;
+  text-align: center;
+  transition: all 0.2s ease;
+  border: 2px solid;
+  background: linear-gradient(135deg, #FFFBF0 0%, #FFF4E0 100%);
+}
+
+.quadrant:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.quadrant.red {
+  border-color: #EF5350;
+}
+
+.quadrant.yellow {
+  border-color: #FFB74D;
+}
+
+.quadrant.blue {
+  border-color: #42A5F5;
+}
+
+.quadrant.green {
+  border-color: #66BB6A;
+}
+
+.quadrant-icon {
+  font-size: 30px;
+  margin-bottom: 8px;
+}
+
+.quadrant-name {
+  font-family: 'Cafe24Ssurround', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #8B6F47;
+  margin-bottom: 5px;
+}
+
+.quadrant-desc {
+  font-family: 'LeeSeoyun', cursive;
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.quadrant-emotions {
+  font-family: 'LeeSeoyun', cursive;
+  font-size: 12px;
+  color: #999;
+}
+
+/* 사용 방법 스텝 */
+.usage-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.step {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px;
+  background: #F9F9F9;
+  border-radius: 10px;
+  transition: all 0.2s ease;
+}
+
+.step:hover {
+  background: #F4E4C1;
+}
+
+.step-number {
+  font-family: 'Cafe24Ssurround', sans-serif;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  background: #8B6F47;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.step-content {
+  flex: 1;
+}
+
+.step-title {
+  font-family: 'Cafe24Ssurround', sans-serif;
+  font-size: 15px;
+  color: #8B6F47;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.step-desc {
+  font-family: 'LeeSeoyun', cursive;
+  font-size: 14px;
+  color: #666;
+}
+
+/* 하단 메시지 */
+.guide-footer {
+  margin-top: 15px;
+  padding: 15px;
+  background: #FFF9E6;
+  border-radius: 10px;
+  border: 2px solid #E8CD8E;
+}
+
+.footer-message {
+  font-family: 'LeeSeoyun', cursive;
+  font-size: 14px;
+  color: #8B6F47;
+  text-align: center;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* 공통 확인 버튼 */
+.confirm-btn {
+  font-family: 'Cafe24Ssurround', sans-serif;
+  padding: 10px 30px;
+  background: linear-gradient(135deg, #8B6F47 0%, #6B5437 100%);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+.confirm-btn:hover {
+  background: linear-gradient(135deg, #6B5437 0%, #5B4427 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.25);
+}
+
+/* 모바일 반응형 */
+@media (max-width: 640px) {
+  .mood-quadrants {
+    grid-template-columns: 1fr;
+  }
+
+  .mood-meter-content {
+    max-width: 95%;
+  }
+
+  .mood-meter-body {
+    padding: 20px;
+  }
+}
+
+/* ============================================
+   14. 알럿/로딩/미리보기 모달
 ============================================ */
 
 /* 커스텀 알럿 */
@@ -1924,40 +2167,10 @@
 }
 
 /* ============================================
-   11. 감정 도감 모달
+   13. 감정 도감 모달 (내용 스타일)
 ============================================ */
 
-/* 감정 도감 모달 */
-.encyclopedia-content {
-  background: white;
-  border-radius: 20px;
-  max-width: 900px;
-  width: 95%;
-  max-height: 90vh;
-  overflow: hidden;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-  animation: modalSlideIn 0.3s ease-out;
-  display: flex;
-  flex-direction: column;
-}
-
-.encyclopedia-header {
-  padding: 20px;
-  border-bottom: 2px solid #f0f0f0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: linear-gradient(135deg, #F4E4C1 0%, #E8D5B5 100%);
-  border-radius: 20px 20px 0 0;
-  position: relative;
-}
-
-.encyclopedia-header h2 {
-  color: #8B6F47;
-  font-weight: 800;
-  font-family: 'LeeSeoyun', cursive;
-}
-
+/* 감정 도감 모달 - 헤더 서브타이틀 */
 .encyclopedia-subtitle {
   position: absolute;
   left: 50%;
@@ -1966,12 +2179,6 @@
   font-weight: 600;
   color: #A68B6A;
   font-family: 'LeeSeoyun', cursive;
-}
-
-.encyclopedia-body {
-  padding: 20px;
-  overflow-y: auto;
-  flex: 1;
 }
 
 .encyclopedia-grid {
@@ -2327,7 +2534,7 @@
 }
 
 /* ============================================
-   12. 애니메이션
+   15. 애니메이션
 ============================================ */
 
 @keyframes moveDots1 {
@@ -2474,7 +2681,7 @@
 }
 
 /* ============================================
-   13. 모바일 반응형
+   16. 모바일 반응형
 ============================================ */
 
 /* 모바일 최적화 */
@@ -2579,102 +2786,96 @@
 }
 
 /* ============================================
-   14. 사이드바 메뉴
+   17. 사이드바 메뉴
 ============================================ */
 
 /* 사이드바 컨테이너 */
 .sidebar-container {
-  border-top-right-radius: 24px;
-  border-bottom-right-radius: 24px;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
   overflow: hidden;
-  background-color: #fff9ed;
+  background-color: white;
+  border-left: 4px solid #F4E4C1;
+}
+
+/* 사이드바 헤더 */
+.sidebar-header {
+  background: linear-gradient(135deg, #F4E4C1 0%, #E8D5B5 100%);
 }
 
 /* 사이드바 타이틀 */
 .sidebar-title {
   font-family: 'Cafe24Ssurround', sans-serif;
+  color: #8B6F47;
 }
 
 /* 사이드바 푸터 */
+.sidebar-footer {
+  background: #F9F6F0;
+}
+
 .footer-text {
-  font-family: 'LeeSeoyun', sans-serif;
+  font-family: 'LeeSeoyun', cursive;
+  color: #A68B6A;
 }
 
 /* 메뉴 아이템 스타일 */
 .menu-item {
   font-family: 'Cafe24Ssurround', sans-serif;
-  border-radius: 20px;
+  border-radius: 12px;
   background-color: transparent;
   border: none;
   cursor: pointer;
   position: relative;
-  overflow: hidden;
-}
-
-.menu-item::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(135deg, #FFE082 0%, #FFD54F 100%);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  z-index: -1;
-  border-radius: 20px;
-}
-
-.menu-item:hover::before {
-  opacity: 1;
+  transition: all 0.2s ease;
 }
 
 .menu-item:hover {
-  transform: translateX(5px);
-  box-shadow: 0 4px 12px rgba(255, 224, 130, 0.4);
+  background: #F9F6F0;
+  transform: translateX(3px);
 }
 
 .menu-item.active {
-  background: linear-gradient(135deg, #FFF9C4 0%, #FFF59D 100%);
-  box-shadow: 0 2px 8px rgba(255, 235, 59, 0.3);
+  background: linear-gradient(135deg, #F4E4C1 0%, #E8D5B5 100%);
 }
 
 .menu-item:hover .menu-icon {
-  color: #F57C00;
-  transform: scale(1.1);
-  transition: all 0.3s ease;
+  color: #8B6F47;
+  transform: scale(1.05);
+  transition: all 0.2s ease;
 }
 
 .menu-item:hover .menu-text {
-  color: #E65100;
+  color: #8B6F47;
 }
 
 .menu-icon {
-  color: #9E9E9E;
-  transition: all 0.3s ease;
+  color: #A68B6A;
+  transition: all 0.2s ease;
 }
 
 .menu-text {
-  color: #424242;
-  transition: color 0.3s ease;
+  color: #5D4E37;
+  transition: color 0.2s ease;
 }
 
 .menu-item.active .menu-icon {
-  color: #F57C00;
+  color: #8B6F47;
 }
 
 .menu-item.active .menu-text {
-  color: #E65100;
+  color: #8B6F47;
+  font-weight: 700;
 }
 
 .badge-text {
   font-family: 'Cafe24Ssurround', sans-serif;
   font-size: 0.7rem;
-  background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
+  background: #8B6F47;
   color: white;
   padding: 4px 10px;
-  border-radius: 12px;
-  box-shadow: 0 2px 6px rgba(255, 107, 107, 0.3);
+  border-radius: 10px;
+  font-weight: 600;
 }
 
 /* 사이드바 애니메이션 */
