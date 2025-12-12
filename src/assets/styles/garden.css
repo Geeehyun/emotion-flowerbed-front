@@ -133,7 +133,35 @@
   transform-style: preserve-3d;
 }
 
-/* 물뿌리개 버튼 */
+/* 햄버거 메뉴 버튼 */
+.hamburger-btn {
+  position: fixed;
+  left: 10px;
+  top: 20px;
+  width: 50px;
+  height: 50px;
+  background: rgba(255, 218, 185, 0.3);
+  border: 3px solid rgba(255, 218, 185, 0.6);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  color: #8B4513;
+  z-index: 30;
+}
+
+.hamburger-btn:hover {
+  background: rgba(255, 218, 185, 0.5);
+  border-color: rgba(255, 200, 160, 0.8);
+  transform: scale(1.1);
+  box-shadow: 0 6px 15px rgba(255, 218, 185, 0.4);
+}
+
+/* 물뿌리개 버튼 (제거됨) */
 .watering-can-btn {
   position: absolute;
   right: 20px;
@@ -1546,7 +1574,96 @@
 }
 
 /* ============================================
-   10. 알럿/로딩/미리보기 모달
+   10. 레터 알림 모달
+============================================ */
+
+.letter-notification-modal {
+  display: flex !important;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 1000;
+}
+
+.letter-notification-content {
+  background: linear-gradient(135deg, #FFF9ED 0%, #FFF4E0 100%);
+  border-radius: 24px;
+  padding: 40px 30px;
+  text-align: center;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+  animation: modalSlideIn 0.3s ease-out;
+  border: 3px solid #FFD54F;
+  max-width: 400px;
+  width: 90%;
+}
+
+.letterbox-animation {
+  margin-bottom: 30px;
+  animation: letterboxShake 0.8s ease-in-out;
+}
+
+.letterbox-img {
+  width: 120px;
+  height: auto;
+}
+
+.letter-title {
+  font-family: 'Cafe24Ssurround', sans-serif;
+  font-size: 24px;
+  color: #5D4E37;
+  margin-bottom: 15px;
+  font-weight: bold;
+}
+
+.letter-message {
+  font-family: 'LeeSeoyun', sans-serif;
+  font-size: 18px;
+  color: #8B7355;
+  margin-bottom: 30px;
+  line-height: 1.6;
+}
+
+.letter-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.letter-btn {
+  font-family: 'Cafe24Ssurround', sans-serif;
+  padding: 14px 32px;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.letter-btn.primary {
+  background: linear-gradient(135deg, #FFB74D 0%, #FF9800 100%);
+  color: white;
+}
+
+.letter-btn.primary:hover {
+  background: linear-gradient(135deg, #FF9800 0%, #F57C00 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(255, 152, 0, 0.4);
+}
+
+.letter-btn.secondary {
+  background: white;
+  color: #8B7355;
+  border: 2px solid #E8CD8E;
+}
+
+.letter-btn.secondary:hover {
+  background: #FFF9E6;
+  border-color: #D4B87A;
+  transform: translateY(-2px);
+}
+
+/* ============================================
+   11. 알럿/로딩/미리보기 모달
 ============================================ */
 
 /* 커스텀 알럿 */
@@ -2333,6 +2450,29 @@
   }
 }
 
+@keyframes letterboxShake {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: rotate(-3deg);
+  }
+  20%, 40%, 60%, 80% {
+    transform: rotate(3deg);
+  }
+}
+
+@keyframes badgePulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.9;
+  }
+}
+
 /* ============================================
    13. 모바일 반응형
 ============================================ */
@@ -2436,4 +2576,126 @@
     font-size: 10px;
     padding: 2px 6px;
   }
+}
+
+/* ============================================
+   14. 사이드바 메뉴
+============================================ */
+
+/* 사이드바 컨테이너 */
+.sidebar-container {
+  border-top-right-radius: 24px;
+  border-bottom-right-radius: 24px;
+  overflow: hidden;
+  background-color: #fff9ed;
+}
+
+/* 사이드바 타이틀 */
+.sidebar-title {
+  font-family: 'Cafe24Ssurround', sans-serif;
+}
+
+/* 사이드바 푸터 */
+.footer-text {
+  font-family: 'LeeSeoyun', sans-serif;
+}
+
+/* 메뉴 아이템 스타일 */
+.menu-item {
+  font-family: 'Cafe24Ssurround', sans-serif;
+  border-radius: 20px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.menu-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #FFE082 0%, #FFD54F 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: -1;
+  border-radius: 20px;
+}
+
+.menu-item:hover::before {
+  opacity: 1;
+}
+
+.menu-item:hover {
+  transform: translateX(5px);
+  box-shadow: 0 4px 12px rgba(255, 224, 130, 0.4);
+}
+
+.menu-item.active {
+  background: linear-gradient(135deg, #FFF9C4 0%, #FFF59D 100%);
+  box-shadow: 0 2px 8px rgba(255, 235, 59, 0.3);
+}
+
+.menu-item:hover .menu-icon {
+  color: #F57C00;
+  transform: scale(1.1);
+  transition: all 0.3s ease;
+}
+
+.menu-item:hover .menu-text {
+  color: #E65100;
+}
+
+.menu-icon {
+  color: #9E9E9E;
+  transition: all 0.3s ease;
+}
+
+.menu-text {
+  color: #424242;
+  transition: color 0.3s ease;
+}
+
+.menu-item.active .menu-icon {
+  color: #F57C00;
+}
+
+.menu-item.active .menu-text {
+  color: #E65100;
+}
+
+.badge-text {
+  font-family: 'Cafe24Ssurround', sans-serif;
+  font-size: 0.7rem;
+  background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
+  color: white;
+  padding: 4px 10px;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(255, 107, 107, 0.3);
+}
+
+/* 사이드바 애니메이션 */
+/* 페이드 애니메이션 (오버레이) */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+/* 슬라이드 애니메이션 (사이드바) */
+.slide-enter-active,
+.slide-leave-active {
+  transition: transform 0.3s ease;
+}
+
+.slide-enter-from,
+.slide-leave-to {
+  transform: translateX(-100%);
 }

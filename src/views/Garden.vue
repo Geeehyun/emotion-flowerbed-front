@@ -11,25 +11,15 @@
     <div class="main-container">
       <!-- 상단 타이틀 -->
       <div class="header-section">
-        <h1 class="page-title">나의 감정 화단</h1>
-        <!-- 물뿌리개 버튼 -->
-        <button class="watering-can-btn" @click="startWatering" :class="{ watering: isWatering }" title="물주기">
-          <img src="../assets/images/waterting-can.png" alt="물주기" class="watering-can-icon" />
+        <!-- 햄버거 메뉴 버튼 (좌측) -->
+        <button
+          class="hamburger-btn"
+          @click="toggleSidebar"
+          title="메뉴"
+        >
+          <Bars3Icon class="w-8 h-8" />
         </button>
-      </div>
-
-      <!-- 물방울 효과 -->
-      <div class="water-drops-container">
-        <div
-          v-for="drop in waterDrops"
-          :key="drop.id"
-          class="water-drop"
-          :style="{
-            left: `${drop.left}%`,
-            animationDelay: `${drop.delay}s`,
-            animationDuration: `${drop.duration}s`
-          }"
-        >💧</div>
+        <h1 class="page-title">나의 감정 화단</h1>
       </div>
 
       <!-- 화단 영역 -->
@@ -41,7 +31,7 @@
           <!-- 격자 그리드로 꽃 배치 -->
           <div class="flower-grid">
             <!-- 일기가 있는 날들 -->
-            <template v-for="day in 31" :key="day">
+            <template v-for="day in daysInCurrentMonth" :key="day">
               <div class="grid-cell" v-if="diaryData[day]" :data-day="day">
                 <div class="flower relative" @click="openDiary(day)">
                   <img
@@ -74,7 +64,7 @@
             </template>
 
             <!-- 빈 셀들 (달력 채우기용, 35칸 맞추기) -->
-            <div class="grid-cell" v-for="i in 4" :key="`fill-${i}`">
+            <div class="grid-cell" v-for="i in emptySlotCount" :key="`fill-${i}`">
               <div class="empty-slot" style="opacity: 0; cursor: default;"></div>
             </div>
           </div>
@@ -175,6 +165,19 @@
       @change-month="changeSelectedMonth"
       @select-day="selectDay"
     />
+
+    <!-- 사이드바 메뉴 -->
+    <SidebarMenu
+      v-model="showSidebar"
+      :has-new-letter="hasNewLetter"
+      @menu-select="handleMenuSelect"
+    />
+
+    <!-- 레터 알림 모달 -->
+    <LetterNotificationModal
+      v-model="showLetterNotification"
+      @confirm="openLetter"
+    />
   </div>
 </template>
 
@@ -183,8 +186,11 @@ import { ref, computed, onMounted, onUnmounted, watch, nextTick } from 'vue'
 import { get3dImageFromDetail, getRealisticImageFromDetail, getEmotionData, UNKNOWN_EMOTION } from '../utils/flowerMapper.js'
 import * as diaryApi from '../services/diaryApi.js'
 import { Chart, ArcElement, Tooltip, Legend } from 'chart.js'
-import { ArrowPathIcon, XMarkIcon, PlusCircleIcon, ArrowDownTrayIcon, BookOpenIcon } from '@heroicons/vue/24/outline'
+import { ArrowPathIcon, XMarkIcon, PlusCircleIcon, ArrowDownTrayIcon, BookOpenIcon, Bars3Icon } from '@heroicons/vue/24/outline'
 import html2canvas from 'html2canvas'
+
+// 컴포넌트 import
+import SidebarMenu from '@/components/SidebarMenu.vue'
 
 // 모달 컴포넌트 import
 import LoadingModal from '@/components/modals/LoadingModal.vue'
@@ -194,6 +200,7 @@ import DiaryWriteModal from '@/components/modals/DiaryWriteModal.vue'
 import DatePickerModal from '@/components/modals/DatePickerModal.vue'
 import DiaryReadModal from '@/components/modals/DiaryReadModal.vue'
 import EncyclopediaModal from '@/components/modals/EncyclopediaModal.vue'
+import LetterNotificationModal from '@/components/modals/LetterNotificationModal.vue'
 
 // Chart.js 요소 등록
 Chart.register(ArcElement, Tooltip, Legend)
@@ -216,8 +223,6 @@ const selectedMonth = ref(12)
 const selectedDay = ref(new Date().getDate())
 const isFlipped = ref(false) // 일기 모달 뒤집기 상태
 const isWriteDiaryMode = ref(false) // 일기 작성 버튼으로 날짜 선택 모드
-const isWatering = ref(false) // 물뿌리기 효과 상태
-const waterDrops = ref([]) // 물방울 배열
 const showEncyclopedia = ref(false) // 도감 모달 표시 상태
 const selectedEncyclopediaEmotion = ref(null) // 도감에서 선택한 감정
 const allEmotionsData = ref([]) // 전체 감정 데이터 (API에서 로드)
@@ -225,6 +230,12 @@ const myEmotionsData = ref([]) // 내가 획득한 감정 데이터
 const showImagePreview = ref(false) // 이미지 미리보기 모달
 const previewImageUrl = ref('') // 미리보기 이미지 URL
 const includeDetailsInCapture = ref(false) // 포스트잇과 상세설명 포함 여부
+const showSidebar = ref(false) // 사이드바 메뉴 표시 상태
+
+// TODO: API 연동 - 새로운 감정 레터 확인 API 호출 필요
+// GET /letters/has-new 같은 엔드포인트로 새 레터 여부 확인
+const hasNewLetter = ref(true) // 임시로 true 설정, 나중에 API로 확인
+const showLetterNotification = ref(false) // 레터 알림 모달 표시 상태
 
 // 포스트잇 드래그 상태
 const postitPositions = ref({
@@ -455,6 +466,16 @@ const yearOptions = computed(() => {
 const daysInSelectedMonth = computed(() => {
   const days = new Date(selectedYear.value, selectedMonth.value, 0).getDate()
   return Array.from({ length: days }, (_, i) => i + 1)
+})
+
+// 현재 월의 일 수 계산
+const daysInCurrentMonth = computed(() => {
+  return new Date(currentYear.value, currentMonth.value, 0).getDate()
+})
+
+// 빈 칸 개수 계산 (35칸 중 남은 칸)
+const emptySlotCount = computed(() => {
+  return 35 - daysInCurrentMonth.value
 })
 
 // 월별 일기 목록 로드
@@ -946,37 +967,6 @@ const deleteDiaryEntry = async () => {
   }
 }
 
-// 물뿌리기 효과
-const startWatering = () => {
-  if (isWatering.value) return
-
-  isWatering.value = true
-  waterDrops.value = []
-
-  // 물방울 생성 (30개)
-  for (let i = 0; i < 30; i++) {
-    setTimeout(() => {
-      const drop = {
-        id: Date.now() + i,
-        left: Math.random() * 100, // 0~100%
-        delay: Math.random() * 0.5, // 0~0.5초 지연
-        duration: 1 + Math.random() * 0.5 // 1~1.5초 지속
-      }
-      waterDrops.value.push(drop)
-
-      // 물방울 제거 (애니메이션 끝난 후)
-      setTimeout(() => {
-        waterDrops.value = waterDrops.value.filter(d => d.id !== drop.id)
-      }, (drop.duration + drop.delay) * 1000)
-    }, i * 50) // 각 물방울을 50ms 간격으로 생성
-  }
-
-  // 물뿌리기 종료
-  setTimeout(() => {
-    isWatering.value = false
-  }, 2000)
-}
-
 // 전체 감정 데이터 로드
 const loadAllEmotions = async () => {
   try {
@@ -1036,6 +1026,48 @@ const isEmotionAcquired = (emotionCode) => {
   return acquiredEmotions.value.has(emotionCode)
 }
 
+// 사이드바 열기/닫기
+const toggleSidebar = () => {
+  showSidebar.value = !showSidebar.value
+}
+
+// 메뉴 선택 처리
+const handleMenuSelect = (menuId) => {
+  console.log('메뉴 선택:', menuId)
+
+  switch (menuId) {
+    case 'garden':
+      // 이미 화단 화면이므로 아무것도 하지 않음
+      break
+    case 'encyclopedia':
+      openEncyclopedia()
+      break
+    case 'write':
+      openWriteDiaryWithDatePicker()
+      break
+    case 'mood-meter':
+      showCustomAlert('감정 무드미터 기능은 준비 중입니다!', '🎨')
+      break
+    case 'training':
+      showCustomAlert('감정 관리 훈련 기능은 준비 중입니다!', '💪')
+      break
+    case 'letter':
+      openLetter()
+      break
+    default:
+      break
+  }
+}
+
+// 우체통 클릭 - 감정 레터 열기
+const openLetter = () => {
+  // TODO: API 연동 - 감정 레터 모달 구현 필요
+  // 1. 레터 목록 API 호출: GET /letters
+  // 2. 레터 상세 모달 표시
+  // 3. 읽음 처리: POST /letters/{letterId}/read
+  showCustomAlert('감정 레터 기능은 준비 중입니다!', '✉️')
+}
+
 // ESC 키로 모달 닫기
 const handleEscKey = (e) => {
   if (e.key === 'Escape') {
@@ -1044,6 +1076,7 @@ const handleEscKey = (e) => {
     closeDatePicker()
     closeAlert()
     closeEncyclopedia()
+    showSidebar.value = false
   }
 }
 
@@ -1063,6 +1096,17 @@ onMounted(() => {
 
   // 페이지 로드 시 현재 월의 일기 목록 로드
   loadMonthlyDiaries()
+
+  // 새 레터가 있으면 알림 모달 표시
+  console.log('hasNewLetter:', hasNewLetter.value)
+  if (hasNewLetter.value) {
+    // 약간의 딜레이를 주고 모달 표시 (자연스러운 효과)
+    setTimeout(() => {
+      console.log('레터 모달 표시:', showLetterNotification.value)
+      showLetterNotification.value = true
+      console.log('레터 모달 표시 후:', showLetterNotification.value)
+    }, 500)
+  }
 })
 
 onUnmounted(() => {
@@ -1074,4 +1118,4 @@ onUnmounted(() => {
     chartInstance = null
   }
 })
-</script>
+</script> 
