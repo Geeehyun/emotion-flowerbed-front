@@ -3,8 +3,9 @@ import {
   BookOpenIcon,
   PencilSquareIcon,
   QuestionMarkCircleIcon,
-  AcademicCapIcon,
-  EnvelopeIcon
+  EnvelopeIcon,
+  ArrowRightOnRectangleIcon,
+  HeartIcon
 } from '@heroicons/vue/24/outline'
 
 export const menuItems = [
@@ -27,21 +28,27 @@ export const menuItems = [
     active: false
   },
   {
-    id: 'mood-meter',
-    label: '감정 무드미터란?',
-    icon: QuestionMarkCircleIcon,
+    id: 'emotion-control',
+    label: '나의 감정제어 활동',
+    icon: HeartIcon,
     active: false
-  },
-  {
-    id: 'training',
-    label: '감정 관리 훈련',
-    icon: AcademicCapIcon,
-    active: false,
   },
   {
     id: 'letter',
     label: '감정 레터',
     icon: EnvelopeIcon,
     active: false
-  }
+  },
+  {
+    id: 'mood-meter',
+    label: '감정 무드미터란?',
+    icon: QuestionMarkCircleIcon,
+    active: false
+  },
+  {
+    id: 'logout',
+    label: '로그아웃',
+    icon: ArrowRightOnRectangleIcon,
+    active: false
+  },
 ]

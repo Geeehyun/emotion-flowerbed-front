@@ -19,6 +19,20 @@ export function get3dImageFromDetail(imageFile3d) {
 }
 
 /**
+ * API flowerDetail에서 3D 이미지 경로 생성
+ * @param {string} imageFile3d - 3D 이미지 파일명
+ * @returns {string} - 이미지 URL
+ */
+export function get3dPotImageFromDetail(imageFile3d) {
+  if (!imageFile3d) {
+    return new URL(`../assets/images/flowers/3d_pot/unknown.png`, import.meta.url).href
+  }
+  // 확장자를 .png로 강제 변경
+  const fileName = imageFile3d.replace(/\.(jpg|jpeg|gif)$/i, '.png')
+  return new URL(`../assets/images/flowers/3d_pot/${fileName}`, import.meta.url).href
+}
+
+/**
  * API flowerDetail에서 실사 이미지 경로 생성
  * @param {string} imageFileRealistic - 실사 이미지 파일명
  * @returns {string} - 이미지 URL

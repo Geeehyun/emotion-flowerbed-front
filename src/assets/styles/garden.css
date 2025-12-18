@@ -1690,6 +1690,7 @@
 .base-modal-header h2 {
   color: #8B6F47;
   font-weight: 800;
+  font-family: 'Cafe24Ssurround', sans-serif;
 }
 
 .base-modal-body {
@@ -2171,14 +2172,181 @@
 ============================================ */
 
 /* 감정 도감 모달 - 헤더 서브타이틀 */
+.encyclopedia-header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  position: relative;
+}
+
+.encyclopedia-header-left {
+  flex: 1;
+  text-align: center;
+  position: relative;
+}
+
 .encyclopedia-subtitle {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
   font-size: 14px;
   font-weight: 600;
   color: #A68B6A;
   font-family: 'LeeSeoyun', cursive;
+  margin-top: 4px;
+}
+
+.mood-meter-guide-btn {
+  background: linear-gradient(135deg, #FFE9AE 0%, #FFD88A 100%);
+  border: 2px solid #E8CD8E;
+  border-radius: 12px;
+  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'LeeSeoyun', cursive;
+  font-size: 13px;
+  font-weight: 600;
+  color: #5D4E37;
+  white-space: nowrap;
+}
+
+.mood-meter-guide-btn:hover {
+  background: linear-gradient(135deg, #FFD88A 0%, #FFC95A 100%);
+  border-color: #D4B87A;
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(232, 205, 142, 0.4);
+}
+
+.guide-icon {
+  font-size: 16px;
+}
+
+.guide-text {
+  font-size: 13px;
+}
+
+/* 영역 필터 - 팔레트 물감 스타일 */
+.area-filter-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.filter-label-text {
+  font-family: 'LeeSeoyun', cursive;
+  font-size: 14px;
+  font-weight: 600;
+  color: #8B7355;
+}
+
+.area-filter-container {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 8px 12px;
+  background: linear-gradient(135deg, #F5F5F5 0%, #E8E8E8 100%);
+  border-radius: 20px;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1),
+              0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.area-filter-chip {
+  width: 38px;
+  height: 38px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  position: relative;
+  background-color: var(--chip-color, #E0E0E0);
+  border-radius: 63% 37% 54% 46% / 55% 48% 52% 45%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2),
+              inset 0 1px 3px rgba(255, 255, 255, 0.5),
+              inset 0 -2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.area-filter-chip::after {
+  content: '';
+  position: absolute;
+  top: 15%;
+  left: 20%;
+  width: 30%;
+  height: 30%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.6) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.area-filter-chip:hover {
+  transform: scale(1.1);
+  border-radius: 58% 42% 48% 52% / 62% 44% 56% 38%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25),
+              inset 0 1px 4px rgba(255, 255, 255, 0.6),
+              inset 0 -3px 6px rgba(0, 0, 0, 0.2);
+}
+
+.area-filter-chip:hover::after {
+  opacity: 0.8;
+}
+
+.area-filter-chip.active {
+  transform: scale(1.15);
+  border-radius: 61% 39% 52% 48% / 48% 55% 45% 52%;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3),
+              inset 0 2px 5px rgba(255, 255, 255, 0.7),
+              inset 0 -4px 8px rgba(0, 0, 0, 0.25);
+  animation: paint-bounce 0.4s ease;
+}
+
+.area-filter-chip.active::after {
+  opacity: 1;
+  width: 35%;
+  height: 35%;
+}
+
+/* 전체 필터 - 흰색 */
+.area-filter-chip.chip-ALL {
+  background-color: #FFFFFF;
+}
+
+/* 영역별 컬러 칩 - 귀여운 톤 */
+.area-filter-chip.chip-red {
+  background-color: #FF6B6B;
+}
+
+.area-filter-chip.chip-yellow {
+  background-color: #FFC75F;
+}
+
+.area-filter-chip.chip-blue {
+  background-color: #5DADE2;
+}
+
+.area-filter-chip.chip-green {
+  background-color: #7ED957;
+}
+
+/* 물감 통통 튀는 애니메이션 */
+@keyframes paint-bounce {
+  0%, 100% {
+    transform: scale(1.15);
+    border-radius: 61% 39% 52% 48% / 48% 55% 45% 52%;
+  }
+  25% {
+    transform: scale(1.18);
+    border-radius: 55% 45% 58% 42% / 52% 48% 52% 48%;
+  }
+  50% {
+    transform: scale(1.2);
+    border-radius: 48% 52% 45% 55% / 58% 42% 58% 42%;
+  }
+  75% {
+    transform: scale(1.18);
+    border-radius: 52% 48% 51% 49% / 45% 55% 45% 55%;
+  }
 }
 
 .encyclopedia-grid {
@@ -2211,52 +2379,88 @@
   box-shadow: 0 8px 20px rgba(139, 111, 71, 0.3);
 }
 
-.encyclopedia-card.acquired {
-  border-color: #8BC34A;
+/* 영역별 카드 스타일 - RED (빨강 영역) */
+.encyclopedia-card.card-red {
+  background: linear-gradient(135deg, #FFF9F9 0%, #FFF0F0 100%);
+  border-color: #FFCDD2;
 }
 
-/* 긍정 감정 스타일 - 미획득 (연한 색상) */
-.encyclopedia-card.positive {
-  background: linear-gradient(135deg, #FFFBF0 0%, #FFF8E7 100%);
-  border-color: #FFE0B2;
+.encyclopedia-card.card-red:hover {
+  border-color: #EF9A9A;
 }
 
-.encyclopedia-card.positive:hover {
-  border-color: #FFCC80;
+.encyclopedia-card.card-red.acquired {
+  background: linear-gradient(135deg, #FFEBEE 0%, #FFCDD2 100%);
+  border-color: #EF5350;
+  box-shadow: 0 4px 12px rgba(239, 83, 80, 0.2);
 }
 
-/* 긍정 감정 스타일 - 획득 (진한 색상) */
-.encyclopedia-card.positive.acquired {
+.encyclopedia-card.card-red.acquired:hover {
+  border-color: #E53935;
+  box-shadow: 0 8px 20px rgba(239, 83, 80, 0.35);
+}
+
+/* 영역별 카드 스타일 - YELLOW (노랑 영역) */
+.encyclopedia-card.card-yellow {
+  background: linear-gradient(135deg, #FFFEF7 0%, #FFFBF0 100%);
+  border-color: #FFE9AE;
+}
+
+.encyclopedia-card.card-yellow:hover {
+  border-color: #FFD88A;
+}
+
+.encyclopedia-card.card-yellow.acquired {
   background: linear-gradient(135deg, #FFF9E6 0%, #FFECB3 100%);
   border-color: #FFB74D;
-  box-shadow: 0 4px 12px rgba(255, 183, 77, 0.3);
+  box-shadow: 0 4px 12px rgba(255, 183, 77, 0.2);
 }
 
-.encyclopedia-card.positive.acquired:hover {
-  border-color: #FF9800;
-  box-shadow: 0 8px 20px rgba(255, 152, 0, 0.4);
+.encyclopedia-card.card-yellow.acquired:hover {
+  border-color: #FFA726;
+  box-shadow: 0 8px 20px rgba(255, 183, 77, 0.35);
 }
 
-/* 부정 감정 스타일 - 미획득 (연한 색상) */
-.encyclopedia-card.negative {
-  background: linear-gradient(135deg, #FAFBFC 0%, #F0F2F7 100%);
-  border-color: #C5CAE9;
+/* 영역별 카드 스타일 - BLUE (파랑 영역) */
+.encyclopedia-card.card-blue {
+  background: linear-gradient(135deg, #F9FCFF 0%, #F0F7FF 100%);
+  border-color: #BBDEFB;
 }
 
-.encyclopedia-card.negative:hover {
-  border-color: #B0B8D4;
+.encyclopedia-card.card-blue:hover {
+  border-color: #90CAF9;
 }
 
-/* 부정 감정 스타일 - 획득 (진한 색상) */
-.encyclopedia-card.negative.acquired {
-  background: linear-gradient(135deg, #F3F5F9 0%, #E8EAF6 100%);
-  border-color: #9FA8DA;
-  box-shadow: 0 4px 12px rgba(159, 168, 218, 0.3);
+.encyclopedia-card.card-blue.acquired {
+  background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
+  border-color: #42A5F5;
+  box-shadow: 0 4px 12px rgba(66, 165, 245, 0.2);
 }
 
-.encyclopedia-card.negative.acquired:hover {
-  border-color: #7986CB;
-  box-shadow: 0 8px 20px rgba(121, 134, 203, 0.4);
+.encyclopedia-card.card-blue.acquired:hover {
+  border-color: #2196F3;
+  box-shadow: 0 8px 20px rgba(66, 165, 245, 0.35);
+}
+
+/* 영역별 카드 스타일 - GREEN (초록 영역) */
+.encyclopedia-card.card-green {
+  background: linear-gradient(135deg, #F9FFF9 0%, #F1FFF1 100%);
+  border-color: #C8E6C9;
+}
+
+.encyclopedia-card.card-green:hover {
+  border-color: #A5D6A7;
+}
+
+.encyclopedia-card.card-green.acquired {
+  background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%);
+  border-color: #66BB6A;
+  box-shadow: 0 4px 12px rgba(102, 187, 106, 0.2);
+}
+
+.encyclopedia-card.card-green.acquired:hover {
+  border-color: #4CAF50;
+  box-shadow: 0 8px 20px rgba(102, 187, 106, 0.35);
 }
 
 .card-image-container {
@@ -2316,50 +2520,96 @@
   animation: slideDown 0.3s ease-out;
 }
 
-/* 긍정 감정 상세 정보 */
-.encyclopedia-detail.detail-positive {
-  background: linear-gradient(135deg, #FFFBF0 0%, #FFECB3 100%);
+/* 영역별 상세 정보 - RED (빨강 영역) */
+.encyclopedia-detail.detail-red {
+  background: linear-gradient(135deg, #FFF5F5 0%, #FFEBEE 100%);
+  border-color: #EF5350;
+  box-shadow: 0 8px 24px rgba(239, 83, 80, 0.2);
+}
+
+.encyclopedia-detail.detail-red .detail-title {
+  color: #C62828;
+}
+
+.encyclopedia-detail.detail-red .detail-subtitle {
+  color: #E53935;
+}
+
+.encyclopedia-detail.detail-red .detail-value {
+  color: #D32F2F;
+}
+
+.encyclopedia-detail.detail-red .detail-label {
+  color: #EF5350;
+}
+
+/* 영역별 상세 정보 - YELLOW (노랑 영역) */
+.encyclopedia-detail.detail-yellow {
+  background: linear-gradient(135deg, #FFFEF7 0%, #FFF9E6 100%);
   border-color: #FFB74D;
-  box-shadow: 0 8px 24px rgba(255, 183, 77, 0.25);
+  box-shadow: 0 8px 24px rgba(255, 183, 77, 0.2);
 }
 
-.encyclopedia-detail.detail-positive .detail-title {
+.encyclopedia-detail.detail-yellow .detail-title {
   color: #E65100;
 }
 
-.encyclopedia-detail.detail-positive .detail-subtitle {
+.encyclopedia-detail.detail-yellow .detail-subtitle {
   color: #F57C00;
 }
 
-.encyclopedia-detail.detail-positive .detail-value {
-  color: #E65100;
+.encyclopedia-detail.detail-yellow .detail-value {
+  color: #EF6C00;
 }
 
-.encyclopedia-detail.detail-positive .detail-label {
-  color: #F57C00;
+.encyclopedia-detail.detail-yellow .detail-label {
+  color: #FF9800;
 }
 
-/* 부정 감정 상세 정보 */
-.encyclopedia-detail.detail-negative {
-  background: linear-gradient(135deg, #F5F7FA 0%, #E8EAF6 100%);
-  border-color: #9FA8DA;
-  box-shadow: 0 8px 24px rgba(159, 168, 218, 0.25);
+/* 영역별 상세 정보 - BLUE (파랑 영역) */
+.encyclopedia-detail.detail-blue {
+  background: linear-gradient(135deg, #F5F9FF 0%, #E3F2FD 100%);
+  border-color: #42A5F5;
+  box-shadow: 0 8px 24px rgba(66, 165, 245, 0.2);
 }
 
-.encyclopedia-detail.detail-negative .detail-title {
-  color: #3949AB;
+.encyclopedia-detail.detail-blue .detail-title {
+  color: #1565C0;
 }
 
-.encyclopedia-detail.detail-negative .detail-subtitle {
-  color: #5C6BC0;
+.encyclopedia-detail.detail-blue .detail-subtitle {
+  color: #1976D2;
 }
 
-.encyclopedia-detail.detail-negative .detail-value {
-  color: #283593;
+.encyclopedia-detail.detail-blue .detail-value {
+  color: #1E88E5;
 }
 
-.encyclopedia-detail.detail-negative .detail-label {
-  color: #3949AB;
+.encyclopedia-detail.detail-blue .detail-label {
+  color: #2196F3;
+}
+
+/* 영역별 상세 정보 - GREEN (초록 영역) */
+.encyclopedia-detail.detail-green {
+  background: linear-gradient(135deg, #F5FFF5 0%, #E8F5E9 100%);
+  border-color: #66BB6A;
+  box-shadow: 0 8px 24px rgba(102, 187, 106, 0.2);
+}
+
+.encyclopedia-detail.detail-green .detail-title {
+  color: #2E7D32;
+}
+
+.encyclopedia-detail.detail-green .detail-subtitle {
+  color: #388E3C;
+}
+
+.encyclopedia-detail.detail-green .detail-value {
+  color: #43A047;
+}
+
+.encyclopedia-detail.detail-green .detail-label {
+  color: #4CAF50;
 }
 
 .detail-header {
@@ -2428,16 +2678,25 @@
   background: rgba(255, 255, 255, 0.4);
 }
 
-/* 긍정 감정 섹션 */
-.encyclopedia-detail.detail-positive .detail-section {
-  background: rgba(255, 236, 179, 0.2);
+/* 영역별 detail-section 스타일 */
+.encyclopedia-detail.detail-red .detail-section {
+  background: rgba(239, 83, 80, 0.08);
+  border-left-color: #EF5350;
+}
+
+.encyclopedia-detail.detail-yellow .detail-section {
+  background: rgba(255, 183, 77, 0.1);
   border-left-color: #FFB74D;
 }
 
-/* 부정 감정 섹션 */
-.encyclopedia-detail.detail-negative .detail-section {
-  background: rgba(197, 202, 233, 0.15);
-  border-left-color: #7986CB;
+.encyclopedia-detail.detail-blue .detail-section {
+  background: rgba(66, 165, 245, 0.08);
+  border-left-color: #42A5F5;
+}
+
+.encyclopedia-detail.detail-green .detail-section {
+  background: rgba(102, 187, 106, 0.08);
+  border-left-color: #66BB6A;
 }
 
 /* 그리드 레이아웃 (색상, 원산지, 향기) */
@@ -2483,17 +2742,28 @@
   border-left: 3px solid rgba(232, 205, 142, 0.5); */
 }
 
-/* 긍정 감정의 강조 값 */
-.encyclopedia-detail.detail-positive .detail-value.highlight {
-  /* background: rgba(255, 236, 179, 0.3);
-  border-left-color: rgba(255, 183, 77, 0.6); */
+/* 영역별 강조 값 스타일 (주석 처리됨 - 필요시 활성화) */
+/*
+.encyclopedia-detail.detail-red .detail-value.highlight {
+  background: rgba(239, 83, 80, 0.15);
+  border-left-color: rgba(239, 83, 80, 0.6);
 }
 
-/* 부정 감정의 강조 값 */
-.encyclopedia-detail.detail-negative .detail-value.highlight {
-  /* background: rgba(197, 202, 233, 0.3);
-  border-left-color: rgba(121, 134, 203, 0.6); */
+.encyclopedia-detail.detail-yellow .detail-value.highlight {
+  background: rgba(255, 183, 77, 0.15);
+  border-left-color: rgba(255, 183, 77, 0.6);
 }
+
+.encyclopedia-detail.detail-blue .detail-value.highlight {
+  background: rgba(66, 165, 245, 0.15);
+  border-left-color: rgba(66, 165, 245, 0.6);
+}
+
+.encyclopedia-detail.detail-green .detail-value.highlight {
+  background: rgba(102, 187, 106, 0.15);
+  border-left-color: rgba(102, 187, 106, 0.6);
+}
+*/
 
 /* 긴 텍스트(유래, 재미있는 사실) 스타일 */
 .detail-value.story {
@@ -2516,10 +2786,6 @@
   background: rgba(255, 255, 255, 0.3); */
 }
 
-.detail-negative .not-acquired-message {
-
-}
-
 .not-acquired-message {
   margin-top: 15px;
   padding: 15px;
@@ -2531,6 +2797,31 @@
   font-size: 14px;
   color: #F57C00;
   font-weight: bold;
+}
+
+/* 영역별 미획득 메시지 스타일 */
+.encyclopedia-detail.detail-red .not-acquired-message {
+  background: rgba(239, 83, 80, 0.1);
+  border-color: #EF5350;
+  color: #C62828;
+}
+
+.encyclopedia-detail.detail-yellow .not-acquired-message {
+  background: rgba(255, 183, 77, 0.1);
+  border-color: #FFB74D;
+  color: #E65100;
+}
+
+.encyclopedia-detail.detail-blue .not-acquired-message {
+  background: rgba(66, 165, 245, 0.1);
+  border-color: #42A5F5;
+  color: #1565C0;
+}
+
+.encyclopedia-detail.detail-green .not-acquired-message {
+  background: rgba(102, 187, 106, 0.1);
+  border-color: #66BB6A;
+  color: #2E7D32;
 }
 
 /* ============================================
@@ -2693,6 +2984,50 @@
   .encyclopedia-grid {
     grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
     gap: 10px;
+  }
+
+  /* 필터 칩 - 모바일 */
+  .area-filter-wrapper {
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .filter-label-text {
+    font-size: 13px;
+  }
+
+  .area-filter-container {
+    gap: 10px;
+    padding: 6px 10px;
+  }
+
+  .area-filter-chip {
+    width: 34px;
+    height: 34px;
+  }
+
+  .area-filter-chip::after {
+    width: 28%;
+    height: 28%;
+  }
+
+  .area-filter-chip.active::after {
+    width: 32%;
+    height: 32%;
+  }
+
+  /* 헤더 버튼 - 모바일 */
+  .mood-meter-guide-btn {
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+
+  .guide-icon {
+    font-size: 14px;
+  }
+
+  .guide-text {
+    font-size: 11px;
   }
 
   .detail-body {
@@ -2899,4 +3234,822 @@
 .slide-enter-from,
 .slide-leave-to {
   transform: translateX(-100%);
+}
+
+/* ============================================
+   18. 감정 레터 관련
+============================================ */
+
+/* 레터 필터 */
+.letter-filter {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  font-family: 'Cafe24Ssurround', sans-serif;
+  padding: 8px 16px;
+  background: #F9F6F0;
+  border: 2px solid #E8CD8E;
+  border-radius: 20px;
+  font-size: 14px;
+  color: #8B6F47;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 600;
+}
+
+.filter-btn:hover {
+  background: #F4E4C1;
+  transform: translateY(-1px);
+}
+
+.filter-btn.active {
+  background: linear-gradient(135deg, #8B6F47 0%, #6B5437 100%);
+  color: white;
+  border-color: #8B6F47;
+}
+
+/* 레터 목록 */
+.letter-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  height: 500px;
+  overflow-y: auto;
+  padding-right: 5px;
+}
+
+.letter-item {
+  display: flex;
+  gap: 15px;
+  padding: 20px;
+  background: linear-gradient(135deg, #FFFBF0 0%, #FFF4E0 100%);
+  border: 2px solid #E8CD8E;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.letter-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(139, 111, 71, 0.2);
+  border-color: #D4B87A;
+}
+
+.letter-item.unread {
+  background: linear-gradient(135deg, #FFF9E6 0%, #FFECB3 100%);
+  border-color: #FFB74D;
+  box-shadow: 0 2px 8px rgba(255, 183, 77, 0.2);
+}
+
+.letter-icon {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.letterbox-icon {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+}
+
+.unread-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: #FF6B6B;
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 8px;
+  font-family: 'Cafe24Ssurround', sans-serif;
+}
+
+.letter-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.letter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+  gap: 10px;
+}
+
+.letter-title {
+  font-family: 'Cafe24Ssurround', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #8B6F47;
+  margin: 0;
+}
+
+.letter-date {
+  font-family: 'LeeSeoyun', cursive;
+  font-size: 13px;
+  color: #A68B6A;
+  flex-shrink: 0;
+}
+
+.letter-preview {
+  font-family: 'LeeSeoyun', cursive;
+  font-size: 14px;
+  color: #5D4E37;
+  line-height: 1.6;
+  margin: 0 0 10px 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.letter-meta {
+  display: flex;
+  gap: 15px;
+  font-size: 12px;
+  color: #A68B6A;
+}
+
+.letter-period,
+.letter-emotion-count {
+  font-family: 'LeeSeoyun', cursive;
+}
+
+/* 빈 상태 */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.empty-icon {
+  font-size: 80px;
+  margin-bottom: 20px;
+}
+
+.empty-message {
+  font-family: 'Cafe24Ssurround', sans-serif;
+  font-size: 18px;
+  color: #8B6F47;
+  margin: 0 0 10px 0;
+  font-weight: 700;
+}
+
+.empty-sub {
+  font-family: 'LeeSeoyun', cursive;
+  font-size: 14px;
+  color: #A68B6A;
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* 레터 상세 */
+.letter-detail-content {
+  font-family: 'LeeSeoyun', cursive;
+}
+
+.letter-section {
+  margin-bottom: 30px;
+  padding-bottom: 25px;
+  border-bottom: 1px solid #F0E8D8;
+}
+
+.letter-section:last-child {
+  border-bottom: none;
+}
+
+.section-title {
+  font-family: 'Cafe24Ssurround', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #8B6F47;
+  margin-bottom: 15px;
+}
+
+/* 인사말 */
+.greeting {
+  text-align: center;
+  padding: 25px;
+  background: linear-gradient(135deg, #FFF9E6 0%, #FFECB3 100%);
+  border-radius: 12px;
+  border: 2px solid #FFE082;
+}
+
+.greeting-icon {
+  font-size: 40px;
+  margin-bottom: 15px;
+}
+
+.greeting-text {
+  font-size: 16px;
+  color: #5D4E37;
+  line-height: 1.8;
+  margin: 0;
+}
+
+/* 감정 차트 */
+.emotion-chart {
+  max-width: 300px;
+  margin: 0 auto 20px;
+}
+
+.chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.legend-color {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.legend-text {
+  color: #5D4E37;
+}
+
+/* 분석 내용 */
+.analysis-content {
+  background: #F9F6F0;
+  padding: 20px;
+  border-radius: 10px;
+  border-left: 4px solid #8B6F47;
+}
+
+.analysis-content p {
+  font-size: 15px;
+  color: #5D4E37;
+  line-height: 1.8;
+  margin: 0;
+}
+
+/* 하이라이트 */
+.highlights {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+}
+
+.highlight-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 15px;
+  background: linear-gradient(135deg, #FFFBF0 0%, #FFF8E7 100%);
+  border: 2px solid #E8CD8E;
+  border-radius: 10px;
+}
+
+.highlight-icon {
+  font-size: 30px;
+  flex-shrink: 0;
+}
+
+.highlight-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.highlight-label {
+  font-size: 13px;
+  color: #A68B6A;
+  margin-bottom: 4px;
+}
+
+.highlight-value {
+  font-family: 'Cafe24Ssurround', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #8B6F47;
+}
+
+/* 응원 메시지 */
+.encouragement {
+  text-align: center;
+  padding: 25px;
+  background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%);
+  border-radius: 12px;
+  border: 2px solid #66BB6A;
+}
+
+.encouragement-icon {
+  font-size: 40px;
+  margin-bottom: 15px;
+}
+
+.encouragement-text {
+  font-size: 16px;
+  color: #2E7D32;
+  line-height: 1.8;
+  margin: 0;
+  font-weight: 600;
+}
+
+/* 서명 */
+.letter-signature {
+  text-align: right;
+  padding-top: 20px;
+  font-size: 14px;
+  color: #A68B6A;
+}
+
+.signature-date {
+  margin-top: 5px;
+  font-size: 12px;
+}
+
+/* 모바일 반응형 */
+@media (max-width: 640px) {
+  .letter-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .letterbox-icon {
+    width: 50px;
+    height: 50px;
+  }
+
+  .highlights {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ============================================
+   Landing Page Styles
+============================================ */
+.landing-container {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: linear-gradient(135deg, #FFFBF0 0%, #FFF4E0 100%);
+}
+
+.landing-content {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 500px;
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+}
+
+.logo-section {
+  text-align: center;
+}
+
+.logo-placeholder {
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 20px;
+  background: linear-gradient(135deg, #FFE9AE 0%, #FFD88A 100%);
+  border: 4px solid #E8CD8E;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 24px rgba(232, 205, 142, 0.4);
+  animation: float 3s ease-in-out infinite;
+}
+
+.service-title {
+  font-family: 'LeeSeoyun', cursive;
+  font-size: 42px;
+  font-weight: bold;
+  color: #5D4E37;
+  margin-bottom: 8px;
+}
+
+.service-subtitle {
+  font-family: 'LeeSeoyun', cursive;
+  font-size: 18px;
+  color: #8B7355;
+  font-weight: 500;
+}
+
+.intro-section {
+  text-align: center;
+  padding: 30px;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 20px;
+  border: 2px solid rgba(232, 205, 142, 0.3);
+  backdrop-filter: blur(10px);
+}
+
+.intro-text {
+  font-family: 'LeeSeoyun', cursive;
+  font-size: 18px;
+  line-height: 1.8;
+  color: #5D4E37;
+  font-weight: 500;
+}
+
+.action-section {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
+  max-width: 350px;
+}
+
+.landing-container .login-btn {
+  width: 100%;
+  padding: 18px 30px;
+  background: linear-gradient(135deg, #FFE9AE 0%, #FFD88A 100%);
+  border: 3px solid #E8CD8E;
+  border-radius: 16px;
+  font-family: 'LeeSeoyun', cursive;
+  font-size: 18px;
+  font-weight: bold;
+  color: #5D4E37;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  box-shadow: 0 6px 16px rgba(232, 205, 142, 0.3);
+}
+
+.landing-container .login-btn:hover {
+  background: linear-gradient(135deg, #FFD88A 0%, #FFC95A 100%);
+  border-color: #D4B87A;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(232, 205, 142, 0.5);
+}
+
+.landing-container .login-btn:active {
+  transform: translateY(0);
+}
+
+.btn-icon {
+  font-size: 22px;
+}
+
+.btn-text {
+  font-size: 18px;
+}
+
+.about-btn {
+  width: 100%;
+  padding: 15px 30px;
+  background: rgba(255, 255, 255, 0.5);
+  border: 2px solid #E8CD8E;
+  border-radius: 14px;
+  font-family: 'LeeSeoyun', cursive;
+  font-size: 16px;
+  font-weight: 600;
+  color: #8B7355;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.about-btn:hover {
+  background: rgba(255, 255, 255, 0.8);
+  border-color: #D4B87A;
+  color: #5D4E37;
+  transform: translateY(-1px);
+}
+
+.landing-footer {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.footer-text {
+  font-family: 'LeeSeoyun', cursive;
+  font-size: 14px;
+  color: #A68B6A;
+}
+
+/* ============================================
+   Login Modal Styles
+============================================ */
+.login-modal-header {
+  width: 100%;
+  text-align: left;
+}
+
+.login-modal-title {
+  font-family: 'LeeSeoyun', cursive;
+  font-size: 28px;
+  font-weight: bold;
+  color: #5D4E37;
+  margin-bottom: 8px;
+}
+
+.login-modal-subtitle {
+  font-family: 'LeeSeoyun', cursive;
+  font-size: 14px;
+  color: #8B7355;
+  font-weight: 500;
+}
+
+.login-modal-form {
+  margin-top: 20px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-label {
+  display: block;
+  font-family: 'LeeSeoyun', cursive;
+  font-size: 15px;
+  font-weight: 600;
+  color: #5D4E37;
+  margin-bottom: 8px;
+}
+
+.form-input {
+  width: 100%;
+  padding: 14px 16px;
+  font-family: 'LeeSeoyun', cursive;
+  font-size: 15px;
+  color: #5D4E37;
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid #E8CD8E;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #D4B87A;
+  background: #FFFFFF;
+  box-shadow: 0 0 0 4px rgba(232, 205, 142, 0.2);
+}
+
+.form-input::placeholder {
+  color: #C4B5A0;
+}
+
+.error-message {
+  padding: 12px 16px;
+  background: rgba(255, 107, 107, 0.1);
+  border: 2px solid #FF6B6B;
+  border-radius: 12px;
+  font-family: 'LeeSeoyun', cursive;
+  font-size: 14px;
+  color: #C62828;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.login-modal-btn {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, #FFE9AE 0%, #FFD88A 100%);
+  border: 3px solid #E8CD8E;
+  border-radius: 14px;
+  font-family: 'LeeSeoyun', cursive;
+  font-size: 17px;
+  font-weight: bold;
+  color: #5D4E37;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(232, 205, 142, 0.3);
+}
+
+.login-modal-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #FFD88A 0%, #FFC95A 100%);
+  border-color: #D4B87A;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(232, 205, 142, 0.5);
+}
+
+.login-modal-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.login-modal-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.test-login-btn {
+  width: 100%;
+  padding: 14px;
+  margin-top: 12px;
+  background: rgba(255, 255, 255, 0.5);
+  border: 2px solid #E8CD8E;
+  border-radius: 14px;
+  font-family: 'LeeSeoyun', cursive;
+  font-size: 15px;
+  font-weight: 600;
+  color: #8B7355;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.test-login-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.8);
+  border-color: #D4B87A;
+  color: #5D4E37;
+  transform: translateY(-1px);
+}
+
+.test-login-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.test-login-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ============================================
+   About Modal Styles
+============================================ */
+.about-section {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.feature-item {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  background: linear-gradient(135deg, #FFFBF0 0%, #FFF8E7 100%);
+  border-radius: 16px;
+  border: 2px solid rgba(232, 205, 142, 0.3);
+  transition: all 0.3s ease;
+}
+
+.feature-item:hover {
+  border-color: #E8CD8E;
+  box-shadow: 0 4px 12px rgba(232, 205, 142, 0.2);
+  transform: translateY(-2px);
+}
+
+.feature-icon {
+  font-size: 40px;
+  flex-shrink: 0;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #FFE9AE 0%, #FFD88A 100%);
+  border-radius: 50%;
+  box-shadow: 0 4px 12px rgba(232, 205, 142, 0.3);
+}
+
+.feature-content {
+  flex: 1;
+}
+
+.feature-title {
+  font-family: 'LeeSeoyun', cursive;
+  font-size: 20px;
+  font-weight: bold;
+  color: #5D4E37;
+  margin-bottom: 8px;
+}
+
+.feature-desc {
+  font-family: 'LeeSeoyun', cursive;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #8B7355;
+}
+
+.about-footer {
+  margin-top: 30px;
+  padding: 20px;
+  background: linear-gradient(135deg, #FFE9AE 0%, #FFD88A 100%);
+  border-radius: 16px;
+  text-align: center;
+}
+
+.footer-message {
+  font-family: 'LeeSeoyun', cursive;
+  font-size: 16px;
+  line-height: 1.8;
+  color: #5D4E37;
+  font-weight: 600;
+}
+
+.confirm-btn {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #FFE9AE 0%, #FFD88A 100%);
+  border: 2px solid #E8CD8E;
+  border-radius: 12px;
+  font-family: 'LeeSeoyun', cursive;
+  font-size: 16px;
+  font-weight: bold;
+  color: #5D4E37;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.confirm-btn:hover {
+  background: linear-gradient(135deg, #FFD88A 0%, #FFC95A 100%);
+  border-color: #D4B87A;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(232, 205, 142, 0.4);
+}
+
+/* ============================================
+   Responsive - Landing, Login Modal & About Modal
+============================================ */
+@media (max-width: 480px) {
+  /* Landing Page */
+  .service-title {
+    font-size: 36px;
+  }
+
+  .service-subtitle {
+    font-size: 16px;
+  }
+
+  .logo-placeholder {
+    width: 100px;
+    height: 100px;
+  }
+
+  .intro-text {
+    font-size: 16px;
+  }
+
+  .landing-container .login-btn {
+    padding: 16px 24px;
+    font-size: 16px;
+  }
+
+  .about-btn {
+    padding: 14px 24px;
+    font-size: 15px;
+  }
+
+  /* Login Modal */
+  .login-modal-title {
+    font-size: 24px;
+  }
+
+  .login-modal-subtitle {
+    font-size: 13px;
+  }
+
+  .form-input {
+    padding: 12px 14px;
+    font-size: 14px;
+  }
+
+  .login-modal-btn {
+    padding: 14px;
+    font-size: 16px;
+  }
+
+  /* About Modal */
+  .feature-item {
+    flex-direction: column;
+    gap: 15px;
+    padding: 15px;
+  }
+
+  .feature-icon {
+    font-size: 35px;
+    width: 55px;
+    height: 55px;
+    margin: 0 auto;
+  }
+
+  .feature-content {
+    text-align: center;
+  }
+
+  .feature-title {
+    font-size: 18px;
+  }
+
+  .feature-desc {
+    font-size: 13px;
+  }
 }

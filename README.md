@@ -70,27 +70,72 @@ src/
 │   │   │   ├── 3d/           # 화단용 3D 꽃 이미지 (PNG)
 │   │   │   └── realistic/    # 상세화면용 실사 꽃 이미지 (PNG)
 │   │   ├── garden-bg-rectangle.png
+│   │   ├── letterbox.png
 │   │   ├── waterting-can.png
 │   │   └── trowel.png
 │   └── styles/
 │       ├── main.css          # Tailwind 설정
-│       └── garden.css        # Garden 컴포넌트 전용 스타일
+│       └── garden.css        # 전체 스타일 (통합 관리)
+│
 ├── components/
-│   └── modals/               # 모달 컴포넌트들
-│       ├── LoadingModal.vue
-│       ├── AlertModal.vue
-│       ├── ImagePreviewModal.vue
-│       ├── DiaryWriteModal.vue
-│       ├── DatePickerModal.vue
-│       ├── DiaryReadModal.vue
-│       └── EncyclopediaModal.vue
+│   ├── common/               # 공통 컴포넌트
+│   │   └── modals/           # 재사용 가능한 모달들
+│   │       ├── BaseModal.vue          # 기본 모달 (슬롯 기반)
+│   │       ├── AlertModal.vue         # 알럿 모달
+│   │       ├── LoadingModal.vue       # 로딩 모달
+│   │       └── ImagePreviewModal.vue  # 이미지 미리보기
+│   │
+│   ├── diary/                # 일기 관련
+│   │   ├── DiaryWriteModal.vue        # 일기 작성 (note.png 배경)
+│   │   └── DiaryReadModal.vue         # 일기 조회 (플립카드)
+│   │
+│   ├── encyclopedia/         # 감정도감 관련
+│   │   └── EncyclopediaModal.vue      # 감정 도감
+│   │
+│   ├── guide/                # 가이드 관련
+│   │   └── MoodMeterGuideModal.vue    # 감정 무드미터 가이드
+│   │
+│   ├── letter/               # 레터 관련
+│   │   ├── LetterNotificationModal.vue # 레터 알림
+│   │   ├── LetterListModal.vue         # 레터 목록
+│   │   └── LetterDetailModal.vue       # 레터 상세
+│   │
+│   └── layout/               # 레이아웃 컴포넌트
+│       ├── SidebarMenu.vue            # 사이드바 메뉴
+│       └── DatePickerModal.vue        # 날짜 선택
+│
+├── config/
+│   └── menuConfig.js         # 사이드바 메뉴 설정
+│
 ├── services/
 │   └── diaryApi.js           # API 통신 서비스
+│
 ├── utils/
 │   └── flowerMapper.js       # 감정-꽃 매핑 유틸리티
+│
 └── views/
     └── Garden.vue            # 메인 화단 화면
 ```
+
+### 컴포넌트 구조 설계 원칙
+
+1. **공통 컴포넌트** (`common/modals/`): 프로젝트 전체에서 재사용 가능한 범용 모달
+   - `BaseModal`: 모든 모달의 기본이 되는 컴포넌트 (슬롯 기반)
+   - `AlertModal`, `LoadingModal`: UI 피드백용 공통 모달
+
+2. **비즈니스 도메인별 분리**: 기능 영역에 따라 폴더 구분 (불필요한 `modals` 중첩 제거)
+   - `diary/`: 일기 작성/조회 관련 컴포넌트
+   - `encyclopedia/`: 감정 도감 관련 컴포넌트
+   - `guide/`: 가이드 및 도움말 관련 컴포넌트
+   - `letter/`: 감정 레터 관련 컴포넌트
+
+3. **레이아웃 컴포넌트** (`layout/`): 페이지 구조 및 네비게이션
+   - `SidebarMenu`, `DatePickerModal` 등
+
+4. **모달 재사용성**: BaseModal을 활용해 통일된 디자인 유지
+   - `EncyclopediaModal`, `MoodMeterGuideModal` → BaseModal 기반
+   - `DiaryWriteModal` → 독자적 스타일 (note.png 배경)
+   - `DiaryReadModal` → 플립카드 특성상 독립적 구조
 
 ## API 연동
 

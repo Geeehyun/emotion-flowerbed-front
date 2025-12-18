@@ -1,7 +1,8 @@
 import axios from 'axios';
+import { refreshAccessToken } from './authApi';
 
 // API Base URL 설정
-const API_BASE_URL = import.meta.env.VITE_APP_API_URL || 'http://localhost:8080/api';
+const API_BASE_URL = import.meta.env.VITE_APP_API_URL || '/api/v1';
 
 // Axios 인스턴스 생성
 const apiClient = axios.create({
@@ -12,14 +13,30 @@ const apiClient = axios.create({
   timeout: 30000 // 30초 타임아웃
 });
 
-// 요청 인터셉터 (필요 시 인증 토큰 추가)
+// 토큰 갱신 중인지 여부
+let isRefreshing = false;
+// 토큰 갱신을 기다리는 요청들
+let failedQueue = [];
+
+const processQueue = (error, token = null) => {
+  failedQueue.forEach(prom => {
+    if (error) {
+      prom.reject(error);
+    } else {
+      prom.resolve(token);
+    }
+  });
+
+  failedQueue = [];
+};
+
+// 요청 인터셉터 (인증 토큰 추가)
 apiClient.interceptors.request.use(
   (config) => {
-    // 예: 로컬 스토리지에서 토큰 가져오기
-    // const token = localStorage.getItem('authToken');
-    // if (token) {
-    //   config.headers.Authorization = `Bearer ${token}`;
-    // }
+    const token = localStorage.getItem('accessToken');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
     return config;
   },
   (error) => {
@@ -27,10 +44,67 @@ apiClient.interceptors.request.use(
   }
 );
 
-// 응답 인터셉터 (에러 처리)
+// 응답 인터셉터 (에러 처리 및 토큰 갱신)
 apiClient.interceptors.response.use(
   (response) => response,
-  (error) => {
+  async (error) => {
+    const originalRequest = error.config;
+
+    // 401 에러이고 토큰 갱신 요청이 아닌 경우
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      if (isRefreshing) {
+        // 이미 토큰 갱신 중이면 큐에 추가
+        return new Promise((resolve, reject) => {
+          failedQueue.push({ resolve, reject });
+        })
+          .then(token => {
+            originalRequest.headers.Authorization = `Bearer ${token}`;
+            return apiClient(originalRequest);
+          })
+          .catch(err => {
+            return Promise.reject(err);
+          });
+      }
+
+      originalRequest._retry = true;
+      isRefreshing = true;
+
+      const refreshToken = localStorage.getItem('refreshToken');
+
+      if (!refreshToken) {
+        // refresh token이 없으면 로그아웃
+        handleLogout();
+        return Promise.reject(error);
+      }
+
+      try {
+        // 토큰 갱신 시도
+        const data = await refreshAccessToken(refreshToken);
+
+        // 새 토큰 저장
+        localStorage.setItem('accessToken', data.accessToken);
+        if (data.refreshToken) {
+          localStorage.setItem('refreshToken', data.refreshToken);
+        }
+
+        // 기존 요청들에 새 토큰 적용
+        apiClient.defaults.headers.common['Authorization'] = `Bearer ${data.accessToken}`;
+        originalRequest.headers.Authorization = `Bearer ${data.accessToken}`;
+
+        processQueue(null, data.accessToken);
+
+        // 원래 요청 재시도
+        return apiClient(originalRequest);
+      } catch (refreshError) {
+        // 토큰 갱신 실패 - 로그아웃
+        processQueue(refreshError, null);
+        handleLogout();
+        return Promise.reject(refreshError);
+      } finally {
+        isRefreshing = false;
+      }
+    }
+
     // 공통 에러 처리
     if (error.response) {
       console.error('API Error:', error.response.status, error.response.data);
@@ -39,9 +113,21 @@ apiClient.interceptors.response.use(
     } else {
       console.error('Error:', error.message);
     }
+
     return Promise.reject(error);
   }
 );
+
+// 로그아웃 처리
+const handleLogout = () => {
+  localStorage.removeItem('accessToken');
+  localStorage.removeItem('refreshToken');
+
+  // 인증 상태 업데이트
+  if (window.setAuth) {
+    window.setAuth(false);
+  }
+};
 
 /**
  * 일기 감정 분석 요청 (테스트용 - 랜덤)

@@ -134,10 +134,11 @@
       :acquired-emotions="acquiredEmotions"
       :all-emotions="allEmotionsData"
       :selected-emotion="selectedEncyclopediaEmotion"
-      :get3d-image="get3dImageFromDetail"
+      :get3d-image="get3dPotImageFromDetail"
       :get-realistic-image="getRealisticImageFromDetail"
       @close="closeEncyclopedia"
       @select-emotion="selectEncyclopediaEmotion"
+      @open-mood-meter-guide="openMoodMeterGuide"
     />
 
 
@@ -179,34 +180,83 @@
       @confirm="openLetter"
     />
 
+    <!-- 감정 레터 목록 모달 -->
+    <LetterListModal
+      v-model="showLetterList"
+      @select-letter="handleSelectLetter"
+      @close="showLetterList = false"
+    />
+
+    <!-- 감정 레터 상세 모달 -->
+    <LetterDetailModal
+      v-model="showLetterDetail"
+      :letter="selectedLetter"
+      @close="showLetterDetail = false"
+    />
+
     <!-- 감정 무드미터 가이드 모달 -->
     <MoodMeterGuideModal
       v-model="showMoodMeterGuide"
+    />
+
+    <!-- 감정제어 활동 모달 -->
+    <EmotionControlModal
+      v-model="showEmotionControl"
+      :is-first-time="isFirstTimeEmotionControl"
+      :initial-activity="currentEmotionControl?.id"
+      @save="saveEmotionControl"
+      @close="showEmotionControl = false"
+    />
+
+    <!-- 3일 연속 감정 토스트 -->
+    <EmotionContinuousToast
+      v-model="showContinuousToast"
+      :emotion-name="continuousEmotionData.emotionName"
+      :emotion-icon="continuousEmotionData.emotionIcon"
+      :consecutive-days="continuousEmotionData.consecutiveDays"
+      :activity-name="continuousEmotionData.activityName"
+      :activity-icon="continuousEmotionData.activityIcon"
+      @close="showContinuousToast = false"
     />
   </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted, watch, nextTick } from 'vue'
-import { get3dImageFromDetail, getRealisticImageFromDetail, getEmotionData, UNKNOWN_EMOTION } from '../utils/flowerMapper.js'
+import { get3dImageFromDetail, get3dPotImageFromDetail, getRealisticImageFromDetail, getEmotionData, UNKNOWN_EMOTION } from '../utils/flowerMapper.js'
 import * as diaryApi from '../services/diaryApi.js'
+import { logout } from '../services/authApi.js'
 import { Chart, ArcElement, Tooltip, Legend } from 'chart.js'
 import { ArrowPathIcon, XMarkIcon, PlusCircleIcon, ArrowDownTrayIcon, BookOpenIcon, Bars3Icon } from '@heroicons/vue/24/outline'
 import html2canvas from 'html2canvas'
 
 // 컴포넌트 import
-import SidebarMenu from '@/components/SidebarMenu.vue'
+// 레이아웃 컴포넌트
+import SidebarMenu from '@/components/layout/SidebarMenu.vue'
+import DatePickerModal from '@/components/layout/DatePickerModal.vue'
 
-// 모달 컴포넌트 import
-import LoadingModal from '@/components/modals/LoadingModal.vue'
-import AlertModal from '@/components/modals/AlertModal.vue'
-import ImagePreviewModal from '@/components/modals/ImagePreviewModal.vue'
-import DiaryWriteModal from '@/components/modals/DiaryWriteModal.vue'
-import DatePickerModal from '@/components/modals/DatePickerModal.vue'
-import DiaryReadModal from '@/components/modals/DiaryReadModal.vue'
-import EncyclopediaModal from '@/components/modals/EncyclopediaModal.vue'
-import LetterNotificationModal from '@/components/modals/LetterNotificationModal.vue'
-import MoodMeterGuideModal from '@/components/modals/MoodMeterGuideModal.vue'
+// 공통 모달 컴포넌트
+import LoadingModal from '@/components/common/modals/LoadingModal.vue'
+import AlertModal from '@/components/common/modals/AlertModal.vue'
+import ImagePreviewModal from '@/components/common/modals/ImagePreviewModal.vue'
+
+// 비즈니스 컴포넌트
+import DiaryWriteModal from '@/components/diary/DiaryWriteModal.vue'
+import DiaryReadModal from '@/components/diary/DiaryReadModal.vue'
+import EncyclopediaModal from '@/components/encyclopedia/EncyclopediaModal.vue'
+import LetterNotificationModal from '@/components/letter/LetterNotificationModal.vue'
+import LetterListModal from '@/components/letter/LetterListModal.vue'
+import LetterDetailModal from '@/components/letter/LetterDetailModal.vue'
+import MoodMeterGuideModal from '@/components/guide/MoodMeterGuideModal.vue'
+import EmotionControlModal from '@/components/common/modals/EmotionControlModal.vue'
+import EmotionContinuousToast from '@/components/common/EmotionContinuousToast.vue'
+
+// 유틸리티
+import {
+  hasEmotionControlActivity,
+  getEmotionControlActivity,
+  saveEmotionControlActivity
+} from '@/utils/emotionControlStorage.js'
 
 // Chart.js 요소 등록
 Chart.register(ArcElement, Tooltip, Legend)
@@ -242,7 +292,21 @@ const showSidebar = ref(false) // 사이드바 메뉴 표시 상태
 // GET /letters/has-new 같은 엔드포인트로 새 레터 여부 확인
 const hasNewLetter = ref(true) // 임시로 true 설정, 나중에 API로 확인
 const showLetterNotification = ref(false) // 레터 알림 모달 표시 상태
+const showLetterList = ref(false) // 레터 목록 모달 표시 상태
+const showLetterDetail = ref(false) // 레터 상세 모달 표시 상태
+const selectedLetter = ref(null) // 선택된 레터
 const showMoodMeterGuide = ref(false) // 무드미터 가이드 모달 표시 상태
+const showEmotionControl = ref(false) // 감정제어 활동 모달 표시 상태
+const isFirstTimeEmotionControl = ref(false) // 최초 등록 여부
+const currentEmotionControl = ref(null) // 현재 설정된 감정제어 활동
+const showContinuousToast = ref(false) // 3일 연속 감정 토스트 표시 상태
+const continuousEmotionData = ref({
+  emotionName: '',
+  emotionIcon: '',
+  consecutiveDays: 0,
+  activityName: '',
+  activityIcon: ''
+})
 
 // 포스트잇 드래그 상태
 const postitPositions = ref({
@@ -289,7 +353,7 @@ const currentDiaryRealisticImage = computed(() => {
 
 // 분석 안된 일기인지 확인
 const isUnanalyzed = computed(() => {
-  return currentDiary.value && !currentDiary.value.emotion
+  return currentDiary.value && !currentDiary.value.emotions
 })
 
 // 획득한 감정 목록 (전체 기간 기준 - API 데이터)
@@ -694,6 +758,17 @@ const saveDiary = async (isTest = true) => {
 
     showLoading.value = false
     showCustomAlert('일기가 저장되었습니다!', '🌸')
+
+    // TODO: API 연동 - 일기 등록 응답에 아래 필드 추가 예정
+    // analyzedDiary = {
+    //   ...기존 필드들,
+    //   shouldShowEmotionControl: true/false,  // 3일 연속 감정 여부
+    //   consecutiveDays: 3                      // 연속 일수
+    // }
+    //
+    // 현재는 테스트용으로 무조건 토스트 표시
+    showEmotionControlToast(analyzedDiary.coreEmotion)
+
     currentDay.value = null
     diaryContent.value = ''
   } catch (error) {
@@ -703,6 +778,43 @@ const saveDiary = async (isTest = true) => {
     currentDay.value = null
     diaryContent.value = ''
   }
+}
+
+// 감정제어 활동 토스트 표시 (테스트용)
+// TODO: API 연동 후 아래 로직으로 변경
+// if (analyzedDiary.shouldShowEmotionControl) {
+//   showEmotionControlToast(analyzedDiary.coreEmotion, analyzedDiary.consecutiveDays)
+// }
+const showEmotionControlToast = (currentEmotion) => {
+  // 감정제어 활동이 등록되어 있지 않으면 표시하지 않음
+  if (!currentEmotionControl.value) return
+
+  // 감정 이름 가져오기
+  const emotionData = getEmotionData(currentEmotion)
+  const emotionNameKr = emotionData ? emotionData.emotionNameKr : '알 수 없는 감정'
+
+  // 감정 아이콘 설정 (영역별)
+  const emotionIcons = {
+    'red': '🔥',
+    'yellow': '⭐',
+    'blue': '💙',
+    'green': '💚'
+  }
+  const emotionIcon = emotionIcons[emotionData?.area] || '🌸'
+
+  // 토스트 데이터 설정
+  continuousEmotionData.value = {
+    emotionName: emotionNameKr,
+    emotionIcon: emotionIcon,
+    consecutiveDays: 3, // TODO: API에서 실제 연속 일수를 받아올 예정
+    activityName: currentEmotionControl.value.name,
+    activityIcon: currentEmotionControl.value.icon
+  }
+
+  // 토스트 표시 (1초 후에 자연스럽게 표시)
+  setTimeout(() => {
+    showContinuousToast.value = true
+  }, 1000)
 }
 
 // 일기 읽기 모달 열기
@@ -1015,6 +1127,11 @@ const closeEncyclopedia = () => {
   selectedEncyclopediaEmotion.value = null
 }
 
+// 무드미터 가이드 열기
+const openMoodMeterGuide = () => {
+  showMoodMeterGuide.value = true
+}
+
 // 도감에서 감정 선택
 const selectEncyclopediaEmotion = (emotionCode) => {
   selectedEncyclopediaEmotion.value = emotionCode
@@ -1038,6 +1155,44 @@ const toggleSidebar = () => {
   showSidebar.value = !showSidebar.value
 }
 
+// 감정제어 활동 등록 체크
+const checkEmotionControlRegistration = () => {
+  // localStorage에서 감정제어 활동이 등록되어 있는지 확인
+  const hasActivity = hasEmotionControlActivity()
+
+  if (!hasActivity) {
+    // 등록되어 있지 않으면 최초 등록 모달 표시
+    isFirstTimeEmotionControl.value = true
+    setTimeout(() => {
+      showEmotionControl.value = true
+    }, 800) // 레터 알림보다 약간 늦게 표시
+  } else {
+    // 등록되어 있으면 현재 활동 불러오기
+    currentEmotionControl.value = getEmotionControlActivity()
+  }
+}
+
+// 감정제어 활동 저장
+const saveEmotionControl = (activity) => {
+  saveEmotionControlActivity(activity)
+  currentEmotionControl.value = activity
+
+  // 최초 등록일 경우
+  if (isFirstTimeEmotionControl.value) {
+    isFirstTimeEmotionControl.value = false
+    showEmotionControl.value = false
+    showCustomAlert(`${activity.icon} ${activity.name}을(를) 등록했어요!\n같은 감정이 3일 연속되면 추천해드릴게요.`, '✨')
+  } else {
+    showCustomAlert(`${activity.icon} ${activity.name}으로 변경했어요!`, '✨')
+  }
+}
+
+// 감정제어 활동 모달 열기 (설정에서)
+const openEmotionControlSettings = () => {
+  isFirstTimeEmotionControl.value = false
+  showEmotionControl.value = true
+}
+
 // 메뉴 선택 처리
 const handleMenuSelect = (menuId) => {
   switch (menuId) {
@@ -1053,24 +1208,65 @@ const handleMenuSelect = (menuId) => {
     case 'mood-meter':
       showMoodMeterGuide.value = true
       break
-    case 'training':
-      showCustomAlert('감정 관리 훈련 기능은 준비 중입니다!', '💪')
+    case 'emotion-control':
+      openEmotionControlSettings()
       break
     case 'letter':
       openLetter()
+      break
+    case 'logout':
+      handleLogout()
       break
     default:
       break
   }
 }
 
+// 로그아웃 처리
+const handleLogout = async () => {
+  try {
+    await logout()
+    // 인증 상태 업데이트 (Landing 페이지로 이동)
+    if (window.setAuth) {
+      window.setAuth(false)
+    }
+  } catch (error) {
+    console.error('로그아웃 중 오류:', error)
+    // 에러가 발생해도 로컬 스토리지는 이미 정리되었으므로 Landing으로 이동
+    if (window.setAuth) {
+      window.setAuth(false)
+    }
+  }
+}
+
 // 우체통 클릭 - 감정 레터 열기
 const openLetter = () => {
-  // TODO: API 연동 - 감정 레터 모달 구현 필요
+  // TODO: API 연동 - 감정 레터 API 호출 필요
   // 1. 레터 목록 API 호출: GET /letters
-  // 2. 레터 상세 모달 표시
-  // 3. 읽음 처리: POST /letters/{letterId}/read
-  showCustomAlert('감정 레터 기능은 준비 중입니다!', '✉️')
+  // 2. 읽음 처리: POST /letters/{letterId}/read
+  showLetterList.value = true
+}
+
+const handleSelectLetter = (letter) => {
+  // TODO: 레터 상세 데이터 구성 (임시 데이터)
+  selectedLetter.value = {
+    ...letter,
+    emotions: [
+      { name: '기쁨', count: 3, color: '#FFB74D' },
+      { name: '평온', count: 2, color: '#66BB6A' },
+      { name: '설렘', count: 1, color: '#FFA726' },
+      { name: '불안', count: 1, color: '#7986CB' }
+    ],
+    analysis: '이번 주는 긍정적인 감정이 주를 이뤘어요! 특히 기쁨과 평온함을 많이 느끼셨네요. 새로운 시작을 준비하면서 설렘도 함께했고, 가끔 불안도 있었지만 잘 극복하신 것 같아요. 감정의 균형을 잘 유지하고 계시네요.',
+    highlights: [
+      { icon: '😊', label: '가장 많은 감정', value: '기쁨 (3일)' },
+      { icon: '📈', label: '감정 변화', value: '안정적' },
+      { icon: '🌟', label: '이번 주 점수', value: '85점' }
+    ],
+    encouragement: '이번 주도 당신의 감정을 잘 돌보셨어요! 긍정적인 감정을 많이 느끼신 만큼, 다음 주도 행복한 순간들이 가득하길 바랍니다. 화이팅!'
+  }
+  showLetterList.value = false
+  showLetterDetail.value = true
 }
 
 // ESC 키로 모달 닫기
@@ -1102,6 +1298,9 @@ onMounted(() => {
 
   // 페이지 로드 시 현재 월의 일기 목록 로드
   loadMonthlyDiaries()
+
+  // 감정제어 활동 최초 등록 체크
+  checkEmotionControlRegistration()
 
   // 새 레터가 있으면 알림 모달 표시
   if (hasNewLetter.value) {
