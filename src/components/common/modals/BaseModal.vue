@@ -1,6 +1,6 @@
 <template>
   <transition name="fade">
-    <div v-if="modelValue" class="modal active" @click="handleBackgroundClick">
+    <div v-if="modelValue" class="modal active" :class="customClass" @click="handleBackgroundClick">
       <div class="base-modal-content" :style="{ maxWidth: maxWidth }">
         <!-- 헤더 -->
         <div class="base-modal-header">
@@ -41,6 +41,10 @@ const props = defineProps({
   maxWidth: {
     type: String,
     default: '600px'
+  },
+  customClass: {
+    type: String,
+    default: ''
   }
 })
 

@@ -2,6 +2,7 @@
   <BaseModal
     v-model="isOpen"
     max-width="600px"
+    custom-class="emotion-control-modal-overlay"
     @close="handleClose"
   >
     <template #header>

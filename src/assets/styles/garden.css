@@ -4259,6 +4259,11 @@
    (src/components/common/modals/EmotionControlModal.vue)
    ============================================ */
 
+/* 감정 제어 모달은 다른 모달들보다 낮은 z-index (다른 모달 뒤에 표시) */
+.emotion-control-modal-overlay {
+  z-index: 900 !important;
+}
+
 .emotion-control-header {
   text-align: left;
 }
