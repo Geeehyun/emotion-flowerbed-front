@@ -3,9 +3,6 @@
     <div v-if="isVisible" class="emotion-toast-container">
       <!-- 말풍선 -->
       <div class="speech-bubble">
-        <button class="toast-close-btn" @click="close">
-          <XMarkIcon class="w-4 h-4" />
-        </button>
         <div class="toast-content">
           <div class="toast-emotion">
             <span class="emotion-icon">{{ emotionIcon }}</span>
@@ -15,6 +12,9 @@
             <span class="activity-icon">{{ activityIcon }}</span>
             <span class="activity-text">{{ activityName }}을(를) 해보는 건 어때요?</span>
           </div>
+          <button class="toast-confirm-btn" @click="close">
+            확인
+          </button>
         </div>
       </div>
 
@@ -28,7 +28,6 @@
 
 <script setup>
 import { ref, onMounted, watch } from 'vue'
-import { XMarkIcon } from '@heroicons/vue/24/outline'
 
 const props = defineProps({
   modelValue: {
@@ -57,11 +56,11 @@ const props = defineProps({
   },
   autoClose: {
     type: Boolean,
-    default: true
+    default: false
   },
   duration: {
     type: Number,
-    default: 7000 // 7초
+    default: 0 // 자동 닫기 비활성화
   }
 })
 

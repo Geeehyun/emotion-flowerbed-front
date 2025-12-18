@@ -190,9 +190,9 @@ const handleClose = () => {
 }
 
 .activity-card.selected {
-  border-color: #7ED957;
-  background: linear-gradient(135deg, #F0FFF4 0%, #ECFDF5 100%);
-  box-shadow: 0 8px 20px rgba(126, 217, 87, 0.3);
+  border-color: #FFB366;
+  background: linear-gradient(135deg, #FFF9E6 0%, #FFF4CC 100%);
+  box-shadow: 0 8px 20px rgba(255, 179, 102, 0.3);
   transform: translateY(-4px);
 }
 
@@ -221,7 +221,7 @@ const handleClose = () => {
   right: 12px;
   width: 28px;
   height: 28px;
-  background: #7ED957;
+  background: #FFB366;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -279,14 +279,14 @@ const handleClose = () => {
 }
 
 .save-btn {
-  background: linear-gradient(135deg, #7ED957 0%, #6BC947 100%);
+  background: linear-gradient(135deg, #FFB366 0%, #FFA044 100%);
   color: white;
-  box-shadow: 0 4px 12px rgba(126, 217, 87, 0.3);
+  box-shadow: 0 4px 12px rgba(255, 179, 102, 0.3);
 }
 
 .save-btn:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(126, 217, 87, 0.4);
+  box-shadow: 0 6px 16px rgba(255, 179, 102, 0.4);
 }
 
 .save-btn:disabled {
