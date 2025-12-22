@@ -7,7 +7,7 @@
   >
     <template #header>
       <div class="emotion-control-header">
-        <h2 class="text-xl font-bold text-gray-800">나의 감정제어 활동</h2>
+        <h2 class="text-xl font-bold text-gray-800">감정 가꾸기</h2>
         <p class="emotion-control-subtitle">
           {{ isFirstTime ? '평소 감정을 다스릴 때 도움이 되는 활동을 선택해주세요' : '감정제어 활동을 수정할 수 있어요' }}
         </p>
@@ -24,7 +24,10 @@
             :class="{ selected: selectedActivity === activity.id }"
             @click="selectActivity(activity.id)"
           >
-            <div class="activity-icon">{{ activity.icon }}</div>
+            <div class="activity-icon">
+              <img v-if="activity.iconImage" :src="activity.iconImage" :alt="activity.name" />
+              <span v-else>{{ activity.icon }}</span>
+            </div>
             <div class="activity-name">{{ activity.name }}</div>
             <div class="activity-description">{{ activity.description }}</div>
             <div v-if="selectedActivity === activity.id" class="check-icon">✓</div>
@@ -92,24 +95,28 @@ const activities = [
     id: 'butterfly-hug',
     name: '나비허그 하기',
     icon: '🦋',
+    iconImage: new URL('@/assets/images/emtion-control/butterfly_hug.png', import.meta.url).href,
     description: '양손을 교차하여 어깨를 토닥이며 마음을 진정시켜요'
   },
   {
     id: 'breathing',
     name: '쉼호흡 하기',
     icon: '🌬️',
+    iconImage: new URL('@/assets/images/emtion-control/deep-breath.png', import.meta.url).href,
     description: '천천히 깊게 숨을 들이마시고 내쉬며 안정을 찾아요'
   },
   {
     id: 'walking',
     name: '산책하기',
     icon: '🚶',
+    iconImage: new URL('@/assets/images/emtion-control/walk.png', import.meta.url).href,
     description: '바깥 공기를 마시며 가볍게 걸으며 생각을 정리해요'
   },
   {
     id: 'drawing',
     name: '내 감정을 그림으로 그려보기',
     icon: '🎨',
+    iconImage: new URL('@/assets/images/emtion-control/draw.png', import.meta.url).href,
     description: '감정을 색과 형태로 표현하며 마음을 표출해요'
   }
 ]
@@ -149,5 +156,3 @@ const handleClose = () => {
   emit('close')
 }
 </script>
-
-<!-- 스타일은 src/assets/styles/garden.css에 통합되어 있습니다 -->

@@ -29,7 +29,7 @@ export const menuItems = [
   },
   {
     id: 'emotion-control',
-    label: '나의 감정제어 활동',
+    label: '감정 가꾸기',
     icon: HeartIcon,
     active: false
   },

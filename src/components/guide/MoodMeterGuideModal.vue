@@ -6,94 +6,203 @@
     @close="handleClose"
   >
     <template #default>
-          <!-- 소개 섹션 -->
-          <div class="guide-section">
-            <h3 class="section-title">감정 무드미터는 무엇인가요?</h3>
-            <p class="section-text">
-              감정 무드미터는 예일대학교에서 개발한 감정 인식 도구로,
-              우리의 복잡한 감정을 <strong>에너지 수준</strong>과 <strong>쾌/불쾌 정도</strong>로
-              분류하여 이해하기 쉽게 만들어줍니다.
-            </p>
-          </div>
+          <div class="card-slider-container">
+            <!-- 카드 슬라이더 -->
+            <div
+              class="card-slider"
+              @touchstart="handleTouchStart"
+              @touchmove="handleTouchMove"
+              @touchend="handleTouchEnd"
+            >
+              <div
+                class="cards-wrapper"
+                :style="{ transform: `translateX(-${currentIndex * 100}%)` }"
+              >
+                <!-- 카드 1: 감정을 아는 게 왜 중요할까요 -->
+                <div class="guide-card section-importance">
+                  <div class="card-emoji">💛</div>
+                  <h3 class="card-title">내 감정을 아는 게<br />왜 중요할까요?</h3>
+                  <p class="card-subtitle">
+                    내 감정을 알면 좋은 점이 아주 많아요!
+                  </p>
+                  <div class="benefits-grid">
+                    <div class="benefit-card">
+                      <div class="benefit-emoji">🧩</div>
+                      <div class="benefit-text">마음이 복잡할 때<br />정리가 돼요</div>
+                    </div>
+                    <div class="benefit-card">
+                      <div class="benefit-emoji">💬</div>
+                      <div class="benefit-text">친구에게 화났을 때<br />말로 설명할 수 있어요</div>
+                    </div>
+                    <div class="benefit-card">
+                      <div class="benefit-emoji">🎯</div>
+                      <div class="benefit-text">쉬어야 할지<br />힘낼지 알 수 있어요</div>
+                    </div>
+                    <div class="benefit-card">
+                      <div class="benefit-emoji">🤝</div>
+                      <div class="benefit-text">어른들이 나를<br />더 잘 도와줄 수 있어요</div>
+                    </div>
+                  </div>
+                </div>
 
-          <!-- 4가지 영역 -->
-          <div class="guide-section">
-            <h3 class="section-title">4가지 감정 영역</h3>
-            <div class="mood-quadrants">
-              <div class="quadrant red">
-                <div class="quadrant-icon">🔥</div>
-                <div class="quadrant-name">빨강 영역</div>
-                <div class="quadrant-desc">높은 에너지 + 불쾌한 감정</div>
-                <div class="quadrant-emotions">화남, 짜증, 불안, 긴장</div>
-              </div>
-              <div class="quadrant yellow">
-                <div class="quadrant-icon">⭐</div>
-                <div class="quadrant-name">노랑 영역</div>
-                <div class="quadrant-desc">높은 에너지 + 즐거운 감정</div>
-                <div class="quadrant-emotions">행복, 신남, 기쁨, 설렘</div>
-              </div>
-              <div class="quadrant blue">
-                <div class="quadrant-icon">💙</div>
-                <div class="quadrant-name">파랑 영역</div>
-                <div class="quadrant-desc">낮은 에너지 + 불쾌한 감정</div>
-                <div class="quadrant-emotions">슬픔, 우울, 지침, 외로움</div>
-              </div>
-              <div class="quadrant green">
-                <div class="quadrant-icon">🌿</div>
-                <div class="quadrant-name">초록 영역</div>
-                <div class="quadrant-desc">낮은 에너지 + 즐거운 감정</div>
-                <div class="quadrant-emotions">평온, 편안, 여유, 만족</div>
+                <!-- 카드 2: 도입부 -->
+                <div class="guide-card section-intro">
+                  <div class="card-emoji">✨</div>
+                  <div class="story-box">
+                    <p class="story-text">
+                      우리 마음에는 매일매일<br />
+                      여러 가지 감정이 있어요
+                    </p>
+                    <div class="emotion-bubbles">
+                      <span class="bubble">😊 기쁠 때</span>
+                      <span class="bubble">🎉 신날 때</span>
+                      <span class="bubble">😢 속상할 때</span>
+                    </div>
+                  </div>
+                  <div class="question-box">
+                    <div class="question-icon">🤔</div>
+                    <p class="question-text">
+                      "내가 지금 왜 이런 기분이지?"<br />
+                      "이게 어떤 감정일까?"
+                    </p>
+                  </div>
+                  <div class="answer-box">
+                    <div class="answer-emoji">🌸</div>
+                    <p class="answer-text">
+                      그럴 때 도와주는 친구가<br />
+                      <strong>감정 무드미터</strong>예요!
+                    </p>
+                  </div>
+                </div>
+
+                <!-- 카드 3: 감정 무드미터 소개 -->
+                <div class="guide-card section-definition">
+                  <div class="card-emoji">🌸</div>
+                  <h3 class="card-title">감정 무드미터는<br />무엇인가요?</h3>
+                  <div class="definition-box">
+                    <div class="definition-icon">🗺️</div>
+                    <p class="definition-text">
+                      지금 내 마음 상태를<br />
+                      <span class="highlight">색</span>과 <span class="highlight">감정 이름</span>으로<br />
+                      알려주는 지도예요
+                    </p>
+                  </div>
+                  <div class="colors-display">
+                    <div class="color-item">
+                      <div class="color-circle red"></div>
+                      <span>빨강</span>
+                    </div>
+                    <div class="color-item">
+                      <div class="color-circle yellow"></div>
+                      <span>노랑</span>
+                    </div>
+                    <div class="color-item">
+                      <div class="color-circle blue"></div>
+                      <span>파랑</span>
+                    </div>
+                    <div class="color-item">
+                      <div class="color-circle green"></div>
+                      <span>초록</span>
+                    </div>
+                  </div>
+                  <div class="compass-badge">
+                    <span class="badge-icon">🧭</span>
+                    <span class="badge-text">마음의 나침반</span>
+                  </div>
+                </div>
+
+                <!-- 카드 4: 감정화단 사용법 -->
+                <div class="guide-card section-usage">
+                  <div class="card-emoji">✏️</div>
+                  <h3 class="card-title">감정화단은<br />이렇게 사용해요!</h3>
+                  <div class="steps-container">
+                    <div class="cute-step">
+                      <div class="step-circle">1</div>
+                      <div class="step-emoji">💭</div>
+                      <div class="step-box">
+                        <div class="step-title">오늘의 하루를 떠올려요</div>
+                        <div class="step-desc">기억에 남는 일을 일기로 써요</div>
+                      </div>
+                    </div>
+                    <div class="step-arrow">↓</div>
+                    <div class="cute-step">
+                      <div class="step-circle">2</div>
+                      <div class="step-emoji">🤖</div>
+                      <div class="step-box">
+                        <div class="step-title">AI가 일기를 분석해요</div>
+                        <div class="step-desc">감정에 어울리는 🌼꽃을 알려줘요</div>
+                      </div>
+                    </div>
+                    <div class="step-arrow">↓</div>
+                    <div class="cute-step">
+                      <div class="step-circle">3</div>
+                      <div class="step-emoji">🌺</div>
+                      <div class="step-box">
+                        <div class="step-title">나만의 감정 꽃 완성!</div>
+                        <div class="step-desc">내 감정을 나타내는 특별한 꽃이에요</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 카드 5: 하단 메시지 -->
+                <div class="guide-card section-footer">
+                  <div class="final-message">
+                    <div class="message-icon">✨</div>
+                    <h3 class="final-title">기억하세요!</h3>
+                    <div class="message-content">
+                      <div class="message-item">
+                        <span class="check-icon">💡</span>
+                        <p>감정에는 좋고 나쁨이 없어요</p>
+                      </div>
+                      <div class="message-item">
+                        <span class="check-icon">🌈</span>
+                        <p>모든 감정은 소중해요</p>
+                      </div>
+                      <div class="message-item">
+                        <span class="check-icon">💖</span>
+                        <p>감정을 인정하고 이해하는 게 중요해요</p>
+                      </div>
+                    </div>
+                    <div class="flower-decoration">🌸 🌼 🌻 🌺 🌷</div>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
 
-          <!-- 사용 방법 -->
-          <div class="guide-section">
-            <h3 class="section-title">어떻게 활용하나요?</h3>
-            <div class="usage-steps">
-              <div class="step">
-                <div class="step-number">1</div>
-                <div class="step-content">
-                  <div class="step-title">지금 느끼는 감정 파악하기</div>
-                  <div class="step-desc">내 감정이 어느 영역에 있는지 확인해보세요</div>
-                </div>
-              </div>
-              <div class="step">
-                <div class="step-number">2</div>
-                <div class="step-content">
-                  <div class="step-title">감정 일기 작성하기</div>
-                  <div class="step-desc">오늘의 감정을 일기로 기록해보세요</div>
-                </div>
-              </div>
-              <div class="step">
-                <div class="step-number">3</div>
-                <div class="step-content">
-                  <div class="step-title">감정 패턴 발견하기</div>
-                  <div class="step-desc">화단에 심어진 꽃들로 나의 감정 흐름을 파악해요</div>
-                </div>
-              </div>
+            <!-- 네비게이션 버튼 -->
+            <button
+              v-if="currentIndex > 0"
+              class="nav-btn nav-btn-prev"
+              @click="prevCard"
+            >
+              ‹
+            </button>
+            <button
+              v-if="currentIndex < totalCards - 1"
+              class="nav-btn nav-btn-next"
+              @click="nextCard"
+            >
+              ›
+            </button>
+
+            <!-- 페이지 인디케이터 -->
+            <div class="card-indicators">
+              <span
+                v-for="(card, index) in totalCards"
+                :key="index"
+                class="indicator-dot"
+                :class="{ active: currentIndex === index }"
+                @click="goToCard(index)"
+              ></span>
             </div>
           </div>
-
-          <!-- 하단 메시지 -->
-          <div class="guide-footer">
-            <p class="footer-message">
-              💡 감정에는 좋고 나쁨이 없어요.<br />
-              모든 감정을 인정하고 이해하는 것이 중요합니다!
-            </p>
-          </div>
-    </template>
-
-    <template #footer>
-      <button class="confirm-btn" @click="handleClose">
-        확인했어요
-      </button>
     </template>
   </BaseModal>
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, ref, watch, onMounted, onUnmounted } from 'vue'
 import BaseModal from '@/components/common/modals/BaseModal.vue'
 
 const props = defineProps({
@@ -110,7 +219,85 @@ const isOpen = computed({
   set: (value) => emit('update:modelValue', value)
 })
 
+// 카드 슬라이더 상태
+const currentIndex = ref(0)
+const totalCards = 5
+let touchStartX = 0
+let touchEndX = 0
+
+// 카드 네비게이션
+const nextCard = () => {
+  if (currentIndex.value < totalCards - 1) {
+    currentIndex.value++
+  }
+}
+
+const prevCard = () => {
+  if (currentIndex.value > 0) {
+    currentIndex.value--
+  }
+}
+
+const goToCard = (index) => {
+  currentIndex.value = index
+}
+
+// 터치 이벤트 핸들러
+const handleTouchStart = (e) => {
+  touchStartX = e.touches[0].clientX
+}
+
+const handleTouchMove = (e) => {
+  touchEndX = e.touches[0].clientX
+}
+
+const handleTouchEnd = () => {
+  const swipeThreshold = 50
+  const diff = touchStartX - touchEndX
+
+  if (Math.abs(diff) > swipeThreshold) {
+    if (diff > 0) {
+      // 왼쪽으로 스와이프 (다음 카드)
+      nextCard()
+    } else {
+      // 오른쪽으로 스와이프 (이전 카드)
+      prevCard()
+    }
+  }
+}
+
+// 키보드 네비게이션
+const handleKeyDown = (e) => {
+  if (!props.modelValue) return
+
+  if (e.key === 'ArrowLeft') {
+    prevCard()
+  } else if (e.key === 'ArrowRight') {
+    nextCard()
+  }
+}
+
+// 모달이 열릴 때 키보드 이벤트 리스너 추가
+watch(() => props.modelValue, (newValue) => {
+  if (newValue) {
+    window.addEventListener('keydown', handleKeyDown)
+  } else {
+    window.removeEventListener('keydown', handleKeyDown)
+  }
+})
+
+onMounted(() => {
+  if (props.modelValue) {
+    window.addEventListener('keydown', handleKeyDown)
+  }
+})
+
+onUnmounted(() => {
+  window.removeEventListener('keydown', handleKeyDown)
+})
+
 const handleClose = () => {
+  currentIndex.value = 0 // 모달 닫을 때 첫 카드로 리셋
   emit('update:modelValue', false)
 }
 </script>
