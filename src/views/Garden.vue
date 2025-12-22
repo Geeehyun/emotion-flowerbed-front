@@ -94,7 +94,6 @@
       :is-unanalyzed="isUnanalyzed"
       :postit-positions="postitPositions"
       :realistic-image="currentDiaryRealisticImage"
-      :get-emotion-color="getEmotionColor"
       :all-emotions-data="allEmotionsData"
       @close="closeDiaryModal"
       @toggle-flip="toggleFlip"
@@ -102,8 +101,6 @@
       @reanalyze="reanalyzeDiary"
       @reanalyze-test="reanalyzeDiaryTest"
       @delete="deleteDiaryEntry"
-      @highlight-emotion="highlightEmotion"
-      @unhighlight-emotion="unhighlightEmotion"
       @drag-start="startDrag"
     />
 
@@ -222,11 +219,10 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted, watch, nextTick } from 'vue'
+import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue'
 import { get3dImageFromDetail, get3dPotImageFromDetail, getRealisticImageFromDetail, getEmotionData, UNKNOWN_EMOTION } from '../utils/flowerMapper.js'
 import * as diaryApi from '../services/diaryApi.js'
 import { logout } from '../services/authApi.js'
-import { Chart, ArcElement, Tooltip, Legend } from 'chart.js'
 import { ArrowPathIcon, XMarkIcon, PlusCircleIcon, ArrowDownTrayIcon, BookOpenIcon, Bars3Icon } from '@heroicons/vue/24/outline'
 import html2canvas from 'html2canvas'
 
@@ -257,9 +253,6 @@ import {
   getEmotionControlActivity,
   saveEmotionControlActivity
 } from '@/utils/emotionControlStorage.js'
-
-// Chart.js 요소 등록
-Chart.register(ArcElement, Tooltip, Legend)
 
 // 상태 관리
 const currentDay = ref(null)
@@ -415,104 +408,6 @@ const getFlowerMeaning = (day) => {
 const getEmotionNameKr = (day) => {
   const flowerData = getFlowerDataForDay(day)
   return flowerData.emotionNameKr || '알 수 없음'
-}
-
-// Chart.js 관련
-const emotionChart = ref(null)
-let chartInstance = null
-
-// 감정별 색상 맵 (감정에 어울리는 색상)
-const EMOTION_COLOR_MAP = {
-  'JOY': '#FFD700',           // 금색
-  'HAPPINESS': '#FFB6C1',     // 연분홍
-  'GRATITUDE': '#FF69B4',     // 핫핑크
-  'EXCITEMENT': '#FFA07A',    // 라이트 새먼
-  'PEACE': '#98FB98',         // 연두색
-  'ACHIEVEMENT': '#FFD700',   // 노란색
-  'LOVE': '#FF0000',          // 빨간색
-  'HOPE': '#87CEEB',          // 스카이블루
-  'VITALITY': '#FF6347',      // 토마토
-  'FUN': '#FF69B4',           // 핑크
-  'SADNESS': '#4169E1',       // 로얄블루
-  'LONELINESS': '#6495ED',    // 콘플라워블루
-  'ANXIETY': '#9370DB',       // 미디엄퍼플
-  'ANGER': '#FFD700',         // 노란색
-  'FATIGUE': '#98D8C8',       // 민트
-  'REGRET': '#9370DB',        // 보라색
-  'LETHARGY': '#F8F8FF',      // 고스트화이트
-  'CONFUSION': '#FFC0CB',     // 연핑크
-  'DISAPPOINTMENT': '#FFD700', // 노란색
-  'BOREDOM': '#F0E68C'        // 카키
-}
-
-// 감정 색상 가져오기
-const getEmotionColor = (emotionCode) => {
-  return EMOTION_COLOR_MAP[emotionCode] || '#CCCCCC'
-}
-
-// 이미지 경로 생성 함수들은 flowerMapper.js에서 import하여 사용
-
-// 도넛 차트 생성
-const createEmotionChart = () => {
-  if (!emotionChart.value || !currentDiary.value?.emotions) return
-
-  // 이전 차트 인스턴스 제거
-  if (chartInstance) {
-    chartInstance.destroy()
-  }
-
-  // const ctx = emotionChart.value.getContext('2d')
-  const ctx = document.getElementById('myChart');
-  const emotions = currentDiary.value.emotions
-
-  chartInstance = new Chart(ctx, {
-    type: 'pie',
-    data: {
-      labels: emotions.map(e => {
-        const emotionData = getEmotionData(allEmotionsData.value, e.emotion)
-        return emotionData?.emotionNameKr || e.emotion
-      }),
-      datasets: [{
-        data: emotions.map(e => e.percent),
-        backgroundColor: emotions.map(e => getEmotionColor(e.emotion)),
-        borderColor: '#FFFFFF',
-        borderWidth: 2
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: true,
-      plugins: {
-        legend: {
-          display: false // 커스텀 레전드 사용
-        },
-        tooltip: {
-          callbacks: {
-            label: function(context) {
-              return `${context.label}: ${context.parsed}%`
-            }
-          },
-          backgroundColor: 'rgba(0, 0, 0, 0.8)',
-          titleColor: '#FFFFFF',
-          bodyColor: '#FFFFFF',
-          padding: 12,
-          cornerRadius: 8,
-          displayColors: true
-        }
-      }
-    }
-  })
-}
-
-// 감정 하이라이트
-const highlightEmotion = (emotionCode) => {
-  if (!chartInstance) return
-  // 차트 세그먼트에 호버 효과 추가 가능
-}
-
-const unhighlightEmotion = () => {
-  if (!chartInstance) return
-  // 차트 호버 효과 제거
 }
 
 // Computed
@@ -1281,17 +1176,6 @@ const handleEscKey = (e) => {
     showMoodMeterGuide.value = false
   }
 }
-
-// 모달이 열릴 때 차트 생성
-watch(showDiaryModal, async (isOpen) => {
-  if (isOpen && currentDiary.value?.emotions) {
-    await nextTick()
-    // createEmotionChart()
-  } else if (!isOpen && chartInstance) {
-    chartInstance.destroy()
-    chartInstance = null
-  }
-})
 
 onMounted(() => {
   document.addEventListener('keydown', handleEscKey)

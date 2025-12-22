@@ -55,28 +55,6 @@
                 <div class="analysis-value">{{ diary.summary || '요약 정보가 없습니다.' }}</div>
               </div>
 
-              <!-- 감정 비율 도넛 그래프 -->
-              <div class="analysis-item" v-if="diary.emotions && diary.emotions.length > 0">
-                <div class="analysis-label">📊 감정 비율</div>
-                <div class="emotion-legend">
-                  <div
-                    v-for="emotion in diary.emotions"
-                    :key="emotion.emotion"
-                    class="legend-item"
-                    @mouseenter="$emit('highlight-emotion', emotion.emotion)"
-                    @mouseleave="$emit('unhighlight-emotion')"
-                  >
-                    <span
-                      class="legend-color"
-                      :style="{ backgroundColor: getEmotionColor(emotion.emotion) }"
-                    ></span>
-                    <span class="legend-text">
-                      {{ getEmotionName(emotion.emotion) }} ({{ emotion.percent }}%)
-                    </span>
-                  </div>
-                </div>
-              </div>
-
               <!-- 대표 감정 -->
               <div class="analysis-item">
                 <div class="analysis-label">🌸 대표 감정</div>
@@ -241,10 +219,6 @@ const props = defineProps({
     type: String,
     default: ''
   },
-  getEmotionColor: {
-    type: Function,
-    required: true
-  },
   allEmotionsData: {
     type: Array,
     default: () => []
@@ -258,8 +232,6 @@ const emit = defineEmits([
   'reanalyze',
   'reanalyze-test',
   'delete',
-  'highlight-emotion',
-  'unhighlight-emotion',
   'drag-start'
 ])
 
