@@ -2448,20 +2448,6 @@
   margin: 0;
 }
 
-/* 나침반 텍스트 */
-.compass-text {
-  font-family: 'Cafe24Ssurround', sans-serif;
-  font-size: 15px;
-  color: #8B6F47;
-  font-weight: 700;
-  margin-top: 15px;
-  padding: 12px 15px;
-  background: rgba(255, 255, 255, 0.7);
-  border-radius: 10px;
-  border: 2px dashed #DEB887;
-  text-align: center;
-}
-
 /* 공통 확인 버튼 (무드미터 가이드용) */
 .confirm-btn {
   font-family: 'Cafe24Ssurround', sans-serif;

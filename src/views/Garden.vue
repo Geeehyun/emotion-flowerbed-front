@@ -199,9 +199,6 @@
     <!-- 감정제어 활동 모달 -->
     <EmotionControlModal
       v-model="showEmotionControl"
-      :is-first-time="isFirstTimeEmotionControl"
-      :initial-activity="currentEmotionControl?.id"
-      @save="saveEmotionControl"
       @close="showEmotionControl = false"
     />
 
@@ -289,7 +286,7 @@ const showLetterList = ref(false) // 레터 목록 모달 표시 상태
 const showLetterDetail = ref(false) // 레터 상세 모달 표시 상태
 const selectedLetter = ref(null) // 선택된 레터
 const showMoodMeterGuide = ref(false) // 무드미터 가이드 모달 표시 상태
-const showEmotionControl = ref(true) // 감정제어 활동 모달 표시 상태
+const showEmotionControl = ref(false) // 감정제어 활동 모달 표시 상태
 const isFirstTimeEmotionControl = ref(false) // 최초 등록 여부
 const currentEmotionControl = ref(null) // 현재 설정된 감정제어 활동
 const showContinuousToast = ref(false) // 3일 연속 감정 토스트 표시 상태
@@ -1048,39 +1045,7 @@ const isEmotionAcquired = (emotionCode) => {
 // 사이드바 열기/닫기
 const toggleSidebar = () => {
   showSidebar.value = !showSidebar.value
-}
-
-// 감정제어 활동 등록 체크
-const checkEmotionControlRegistration = () => {
-  // localStorage에서 감정제어 활동이 등록되어 있는지 확인
-  const hasActivity = hasEmotionControlActivity()
-
-  if (!hasActivity) {
-    // 등록되어 있지 않으면 최초 등록 모달 표시
-    isFirstTimeEmotionControl.value = true
-    setTimeout(() => {
-      showEmotionControl.value = true
-    }, 800) // 레터 알림보다 약간 늦게 표시
-  } else {
-    // 등록되어 있으면 현재 활동 불러오기
-    currentEmotionControl.value = getEmotionControlActivity()
-  }
-}
-
-// 감정제어 활동 저장
-const saveEmotionControl = (activity) => {
-  saveEmotionControlActivity(activity)
-  currentEmotionControl.value = activity
-
-  // 최초 등록일 경우
-  if (isFirstTimeEmotionControl.value) {
-    isFirstTimeEmotionControl.value = false
-    showEmotionControl.value = false
-    showCustomAlert(`${activity.icon} ${activity.name}을(를) 등록했어요!\n같은 감정이 3일 연속되면 추천해드릴게요.`, '✨')
-  } else {
-    showCustomAlert(`${activity.icon} ${activity.name}으로 변경했어요!`, '✨')
-  }
-}
+} 
 
 // 감정제어 활동 모달 열기 (설정에서)
 const openEmotionControlSettings = () => {
@@ -1182,9 +1147,6 @@ onMounted(() => {
 
   // 페이지 로드 시 현재 월의 일기 목록 로드
   loadMonthlyDiaries()
-
-  // 감정제어 활동 최초 등록 체크
-  checkEmotionControlRegistration()
 
   // 새 레터가 있으면 알림 모달 표시
   if (hasNewLetter.value) {

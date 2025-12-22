@@ -40,24 +40,6 @@
       </div>
     </template>
 
-    <template #footer>
-      <div class="emotion-control-footer">
-        <button
-          v-if="!isFirstTime"
-          class="cancel-btn"
-          @click="handleClose"
-        >
-          취소
-        </button>
-        <button
-          class="save-btn"
-          :disabled="!selectedActivity"
-          @click="handleSave"
-        >
-          {{ isFirstTime ? '시작하기' : '저장하기' }}
-        </button>
-      </div>
-    </template>
   </BaseModal>
 </template>
 

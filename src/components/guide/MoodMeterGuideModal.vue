@@ -66,11 +66,9 @@
                       "이게 어떤 감정일까?"
                     </p>
                   </div>
-                  <div class="answer-box">
-                    <div class="answer-emoji">🌸</div>
+                  <div>
                     <p class="answer-text">
-                      그럴 때 도와주는 친구가<br />
-                      <strong>감정 무드미터</strong>예요!
+                      그럴 때 도와주는 친구가 <strong>감정 무드미터</strong>예요!
                     </p>
                   </div>
                 </div>
@@ -104,10 +102,6 @@
                       <div class="color-circle green"></div>
                       <span>초록</span>
                     </div>
-                  </div>
-                  <div class="compass-badge">
-                    <span class="badge-icon">🧭</span>
-                    <span class="badge-text">마음의 나침반</span>
                   </div>
                 </div>
 
@@ -152,15 +146,12 @@
                     <h3 class="final-title">기억하세요!</h3>
                     <div class="message-content">
                       <div class="message-item">
-                        <span class="check-icon">💡</span>
                         <p>감정에는 좋고 나쁨이 없어요</p>
                       </div>
                       <div class="message-item">
-                        <span class="check-icon">🌈</span>
                         <p>모든 감정은 소중해요</p>
                       </div>
                       <div class="message-item">
-                        <span class="check-icon">💖</span>
                         <p>감정을 인정하고 이해하는 게 중요해요</p>
                       </div>
                     </div>
