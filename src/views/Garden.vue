@@ -196,9 +196,12 @@
       v-model="showMoodMeterGuide"
     />
 
-    <!-- 감정제어 활동 모달 -->
+    <!-- 감정 가꾸기 모달 -->
     <EmotionControlModal
+      v-if="emotionCareData"
       v-model="showEmotionControl"
+      :area="emotionCareData.area"
+      :care-type="emotionCareData.type"
       @close="showEmotionControl = false"
     />
 
@@ -246,9 +249,8 @@ import EmotionContinuousToast from '@/components/common/EmotionContinuousToast.v
 
 // 유틸리티
 import {
-  hasEmotionControlActivity,
-  getEmotionControlActivity,
-  saveEmotionControlActivity
+  updateAreaTracking,
+  checkEmotionCareNeeded
 } from '@/utils/emotionControlStorage.js'
 
 // 상태 관리
@@ -286,9 +288,8 @@ const showLetterList = ref(false) // 레터 목록 모달 표시 상태
 const showLetterDetail = ref(false) // 레터 상세 모달 표시 상태
 const selectedLetter = ref(null) // 선택된 레터
 const showMoodMeterGuide = ref(false) // 무드미터 가이드 모달 표시 상태
-const showEmotionControl = ref(false) // 감정제어 활동 모달 표시 상태
-const isFirstTimeEmotionControl = ref(false) // 최초 등록 여부
-const currentEmotionControl = ref(null) // 현재 설정된 감정제어 활동
+const showEmotionControl = ref(false) // 감정 가꾸기 모달 표시 상태
+const emotionCareData = ref(null) // 감정 가꾸기 데이터 { area: 'red', type: 'immediate' }
 const showContinuousToast = ref(false) // 3일 연속 감정 토스트 표시 상태
 const continuousEmotionData = ref({
   emotionName: '',
@@ -652,14 +653,24 @@ const saveDiary = async (isTest = true) => {
     showCustomAlert('일기가 저장되었습니다!', '🌸')
 
     // TODO: API 연동 - 일기 등록 응답에 아래 필드 추가 예정
-    // analyzedDiary = {
-    //   ...기존 필드들,
-    //   shouldShowEmotionControl: true/false,  // 3일 연속 감정 여부
-    //   consecutiveDays: 3                      // 연속 일수
-    // }
-    //
-    // 현재는 테스트용으로 무조건 토스트 표시
-    showEmotionControlToast(analyzedDiary.coreEmotion)
+    // 영역별 연속 일수 업데이트 및 감정 가꾸기 체크
+    const emotionData = getEmotionData(allEmotionsData.value, analyzedDiary.coreEmotion)
+    if (emotionData?.area) {
+      const date = formatDateForApi(currentDay.value)
+      updateAreaTracking(emotionData.area, date, analyzedDiary.coreEmotion)
+
+      // 감정 가꾸기 안내가 필요한지 확인
+      const careNeeded = checkEmotionCareNeeded(emotionData.area)
+      if (careNeeded) {
+        setTimeout(() => {
+          emotionCareData.value = {
+            area: emotionData.area,
+            type: careNeeded.type
+          }
+          showEmotionControl.value = true
+        }, 1000)
+      }
+    }
 
     currentDay.value = null
     diaryContent.value = ''
@@ -670,43 +681,6 @@ const saveDiary = async (isTest = true) => {
     currentDay.value = null
     diaryContent.value = ''
   }
-}
-
-// 감정제어 활동 토스트 표시 (테스트용)
-// TODO: API 연동 후 아래 로직으로 변경
-// if (analyzedDiary.shouldShowEmotionControl) {
-//   showEmotionControlToast(analyzedDiary.coreEmotion, analyzedDiary.consecutiveDays)
-// }
-const showEmotionControlToast = (currentEmotion) => {
-  // 감정제어 활동이 등록되어 있지 않으면 표시하지 않음
-  if (!currentEmotionControl.value) return
-
-  // 감정 이름 가져오기
-  const emotionData = getEmotionData(currentEmotion)
-  const emotionNameKr = emotionData ? emotionData.emotionNameKr : '알 수 없는 감정'
-
-  // 감정 아이콘 설정 (영역별)
-  const emotionIcons = {
-    'red': '🔥',
-    'yellow': '⭐',
-    'blue': '💙',
-    'green': '💚'
-  }
-  const emotionIcon = emotionIcons[emotionData?.area] || '🌸'
-
-  // 토스트 데이터 설정
-  continuousEmotionData.value = {
-    emotionName: emotionNameKr,
-    emotionIcon: emotionIcon,
-    consecutiveDays: 3, // TODO: API에서 실제 연속 일수를 받아올 예정
-    activityName: currentEmotionControl.value.name,
-    activityIcon: currentEmotionControl.value.icon
-  }
-
-  // 토스트 표시 (1초 후에 자연스럽게 표시)
-  setTimeout(() => {
-    showContinuousToast.value = true
-  }, 1000)
 }
 
 // 일기 읽기 모달 열기
@@ -1045,12 +1019,6 @@ const isEmotionAcquired = (emotionCode) => {
 // 사이드바 열기/닫기
 const toggleSidebar = () => {
   showSidebar.value = !showSidebar.value
-} 
-
-// 감정제어 활동 모달 열기 (설정에서)
-const openEmotionControlSettings = () => {
-  isFirstTimeEmotionControl.value = false
-  showEmotionControl.value = true
 }
 
 // 메뉴 선택 처리
@@ -1067,9 +1035,6 @@ const handleMenuSelect = (menuId) => {
       break
     case 'mood-meter':
       showMoodMeterGuide.value = true
-      break
-    case 'emotion-control':
-      openEmotionControlSettings()
       break
     case 'letter':
       openLetter()

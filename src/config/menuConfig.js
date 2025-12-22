@@ -4,8 +4,7 @@ import {
   PencilSquareIcon,
   QuestionMarkCircleIcon,
   EnvelopeIcon,
-  ArrowRightOnRectangleIcon,
-  HeartIcon
+  ArrowRightOnRectangleIcon
 } from '@heroicons/vue/24/outline'
 
 export const menuItems = [
@@ -25,12 +24,6 @@ export const menuItems = [
     id: 'write',
     label: '감정일기 작성',
     icon: PencilSquareIcon,
-    active: false
-  },
-  {
-    id: 'emotion-control',
-    label: '감정 가꾸기',
-    icon: HeartIcon,
     active: false
   },
   {
