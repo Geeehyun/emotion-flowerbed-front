@@ -198,10 +198,7 @@
 
     <!-- 감정 가꾸기 모달 -->
     <EmotionControlModal
-      v-if="emotionCareData"
       v-model="showEmotionControl"
-      :area="emotionCareData.area"
-      :care-type="emotionCareData.type"
       @close="showEmotionControl = false"
     />
 
@@ -1015,6 +1012,9 @@ const handleMenuSelect = (menuId) => {
       break
     case 'letter':
       openLetter()
+      break
+    case 'emotion-care':
+      showEmotionControl.value = true
       break
     case 'logout':
       handleLogout()
