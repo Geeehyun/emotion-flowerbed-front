@@ -248,10 +248,7 @@ import EmotionControlModal from '@/components/common/modals/EmotionControlModal.
 import EmotionContinuousToast from '@/components/common/EmotionContinuousToast.vue'
 
 // 유틸리티
-import {
-  updateAreaTracking,
-  checkEmotionCareNeeded
-} from '@/utils/emotionControlStorage.js'
+// (감정 가꾸기 저장/수정 기능 제거됨)
 
 // 상태 관리
 const currentDay = ref(null)
@@ -651,26 +648,6 @@ const saveDiary = async (isTest = true) => {
 
     showLoading.value = false
     showCustomAlert('일기가 저장되었습니다!', '🌸')
-
-    // TODO: API 연동 - 일기 등록 응답에 아래 필드 추가 예정
-    // 영역별 연속 일수 업데이트 및 감정 가꾸기 체크
-    const emotionData = getEmotionData(allEmotionsData.value, analyzedDiary.coreEmotion)
-    if (emotionData?.area) {
-      const date = formatDateForApi(currentDay.value)
-      updateAreaTracking(emotionData.area, date, analyzedDiary.coreEmotion)
-
-      // 감정 가꾸기 안내가 필요한지 확인
-      const careNeeded = checkEmotionCareNeeded(emotionData.area)
-      if (careNeeded) {
-        setTimeout(() => {
-          emotionCareData.value = {
-            area: emotionData.area,
-            type: careNeeded.type
-          }
-          showEmotionControl.value = true
-        }, 1000)
-      }
-    }
 
     currentDay.value = null
     diaryContent.value = ''
