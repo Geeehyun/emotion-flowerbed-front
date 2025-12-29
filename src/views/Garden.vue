@@ -1300,11 +1300,5 @@ onMounted(() => {
 
 onUnmounted(() => {
   document.removeEventListener('keydown', handleEscKey)
-
-  // 차트 인스턴스 정리
-  if (chartInstance) {
-    chartInstance.destroy()
-    chartInstance = null
-  }
 })
 </script> 
