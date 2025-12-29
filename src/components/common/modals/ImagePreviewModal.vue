@@ -8,19 +8,7 @@
         </button>
       </div>
       <div class="image-preview-body">
-        <img :src="imageUrl" alt="꽃 이미지 미리보기" class="preview-image" loading="lazy" />
-
-        <!-- 캡쳐 옵션 -->
-        <div class="capture-options">
-          <label class="option-label">
-            <input
-              type="checkbox"
-              :checked="includeDetails"
-              @change="$emit('update:includeDetails', $event.target.checked)"
-            />
-            <span>포스트잇과 상세설명 포함</span>
-          </label>
-        </div>
+        <img :src="imageUrl" alt="일기 리포트 미리보기" class="preview-image" loading="lazy" />
 
         <div class="image-preview-info">
           <p class="text-sm text-gray-600">
@@ -50,12 +38,8 @@ defineProps({
   imageUrl: {
     type: String,
     default: ''
-  },
-  includeDetails: {
-    type: Boolean,
-    default: false
   }
 })
 
-defineEmits(['close', 'download', 'update:includeDetails'])
+defineEmits(['close', 'download'])
 </script>

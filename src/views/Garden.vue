@@ -144,10 +144,8 @@
     <ImagePreviewModal
       v-model="showImagePreview"
       :image-url="previewImageUrl"
-      v-model:include-details="includeDetailsInCapture"
       @close="closeImagePreview"
       @download="downloadImage"
-      @update:include-details="recaptureImage"
     />
 
     <!-- 날짜 선택 모달 (모바일 친화적) -->
@@ -213,6 +211,16 @@
       :activity-icon="continuousEmotionData.activityIcon"
       @close="showContinuousToast = false"
     />
+
+    <!-- 리포트 템플릿 (이미지 캡처용, 화면에 보이지 않음) -->
+    <div v-if="currentDiary" class="report-capture-container" ref="reportCaptureRef">
+      <DiaryReportTemplate
+        :diary="currentDiary"
+        :flower-detail="currentFlowerDetail"
+        :realistic-image="currentDiaryRealisticImage"
+        :emotion-name="currentEmotionName"
+      />
+    </div>
   </div>
 </template>
 
@@ -239,6 +247,7 @@ import LazyImage from '@/components/common/LazyImage.vue'
 // 비즈니스 컴포넌트
 import DiaryWriteModal from '@/components/diary/DiaryWriteModal.vue'
 import DiaryReadModal from '@/components/diary/DiaryReadModal.vue'
+import DiaryReportTemplate from '@/components/diary/DiaryReportTemplate.vue'
 import EncyclopediaModal from '@/components/encyclopedia/EncyclopediaModal.vue'
 import LetterNotificationModal from '@/components/letter/LetterNotificationModal.vue'
 import LetterListModal from '@/components/letter/LetterListModal.vue'
@@ -275,7 +284,7 @@ const allEmotionsData = ref([]) // 전체 감정 데이터 (API에서 로드)
 const myEmotionsData = ref([]) // 내가 획득한 감정 데이터
 const showImagePreview = ref(false) // 이미지 미리보기 모달
 const previewImageUrl = ref('') // 미리보기 이미지 URL
-const includeDetailsInCapture = ref(false) // 포스트잇과 상세설명 포함 여부
+const reportCaptureRef = ref(null) // 리포트 템플릿 캡처용 ref
 const showSidebar = ref(false) // 사이드바 메뉴 표시 상태
 
 // TODO: API 연동 - 새로운 감정 레터 확인 API 호출 필요
@@ -338,6 +347,26 @@ const currentDiaryRealisticImage = computed(() => {
   }
 
   return getRealisticImageFromDetail(UNKNOWN_EMOTION.imageFileRealistic)
+})
+
+// 현재 일기의 감정 이름
+const currentEmotionName = computed(() => {
+  if (!currentDiary.value) return '알 수 없음'
+
+  // flowerDetail이 있으면 사용
+  if (currentFlowerDetail.value) {
+    return currentFlowerDetail.value.emotionNameKr || '알 수 없음'
+  }
+
+  // emotion 코드로 API 데이터에서 찾기
+  if (currentDiary.value.emotion) {
+    const emotionData = getEmotionData(allEmotionsData.value, currentDiary.value.emotion)
+    if (emotionData) {
+      return emotionData.emotionNameKr || '알 수 없음'
+    }
+  }
+
+  return '알 수 없음'
 })
 
 // 분석 안된 일기인지 확인
@@ -821,21 +850,24 @@ const closeAlert = () => {
   showAlert.value = false
 }
 
-// 꽃 정보를 이미지로 저장 (미리보기)
-const saveFlowerAsImage = async (includeDetails = false) => {
-  // includeDetails가 false면 꽃 이미지만, true면 포스트잇과 상세설명까지 포함
-  const targetElement = includeDetails
-    ? document.querySelector('.flower-catalog')
-    : document.querySelector('.flower-catalog-image')
-
-  if (!targetElement) return
+// 꽃 정보를 이미지로 저장 (미리보기) - 리포트 템플릿 캡처
+const saveFlowerAsImage = async () => {
+  if (!reportCaptureRef.value) {
+    showCustomAlert('리포트를 생성할 수 없습니다.', 'error')
+    return
+  }
 
   try {
-    const canvas = await html2canvas(targetElement, {
-      backgroundColor: null, // 투명 배경
+    // DOM이 완전히 렌더링될 때까지 대기
+    await nextTick()
+
+    const canvas = await html2canvas(reportCaptureRef.value, {
+      backgroundColor: '#FFF9E8', // 노트 테마 배경색
       scale: 2, // 고해상도
       useCORS: true,
-      logging: false
+      logging: false,
+      width: 800, // 리포트 너비 고정
+      windowWidth: 800
     })
 
     // 캔버스를 Data URL로 변환하여 미리보기에 표시
@@ -851,33 +883,21 @@ const saveFlowerAsImage = async (includeDetails = false) => {
 const closeImagePreview = () => {
   showImagePreview.value = false
   previewImageUrl.value = ''
-  includeDetailsInCapture.value = false // 초기화
-}
-
-// 옵션 변경 후 재캡쳐
-const recaptureImage = async () => {
-  showImagePreview.value = false // 일단 모달 닫기
-  await saveFlowerAsImage(includeDetailsInCapture.value)
 }
 
 // 이미지 다운로드 (데스크톱/안드로이드용)
 const downloadImage = () => {
   const link = document.createElement('a')
 
-  // 파일명 생성
-  let flowerName = '알 수 없음'
-  if (currentFlowerDetail.value) {
-    flowerName = currentFlowerDetail.value.flowerNameKr
-  } else if (currentDiary.value.emotion) {
-    const emotionData = getEmotionData(allEmotionsData.value, currentDiary.value.emotion)
-    flowerName = emotionData?.flowerNameKr || '알 수 없음'
-  }
+  // 파일명 생성 (감정_리포트_날짜.png)
+  let emotionName = currentEmotionName.value || '알수없음'
+  const date = currentDiary.value?.date?.replace(/\./g, '') || 'unknown'
+  const fileName = `${emotionName}_리포트_${date}.png`
 
-  const fileName = `${flowerName}_${currentDiary.value.date}.png`
   link.download = fileName
   link.href = previewImageUrl.value
   link.click()
-  showCustomAlert('이미지가 저장되었습니다!', 'success')
+  showCustomAlert('리포트가 저장되었습니다!', 'success')
 }
 
 // 일기 재분석 요청 (테스트)
