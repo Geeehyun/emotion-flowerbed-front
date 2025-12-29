@@ -67,6 +67,17 @@
                 <div class="analysis-label section-label">선정 이유</div>
                 <div class="analysis-value">{{ diary.reason }}</div>
               </div>
+
+              <!-- 감정 분포 차트 -->
+              <div class="analysis-item emotion-chart-section" v-if="diary.emotions && diary.emotions.length > 0">
+                <div class="analysis-label section-label">감정 분포</div>
+                <div class="emotion-chart-wrapper">
+                  <Bar
+                    :data="emotionChartData"
+                    :options="emotionChartOptions"
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -184,6 +195,26 @@ import { computed } from 'vue'
 import { ArrowPathIcon, XMarkIcon, ArrowDownTrayIcon } from '@heroicons/vue/24/outline'
 import { getEmotionData, UNKNOWN_EMOTION } from '@/utils/flowerMapper.js'
 import LazyImage from '@/components/common/LazyImage.vue'
+import { Bar } from 'vue-chartjs'
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+} from 'chart.js'
+
+// Chart.js 컴포넌트 등록
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+)
 
 const props = defineProps({
   modelValue: {
@@ -266,6 +297,93 @@ const getEmotionName = (emotionCode) => {
   const emotionData = getEmotionData(props.allEmotionsData, emotionCode)
   return emotionData?.emotionNameKr || emotionCode
 }
+
+// 감정 차트 데이터
+const emotionChartData = computed(() => {
+  if (!props.diary?.emotions || props.diary.emotions.length === 0) {
+    return null
+  }
+
+  const emotions = props.diary.emotions
+  const labels = emotions.map(e => e.emotionNameKr || e.emotion)
+  const data = emotions.map(e => e.percent)
+  const colors = emotions.map(e => e.color)
+
+  return {
+    labels,
+    datasets: [
+      {
+        data,
+        backgroundColor: colors,
+        borderColor: colors,
+        borderWidth: 1,
+        borderRadius: 4,
+        barThickness: 20
+      }
+    ]
+  }
+})
+
+// 감정 차트 옵션
+const emotionChartOptions = computed(() => {
+  return {
+    indexAxis: 'y', // 가로 바 차트
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: false
+      },
+      tooltip: {
+        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+        padding: 12,
+        titleFont: {
+          size: 14,
+          family: "'LeeSeoyun', sans-serif"
+        },
+        bodyFont: {
+          size: 13,
+          family: "'LeeSeoyun', sans-serif"
+        },
+        callbacks: {
+          label: (context) => {
+            return `${context.parsed.x}%`
+          }
+        }
+      }
+    },
+    scales: {
+      x: {
+        beginAtZero: true,
+        max: 100,
+        ticks: {
+          callback: (value) => `${value}%`,
+          font: {
+            size: 11,
+            family: "'LeeSeoyun', sans-serif"
+          },
+          color: '#8B7355'
+        },
+        grid: {
+          color: 'rgba(139, 115, 85, 0.1)',
+          drawBorder: false
+        }
+      },
+      y: {
+        ticks: {
+          font: {
+            size: 13,
+            family: "'LeeSeoyun', sans-serif"
+          },
+          color: '#5D4E37'
+        },
+        grid: {
+          display: false
+        }
+      }
+    }
+  }
+})
 
 const handleBackgroundClick = (event) => {
   if (event.target.classList.contains('modal')) {
