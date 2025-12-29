@@ -23,11 +23,12 @@
           <div class="modal-body">
             <!-- 꽃 수채화 배경 이미지 -->
             <div class="flower-watercolor-bg" v-if="diary">
-              <img
+              <LazyImage
                 :src="realisticImage"
                 :alt="flowerDetail?.flowerNameKr || flowerInfo.name"
-                class="watercolor-bg-image"
-              >
+                image-class="watercolor-bg-image opacity3"
+                skeleton-type="watercolor"
+              />
             </div>
 
             <div class="diary-content">{{ diary?.content }}</div>
@@ -51,19 +52,19 @@
 
               <!-- 요약 -->
               <div class="analysis-item">
-                <div class="analysis-label">📝 요약</div>
+                <div class="analysis-label section-label">요약</div>
                 <div class="analysis-value">{{ diary.summary || '요약 정보가 없습니다.' }}</div>
               </div>
 
               <!-- 대표 감정 -->
               <div class="analysis-item">
-                <div class="analysis-label">🌸 대표 감정</div>
+                <div class="analysis-label section-label">대표 감정</div>
                 <div class="analysis-value highlight">{{ flowerDetail?.emotionNameKr || emotionName }}</div>
               </div>
 
               <!-- 대표 감정 선정 이유 -->
               <div class="analysis-item" v-if="diary.reason">
-                <div class="analysis-label">💭 선정 이유</div>
+                <div class="analysis-label section-label">선정 이유</div>
                 <div class="analysis-value">{{ diary.reason }}</div>
               </div>
             </div>
@@ -96,11 +97,12 @@
             <div class="flower-catalog" v-if="diary">
               <!-- 꽃 배경 이미지 -->
               <div class="flower-catalog-bg">
-                <img
+                <LazyImage
                   :src="realisticImage"
                   :alt="flowerDetail?.flowerNameKr || flowerInfo.name"
-                  class="flower-catalog-image"
-                >
+                  image-class="flower-catalog-image"
+                  skeleton-type="detail"
+                />
               </div>
 
               <!-- 포스트잇: 꽃 이름(학명) -->
@@ -127,9 +129,8 @@
             <!-- 하단 상세 정보 -->
             <div class="flower-detail-info" v-if="flowerDetail">
               <div class="detail-section" v-if="flowerDetail.flowerColor">
-                <span class="detail-icon">🎨</span>
                 <div class="detail-content">
-                  <div class="detail-title">색상</div>
+                  <div class="detail-title section-label">색상</div>
                   <div class="detail-text">{{ flowerDetail.flowerColor }}</div>
                   <div class="color-palette" v-if="flowerDetail.flowerColorCodes">
                     <div
@@ -144,33 +145,29 @@
               </div>
 
               <div class="detail-section" v-if="flowerDetail.flowerOrigin">
-                <span class="detail-icon">🌍</span>
                 <div class="detail-content">
-                  <div class="detail-title">원산지</div>
+                  <div class="detail-title section-label">원산지</div>
                   <div class="detail-text">{{ flowerDetail.flowerOrigin }}</div>
                 </div>
               </div>
 
               <div class="detail-section" v-if="flowerDetail.flowerFragrance">
-                <span class="detail-icon">👃</span>
                 <div class="detail-content">
-                  <div class="detail-title">향기</div>
+                  <div class="detail-title section-label">향기</div>
                   <div class="detail-text">{{ flowerDetail.flowerFragrance }}</div>
                 </div>
               </div>
 
               <div class="detail-section story-section" v-if="flowerDetail.flowerMeaningStory">
-                <span class="detail-icon">📖</span>
                 <div class="detail-content">
-                  <div class="detail-title">꽃말 유래</div>
+                  <div class="detail-title section-label">꽃말 유래</div>
                   <div class="detail-text story-text">{{ flowerDetail.flowerMeaningStory }}</div>
                 </div>
               </div>
 
               <div class="detail-section story-section" v-if="flowerDetail.flowerFunFact">
-                <span class="detail-icon">💡</span>
                 <div class="detail-content">
-                  <div class="detail-title">재미있는 사실</div>
+                  <div class="detail-title section-label">재미있는 사실</div>
                   <div class="detail-text story-text">{{ flowerDetail.flowerFunFact }}</div>
                 </div>
               </div>
@@ -186,6 +183,7 @@
 import { computed } from 'vue'
 import { ArrowPathIcon, XMarkIcon, ArrowDownTrayIcon } from '@heroicons/vue/24/outline'
 import { getEmotionData, UNKNOWN_EMOTION } from '@/utils/flowerMapper.js'
+import LazyImage from '@/components/common/LazyImage.vue'
 
 const props = defineProps({
   modelValue: {

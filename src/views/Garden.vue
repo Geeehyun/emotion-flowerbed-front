@@ -26,7 +26,7 @@
       <div class="garden-section">
         <div class="garden-wrapper">
           <!-- 화단 배경 이미지 -->
-          <img src="../assets/images/garden-bg-rectangle.png" alt="화단" class="garden-bg-image">
+          <img src="../assets/images/garden-bg-rectangle.png" alt="화단" class="garden-bg-image" loading="lazy">
 
           <!-- 격자 그리드로 꽃 배치 -->
           <div class="flower-grid">
@@ -34,11 +34,12 @@
             <template v-for="day in daysInCurrentMonth" :key="day">
               <div class="grid-cell" v-if="diaryData[day]" :data-day="day">
                 <div class="flower relative" @click="openDiary(day)">
-                  <img
+                  <LazyImage
                     :src="getFlowerImageUrl(day)"
                     :alt="getFlowerName(day)"
-                    class="flower-image"
-                  >
+                    image-class="flower-image"
+                    skeleton-type="default"
+                  />
                   <div class="tooltip">
                     <div class="tooltip-card">
                       <div class="tooltip-flower-name">{{ getFlowerName(day) }}</div>
@@ -80,7 +81,7 @@
         <div class="month-display" @click="openDatePicker">{{ currentYear }}년 {{ currentMonth }}월</div>
         <button class="month-nav" @click="changeMonth(1)">▶</button>
         <button class="write-diary-btn" @click="openWriteDiaryWithDatePicker" title="일기 작성">
-          <img src="../assets/images/trowel.png" alt="일기 작성" class="trowel-icon" />
+          <img src="../assets/images/trowel.png" alt="일기 작성" class="trowel-icon" loading="lazy" />
         </button>
       </div>
     </div>
@@ -115,13 +116,13 @@
     />
 
     <!-- AI 로딩 모달 -->
-    <LoadingModal v-model="showLoading" />
+    <LoadingModal v-model="showLoading" :message="loadingMessage" />
 
     <!-- 커스텀 알럿 모달 -->
     <AlertModal
       v-model="showAlert"
       :message="alertMessage"
-      :icon="alertIcon"
+      :type="alertType"
       @close="closeAlert"
     />
 
@@ -219,6 +220,7 @@
 import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue'
 import { get3dImageFromDetail, get3dPotImageFromDetail, getRealisticImageFromDetail, getEmotionData, UNKNOWN_EMOTION } from '../utils/flowerMapper.js'
 import * as diaryApi from '../services/diaryApi.js'
+import { getEmotionControlTip } from '../services/codeApi.js'
 import { logout } from '../services/authApi.js'
 import { ArrowPathIcon, XMarkIcon, PlusCircleIcon, ArrowDownTrayIcon, BookOpenIcon, Bars3Icon } from '@heroicons/vue/24/outline'
 import html2canvas from 'html2canvas'
@@ -232,6 +234,7 @@ import DatePickerModal from '@/components/layout/DatePickerModal.vue'
 import LoadingModal from '@/components/common/modals/LoadingModal.vue'
 import AlertModal from '@/components/common/modals/AlertModal.vue'
 import ImagePreviewModal from '@/components/common/modals/ImagePreviewModal.vue'
+import LazyImage from '@/components/common/LazyImage.vue'
 
 // 비즈니스 컴포넌트
 import DiaryWriteModal from '@/components/diary/DiaryWriteModal.vue'
@@ -253,9 +256,10 @@ const showDiaryModal = ref(false)
 const showWriteModal = ref(false)
 const diaryContent = ref('')
 const showLoading = ref(false)
+const loadingMessage = ref('로딩중...')
 const showAlert = ref(false)
 const alertMessage = ref('')
-const alertIcon = ref('🌸')
+const alertType = ref('success')
 // const selectedEmotion = ref('기쁨') // AI 감정 분석으로 대체됨
 const currentYear = ref(new Date().getFullYear())
 const currentMonth = ref(12)
@@ -438,6 +442,8 @@ const emptySlotCount = computed(() => {
 
 // 월별 일기 목록 로드
 const loadMonthlyDiaries = async () => {
+  loadingMessage.value = '일기 목록을 불러오는 중...'
+  showLoading.value = true
   try {
     const yearMonth = `${currentYear.value}-${String(currentMonth.value).padStart(2, '0')}`
     const response = await diaryApi.getDiaries(yearMonth)
@@ -462,10 +468,13 @@ const loadMonthlyDiaries = async () => {
         flowerDetail: diary.flowerDetail || null
       }
     })
+    showLoading.value = false
   } catch (error) {
     console.error('월별 일기 로드 에러:', error)
+    showLoading.value = false
     // 에러 시 빈 데이터로 초기화
     diaryData.value = {}
+    showCustomAlert('일기 목록을 불러올 수 없습니다.', 'error')
   }
 }
 
@@ -597,18 +606,20 @@ const closeWriteModal = () => {
 }
 
 // 일기 저장
-const saveDiary = async (isTest = true) => {
+const saveDiary = async (isTest = true, area = null) => {
   if (!currentDay.value) return
   if (!diaryContent.value.trim()) {
-    showCustomAlert('일기 내용을 입력해주세요!', '📝')
+    showCustomAlert('일기 내용을 입력해주세요!', 'info')
     return
   }
 
   console.log(`${currentDay.value}일 일기 저장:`, diaryContent.value)
   console.log(`분석 모드: ${isTest ? '테스트(랜덤)' : 'Claude AI'}`)
+  if (area) console.log(`선택 영역: ${area}`)
 
   // 로딩 화면 표시
   showWriteModal.value = false
+  loadingMessage.value = 'AI가 당신의 감정을 분석하고 있어요...'
   showLoading.value = true
 
   try {
@@ -624,7 +635,7 @@ const saveDiary = async (isTest = true) => {
 
     // 2. 감정 분석 API 호출 (테스트 or Claude AI)
     const analyzedDiary = isTest
-      ? await diaryApi.analyzeDiaryTest(createdDiary.diaryId)
+      ? await diaryApi.analyzeDiaryTest(createdDiary.diaryId, area)
       : await diaryApi.analyzeDiary(createdDiary.diaryId)
 
     console.log('감정 분석 결과:', analyzedDiary)
@@ -643,15 +654,53 @@ const saveDiary = async (isTest = true) => {
       flowerDetail: analyzedDiary.flowerDetail || null
     }
 
+    // 4. 감정 조절 팁 체크 및 표시
+    if (analyzedDiary.showEmotionControlTip && analyzedDiary.consecutiveSameAreaDays && analyzedDiary.repeatedEmotionArea) {
+      try {
+        const tipData = await getEmotionControlTip(
+          analyzedDiary.repeatedEmotionArea,
+          analyzedDiary.consecutiveSameAreaDays
+        )
+
+        // 영역별 이모지 매핑
+        const areaEmojis = {
+          red: '🔥',
+          yellow: '☀️',
+          blue: '💙',
+          green: '🌿'
+        }
+
+        // 영역별 이름 매핑
+        const areaNames = {
+          red: '활동적인',
+          yellow: '긍정적인',
+          blue: '차분한',
+          green: '평온한'
+        }
+
+        continuousEmotionData.value = {
+          emotionName: areaNames[analyzedDiary.repeatedEmotionArea.toLowerCase()] || '특정',
+          emotionIcon: areaEmojis[analyzedDiary.repeatedEmotionArea.toLowerCase()] || '🌸',
+          consecutiveDays: analyzedDiary.consecutiveSameAreaDays,
+          activityName: tipData.codeName,
+          activityIcon: areaEmojis[analyzedDiary.repeatedEmotionArea.toLowerCase()] || '🌸'
+        }
+
+        showContinuousToast.value = true
+      } catch (error) {
+        console.error('감정 조절 팁 로드 실패:', error)
+      }
+    }
+
     showLoading.value = false
-    showCustomAlert('일기가 저장되었습니다!', '🌸')
+    showCustomAlert('일기가 저장되었습니다!', 'success')
 
     currentDay.value = null
     diaryContent.value = ''
   } catch (error) {
     console.error('일기 저장 에러:', error)
     showLoading.value = false
-    showCustomAlert(`일기 저장에 실패했습니다.\n${error.message}`, '😢')
+    showCustomAlert(`일기 저장에 실패했습니다.\n${error.message}`, 'error')
     currentDay.value = null
     diaryContent.value = ''
   }
@@ -762,9 +811,9 @@ const handleModalBackgroundClick = (type, event) => {
 }
 
 // 커스텀 알럿
-const showCustomAlert = (message, icon = '🌸') => {
+const showCustomAlert = (message, type = 'success') => {
   alertMessage.value = message
-  alertIcon.value = icon
+  alertType.value = type
   showAlert.value = true
 }
 
@@ -794,7 +843,7 @@ const saveFlowerAsImage = async (includeDetails = false) => {
     showImagePreview.value = true
   } catch (error) {
     console.error('이미지 저장 에러:', error)
-    showCustomAlert('이미지 저장에 실패했습니다.', '😢')
+    showCustomAlert('이미지 저장에 실패했습니다.', 'error')
   }
 }
 
@@ -828,13 +877,14 @@ const downloadImage = () => {
   link.download = fileName
   link.href = previewImageUrl.value
   link.click()
-  showCustomAlert('이미지가 저장되었습니다!', '📸')
+  showCustomAlert('이미지가 저장되었습니다!', 'success')
 }
 
 // 일기 재분석 요청 (테스트)
 const reanalyzeDiaryTest = async () => {
   if (!currentDiary.value?.id) return
 
+  loadingMessage.value = '일기를 재분석하는 중...'
   showLoading.value = true
   closeDiaryModal()
 
@@ -857,12 +907,48 @@ const reanalyzeDiaryTest = async () => {
       }
     }
 
+    // 감정 조절 팁 체크 및 표시
+    if (analyzedDiary.showEmotionControlTip && analyzedDiary.consecutiveSameAreaDays && analyzedDiary.repeatedEmotionArea) {
+      try {
+        const tipData = await getEmotionControlTip(
+          analyzedDiary.repeatedEmotionArea,
+          analyzedDiary.consecutiveSameAreaDays
+        )
+
+        const areaEmojis = {
+          red: '🔥',
+          yellow: '☀️',
+          blue: '💙',
+          green: '🌿'
+        }
+
+        const areaNames = {
+          red: '활동적인',
+          yellow: '긍정적인',
+          blue: '차분한',
+          green: '평온한'
+        }
+
+        continuousEmotionData.value = {
+          emotionName: areaNames[analyzedDiary.repeatedEmotionArea.toLowerCase()] || '특정',
+          emotionIcon: areaEmojis[analyzedDiary.repeatedEmotionArea.toLowerCase()] || '🌸',
+          consecutiveDays: analyzedDiary.consecutiveSameAreaDays,
+          activityName: tipData.codeName,
+          activityIcon: areaEmojis[analyzedDiary.repeatedEmotionArea.toLowerCase()] || '🌸'
+        }
+
+        showContinuousToast.value = true
+      } catch (error) {
+        console.error('감정 조절 팁 로드 실패:', error)
+      }
+    }
+
     showLoading.value = false
-    showCustomAlert('일기가 재분석되었습니다!', '🌸')
+    showCustomAlert('일기가 재분석되었습니다!', 'success')
   } catch (error) {
     console.error('재분석 에러:', error)
     showLoading.value = false
-    showCustomAlert(`재분석에 실패했습니다.\n${error.message}`, '😢')
+    showCustomAlert(`재분석에 실패했습니다.\n${error.message}`, 'error')
   }
 }
 
@@ -870,6 +956,7 @@ const reanalyzeDiaryTest = async () => {
 const reanalyzeDiary = async () => {
   if (!currentDiary.value?.id) return
 
+  loadingMessage.value = 'AI가 일기를 재분석하는 중...'
   showLoading.value = true
   closeDiaryModal()
 
@@ -892,12 +979,48 @@ const reanalyzeDiary = async () => {
       }
     }
 
+    // 감정 조절 팁 체크 및 표시
+    if (analyzedDiary.showEmotionControlTip && analyzedDiary.consecutiveSameAreaDays && analyzedDiary.repeatedEmotionArea) {
+      try {
+        const tipData = await getEmotionControlTip(
+          analyzedDiary.repeatedEmotionArea,
+          analyzedDiary.consecutiveSameAreaDays
+        )
+
+        const areaEmojis = {
+          red: '🔥',
+          yellow: '☀️',
+          blue: '💙',
+          green: '🌿'
+        }
+
+        const areaNames = {
+          red: '활동적인',
+          yellow: '긍정적인',
+          blue: '차분한',
+          green: '평온한'
+        }
+
+        continuousEmotionData.value = {
+          emotionName: areaNames[analyzedDiary.repeatedEmotionArea.toLowerCase()] || '특정',
+          emotionIcon: areaEmojis[analyzedDiary.repeatedEmotionArea.toLowerCase()] || '🌸',
+          consecutiveDays: analyzedDiary.consecutiveSameAreaDays,
+          activityName: tipData.codeName,
+          activityIcon: areaEmojis[analyzedDiary.repeatedEmotionArea.toLowerCase()] || '🌸'
+        }
+
+        showContinuousToast.value = true
+      } catch (error) {
+        console.error('감정 조절 팁 로드 실패:', error)
+      }
+    }
+
     showLoading.value = false
-    showCustomAlert('일기가 재분석되었습니다!', '🌸')
+    showCustomAlert('일기가 재분석되었습니다!', 'success')
   } catch (error) {
     console.error('재분석 에러:', error)
     showLoading.value = false
-    showCustomAlert(`재분석에 실패했습니다.\n${error.message}`, '😢')
+    showCustomAlert(`재분석에 실패했습니다.\n${error.message}`, 'error')
   }
 }
 
@@ -919,10 +1042,10 @@ const deleteDiaryEntry = async () => {
     }
 
     closeDiaryModal()
-    showCustomAlert('일기가 삭제되었습니다.', '🗑️')
+    showCustomAlert('일기가 삭제되었습니다.', 'delete')
   } catch (error) {
     console.error('삭제 에러:', error)
-    showCustomAlert(`일기 삭제에 실패했습니다.\n${error.message}`, '😢')
+    showCustomAlert(`일기 삭제에 실패했습니다.\n${error.message}`, 'error')
   }
 }
 
@@ -934,6 +1057,7 @@ const loadAllEmotions = async () => {
   } catch (error) {
     console.error('전체 감정 로드 에러:', error)
     allEmotionsData.value = []
+    throw error // 상위에서 에러 처리를 위해 다시 throw
   }
 }
 
@@ -942,24 +1066,35 @@ const loadMyEmotions = async () => {
   try {
     const response = await diaryApi.getMyEmotions()
     myEmotionsData.value = response.items || []
-    console.log('📊 내가 획득한 감정 데이터:', myEmotionsData.value)
-    console.log('📊 획득한 감정 코드:', Array.from(acquiredEmotions.value))
+    console.log('[내 감정 데이터]', myEmotionsData.value)
+    console.log('[획득한 감정 코드]', Array.from(acquiredEmotions.value))
   } catch (error) {
     console.error('내 감정 로드 에러:', error)
     myEmotionsData.value = []
+    throw error // 상위에서 에러 처리를 위해 다시 throw
   }
 }
 
 // 도감 열기/닫기
 const openEncyclopedia = async () => {
-  showEncyclopedia.value = true
   selectedEncyclopediaEmotion.value = null
+  loadingMessage.value = '감정 도감을 불러오는 중...'
+  showLoading.value = true
 
-  // 도감 데이터 로드
-  await Promise.all([
-    loadAllEmotions(),
-    loadMyEmotions()
-  ])
+  try {
+    // 도감 데이터 로드
+    await Promise.all([
+      loadAllEmotions(),
+      loadMyEmotions()
+    ])
+    showLoading.value = false
+    showEncyclopedia.value = true // 데이터 로드 성공 후에만 모달 열기
+  } catch (error) {
+    console.error('도감 데이터 로드 에러:', error)
+    showLoading.value = false
+    showCustomAlert('감정 도감 데이터를 불러올 수 없습니다.', 'error')
+    // 에러 시 모달을 열지 않음
+  }
 }
 
 const closeEncyclopedia = () => {

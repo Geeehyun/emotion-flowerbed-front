@@ -8,7 +8,7 @@
         </button>
       </div>
       <div class="image-preview-body">
-        <img :src="imageUrl" alt="꽃 이미지 미리보기" class="preview-image" />
+        <img :src="imageUrl" alt="꽃 이미지 미리보기" class="preview-image" loading="lazy" />
 
         <!-- 캡쳐 옵션 -->
         <div class="capture-options">
@@ -24,10 +24,10 @@
 
         <div class="image-preview-info">
           <p class="text-sm text-gray-600">
-            💡 <strong>iPhone 사용자:</strong> 이미지를 길게 눌러 저장하세요
+            <strong>iPhone 사용자:</strong> 이미지를 길게 눌러 저장하세요
           </p>
           <p class="text-sm text-gray-600">
-            💡 <strong>데스크톱/안드로이드:</strong> 아래 버튼으로 다운로드하세요
+            <strong>데스크톱/안드로이드:</strong> 아래 버튼으로 다운로드하세요
           </p>
         </div>
         <button class="download-btn" @click="$emit('download')">

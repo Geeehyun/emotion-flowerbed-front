@@ -20,7 +20,7 @@
 
       <!-- 물뿌리개 이미지 -->
       <div class="watering-can">
-        <img src="@/assets/images/watering-can.png" alt="물뿌리개" class="watering-can-image" />
+        <img src="@/assets/images/watering-can.png" alt="물뿌리개" class="watering-can-image" loading="lazy" />
       </div>
     </div>
   </transition>

@@ -9,16 +9,23 @@
 ============================================ */
 @font-face {
   font-family: 'Cafe24Ssurround';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2105_2@1.0/Cafe24Ssurround.woff') format('woff');
+  src: url('../fonts/Cafe24Ssurround-v2.0.woff2') format('woff2'),
+       url('../fonts/Cafe24Ssurround-v2.0.woff') format('woff');
   font-weight: normal;
   font-display: swap;
 }
 
 @font-face {
   font-family: 'LeeSeoyun';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2202-2@1.0/LeeSeoyun.woff') format('woff');
+  src: url('../fonts/LeeSeoyun.woff') format('woff');
   font-weight: normal;
   font-display: swap;
+}
+
+/* CSS 변수로 폰트 스택 정의 */
+:root {
+  --font-title: 'Cafe24Ssurround', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  --font-body: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
 }
 
 * {
@@ -114,7 +121,7 @@
 }
 
 .page-title {
-  font-family: 'Cafe24Ssurround', sans-serif;
+  font-family: 'Cafe24Ssurround', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 48px;
   font-weight: 900;
   color: white;
@@ -253,7 +260,7 @@
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
   text-align: center;
   white-space: nowrap;
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   min-width: 140px;
   position: relative;
 }
@@ -439,7 +446,7 @@
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
   text-align: center;
   white-space: nowrap;
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 14px;
   font-weight: bold;
   color: #A68B6A; /* 꽃 툴팁 날짜와 동일한 색상 */
@@ -611,10 +618,18 @@
 }
 
 .modal-content {
-  background-image: url('../images/note.png');
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
-  background-position: center;
+  position: relative;
+  background-color: #FFF9E8;
+  /* 종이 질감 추가 */
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 31px,
+      rgba(212, 197, 176, 0.1) 31px,
+      rgba(212, 197, 176, 0.1) 32px
+    ),
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
   border-radius: 16px;
   max-width: 500px;
   width: 90%;
@@ -626,6 +641,30 @@
   animation: modalSlideIn 0.15s ease-out;
   display: flex;
   flex-direction: column;
+}
+
+/* 왼쪽 마진선 제거됨 */
+
+/* 왼쪽 스프링 구멍들 (투명) */
+.modal-content::after {
+  content: '';
+  position: absolute;
+  left: 20px;
+  top: 60px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.08);
+  border: 2px solid rgba(139, 115, 85, 0.3);
+  box-shadow:
+    0 60px 0 rgba(0, 0, 0, 0.08),
+    0 60px 0 0 rgba(139, 115, 85, 0.3) inset,
+    0 120px 0 rgba(0, 0, 0, 0.08),
+    0 180px 0 rgba(0, 0, 0, 0.08),
+    0 240px 0 rgba(0, 0, 0, 0.08),
+    0 300px 0 rgba(0, 0, 0, 0.08),
+    0 360px 0 rgba(0, 0, 0, 0.08),
+    0 420px 0 rgba(0, 0, 0, 0.08);
 }
 
 /* 3D 플립 카드 컨테이너 */
@@ -703,7 +742,7 @@
 
 .modal-header {
   padding: 0 0 20px 0;
-  border-bottom: none;
+  border-bottom: 2px solid #D4C5B0;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -719,20 +758,20 @@
 }
 
 .modal-header h2 {
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 28px;
   color: #5D4E37;
   text-shadow: none;
 }
 
 .modal-header p {
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   color: #8B7355;
 }
 
 .modal-body {
   padding: 20px 0 0 0;
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   line-height: 2.2;
   flex: 1;
   overflow-y: auto; /* 내부 스크롤 */
@@ -789,7 +828,7 @@
 }
 
 .unanalyzed-text {
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 18px;
   color: #8B6F47;
   font-weight: bold;
@@ -813,7 +852,7 @@
   cursor: pointer;
   transition: all 0.2s ease;
   box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
 }
 
 .reanalyze-btn:hover {
@@ -842,7 +881,7 @@
   cursor: pointer;
   transition: all 0.2s ease;
   box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
 }
 
 .delete-btn:hover {
@@ -859,7 +898,7 @@
 }
 
 .analysis-title {
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 24px;
   font-weight: bold;
   color: #8B6F47;
@@ -872,7 +911,7 @@
 }
 
 .analysis-label {
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 16px;
   font-weight: 700;
   color: #8B6F47;
@@ -880,7 +919,7 @@
 }
 
 .analysis-value {
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 18px;
   color: #5D4E37;
   line-height: 1.6;
@@ -944,7 +983,7 @@
 }
 
 .legend-text {
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 15px;
   color: #5D4E37;
   font-weight: 600;
@@ -1048,7 +1087,7 @@
   box-shadow:
     0 2px 4px rgba(0,0,0,0.1),
     0 4px 8px rgba(0,0,0,0.05);
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   transform: rotate(-3deg);
   transition: box-shadow 0.2s ease;
 }
@@ -1124,9 +1163,8 @@
   align-items: flex-start;
   margin-bottom: 15px;
   padding: 12px;
-  background: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.2);
   border-radius: 12px;
-  border-left: 4px solid #E8CD8E;
   transition: all 0.2s ease;
 }
 
@@ -1151,7 +1189,7 @@
 }
 
 .detail-title {
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 13px;
   font-weight: 700;
   color: #8B6F47;
@@ -1159,7 +1197,7 @@
 }
 
 .detail-text {
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 15px;
   color: #5D4E37;
   line-height: 1.5;
@@ -1305,17 +1343,25 @@
 }
 
 /* 일기 작성 폼 */
+.diary-form {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
 .diary-form textarea {
   width: 100%;
   min-height: 300px;
+  flex: 1;
   padding: 0;
   border: none;
   background: transparent;
   font-size: 20px;
   line-height: 1.5;
   resize: none;
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   color: #5D4E37;
+  margin-bottom: 20px;
 }
 
 .diary-form textarea::placeholder {
@@ -1328,12 +1374,12 @@
 }
 
 .diary-form button {
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 18px;
 }
 
 .cancel-btn {
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   background: transparent;
   color: #8B7355;
   padding: 8px 16px;
@@ -1377,6 +1423,84 @@
 
 .test-btn:hover {
   background: #8B7355;
+}
+
+/* 테스트 버튼 영역 선택 툴팁 */
+.test-btn-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.area-tooltip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: white;
+  border: 2px solid #E8CD8E;
+  border-radius: 12px;
+  padding: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  z-index: 1000;
+  min-width: 200px;
+}
+
+.area-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 8px solid transparent;
+  border-top-color: #E8CD8E;
+}
+
+.area-tooltip-title {
+  font-size: 12px;
+  color: #8B7355;
+  margin-bottom: 8px;
+  text-align: center;
+  font-weight: 600;
+}
+
+.area-options {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.area-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  background: #FFF9E8;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.area-option:hover {
+  background: #F4E4C1;
+  border-color: currentColor;
+  transform: translateX(2px);
+}
+
+.area-option.area-red { color: #EF5350; }
+.area-option.area-yellow { color: #FFB74D; }
+.area-option.area-blue { color: #42A5F5; }
+.area-option.area-green { color: #66BB6A; }
+
+.area-color {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid white;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  flex-shrink: 0;
 }
 
 /* ============================================
@@ -1485,7 +1609,7 @@
   color: #8B6F47;
   min-width: 90px;
   text-align: center;
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
 }
 
 /* 캘린더 그리드 (일 선택) */
@@ -1516,7 +1640,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
 }
 
 .calendar-day-btn:hover {
@@ -1605,7 +1729,7 @@
 }
 
 .letter-title {
-  font-family: 'Cafe24Ssurround', sans-serif;
+  font-family: 'Cafe24Ssurround', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 22px;
   color: #8B6F47;
   margin-bottom: 12px;
@@ -1613,7 +1737,7 @@
 }
 
 .letter-message {
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 16px;
   color: #5D4E37;
   margin-bottom: 25px;
@@ -1627,7 +1751,7 @@
 }
 
 .letter-btn {
-  font-family: 'Cafe24Ssurround', sans-serif;
+  font-family: 'Cafe24Ssurround', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   padding: 12px 30px;
   border: none;
   border-radius: 10px;
@@ -1690,7 +1814,7 @@
 .base-modal-header h2 {
   color: #8B6F47;
   font-weight: 800;
-  font-family: 'Cafe24Ssurround', sans-serif;
+  font-family: 'Cafe24Ssurround', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
 }
 
 .base-modal-body {
@@ -1791,7 +1915,7 @@
 }
 
 .card-title {
-  font-family: 'Cafe24Ssurround', sans-serif;
+  font-family: 'Cafe24Ssurround', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 20px;
   font-weight: 700;
   color: #6D4C41;
@@ -1800,7 +1924,7 @@
 }
 
 .card-subtitle {
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 14px;
   color: #8B6F47;
   margin-bottom: 12px;
@@ -1835,7 +1959,7 @@
 }
 
 .benefit-text {
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 11.5px;
   color: #6D4C41;
   line-height: 1.35;
@@ -1848,7 +1972,7 @@
 }
 
 .story-text {
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 14px;
   color: #6D4C41;
   line-height: 1.5;
@@ -1866,7 +1990,7 @@
   background: rgba(255, 255, 255, 0.8);
   padding: 7px 12px;
   border-radius: 16px;
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 12px;
   color: #6D4C41;
   border: 2px solid #FFCC80;
@@ -1892,7 +2016,7 @@
 }
 
 .question-text {
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 13px;
   color: #6D4C41;
   line-height: 1.5;
@@ -1912,7 +2036,7 @@
 }
 
 .answer-text {
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 14px;
   color: #6D4C41;
   line-height: 1.4;
@@ -1938,7 +2062,7 @@
 }
 
 .definition-text {
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 13px;
   color: #6D4C41;
   line-height: 1.5;
@@ -1995,7 +2119,7 @@
 }
 
 .color-item span {
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 11px;
   color: #6D4C41;
   font-weight: 600;
@@ -2017,7 +2141,7 @@
 }
 
 .badge-text {
-  font-family: 'Cafe24Ssurround', sans-serif;
+  font-family: 'Cafe24Ssurround', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 13px;
   color: #6D4C41;
   font-weight: 700;
@@ -2058,7 +2182,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'Cafe24Ssurround', sans-serif;
+  font-family: 'Cafe24Ssurround', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 15px;
   font-weight: 700;
   box-shadow: 0 3px 8px rgba(174, 213, 129, 0.4);
@@ -2075,7 +2199,7 @@
 }
 
 .step-title {
-  font-family: 'Cafe24Ssurround', sans-serif;
+  font-family: 'Cafe24Ssurround', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 13px;
   color: #6D4C41;
   font-weight: 700;
@@ -2083,7 +2207,7 @@
 }
 
 .step-desc {
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 11.5px;
   color: #8B6F47;
   line-height: 1.35;
@@ -2107,7 +2231,7 @@
 }
 
 .final-title {
-  font-family: 'Cafe24Ssurround', sans-serif;
+  font-family: 'Cafe24Ssurround', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 22px;
   color: #6D4C41;
   font-weight: 700;
@@ -2143,7 +2267,7 @@
 }
 
 .message-item p {
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 13px;
   color: #6D4C41;
   margin: 0;
@@ -2233,7 +2357,7 @@
 }
 
 .section-title {
-  font-family: 'Cafe24Ssurround', sans-serif;
+  font-family: 'Cafe24Ssurround', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 18px;
   font-weight: 700;
   color: #8B6F47;
@@ -2241,7 +2365,7 @@
 }
 
 .section-text {
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 15px;
   color: #5D4E37;
   line-height: 1.7;
@@ -2296,7 +2420,7 @@
 }
 
 .quadrant-name {
-  font-family: 'Cafe24Ssurround', sans-serif;
+  font-family: 'Cafe24Ssurround', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 16px;
   font-weight: 700;
   color: #8B6F47;
@@ -2304,14 +2428,14 @@
 }
 
 .quadrant-desc {
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 13px;
   color: #666;
   margin-bottom: 8px;
 }
 
 .quadrant-emotions {
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 12px;
   color: #999;
 }
@@ -2339,7 +2463,7 @@
 }
 
 .step-number {
-  font-family: 'Cafe24Ssurround', sans-serif;
+  font-family: 'Cafe24Ssurround', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   flex-shrink: 0;
   width: 32px;
   height: 32px;
@@ -2358,7 +2482,7 @@
 }
 
 .step-title {
-  font-family: 'Cafe24Ssurround', sans-serif;
+  font-family: 'Cafe24Ssurround', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 15px;
   color: #8B6F47;
   font-weight: 700;
@@ -2366,14 +2490,14 @@
 }
 
 .step-desc {
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 14px;
   color: #666;
 }
 
 /* 하단 메시지 */
 .footer-message {
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 14px;
   color: #8B6F47;
   text-align: center;
@@ -2390,7 +2514,7 @@
 }
 
 .benefit-item {
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 14px;
   color: #5D4E37;
   line-height: 1.6;
@@ -2409,7 +2533,7 @@
 }
 
 .important-message {
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 14px;
   color: #8B6F47;
   line-height: 1.7;
@@ -2425,7 +2549,7 @@
 /* 도입부 섹션 (section-intro 클래스로 스타일 적용됨) */
 
 .intro-text {
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 15px;
   color: #5D4E37;
   line-height: 1.8;
@@ -2437,7 +2561,7 @@
 }
 
 .intro-highlight {
-  font-family: 'Cafe24Ssurround', sans-serif;
+  font-family: 'Cafe24Ssurround', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 15px;
   color: #8B6F47;
   font-weight: 700;
@@ -2450,7 +2574,7 @@
 
 /* 공통 확인 버튼 (무드미터 가이드용) */
 .confirm-btn {
-  font-family: 'Cafe24Ssurround', sans-serif;
+  font-family: 'Cafe24Ssurround', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   padding: 14px 36px;
   background: linear-gradient(135deg, #8B6F47 0%, #6D4C41 100%);
   color: white;
@@ -2738,13 +2862,36 @@
 }
 
 .alert-icon {
-  font-size: 60px;
   margin-bottom: 20px;
   animation: alertBounce 0.6s ease-out;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.alert-icon .icon-svg {
+  width: 64px;
+  height: 64px;
+}
+
+.alert-icon .icon-svg.success {
+  color: #66BB6A;
+}
+
+.alert-icon .icon-svg.error {
+  color: #EF5350;
+}
+
+.alert-icon .icon-svg.info {
+  color: #42A5F5;
+}
+
+.alert-icon .icon-svg.delete {
+  color: #8B6F47;
 }
 
 .alert-message {
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 22px;
   color: #5D4E37;
   margin-bottom: 30px;
@@ -2763,7 +2910,7 @@
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
 }
 
 .alert-button:hover {
@@ -2804,7 +2951,7 @@
 
 .image-preview-header h3 {
   margin: 0;
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   color: #5D4E37;
 }
 
@@ -2818,16 +2965,37 @@
 }
 
 .preview-image {
+  position: relative;
   max-width: 100%;
   max-height: 60vh;
   border-radius: 12px;
   /* box-shadow: 0 8px 24px rgba(0,0,0,0.3); */
   border: 2px solid #E8CD8E;
   padding: 20px 10px;
-  background-image: url('@/assets/images/note.png');
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
-  background-position: center;
+  background-color: #FFF9E8;
+}
+
+/* preview-image용 왼쪽 마진선 제거됨 */
+
+/* preview-image용 스프링 구멍들 */
+.preview-image::after {
+  content: '';
+  position: absolute;
+  left: 20px;
+  top: 40px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: #D4C5B0;
+  box-shadow:
+    0 50px 0 #D4C5B0,
+    0 100px 0 #D4C5B0,
+    0 150px 0 #D4C5B0,
+    0 200px 0 #D4C5B0,
+    0 250px 0 #D4C5B0,
+    0 300px 0 #D4C5B0,
+    0 350px 0 #D4C5B0,
+    0 400px 0 #D4C5B0;
 }
 
 /* 캡쳐 옵션 */
@@ -2849,7 +3017,7 @@
   font-size: 14px;
   font-weight: 500;
   color: #5D4E37;
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
 }
 
 .option-label input[type="checkbox"] {
@@ -2893,7 +3061,7 @@
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   width: 100%;
   max-width: 300px;
 }
@@ -2933,12 +3101,64 @@
   }
 }
 
+/* 섹션 라벨 공통 스타일 (이모지 제거 후 텍스트 강조) */
+.section-label {
+  font-weight: bold !important;
+  color: #5D4E37 !important;
+  position: relative;
+  padding-left: 12px !important;
+}
+
+.section-label::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 80%;
+  background: linear-gradient(135deg, #E8CD8E 0%, #D4B87A 100%);
+  border-radius: 2px;
+}
+
+/* 무드미터 색상 버전 (왼쪽 세로선만 변경) */
+.section-label.red::before {
+  background: #EF5350;
+}
+
+.section-label.yellow::before {
+  background: #FFB74D;
+}
+
+.section-label.blue::before {
+  background: #42A5F5;
+}
+
+.section-label.green::before {
+  background: #66BB6A;
+}
+
 /* AI 로딩 화면 */
 .loading-modal {
-  background: rgba(0, 0, 0, 0.8);
+  z-index: 10000 !important; /* 모든 모달보다 위에 표시 */
+  background: transparent;
+  pointer-events: all;
+}
+
+.loading-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  z-index: 10001;
 }
 
 .loading-content {
+  position: relative;
+  z-index: 10002;
   background: linear-gradient(135deg, #F4E4C1 0%, #E8D5B5 100%);
   border-radius: 24px;
   padding: 50px 40px;
@@ -2947,34 +3167,84 @@
   animation: modalSlideIn 0.3s ease-out;
 }
 
-.loading-flower {
-  font-size: 80px;
-  animation: flowerBounce 1.5s ease-in-out infinite;
-  margin-bottom: 20px;
+.loading-icon-wrapper {
+  position: relative;
+  height: 100px;
+  margin-bottom: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .loading-text {
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 24px;
   color: #5D4E37;
-  margin-bottom: 30px;
   font-weight: bold;
 }
 
 .loading-spinner {
+  position: relative;
+  width: 80px;
+  height: 80px;
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 8px;
 }
 
-.flower-grow {
-  width: 60px;
-  height: 60px;
-  border: 5px solid #E8CD8E;
-  border-top-color: #8B6F47;
+.spinner-dot {
+  position: absolute;
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
-  animation: spin 1s linear infinite;
+  animation: spinnerRotate 1.4s ease-in-out infinite;
+}
+
+.spinner-dot.dot-1 {
+  /* Red - 무드미터 레드 영역 (높은 에너지, 불쾌) */
+  background: linear-gradient(135deg, #FFB3BA 0%, #FF8A95 100%);
+  box-shadow: 0 2px 8px rgba(255, 179, 186, 0.5);
+  animation-delay: 0s;
+}
+
+.spinner-dot.dot-2 {
+  /* Yellow - 무드미터 옐로우 영역 (높은 에너지, 즐거움) */
+  background: linear-gradient(135deg, #FFFFB3 0%, #FFE66D 100%);
+  box-shadow: 0 2px 8px rgba(255, 255, 179, 0.5);
+  animation-delay: 0.35s;
+}
+
+.spinner-dot.dot-3 {
+  /* Green - 무드미터 그린 영역 (낮은 에너지, 즐거움) */
+  background: linear-gradient(135deg, #BAFFC9 0%, #90EE90 100%);
+  box-shadow: 0 2px 8px rgba(186, 255, 201, 0.5);
+  animation-delay: 0.7s;
+}
+
+.spinner-dot.dot-4 {
+  /* Blue - 무드미터 블루 영역 (낮은 에너지, 불쾌) */
+  background: linear-gradient(135deg, #BAE1FF 0%, #89CFF0 100%);
+  box-shadow: 0 2px 8px rgba(186, 225, 255, 0.5);
+  animation-delay: 1.05s;
+}
+
+@keyframes spinnerRotate {
+  0%, 100% {
+    transform: rotate(0deg) translateY(-30px) scale(1);
+    opacity: 1;
+  }
+  25% {
+    transform: rotate(90deg) translateY(-30px) scale(1.2);
+    opacity: 0.8;
+  }
+  50% {
+    transform: rotate(180deg) translateY(-30px) scale(1);
+    opacity: 1;
+  }
+  75% {
+    transform: rotate(270deg) translateY(-30px) scale(1.2);
+    opacity: 0.8;
+  }
 }
 
 /* ============================================
@@ -3000,7 +3270,7 @@
   font-size: 14px;
   font-weight: 600;
   color: #A68B6A;
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   margin-top: 4px;
 }
 
@@ -3014,7 +3284,7 @@
   gap: 6px;
   cursor: pointer;
   transition: all 0.3s ease;
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 13px;
   font-weight: 600;
   color: #8B7355;
@@ -3046,7 +3316,7 @@
 }
 
 .filter-label-text {
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 14px;
   font-weight: 600;
   color: #8B7355;
@@ -3298,7 +3568,7 @@
 }
 
 .card-flower-name {
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 13px;
   font-weight: bold;
   color: #5D4E37;
@@ -3306,7 +3576,7 @@
 }
 
 .card-emotion-name {
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 11px;
   color: #8B7355;
 }
@@ -3345,10 +3615,6 @@
   color: #E53935;
 }
 
-.encyclopedia-detail.detail-red .detail-value {
-  color: #D32F2F;
-}
-
 .encyclopedia-detail.detail-red .detail-label {
   color: #EF5350;
 }
@@ -3366,10 +3632,6 @@
 
 .encyclopedia-detail.detail-yellow .detail-subtitle {
   color: #F57C00;
-}
-
-.encyclopedia-detail.detail-yellow .detail-value {
-  color: #EF6C00;
 }
 
 .encyclopedia-detail.detail-yellow .detail-label {
@@ -3391,10 +3653,6 @@
   color: #1976D2;
 }
 
-.encyclopedia-detail.detail-blue .detail-value {
-  color: #1E88E5;
-}
-
 .encyclopedia-detail.detail-blue .detail-label {
   color: #2196F3;
 }
@@ -3414,10 +3672,6 @@
   color: #388E3C;
 }
 
-.encyclopedia-detail.detail-green .detail-value {
-  color: #43A047;
-}
-
 .encyclopedia-detail.detail-green .detail-label {
   color: #4CAF50;
 }
@@ -3428,7 +3682,7 @@
 }
 
 .detail-title {
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 28px;
   font-weight: bold;
   color: #5D4E37;
@@ -3443,13 +3697,14 @@
 }
 
 .detail-subtitle {
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 16px;
   color: #8B7355;
 }
 
 .detail-body {
   display: flex;
+  flex-direction: column;
   gap: 20px;
   align-items: center;
 }
@@ -3484,30 +3739,9 @@
   gap: 12px;
   padding: 15px;
   border-radius: 12px;
-  border-left: 4px solid #E8CD8E;
-  background: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.8);
 }
 
-/* 영역별 detail-section 스타일 */
-.encyclopedia-detail.detail-red .detail-section {
-  background: rgba(239, 83, 80, 0.08);
-  border-left-color: #EF5350;
-}
-
-.encyclopedia-detail.detail-yellow .detail-section {
-  background: rgba(255, 183, 77, 0.1);
-  border-left-color: #FFB74D;
-}
-
-.encyclopedia-detail.detail-blue .detail-section {
-  background: rgba(66, 165, 245, 0.08);
-  border-left-color: #42A5F5;
-}
-
-.encyclopedia-detail.detail-green .detail-section {
-  background: rgba(102, 187, 106, 0.08);
-  border-left-color: #66BB6A;
-}
 
 /* 그리드 레이아웃 (색상, 원산지, 향기) */
 .detail-grid {
@@ -3527,14 +3761,14 @@
 }
 
 .detail-label {
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 14px;
   font-weight: 700;
   color: #8B6F47;
 }
 
 .detail-value {
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 16px;
   color: #5D4E37;
   padding: 8px 10px;
@@ -3603,7 +3837,7 @@
   border: 2px dashed #FFC107;
   border-radius: 12px;
   text-align: center;
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 14px;
   color: #F57C00;
   font-weight: bold;
@@ -3840,10 +4074,6 @@
     font-size: 11px;
   }
 
-  .detail-body {
-    flex-direction: column;
-  }
-
   .detail-image {
     max-width: 100%;
   }
@@ -3950,7 +4180,7 @@
 
 /* 사이드바 타이틀 */
 .sidebar-title {
-  font-family: 'Cafe24Ssurround', sans-serif;
+  font-family: 'Cafe24Ssurround', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   color: #8B6F47;
 }
 
@@ -3960,13 +4190,13 @@
 }
 
 .footer-text {
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   color: #A68B6A;
 }
 
 /* 메뉴 아이템 스타일 */
 .menu-item {
-  font-family: 'Cafe24Ssurround', sans-serif;
+  font-family: 'Cafe24Ssurround', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   border-radius: 12px;
   background-color: transparent;
   border: none;
@@ -4014,7 +4244,7 @@
 }
 
 .badge-text {
-  font-family: 'Cafe24Ssurround', sans-serif;
+  font-family: 'Cafe24Ssurround', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 0.7rem;
   background: #8B6F47;
   color: white;
@@ -4059,7 +4289,7 @@
 }
 
 .filter-btn {
-  font-family: 'Cafe24Ssurround', sans-serif;
+  font-family: 'Cafe24Ssurround', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   padding: 8px 16px;
   background: #F9F6F0;
   border: 2px solid #E8CD8E;
@@ -4136,7 +4366,7 @@
   font-weight: 700;
   padding: 2px 6px;
   border-radius: 8px;
-  font-family: 'Cafe24Ssurround', sans-serif;
+  font-family: 'Cafe24Ssurround', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
 }
 
 .letter-info {
@@ -4153,7 +4383,7 @@
 }
 
 .letter-title {
-  font-family: 'Cafe24Ssurround', sans-serif;
+  font-family: 'Cafe24Ssurround', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 16px;
   font-weight: 700;
   color: #8B6F47;
@@ -4161,14 +4391,14 @@
 }
 
 .letter-date {
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 13px;
   color: #A68B6A;
   flex-shrink: 0;
 }
 
 .letter-preview {
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 14px;
   color: #5D4E37;
   line-height: 1.6;
@@ -4189,7 +4419,7 @@
 
 .letter-period,
 .letter-emotion-count {
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
 }
 
 /* 빈 상태 */
@@ -4204,7 +4434,7 @@
 }
 
 .empty-message {
-  font-family: 'Cafe24Ssurround', sans-serif;
+  font-family: 'Cafe24Ssurround', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 18px;
   color: #8B6F47;
   margin: 0 0 10px 0;
@@ -4212,7 +4442,7 @@
 }
 
 .empty-sub {
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 14px;
   color: #A68B6A;
   margin: 0;
@@ -4221,7 +4451,7 @@
 
 /* 레터 상세 */
 .letter-detail-content {
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
 }
 
 .letter-section {
@@ -4235,7 +4465,7 @@
 }
 
 .section-title {
-  font-family: 'Cafe24Ssurround', sans-serif;
+  font-family: 'Cafe24Ssurround', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 18px;
   font-weight: 700;
   color: #8B6F47;
@@ -4343,7 +4573,7 @@
 }
 
 .highlight-value {
-  font-family: 'Cafe24Ssurround', sans-serif;
+  font-family: 'Cafe24Ssurround', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 16px;
   font-weight: 700;
   color: #8B6F47;
@@ -4451,7 +4681,7 @@
 }
 
 .service-title {
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 42px;
   font-weight: bold;
   color: #5D4E37;
@@ -4459,7 +4689,7 @@
 }
 
 .service-subtitle {
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 18px;
   color: #8B7355;
   font-weight: 500;
@@ -4475,7 +4705,7 @@
 }
 
 .intro-text {
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 18px;
   line-height: 1.8;
   color: #5D4E37;
@@ -4496,7 +4726,7 @@
   background: linear-gradient(135deg, #FFE9AE 0%, #FFD88A 100%);
   border: 3px solid #E8CD8E;
   border-radius: 16px;
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 18px;
   font-weight: bold;
   color: #5D4E37;
@@ -4534,7 +4764,7 @@
   background: rgba(255, 255, 255, 0.5);
   border: 2px solid #E8CD8E;
   border-radius: 14px;
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 16px;
   font-weight: 600;
   color: #8B7355;
@@ -4555,7 +4785,7 @@
 }
 
 .footer-text {
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 14px;
   color: #A68B6A;
 }
@@ -4578,7 +4808,7 @@
 }
 
 .login-modal-title {
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 28px;
   font-weight: bold;
   color: #5D4E37;
@@ -4586,7 +4816,7 @@
 }
 
 .login-modal-subtitle {
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 14px;
   color: #8B7355;
   font-weight: 500;
@@ -4602,7 +4832,7 @@
 
 .form-label {
   display: block;
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 15px;
   font-weight: 600;
   color: #5D4E37;
@@ -4612,7 +4842,7 @@
 .form-input {
   width: 100%;
   padding: 14px 16px;
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 15px;
   color: #5D4E37;
   background: rgba(255, 255, 255, 0.9);
@@ -4638,7 +4868,7 @@
   background: rgba(255, 107, 107, 0.1);
   border: 2px solid #FF6B6B;
   border-radius: 12px;
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 14px;
   color: #C62828;
   text-align: center;
@@ -4651,7 +4881,7 @@
   background: #8B6F47;
   border: none;
   border-radius: 14px;
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 17px;
   font-weight: bold;
   color: white;
@@ -4682,7 +4912,7 @@
   background: rgba(255, 255, 255, 0.5);
   border: 2px solid #E8CD8E;
   border-radius: 14px;
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 15px;
   font-weight: 600;
   color: #8B7355;
@@ -4749,7 +4979,7 @@
 }
 
 .feature-title {
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 20px;
   font-weight: bold;
   color: #5D4E37;
@@ -4757,7 +4987,7 @@
 }
 
 .feature-desc {
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 14px;
   line-height: 1.6;
   color: #8B7355;
@@ -4772,7 +5002,7 @@
 }
 
 .footer-message {
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 16px;
   line-height: 1.8;
   color: #5D4E37;
@@ -4927,7 +5157,7 @@
   color: white;
   border: none;
   border-radius: 10px;
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;
@@ -4951,7 +5181,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 15px;
   color: #2D3748;
 }
@@ -4972,7 +5202,7 @@
   padding: 12px 16px;
   background: #FFF9E6;
   border-radius: 12px;
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 14px;
   color: #2D3748;
   border: 1px solid #E8CD8E;
@@ -5099,7 +5329,7 @@
 }
 
 .emotion-control-subtitle {
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 14px;
   color: #8B7355;
   margin-top: 8px;
@@ -5162,7 +5392,7 @@
 }
 
 .activity-name {
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 16px;
   font-weight: 700;
   color: #2D3748;
@@ -5207,7 +5437,7 @@
   border: 1px solid #E8CD8E;
   border-radius: 12px;
   text-align: center;
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   color: #8B7355;
   font-size: 14px;
 }
@@ -5222,7 +5452,7 @@
 .emotion-control-footer .save-btn {
   padding: 12px 24px;
   border-radius: 12px;
-  font-family: 'LeeSeoyun', cursive;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;
@@ -5288,4 +5518,169 @@
   .activity-description {
     font-size: 11px;
   }
+}
+
+/* ============================================
+   이미지 로딩 - 스켈레톤 UI
+============================================ */
+
+/* LazyImage 래퍼 */
+.lazy-image-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* LazyImage 내부 이미지 */
+.lazy-image-wrapper img {
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.lazy-image-wrapper img.image-loaded {
+  opacity: 1;
+}
+
+.lazy-image-wrapper img.image-loaded.opacity3 {
+  opacity: 0.3;
+}
+
+/* FlowerSkeleton 기본 스타일 */
+.flower-skeleton {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 182, 193, 0.1) 0%,
+    rgba(255, 218, 185, 0.1) 25%,
+    rgba(232, 205, 142, 0.1) 50%,
+    rgba(184, 168, 216, 0.1) 75%,
+    rgba(255, 182, 193, 0.1) 100%
+  );
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+/* 꽃 실루엣 SVG */
+.flower-silhouette {
+  width: 70%;
+  height: 70%;
+  opacity: 0.3;
+  z-index: 1;
+}
+
+.flower-petal {
+  fill: url(#petalGradient);
+}
+
+.flower-center {
+  fill: url(#centerGradient);
+}
+
+/* SVG 그라데이션 정의는 인라인으로 처리하기 위해 꽃잎과 중앙에 단색 적용 */
+.flower-petal {
+  fill: rgba(232, 205, 142, 0.4);
+}
+
+.flower-center {
+  fill: rgba(232, 205, 142, 0.5);
+}
+
+/* Shimmer 애니메이션 */
+.skeleton-shimmer {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.5) 50%,
+    transparent 100%
+  );
+  animation: shimmer 2s infinite;
+  z-index: 2;
+}
+
+@keyframes shimmer {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+/* 타입별 스켈레톤 스타일 */
+
+/* default: 화단 꽃 이미지용 */
+.skeleton-default {
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+}
+
+/* card: 도감 카드용 */
+.skeleton-card {
+  aspect-ratio: 1 / 1;
+  border-radius: 12px;
+}
+
+/* detail: 도감 상세 이미지용 */
+.skeleton-detail {
+  aspect-ratio: 1 / 1;
+  border-radius: 16px;
+}
+
+/* watercolor: 일기 수채화 배경용 */
+.skeleton-watercolor {
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+  opacity: 0.3;
+}
+
+/* watercolor 타입에서는 꽃 실루엣 숨김 */
+.skeleton-watercolor .flower-silhouette {
+  display: none;
+}
+
+/* 이미지 에러 표시 */
+.image-error {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #F4E4C1 0%, #E8CD8E 100%);
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  z-index: 10;
+}
+
+.error-icon {
+  font-size: 32px;
+  margin-bottom: 8px;
+  opacity: 0.5;
+}
+
+.error-text {
+  font-size: 12px;
+  color: #8B6F47;
+  opacity: 0.7;
 }

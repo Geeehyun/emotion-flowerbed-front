@@ -33,6 +33,7 @@
               src="@/assets/images/letterbox.png"
               alt="편지"
               class="letterbox-icon"
+              loading="lazy"
             />
             <span v-if="!letter.isRead" class="unread-badge">NEW</span>
           </div>
@@ -52,7 +53,6 @@
 
       <!-- 레터가 없을 때 -->
       <div v-if="filteredLetters.length === 0" class="empty-state">
-        <div class="empty-icon">📭</div>
         <p class="empty-message">아직 받은 레터가 없어요</p>
         <p class="empty-sub">일기를 꾸준히 작성하면 매주 감정 레터를 받을 수 있어요!</p>
       </div>

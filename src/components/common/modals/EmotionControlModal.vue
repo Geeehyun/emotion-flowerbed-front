@@ -16,7 +16,20 @@
 
     <template #default>
       <div class="emotion-control-content">
-        <div class="activities-grid">
+        <!-- 로딩 중 -->
+        <div v-if="isLoading" class="loading-container">
+          <div class="loading-spinner">로딩 중...</div>
+        </div>
+
+        <!-- 에러 메시지 -->
+        <div v-else-if="loadError" class="error-container">
+          <div class="error-icon">😢</div>
+          <div class="error-message">활동 목록을 불러올 수 없습니다.</div>
+          <button class="retry-btn" @click="loadActivities">다시 시도</button>
+        </div>
+
+        <!-- 활동 목록 -->
+        <div v-else class="activities-grid">
           <div
             v-for="activity in activities"
             :key="activity.id"
@@ -25,7 +38,7 @@
             @click="selectActivity(activity.id)"
           >
             <div class="activity-icon">
-              <img v-if="activity.iconImage" :src="activity.iconImage" :alt="activity.name" />
+              <img v-if="activity.iconImage" :src="activity.iconImage" :alt="activity.name" loading="lazy" />
               <span v-else>{{ activity.icon }}</span>
             </div>
             <div class="activity-name">{{ activity.name }}</div>
@@ -34,7 +47,7 @@
           </div>
         </div>
 
-        <div v-if="isFirstTime" class="first-time-notice">
+        <div v-if="isFirstTime && !isLoading && !loadError" class="first-time-notice">
           <p>💡 선택한 활동은 언제든지 변경할 수 있어요!</p>
         </div>
       </div>
@@ -44,8 +57,9 @@
 </template>
 
 <script setup>
-import { computed, ref, watch } from 'vue'
+import { computed, ref, watch, onMounted } from 'vue'
 import BaseModal from '@/components/common/modals/BaseModal.vue'
+import { getEmotionControlActivities } from '@/services/codeApi'
 
 const props = defineProps({
   modelValue: {
@@ -71,39 +85,75 @@ const isOpen = computed({
   }
 })
 
-// 감정제어 활동 목록
-const activities = [
-  {
-    id: 'butterfly-hug',
-    name: '나비허그 하기',
-    icon: '🦋',
-    iconImage: new URL('@/assets/images/emtion-control/butterfly_hug.png', import.meta.url).href,
-    description: '양손을 교차하여 어깨를 토닥이며 마음을 진정시켜요'
-  },
-  {
-    id: 'breathing',
-    name: '쉼호흡 하기',
-    icon: '🌬️',
-    iconImage: new URL('@/assets/images/emtion-control/deep-breath.png', import.meta.url).href,
-    description: '천천히 깊게 숨을 들이마시고 내쉬며 안정을 찾아요'
-  },
-  {
-    id: 'walking',
-    name: '산책하기',
-    icon: '🚶',
-    iconImage: new URL('@/assets/images/emtion-control/walk.png', import.meta.url).href,
-    description: '바깥 공기를 마시며 가볍게 걸으며 생각을 정리해요'
-  },
-  {
-    id: 'drawing',
-    name: '내 감정을 그림으로 그려보기',
-    icon: '🎨',
-    iconImage: new URL('@/assets/images/emtion-control/draw.png', import.meta.url).href,
-    description: '감정을 색과 형태로 표현하며 마음을 표출해요'
-  }
-]
+// 감정제어 활동 목록 (DB에서 로드)
+const activities = ref([])
+const isLoading = ref(true)
 
 const selectedActivity = ref(props.initialActivity)
+const loadError = ref(false)
+
+// assets 폴더의 모든 이미지를 자동으로 로드
+const images = import.meta.glob('@/assets/images/emtion-control/*', { eager: true })
+
+// 파일명으로 이미지 URL 가져오기
+const getImageUrl = (filename) => {
+  if (!filename) return null
+  const key = `/src/assets/images/emtion-control/${filename}`
+  return images[key]?.default || null
+}
+
+// 활동 목록 로드
+const loadActivities = async () => {
+  try {
+    isLoading.value = true
+    loadError.value = false
+    const response = await getEmotionControlActivities()
+
+    // API 응답을 활동 목록 형식으로 변환
+    // extraValue1: area (red, yellow, blue, green)
+    // extraValue2: days (3, 5)
+    // extraValue3: image filename
+    activities.value = response.map(item => {
+      // 영역별 이모지 매핑
+      const areaIcons = {
+        red: '🔥',
+        yellow: '☀️',
+        blue: '💙',
+        green: '🌿'
+      }
+
+      return {
+        id: item.code,
+        name: item.codeName,
+        icon: areaIcons[item.extraValue1?.toLowerCase()] || '🌸',
+        iconImage: getImageUrl(item.extraValue3),
+        description: item.description,
+        area: item.extraValue1, // red, yellow, blue, green
+        days: parseInt(item.extraValue2) || 0 // 3 or 5
+      }
+    })
+  } catch (error) {
+    console.error('활동 목록 로드 실패:', error)
+    loadError.value = true
+    activities.value = []
+  } finally {
+    isLoading.value = false
+  }
+}
+
+// 모달 열릴 때 활동 목록 로드
+watch(() => props.modelValue, (newVal) => {
+  if (newVal && activities.value.length === 0) {
+    loadActivities()
+  }
+})
+
+// 컴포넌트 마운트 시 로드
+onMounted(() => {
+  if (props.modelValue) {
+    loadActivities()
+  }
+})
 
 // props 변경 시 selectedActivity 업데이트
 watch(() => props.initialActivity, (newVal) => {

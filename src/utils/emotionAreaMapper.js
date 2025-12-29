@@ -22,7 +22,6 @@ export const AREA_INFO = {
     code: 'red',
     nameKr: '빨강 영역',
     nameEn: 'Red Area',
-    icon: '🔥',
     description: '높은 에너지 + 불쾌한 감정',
     borderColor: '#EF5350',
     examples: '화남, 짜증, 불안, 긴장'
@@ -31,7 +30,6 @@ export const AREA_INFO = {
     code: 'yellow',
     nameKr: '노랑 영역',
     nameEn: 'Yellow Area',
-    icon: '⭐',
     description: '높은 에너지 + 즐거운 감정',
     borderColor: '#FFB74D',
     examples: '행복, 신남, 기쁨, 설렘'
@@ -40,7 +38,6 @@ export const AREA_INFO = {
     code: 'blue',
     nameKr: '파랑 영역',
     nameEn: 'Blue Area',
-    icon: '💙',
     description: '낮은 에너지 + 불쾌한 감정',
     borderColor: '#42A5F5',
     examples: '슬픔, 우울, 지침, 외로움'
@@ -49,7 +46,6 @@ export const AREA_INFO = {
     code: 'green',
     nameKr: '초록 영역',
     nameEn: 'Green Area',
-    icon: '🌿',
     description: '낮은 에너지 + 즐거운 감정',
     borderColor: '#66BB6A',
     examples: '평온, 편안, 여유, 만족'

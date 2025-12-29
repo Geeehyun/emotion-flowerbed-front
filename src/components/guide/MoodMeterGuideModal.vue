@@ -155,7 +155,6 @@
                         <p>감정을 인정하고 이해하는 게 중요해요</p>
                       </div>
                     </div>
-                    <div class="flower-decoration">🌸 🌼 🌻 🌺 🌷</div>
                   </div>
                 </div>
               </div>

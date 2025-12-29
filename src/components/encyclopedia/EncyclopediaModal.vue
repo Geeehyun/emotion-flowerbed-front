@@ -37,11 +37,11 @@
           </div>
           <div class="detail-body">
             <div class="detail-image">
-              <img
+              <LazyImage
                 :src="selectedEmotionImage"
                 :alt="selectedEmotionData.flowerNameKr"
-                class="detail-flower-image"
-                :class="{ silhouette: !isAcquired(selectedEmotion) }"
+                :image-class="'detail-flower-image' + (!isAcquired(selectedEmotion) ? ' silhouette' : '')"
+                skeleton-type="detail"
               />
             </div>
             <div class="detail-info">
@@ -50,11 +50,11 @@
                 <!-- 꽃말 그룹 -->
                 <div class="detail-section">
                   <div class="detail-item">
-                    <span class="detail-label">💐 꽃말</span>
+                    <span class="detail-label section-label" :class="selectedEmotionData.area">꽃말</span>
                     <span class="detail-value highlight">"{{ selectedEmotionData.flowerMeaning }}"</span>
                   </div>
                   <div class="detail-item" v-if="selectedEmotionData.flowerMeaningStory">
-                    <span class="detail-label">📖 꽃말 유래</span>
+                    <span class="detail-label section-label" :class="selectedEmotionData.area">꽃말 유래</span>
                     <span class="detail-value story">{{ selectedEmotionData.flowerMeaningStory }}</span>
                   </div>
                 </div>
@@ -63,15 +63,15 @@
                 <div class="detail-section">
                   <div class="detail-grid">
                     <div class="detail-item compact" v-if="selectedEmotionData.flowerColor">
-                      <span class="detail-label">🎨 색상</span>
+                      <span class="detail-label section-label" :class="selectedEmotionData.area">색상</span>
                       <span class="detail-value">{{ selectedEmotionData.flowerColor }}</span>
                     </div>
                     <div class="detail-item compact" v-if="selectedEmotionData.flowerOrigin">
-                      <span class="detail-label">🌍 원산지</span>
+                      <span class="detail-label section-label" :class="selectedEmotionData.area">원산지</span>
                       <span class="detail-value">{{ selectedEmotionData.flowerOrigin }}</span>
                     </div>
                     <div class="detail-item compact" v-if="selectedEmotionData.flowerFragrance">
-                      <span class="detail-label">👃 향기</span>
+                      <span class="detail-label section-label" :class="selectedEmotionData.area">향기</span>
                       <span class="detail-value">{{ selectedEmotionData.flowerFragrance }}</span>
                     </div>
                   </div>
@@ -80,7 +80,7 @@
                 <!-- 재미있는 사실 -->
                 <div class="detail-section" v-if="selectedEmotionData.flowerFunFact">
                   <div class="detail-item">
-                    <span class="detail-label">💡 재미있는 사실</span>
+                    <span class="detail-label section-label" :class="selectedEmotionData.area">재미있는 사실</span>
                     <span class="detail-value story">{{ selectedEmotionData.flowerFunFact }}</span>
                   </div>
                 </div>
@@ -88,12 +88,14 @@
 
               <!-- 미획득한 경우: 기본 정보만 표시 -->
               <template v-else>
-                <div class="detail-item">
-                  <span class="detail-label">💐 꽃말</span>
-                  <span class="detail-value highlight">"{{ selectedEmotionData.flowerMeaning }}"</span>
-                </div>
-                <div class="not-acquired-message">
-                  이 감정의 일기를 작성하면 획득할 수 있어요!
+                <div class="detail-section">
+                  <div class="detail-item">
+                    <span class="detail-label section-label" :class="selectedEmotionData.area">꽃말</span>
+                    <span class="detail-value highlight">"{{ selectedEmotionData.flowerMeaning }}"</span>
+                  </div>
+                  <div class="not-acquired-message">
+                    이 감정의 일기를 작성하면 획득할 수 있어요!
+                  </div>
                 </div>
               </template>
             </div>
@@ -136,11 +138,11 @@
             @click="$emit('select-emotion', emotion.emotionCode)"
           >
             <div class="card-image-container">
-              <img
+              <LazyImage
                 :src="get3dImage(emotion.imageFile3d)"
                 :alt="emotion.flowerNameKr"
-                class="card-flower-image"
-                :class="{ silhouette: !isAcquired(emotion.emotionCode) }"
+                :image-class="'card-flower-image' + (!isAcquired(emotion.emotionCode) ? ' silhouette' : '')"
+                skeleton-type="card"
               />
             </div>
             <div class="card-info">
@@ -157,6 +159,7 @@
 <script setup>
 import { computed, ref } from 'vue'
 import BaseModal from '@/components/common/modals/BaseModal.vue'
+import LazyImage from '@/components/common/LazyImage.vue'
 import { getAreaInfo, AREA_DISPLAY_ORDER } from '@/utils/emotionAreaMapper'
 
 const props = defineProps({

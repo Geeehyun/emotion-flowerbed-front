@@ -134,9 +134,12 @@ const handleLogout = () => {
  * @param {number} diaryId - 일기 ID
  * @returns {Promise} - 감정 분석 결과
  */
-export async function analyzeDiaryTest(diaryId) {
+export async function analyzeDiaryTest(diaryId, area = null) {
   try {
-    const response = await apiClient.post(`/diaries/${diaryId}/analyze-test`);
+    const url = area
+      ? `/diaries/${diaryId}/analyze-test?area=${area}`
+      : `/diaries/${diaryId}/analyze-test`;
+    const response = await apiClient.post(url);
     return response.data;
   } catch (error) {
     if (error.response?.status === 400) {

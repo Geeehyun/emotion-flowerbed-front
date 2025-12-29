@@ -15,7 +15,6 @@
       <div class="letter-detail-content">
         <!-- 인사말 -->
         <div class="letter-section greeting">
-          <div class="greeting-icon">💌</div>
           <p class="greeting-text">
             안녕하세요!<br />
             지난 한 주간의 감정 여정을 정리한 레터가 도착했어요.
@@ -24,7 +23,7 @@
 
         <!-- 주간 감정 그래프 -->
         <div class="letter-section">
-          <h3 class="section-title">📊 이번 주 감정 그래프</h3>
+          <h3 class="section-title section-label">이번 주 감정 그래프</h3>
           <div class="emotion-chart">
             <canvas ref="chartCanvas"></canvas>
           </div>
@@ -45,7 +44,7 @@
 
         <!-- 감정 분석 -->
         <div class="letter-section">
-          <h3 class="section-title">💭 감정 분석</h3>
+          <h3 class="section-title section-label">감정 분석</h3>
           <div class="analysis-content">
             <p>{{ letter?.analysis }}</p>
           </div>
@@ -53,7 +52,7 @@
 
         <!-- 주간 하이라이트 -->
         <div class="letter-section">
-          <h3 class="section-title">✨ 이번 주 하이라이트</h3>
+          <h3 class="section-title section-label">이번 주 하이라이트</h3>
           <div class="highlights">
             <div
               v-for="(highlight, index) in letter?.highlights"
@@ -71,7 +70,6 @@
 
         <!-- 다음 주 응원 메시지 -->
         <div class="letter-section encouragement">
-          <div class="encouragement-icon">🌟</div>
           <p class="encouragement-text">
             {{ letter?.encouragement }}
           </p>

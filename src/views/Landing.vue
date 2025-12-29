@@ -12,7 +12,7 @@
       <!-- 로고 영역 -->
       <div class="logo-section">
         <div class="logo-placeholder">
-          <img src="@/assets/images/logo.png" alt="나의 감정 화단 로고" class="logo-image" />
+          <img src="@/assets/images/logo.png" alt="나의 감정 화단 로고" class="logo-image" loading="lazy" />
         </div>
         <h1 class="service-title">나의 감정 화단</h1>
         <p class="service-subtitle">My Emotion Garden</p>
@@ -30,7 +30,6 @@
       <!-- 버튼 영역 -->
       <div class="action-section">
         <button class="login-btn" @click="showLogin = true">
-          <span class="btn-icon">🌿</span>
           <span class="btn-text">로그인하고 시작하기</span>
         </button>
 
@@ -41,7 +40,7 @@
 
       <!-- 푸터 -->
       <div class="landing-footer">
-        <p class="footer-text">감정을 꽃으로 피워보세요 🌺</p>
+        <p class="footer-text">감정을 꽃으로 피워보세요</p>
       </div>
     </div>
 
