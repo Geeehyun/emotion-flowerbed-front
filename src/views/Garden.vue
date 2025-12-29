@@ -198,6 +198,7 @@
     <!-- 감정 가꾸기 모달 -->
     <EmotionControlModal
       v-model="showEmotionControl"
+      :activities="emotionControlActivities"
       @close="showEmotionControl = false"
     />
 
@@ -209,6 +210,7 @@
       :consecutive-days="continuousEmotionData.consecutiveDays"
       :activity-name="continuousEmotionData.activityName"
       :activity-icon="continuousEmotionData.activityIcon"
+      :emotion-area="continuousEmotionData.emotionArea"
       @close="showContinuousToast = false"
     />
 
@@ -228,7 +230,6 @@
 import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue'
 import { get3dImageFromDetail, get3dPotImageFromDetail, getRealisticImageFromDetail, getEmotionData, UNKNOWN_EMOTION } from '../utils/flowerMapper.js'
 import * as diaryApi from '../services/diaryApi.js'
-import { getEmotionControlTip } from '../services/codeApi.js'
 import { logout } from '../services/authApi.js'
 import { ArrowPathIcon, XMarkIcon, PlusCircleIcon, ArrowDownTrayIcon, BookOpenIcon, Bars3Icon } from '@heroicons/vue/24/outline'
 import html2canvas from 'html2canvas'
@@ -296,6 +297,7 @@ const showLetterDetail = ref(false) // 레터 상세 모달 표시 상태
 const selectedLetter = ref(null) // 선택된 레터
 const showMoodMeterGuide = ref(false) // 무드미터 가이드 모달 표시 상태
 const showEmotionControl = ref(false) // 감정 가꾸기 모달 표시 상태
+const emotionControlActivities = ref([]) // 감정 가꾸기 활동 목록
 const emotionCareData = ref(null) // 감정 가꾸기 데이터 { area: 'red', type: 'immediate' }
 const showContinuousToast = ref(false) // 3일 연속 감정 토스트 표시 상태
 const continuousEmotionData = ref({
@@ -303,7 +305,8 @@ const continuousEmotionData = ref({
   emotionIcon: '',
   consecutiveDays: 0,
   activityName: '',
-  activityIcon: ''
+  activityIcon: '',
+  emotionArea: 'red'
 })
 
 // 포스트잇 드래그 상태
@@ -684,12 +687,17 @@ const saveDiary = async (isTest = true, area = null) => {
     }
 
     // 4. 감정 조절 팁 체크 및 표시
-    if (analyzedDiary.showEmotionControlTip && analyzedDiary.consecutiveSameAreaDays && analyzedDiary.repeatedEmotionArea) {
+    if (analyzedDiary.showEmotionControlTip && analyzedDiary.emotionControlTipCode) {
       try {
-        const tipData = await getEmotionControlTip(
-          analyzedDiary.repeatedEmotionArea,
-          analyzedDiary.consecutiveSameAreaDays
-        )
+        // emotionControlTipCode로 활동 조회
+        const { getEmotionControlActivities } = await import('@/services/codeApi.js')
+        const allActivities = await getEmotionControlActivities()
+        const tipData = allActivities.find(activity => activity.code === analyzedDiary.emotionControlTipCode)
+
+        if (!tipData) {
+          console.warn('감정 조절 팁을 찾을 수 없음:', analyzedDiary.emotionControlTipCode)
+          throw new Error('해당 활동을 찾을 수 없습니다.')
+        }
 
         // 영역별 이모지 매핑
         const areaEmojis = {
@@ -708,16 +716,18 @@ const saveDiary = async (isTest = true, area = null) => {
         }
 
         continuousEmotionData.value = {
-          emotionName: areaNames[analyzedDiary.repeatedEmotionArea.toLowerCase()] || '특정',
-          emotionIcon: areaEmojis[analyzedDiary.repeatedEmotionArea.toLowerCase()] || '🌸',
-          consecutiveDays: analyzedDiary.consecutiveSameAreaDays,
+          emotionName: areaNames[analyzedDiary.repeatedEmotionArea?.toLowerCase()] || '특정',
+          emotionIcon: areaEmojis[analyzedDiary.repeatedEmotionArea?.toLowerCase()] || '🌸',
+          consecutiveDays: analyzedDiary.consecutiveSameAreaDays || 0,
           activityName: tipData.codeName,
-          activityIcon: areaEmojis[analyzedDiary.repeatedEmotionArea.toLowerCase()] || '🌸'
+          activityIcon: areaEmojis[analyzedDiary.repeatedEmotionArea?.toLowerCase()] || '🌸',
+          emotionArea: analyzedDiary.repeatedEmotionArea?.toLowerCase() || 'red'
         }
 
         showContinuousToast.value = true
       } catch (error) {
         console.error('감정 조절 팁 로드 실패:', error)
+        // 에러 발생 시 토스트 표시 안 함 (조용히 실패)
       }
     }
 
@@ -928,12 +938,17 @@ const reanalyzeDiaryTest = async () => {
     }
 
     // 감정 조절 팁 체크 및 표시
-    if (analyzedDiary.showEmotionControlTip && analyzedDiary.consecutiveSameAreaDays && analyzedDiary.repeatedEmotionArea) {
+    if (analyzedDiary.showEmotionControlTip && analyzedDiary.emotionControlTipCode) {
       try {
-        const tipData = await getEmotionControlTip(
-          analyzedDiary.repeatedEmotionArea,
-          analyzedDiary.consecutiveSameAreaDays
-        )
+        // emotionControlTipCode로 활동 조회
+        const { getEmotionControlActivities } = await import('@/services/codeApi.js')
+        const allActivities = await getEmotionControlActivities()
+        const tipData = allActivities.find(activity => activity.code === analyzedDiary.emotionControlTipCode)
+
+        if (!tipData) {
+          console.warn('감정 조절 팁을 찾을 수 없음:', analyzedDiary.emotionControlTipCode)
+          throw new Error('해당 활동을 찾을 수 없습니다.')
+        }
 
         const areaEmojis = {
           red: '🔥',
@@ -950,16 +965,18 @@ const reanalyzeDiaryTest = async () => {
         }
 
         continuousEmotionData.value = {
-          emotionName: areaNames[analyzedDiary.repeatedEmotionArea.toLowerCase()] || '특정',
-          emotionIcon: areaEmojis[analyzedDiary.repeatedEmotionArea.toLowerCase()] || '🌸',
-          consecutiveDays: analyzedDiary.consecutiveSameAreaDays,
+          emotionName: areaNames[analyzedDiary.repeatedEmotionArea?.toLowerCase()] || '특정',
+          emotionIcon: areaEmojis[analyzedDiary.repeatedEmotionArea?.toLowerCase()] || '🌸',
+          consecutiveDays: analyzedDiary.consecutiveSameAreaDays || 0,
           activityName: tipData.codeName,
-          activityIcon: areaEmojis[analyzedDiary.repeatedEmotionArea.toLowerCase()] || '🌸'
+          activityIcon: areaEmojis[analyzedDiary.repeatedEmotionArea?.toLowerCase()] || '🌸',
+          emotionArea: analyzedDiary.repeatedEmotionArea?.toLowerCase() || 'red'
         }
 
         showContinuousToast.value = true
       } catch (error) {
         console.error('감정 조절 팁 로드 실패:', error)
+        // 에러 발생 시 토스트 표시 안 함 (조용히 실패)
       }
     }
 
@@ -1000,12 +1017,17 @@ const reanalyzeDiary = async () => {
     }
 
     // 감정 조절 팁 체크 및 표시
-    if (analyzedDiary.showEmotionControlTip && analyzedDiary.consecutiveSameAreaDays && analyzedDiary.repeatedEmotionArea) {
+    if (analyzedDiary.showEmotionControlTip && analyzedDiary.emotionControlTipCode) {
       try {
-        const tipData = await getEmotionControlTip(
-          analyzedDiary.repeatedEmotionArea,
-          analyzedDiary.consecutiveSameAreaDays
-        )
+        // emotionControlTipCode로 활동 조회
+        const { getEmotionControlActivities } = await import('@/services/codeApi.js')
+        const allActivities = await getEmotionControlActivities()
+        const tipData = allActivities.find(activity => activity.code === analyzedDiary.emotionControlTipCode)
+
+        if (!tipData) {
+          console.warn('감정 조절 팁을 찾을 수 없음:', analyzedDiary.emotionControlTipCode)
+          throw new Error('해당 활동을 찾을 수 없습니다.')
+        }
 
         const areaEmojis = {
           red: '🔥',
@@ -1022,16 +1044,18 @@ const reanalyzeDiary = async () => {
         }
 
         continuousEmotionData.value = {
-          emotionName: areaNames[analyzedDiary.repeatedEmotionArea.toLowerCase()] || '특정',
-          emotionIcon: areaEmojis[analyzedDiary.repeatedEmotionArea.toLowerCase()] || '🌸',
-          consecutiveDays: analyzedDiary.consecutiveSameAreaDays,
+          emotionName: areaNames[analyzedDiary.repeatedEmotionArea?.toLowerCase()] || '특정',
+          emotionIcon: areaEmojis[analyzedDiary.repeatedEmotionArea?.toLowerCase()] || '🌸',
+          consecutiveDays: analyzedDiary.consecutiveSameAreaDays || 0,
           activityName: tipData.codeName,
-          activityIcon: areaEmojis[analyzedDiary.repeatedEmotionArea.toLowerCase()] || '🌸'
+          activityIcon: areaEmojis[analyzedDiary.repeatedEmotionArea?.toLowerCase()] || '🌸',
+          emotionArea: analyzedDiary.repeatedEmotionArea?.toLowerCase() || 'red'
         }
 
         showContinuousToast.value = true
       } catch (error) {
         console.error('감정 조절 팁 로드 실패:', error)
+        // 에러 발생 시 토스트 표시 안 함 (조용히 실패)
       }
     }
 
@@ -1127,6 +1151,26 @@ const openMoodMeterGuide = () => {
   showMoodMeterGuide.value = true
 }
 
+// 감정 가꾸기 가이드 열기
+const openEmotionControl = async () => {
+  loadingMessage.value = '감정 가꾸기 가이드를 불러오는 중...'
+  showLoading.value = true
+
+  try {
+    // 활동 목록 로드
+    const { getEmotionControlActivities } = await import('@/services/codeApi.js')
+    emotionControlActivities.value = await getEmotionControlActivities()
+
+    showLoading.value = false
+    showEmotionControl.value = true // 데이터 로드 성공 후에만 모달 열기
+  } catch (error) {
+    console.error('감정 가꾸기 데이터 로드 에러:', error)
+    showLoading.value = false
+    showCustomAlert('감정 가꾸기 가이드를 불러올 수 없습니다.', 'error')
+    // 에러 시 모달을 열지 않음
+  }
+}
+
 // 도감에서 감정 선택
 const selectEncyclopediaEmotion = (emotionCode) => {
   selectedEncyclopediaEmotion.value = emotionCode
@@ -1169,7 +1213,7 @@ const handleMenuSelect = (menuId) => {
       openLetter()
       break
     case 'emotion-care':
-      showEmotionControl.value = true
+      openEmotionControl()
       break
     case 'logout':
       handleLogout()

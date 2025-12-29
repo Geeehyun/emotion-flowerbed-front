@@ -2,7 +2,7 @@
   <transition name="slide-toast">
     <div v-if="isVisible" class="emotion-toast-container">
       <!-- 말풍선 -->
-      <div class="speech-bubble">
+      <div class="speech-bubble" :class="areaClass">
         <div class="toast-content">
           <div class="toast-emotion">
             <span class="emotion-icon">{{ emotionIcon }}</span>
@@ -27,7 +27,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 
 const props = defineProps({
   modelValue: {
@@ -54,6 +54,11 @@ const props = defineProps({
     type: String,
     required: true
   },
+  emotionArea: {
+    type: String,
+    default: 'red', // red, yellow, blue, green
+    validator: (value) => ['red', 'yellow', 'blue', 'green'].includes(value.toLowerCase())
+  },
   autoClose: {
     type: Boolean,
     default: false
@@ -68,6 +73,11 @@ const emit = defineEmits(['update:modelValue', 'close'])
 
 const isVisible = ref(false)
 let autoCloseTimer = null
+
+// 영역별 클래스
+const areaClass = computed(() => {
+  return `area-${props.emotionArea.toLowerCase()}`
+})
 
 watch(() => props.modelValue, (newVal) => {
   isVisible.value = newVal

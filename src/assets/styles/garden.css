@@ -5141,6 +5141,27 @@
   border: 2px solid #E8CD8E;
 }
 
+/* 영역별 말풍선 색상 */
+.speech-bubble.area-red {
+  border-color: rgba(239, 68, 68, 0.5);
+  background: linear-gradient(135deg, #ffffff 0%, rgba(254, 226, 226, 0.3) 100%);
+}
+
+.speech-bubble.area-yellow {
+  border-color: rgba(234, 179, 8, 0.5);
+  background: linear-gradient(135deg, #ffffff 0%, rgba(254, 249, 195, 0.3) 100%);
+}
+
+.speech-bubble.area-blue {
+  border-color: rgba(59, 130, 246, 0.5);
+  background: linear-gradient(135deg, #ffffff 0%, rgba(219, 234, 254, 0.3) 100%);
+}
+
+.speech-bubble.area-green {
+  border-color: rgba(34, 197, 94, 0.5);
+  background: linear-gradient(135deg, #ffffff 0%, rgba(220, 252, 231, 0.3) 100%);
+}
+
 /* 말풍선 꼬리 (물뿌리개를 향하도록) */
 .speech-bubble::after {
   content: '';
@@ -5164,7 +5185,7 @@
   height: 0;
   border-style: solid;
   border-width: 14px 14px 0 14px;
-  border-color: #E8CD8E transparent transparent transparent;
+  border-color: inherit;
   z-index: -1;
 }
 
@@ -5188,6 +5209,39 @@
   background: #6F5835;
   transform: translateY(-1px);
   box-shadow: 0 4px 8px rgba(0,0,0,0.25);
+}
+
+/* 영역별 버튼 색상 */
+.speech-bubble.area-red .toast-confirm-btn {
+  background: rgb(220, 38, 38);
+}
+
+.speech-bubble.area-red .toast-confirm-btn:hover {
+  background: rgb(185, 28, 28);
+}
+
+.speech-bubble.area-yellow .toast-confirm-btn {
+  background: rgb(202, 138, 4);
+}
+
+.speech-bubble.area-yellow .toast-confirm-btn:hover {
+  background: rgb(161, 98, 7);
+}
+
+.speech-bubble.area-blue .toast-confirm-btn {
+  background: rgb(37, 99, 235);
+}
+
+.speech-bubble.area-blue .toast-confirm-btn:hover {
+  background: rgb(29, 78, 216);
+}
+
+.speech-bubble.area-green .toast-confirm-btn {
+  background: rgb(21, 128, 61);
+}
+
+.speech-bubble.area-green .toast-confirm-btn:hover {
+  background: rgb(22, 101, 52);
 }
 
 .toast-content {
@@ -5354,59 +5408,170 @@
   margin-top: 8px;
 }
 
+.emotion-control-notice {
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-size: 13px;
+  color: #8B6F47;
+  margin-top: 12px;
+  padding: 10px 14px;
+  background: rgba(232, 205, 142, 0.15);
+  border-radius: 8px;
+  border: 1px solid rgba(232, 205, 142, 0.3);
+}
+
 .emotion-control-content {
   padding: 10px 0;
 }
 
-.activities-grid {
+/* 영역별 그룹 컨테이너 */
+.emotion-areas {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.emotion-area {
+  border-radius: 12px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.area-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+}
+
+.area-icon {
+  font-size: 24px;
+}
+
+.area-name {
+  font-size: 18px;
+  font-weight: bold;
+  color: #2D3748;
+}
+
+.area-desc {
+  font-size: 13px;
+  color: #718096;
+  margin-left: auto;
+}
+
+.area-activities {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
-  margin-bottom: 20px;
+  gap: 12px;
+}
+
+/* 영역별 색상 */
+.red-area {
+  border: 2px solid rgba(239, 68, 68, 0.2);
+  background: rgba(254, 226, 226, 0.3);
+}
+
+.yellow-area {
+  border: 2px solid rgba(234, 179, 8, 0.2);
+  background: rgba(254, 249, 195, 0.3);
+}
+
+.blue-area {
+  border: 2px solid rgba(59, 130, 246, 0.2);
+  background: rgba(219, 234, 254, 0.3);
+}
+
+.green-area {
+  border: 2px solid rgba(34, 197, 94, 0.2);
+  background: rgba(220, 252, 231, 0.3);
 }
 
 .activity-card {
   position: relative;
-  padding: 32px 20px;
+  padding: 24px 16px;
   border: 2px solid #E5E7EB;
-  border-radius: 16px;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  border-radius: 12px;
+  transition: all 0.3s ease;
   background: white;
   text-align: center;
-  min-height: 260px;
+  min-height: 200px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
+  overflow: hidden;
 }
 
 .activity-card:hover {
-  border-color: #FFC75F;
-  background: #FFF9E6;
-  transform: translateY(-4px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-.activity-card.selected {
-  border-color: #FFC75F;
-  background: #FFF9E6;
-  box-shadow: 0 4px 12px rgba(232, 205, 142, 0.3);
-  transform: translateY(-4px);
+/* 호버 시 설명 표시 */
+.activity-card .activity-description {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  margin-top: 0;
+}
+
+.activity-card:hover .activity-description {
+  max-height: 100px;
+  opacity: 1;
+  margin-top: 12px;
+}
+
+/* 영역별 카드 색상 */
+.activity-card.red {
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.activity-card.red:hover {
+  border-color: rgba(239, 68, 68, 0.6);
+  background: rgba(254, 226, 226, 0.5);
+}
+
+.activity-card.yellow {
+  border-color: rgba(234, 179, 8, 0.3);
+}
+
+.activity-card.yellow:hover {
+  border-color: rgba(234, 179, 8, 0.6);
+  background: rgba(254, 249, 195, 0.5);
+}
+
+.activity-card.blue {
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+.activity-card.blue:hover {
+  border-color: rgba(59, 130, 246, 0.6);
+  background: rgba(219, 234, 254, 0.5);
+}
+
+.activity-card.green {
+  border-color: rgba(34, 197, 94, 0.3);
+}
+
+.activity-card.green:hover {
+  border-color: rgba(34, 197, 94, 0.6);
+  background: rgba(220, 252, 231, 0.5);
 }
 
 .activity-icon {
-  font-size: 48px;
-  margin-bottom: 16px;
+  font-size: 36px;
+  margin-bottom: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 120px;
+  min-height: 80px;
 }
 
 .activity-icon img {
-  width: 120px;
-  height: 120px;
+  width: 80px;
+  height: 80px;
   object-fit: contain;
 }
 
