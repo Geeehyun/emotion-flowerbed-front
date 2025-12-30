@@ -479,7 +479,9 @@
   z-index: 100;
   background: rgba(139, 111, 71, 0.95);
   backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px); /* Safari 지원 */
   padding: 16px 20px;
+  padding-bottom: calc(16px + env(safe-area-inset-bottom)); /* iOS 안전 영역 고려 */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -594,6 +596,69 @@
   box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
 }
 
+/* 작은 화면 대응 (하단 바) */
+@media (max-width: 480px) {
+  .month-selector-bar {
+    padding: 12px 10px;
+    padding-bottom: calc(12px + env(safe-area-inset-bottom));
+    gap: 12px;
+  }
+
+  .month-nav {
+    width: 35px;
+    height: 35px;
+    font-size: 14px;
+  }
+
+  .month-display {
+    font-size: 16px;
+    min-width: 120px;
+    padding: 6px 10px;
+  }
+
+  .write-diary-btn {
+    width: 42px;
+    height: 42px;
+    padding: 6px;
+  }
+
+  .encyclopedia-btn {
+    width: 35px;
+    height: 35px;
+  }
+}
+
+@media (max-width: 360px) {
+  .month-selector-bar {
+    padding: 10px 6px;
+    padding-bottom: calc(10px + env(safe-area-inset-bottom));
+    gap: 8px;
+  }
+
+  .month-nav {
+    width: 32px;
+    height: 32px;
+    font-size: 13px;
+  }
+
+  .month-display {
+    font-size: 14px;
+    min-width: 100px;
+    padding: 5px 8px;
+  }
+
+  .write-diary-btn {
+    width: 38px;
+    height: 38px;
+    padding: 5px;
+  }
+
+  .encyclopedia-btn {
+    width: 32px;
+    height: 32px;
+  }
+}
+
 /* ============================================
    6. 모달 공통 스타일
 ============================================ */
@@ -682,10 +747,14 @@
   height: 100%;
   transition: transform 0.8s;
   transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d; /* Safari 지원 */
+  perspective: 1000px; /* Safari 3D 변환 개선 */
+  -webkit-perspective: 1000px;
 }
 
 .flip-card-inner.is-flipped {
   transform: rotateY(180deg);
+  -webkit-transform: rotateY(180deg); /* Safari 지원 */
 }
 
 .flip-card-front,
@@ -696,6 +765,20 @@
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   pointer-events: none;
+  will-change: transform; /* GPU 가속 활성화 */
+  -webkit-font-smoothing: antialiased; /* Safari 렌더링 개선 */
+}
+
+.flip-card-front {
+  z-index: 2; /* 앞면이 뒷면보다 위에 */
+  transform: rotateY(0deg);
+  -webkit-transform: rotateY(0deg);
+}
+
+.flip-card-back {
+  z-index: 1; /* 뒷면이 앞면보다 아래에 */
+  transform: rotateY(180deg);
+  -webkit-transform: rotateY(180deg); /* Safari 지원 */
 }
 
 .flip-card-front.active,
@@ -709,10 +792,6 @@
 
 .flip-card-inner.is-flipped .flip-card-back {
   pointer-events: auto;
-}
-
-.flip-card-back {
-  transform: rotateY(180deg);
 }
 
 /* 일기 읽기 모달 - 스크롤 작동하도록 */
