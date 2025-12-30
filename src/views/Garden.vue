@@ -1240,13 +1240,13 @@ const handleEscKey = (e) => {
   }
 }
 
-onMounted(() => {
+onMounted(async () => {
   document.addEventListener('keydown', handleEscKey)
 
   // 페이지 로드 시 현재 월의 일기 목록 로드
-  loadMonthlyDiaries()
+  await loadMonthlyDiaries()
 
-  // 새 레터가 있으면 알림 모달 표시
+  // 감정 화단 데이터 로딩 완료 후, 새 레터가 있으면 알림 모달 표시
   if (hasNewLetter.value) {
     // 약간의 딜레이를 주고 모달 표시 (자연스러운 효과)
     setTimeout(() => {
