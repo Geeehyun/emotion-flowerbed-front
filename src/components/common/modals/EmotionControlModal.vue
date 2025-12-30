@@ -122,6 +122,7 @@
 <script setup>
 import { computed } from 'vue'
 import BaseModal from '@/components/common/modals/BaseModal.vue'
+import { AREA_EMOJIS } from '@/utils/emotionAreaMapper.js'
 
 const props = defineProps({
   modelValue: {
@@ -155,17 +156,10 @@ const getImageUrl = (filename) => {
 
 // API 응답을 UI 형식으로 변환
 const formattedActivities = computed(() => {
-  const areaIcons = {
-    red: '🔥',
-    yellow: '☀️',
-    blue: '💙',
-    green: '🌿'
-  }
-
   return props.activities.map(item => ({
     id: item.code,
     name: item.codeName,
-    icon: areaIcons[item.extraValue1?.toLowerCase()] || '🌸',
+    icon: AREA_EMOJIS[item.extraValue1?.toLowerCase()] || '🌸',
     iconImage: getImageUrl(item.extraValue3),
     description: item.description,
     area: item.extraValue1, // red, yellow, blue, green

@@ -2,7 +2,7 @@
   <div v-if="modelValue" class="modal active image-preview-modal">
     <div class="image-preview-content">
       <div class="image-preview-header">
-        <h3 class="text-lg font-bold text-gray-800">이미지 미리보기</h3>
+        <h3 class="text-base font-bold text-gray-800">일기 리포트 미리보기</h3>
         <button class="close-btn" @click="$emit('close')">
           <XMarkIcon class="w-6 h-6" />
         </button>

@@ -17,6 +17,26 @@ export const MOOD_AREAS = {
   GREEN: 'green'
 }
 
+/**
+ * 영역별 이모지 아이콘
+ */
+export const AREA_EMOJIS = {
+  red: '🔥',
+  yellow: '☀️',
+  blue: '💙',
+  green: '🌿'
+}
+
+/**
+ * 영역별 짧은 이름 (감정 표현용)
+ */
+export const AREA_SHORT_NAMES = {
+  red: '활동적인',
+  yellow: '긍정적인',
+  blue: '차분한',
+  green: '평온한'
+}
+
 export const AREA_INFO = {
   red: {
     code: 'red',
@@ -24,7 +44,9 @@ export const AREA_INFO = {
     nameEn: 'Red Area',
     description: '높은 에너지 + 불쾌한 감정',
     borderColor: '#EF5350',
-    examples: '화남, 짜증, 불안, 긴장'
+    examples: '화남, 짜증, 불안, 긴장',
+    emoji: '🔥',
+    shortName: '활동적인'
   },
   yellow: {
     code: 'yellow',
@@ -32,7 +54,9 @@ export const AREA_INFO = {
     nameEn: 'Yellow Area',
     description: '높은 에너지 + 즐거운 감정',
     borderColor: '#FFB74D',
-    examples: '행복, 신남, 기쁨, 설렘'
+    examples: '행복, 신남, 기쁨, 설렘',
+    emoji: '☀️',
+    shortName: '긍정적인'
   },
   blue: {
     code: 'blue',
@@ -40,7 +64,9 @@ export const AREA_INFO = {
     nameEn: 'Blue Area',
     description: '낮은 에너지 + 불쾌한 감정',
     borderColor: '#42A5F5',
-    examples: '슬픔, 우울, 지침, 외로움'
+    examples: '슬픔, 우울, 지침, 외로움',
+    emoji: '💙',
+    shortName: '차분한'
   },
   green: {
     code: 'green',
@@ -48,7 +74,9 @@ export const AREA_INFO = {
     nameEn: 'Green Area',
     description: '낮은 에너지 + 즐거운 감정',
     borderColor: '#66BB6A',
-    examples: '평온, 편안, 여유, 만족'
+    examples: '평온, 편안, 여유, 만족',
+    emoji: '🌿',
+    shortName: '평온한'
   }
 }
 

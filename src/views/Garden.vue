@@ -229,6 +229,7 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue'
 import { get3dImageFromDetail, get3dPotImageFromDetail, getRealisticImageFromDetail, getEmotionData, UNKNOWN_EMOTION } from '../utils/flowerMapper.js'
+import { AREA_EMOJIS, AREA_SHORT_NAMES } from '../utils/emotionAreaMapper.js'
 import * as diaryApi from '../services/diaryApi.js'
 import { logout } from '../services/authApi.js'
 import { ArrowPathIcon, XMarkIcon, PlusCircleIcon, ArrowDownTrayIcon, BookOpenIcon, Bars3Icon } from '@heroicons/vue/24/outline'
@@ -699,28 +700,12 @@ const saveDiary = async (isTest = true, area = null) => {
           throw new Error('해당 활동을 찾을 수 없습니다.')
         }
 
-        // 영역별 이모지 매핑
-        const areaEmojis = {
-          red: '🔥',
-          yellow: '☀️',
-          blue: '💙',
-          green: '🌿'
-        }
-
-        // 영역별 이름 매핑
-        const areaNames = {
-          red: '활동적인',
-          yellow: '긍정적인',
-          blue: '차분한',
-          green: '평온한'
-        }
-
         continuousEmotionData.value = {
-          emotionName: areaNames[analyzedDiary.repeatedEmotionArea?.toLowerCase()] || '특정',
-          emotionIcon: areaEmojis[analyzedDiary.repeatedEmotionArea?.toLowerCase()] || '🌸',
+          emotionName: AREA_SHORT_NAMES[analyzedDiary.repeatedEmotionArea?.toLowerCase()] || '특정',
+          emotionIcon: AREA_EMOJIS[analyzedDiary.repeatedEmotionArea?.toLowerCase()] || '🌸',
           consecutiveDays: analyzedDiary.consecutiveSameAreaDays || 0,
           activityName: tipData.codeName,
-          activityIcon: areaEmojis[analyzedDiary.repeatedEmotionArea?.toLowerCase()] || '🌸',
+          activityIcon: AREA_EMOJIS[analyzedDiary.repeatedEmotionArea?.toLowerCase()] || '🌸',
           emotionArea: analyzedDiary.repeatedEmotionArea?.toLowerCase() || 'red'
         }
 
@@ -950,26 +935,12 @@ const reanalyzeDiaryTest = async () => {
           throw new Error('해당 활동을 찾을 수 없습니다.')
         }
 
-        const areaEmojis = {
-          red: '🔥',
-          yellow: '☀️',
-          blue: '💙',
-          green: '🌿'
-        }
-
-        const areaNames = {
-          red: '활동적인',
-          yellow: '긍정적인',
-          blue: '차분한',
-          green: '평온한'
-        }
-
         continuousEmotionData.value = {
-          emotionName: areaNames[analyzedDiary.repeatedEmotionArea?.toLowerCase()] || '특정',
-          emotionIcon: areaEmojis[analyzedDiary.repeatedEmotionArea?.toLowerCase()] || '🌸',
+          emotionName: AREA_SHORT_NAMES[analyzedDiary.repeatedEmotionArea?.toLowerCase()] || '특정',
+          emotionIcon: AREA_EMOJIS[analyzedDiary.repeatedEmotionArea?.toLowerCase()] || '🌸',
           consecutiveDays: analyzedDiary.consecutiveSameAreaDays || 0,
           activityName: tipData.codeName,
-          activityIcon: areaEmojis[analyzedDiary.repeatedEmotionArea?.toLowerCase()] || '🌸',
+          activityIcon: AREA_EMOJIS[analyzedDiary.repeatedEmotionArea?.toLowerCase()] || '🌸',
           emotionArea: analyzedDiary.repeatedEmotionArea?.toLowerCase() || 'red'
         }
 
@@ -1029,26 +1000,12 @@ const reanalyzeDiary = async () => {
           throw new Error('해당 활동을 찾을 수 없습니다.')
         }
 
-        const areaEmojis = {
-          red: '🔥',
-          yellow: '☀️',
-          blue: '💙',
-          green: '🌿'
-        }
-
-        const areaNames = {
-          red: '활동적인',
-          yellow: '긍정적인',
-          blue: '차분한',
-          green: '평온한'
-        }
-
         continuousEmotionData.value = {
-          emotionName: areaNames[analyzedDiary.repeatedEmotionArea?.toLowerCase()] || '특정',
-          emotionIcon: areaEmojis[analyzedDiary.repeatedEmotionArea?.toLowerCase()] || '🌸',
+          emotionName: AREA_SHORT_NAMES[analyzedDiary.repeatedEmotionArea?.toLowerCase()] || '특정',
+          emotionIcon: AREA_EMOJIS[analyzedDiary.repeatedEmotionArea?.toLowerCase()] || '🌸',
           consecutiveDays: analyzedDiary.consecutiveSameAreaDays || 0,
           activityName: tipData.codeName,
-          activityIcon: areaEmojis[analyzedDiary.repeatedEmotionArea?.toLowerCase()] || '🌸',
+          activityIcon: AREA_EMOJIS[analyzedDiary.repeatedEmotionArea?.toLowerCase()] || '🌸',
           emotionArea: analyzedDiary.repeatedEmotionArea?.toLowerCase() || 'red'
         }
 
