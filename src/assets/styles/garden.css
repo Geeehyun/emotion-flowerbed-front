@@ -5971,3 +5971,117 @@
   z-index: -9999;
   pointer-events: none;
 }
+
+/* ============================================
+   360px 이하 초소형 화면 대응 (Galaxy Fold, 작은 iPhone 등)
+============================================ */
+@media (max-width: 360px) {
+  /* 페이지 타이틀 */
+  .page-title {
+    font-size: 30px;
+    letter-spacing: 2px;
+  }
+
+  /* 서비스 타이틀 (랜딩) */
+  .service-title {
+    font-size: 32px;
+  }
+
+  /* 랜딩 컨텐츠 패딩 */
+  .landing-content {
+    padding: 30px 15px;
+  }
+
+  /* 모달 너비 및 패딩 조정 */
+  .modal-content,
+  .flip-card-container {
+    max-width: 95%;
+    padding: 10px 20px 20px 35px;
+  }
+
+  /* 꽃 카탈로그 이미지 */
+  .flower-catalog-image {
+    max-width: 280px;
+  }
+
+  /* 날짜 선택 모달 */
+  .date-picker-content {
+    max-width: 95%;
+  }
+
+  /* 편지함 모달 */
+  .letterbox-content,
+  .letterbox-modal-content {
+    max-width: 95%;
+    padding: 25px 20px;
+  }
+
+  /* About 모달 */
+  .about-modal-content {
+    padding: 25px 20px;
+  }
+
+  /* 알림 모달 */
+  .alert-content {
+    padding: 30px 20px;
+  }
+
+  /* 알림 버튼 */
+  .alert-button {
+    padding: 12px 30px;
+  }
+
+  /* 로딩 모달 */
+  .loading-content {
+    padding: 35px 25px;
+  }
+
+  /* 빈 상태 */
+  .empty-state {
+    padding: 40px 15px;
+  }
+
+  .empty-icon {
+    font-size: 60px;
+  }
+
+  /* 인사말 아이콘 */
+  .greeting-icon {
+    font-size: 32px;
+  }
+
+  /* 카드 이모지 */
+  .card-emoji {
+    font-size: 30px;
+  }
+
+  /* 미분석 아이콘 */
+  .unanalyzed-icon {
+    font-size: 48px;
+  }
+
+  /* 메시지 아이콘 */
+  .message-icon {
+    font-size: 30px;
+  }
+
+  /* 꽃 영역 아이콘 */
+  .area-icon {
+    font-size: 28px;
+  }
+
+  .quadrant-icon {
+    font-size: 26px;
+  }
+
+  /* 툴팁 카드 */
+  .tooltip-card {
+    min-width: 100px;
+    padding: 6px 8px;
+  }
+
+  /* 영역 툴팁 */
+  .area-tooltip {
+    min-width: 150px;
+  }
+}
