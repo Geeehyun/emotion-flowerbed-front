@@ -75,10 +75,11 @@
 
                 <!-- 카드 3: 감정 무드미터 소개 -->
                 <div class="guide-card section-definition">
-                  <div class="card-emoji">🌸</div>
                   <h3 class="card-title">감정 무드미터는<br />무엇인가요?</h3>
                   <div class="definition-box">
-                    <div class="definition-icon">🗺️</div>
+                    <div class="definition-placeholder">
+                      <img src="@/assets/images/emotion-moodmeter.png" alt="감정 무드 미터" class="definition-image" loading="lazy"/>
+                    </div>
                     <p class="definition-text">
                       지금 내 마음 상태를<br />
                       <span class="highlight">색</span>과 <span class="highlight">감정 이름</span>으로<br />

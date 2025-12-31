@@ -188,6 +188,7 @@
       v-model="showLetterDetail"
       :letter="selectedLetter"
       @close="showLetterDetail = false"
+      @open-diary="handleOpenDiaryFromLetter"
     />
 
     <!-- 감정 무드미터 가이드 모달 -->
@@ -231,6 +232,7 @@ import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue'
 import { get3dImageFromDetail, get3dPotImageFromDetail, getRealisticImageFromDetail, getEmotionData, UNKNOWN_EMOTION } from '../utils/flowerMapper.js'
 import { AREA_EMOJIS, AREA_SHORT_NAMES } from '../utils/emotionAreaMapper.js'
 import * as diaryApi from '../services/diaryApi.js'
+import * as weeklyReportApi from '../services/weeklyReportApi.js'
 import { logout } from '../services/authApi.js'
 import { ArrowPathIcon, XMarkIcon, PlusCircleIcon, ArrowDownTrayIcon, BookOpenIcon, Bars3Icon } from '@heroicons/vue/24/outline'
 import html2canvas from 'html2canvas'
@@ -289,9 +291,7 @@ const previewImageUrl = ref('') // 미리보기 이미지 URL
 const reportCaptureRef = ref(null) // 리포트 템플릿 캡처용 ref
 const showSidebar = ref(false) // 사이드바 메뉴 표시 상태
 
-// TODO: API 연동 - 새로운 감정 레터 확인 API 호출 필요
-// GET /letters/has-new 같은 엔드포인트로 새 레터 여부 확인
-const hasNewLetter = ref(true) // 임시로 true 설정, 나중에 API로 확인
+const hasNewLetter = ref(false) // 안 읽은 레터 존재 여부 (사이드바 N 뱃지용)
 const showLetterNotification = ref(false) // 레터 알림 모달 표시 상태
 const showLetterList = ref(false) // 레터 목록 모달 표시 상태
 const showLetterDetail = ref(false) // 레터 상세 모달 표시 상태
@@ -1199,32 +1199,61 @@ const handleLogout = async () => {
 
 // 우체통 클릭 - 감정 레터 열기
 const openLetter = () => {
-  // TODO: API 연동 - 감정 레터 API 호출 필요
-  // 1. 레터 목록 API 호출: GET /letters
-  // 2. 읽음 처리: POST /letters/{letterId}/read
   showLetterList.value = true
 }
 
-const handleSelectLetter = (letter) => {
-  // TODO: 레터 상세 데이터 구성 (임시 데이터)
-  selectedLetter.value = {
-    ...letter,
-    emotions: [
-      { name: '기쁨', count: 3, color: '#FFB74D' },
-      { name: '평온', count: 2, color: '#66BB6A' },
-      { name: '설렘', count: 1, color: '#FFA726' },
-      { name: '불안', count: 1, color: '#7986CB' }
-    ],
-    analysis: '이번 주는 긍정적인 감정이 주를 이뤘어요! 특히 기쁨과 평온함을 많이 느끼셨네요. 새로운 시작을 준비하면서 설렘도 함께했고, 가끔 불안도 있었지만 잘 극복하신 것 같아요. 감정의 균형을 잘 유지하고 계시네요.',
-    highlights: [
-      { icon: '😊', label: '가장 많은 감정', value: '기쁨 (3일)' },
-      { icon: '📈', label: '감정 변화', value: '안정적' },
-      { icon: '🌟', label: '이번 주 점수', value: '85점' }
-    ],
-    encouragement: '이번 주도 당신의 감정을 잘 돌보셨어요! 긍정적인 감정을 많이 느끼신 만큼, 다음 주도 행복한 순간들이 가득하길 바랍니다. 화이팅!'
+// 레터에서 일기 열기
+const handleOpenDiaryFromLetter = async (diaryId) => {
+  try {
+    showLoading.value = true
+    loadingMessage.value = '일기를 불러오는 중...'
+
+    // 일기 상세 조회 API 호출
+    const diary = await diaryApi.getDiary(diaryId)
+
+    // 일기가 존재하면 모달 데이터 설정
+    currentDiary.value = diary
+    currentDay.value = diary.date.split('-')[2] // 'YYYY-MM-DD'에서 일(DD) 추출
+
+    // 레터 모달 닫고 일기 모달 열기
+    showLetterDetail.value = false
+    showDiaryModal.value = true
+  } catch (error) {
+    console.error('일기 조회 실패:', error)
+
+    // 404 에러 (일기 삭제됨)
+    if (error.response?.status === 404) {
+      showCustomAlert('삭제된 일기입니다.\n해당 일기는 이미 삭제되었습니다.', 'error')
+    } else {
+      showCustomAlert('일기를 불러오는 중 문제가 발생했습니다.', 'error')
+    }
+  } finally {
+    showLoading.value = false
+    loadingMessage.value = ''
   }
-  showLetterList.value = false
-  showLetterDetail.value = true
+}
+
+const handleSelectLetter = async (letter) => {
+  try {
+    // 주간 리포트 상세 조회 API 호출
+    const reportDetail = await weeklyReportApi.getWeeklyReportDetail(letter.id)
+
+    // API 응답을 UI 형식으로 변환
+    selectedLetter.value = weeklyReportApi.transformWeeklyReportData(reportDetail)
+
+    showLetterList.value = false
+    showLetterDetail.value = true
+
+    // 읽음 처리 (비동기, 에러 무시)
+    weeklyReportApi.markReportAsRead(letter.id).catch(error => {
+      console.error('읽음 처리 실패:', error)
+    })
+  } catch (error) {
+    console.error('레터 상세 조회 실패:', error)
+    showAlert.value = true
+    alertType.value = 'error'
+    alertMessage.value = '레터를 불러오는 중 문제가 발생했습니다.'
+  }
 }
 
 // ESC 키로 모달 닫기
@@ -1240,19 +1269,45 @@ const handleEscKey = (e) => {
   }
 }
 
+// 주간 리포트 상태 체크
+const checkWeeklyReports = async () => {
+  try {
+    // 1. 안 읽은 리포트 존재 여부 확인 (사이드바 N 뱃지용 - 매번 체크)
+    const unreadResult = await weeklyReportApi.checkUnreadReports()
+    hasNewLetter.value = unreadResult.hasUnread || false
+
+    // 2. 새 리포트 존재 여부 확인 (알림 모달 1회 노출용 - 하루 1회만 체크)
+    const today = new Date().toISOString().split('T')[0] // YYYY-MM-DD
+    const lastCheck = localStorage.getItem('lastLetterNotificationCheck')
+
+    if (lastCheck !== today) {
+      // 오늘 아직 체크 안 했으면 API 호출
+      const newResult = await weeklyReportApi.checkNewReports()
+
+      // localStorage 업데이트 (오늘 체크했다고 기록)
+      localStorage.setItem('lastLetterNotificationCheck', today)
+
+      if (newResult.hasNew) {
+        // 약간의 딜레이를 주고 모달 표시 (자연스러운 효과)
+        setTimeout(() => {
+          showLetterNotification.value = true
+        }, 500)
+      }
+    }
+  } catch (error) {
+    console.error('주간 리포트 상태 확인 실패:', error)
+    // 에러가 발생해도 화단은 정상 동작하도록 함
+  }
+}
+
 onMounted(async () => {
   document.addEventListener('keydown', handleEscKey)
 
   // 페이지 로드 시 현재 월의 일기 목록 로드
   await loadMonthlyDiaries()
 
-  // 감정 화단 데이터 로딩 완료 후, 새 레터가 있으면 알림 모달 표시
-  if (hasNewLetter.value) {
-    // 약간의 딜레이를 주고 모달 표시 (자연스러운 효과)
-    setTimeout(() => {
-      showLetterNotification.value = true
-    }, 500)
-  }
+  // 감정 화단 데이터 로딩 완료 후, 주간 리포트 상태 확인
+  await checkWeeklyReports()
 })
 
 onUnmounted(() => {

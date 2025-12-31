@@ -31,3 +31,6 @@ dist-ssr
 
 # Study notes (personal learning)
 study/
+
+# Claude Code settings (personal)
+.claude/settings.local.json

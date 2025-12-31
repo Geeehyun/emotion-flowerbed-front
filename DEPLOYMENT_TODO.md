@@ -50,6 +50,64 @@
 
 ---
 
+## 🐳 Docker + GitHub Actions 자동 배포 전환
+
+### 📋 EC2 서버 설정
+- [ ] **EC2 nginx 리버스 프록시 설정**
+  ```nginx
+  # /etc/nginx/sites-available/emotion-flowerbed
+  server {
+      listen 443 ssl;
+      server_name emotion-flowerbed.duckdns.org;
+
+      # SSL 인증서 설정
+      ssl_certificate /path/to/cert.pem;
+      ssl_certificate_key /path/to/key.pem;
+
+      # 프론트엔드 프록시 (Docker 컨테이너 :3000)
+      location / {
+          proxy_pass http://localhost:3000;
+          proxy_http_version 1.1;
+          proxy_set_header Host $host;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $scheme;
+      }
+
+      # API 프록시 (Docker 컨테이너 :8080)
+      location /api {
+          proxy_pass http://localhost:8080;
+          proxy_http_version 1.1;
+          proxy_set_header Host $host;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $scheme;
+      }
+  }
+  ```
+
+- [ ] **docker-compose.yml 배포**
+  - `study/docker-compose.yml.example` 참고
+  - EC2 서버의 `/home/ubuntu/emotion-flowerbed/docker-compose.yml` 위치에 배포
+  - 민감정보 포함되므로 Git에 올리지 말 것!
+
+- [ ] **GitHub Secrets 설정**
+  - `GHCR_TOKEN`: GitHub Container Registry 접근 토큰
+  - `EC2_HOST`: EC2 서버 IP 또는 도메인
+  - `EC2_USER`: SSH 사용자명
+  - `EC2_SSH_KEY`: EC2 접속용 SSH private key
+
+### 📝 프론트엔드 빌드 체크리스트
+- [x] Dockerfile 작성 완료
+- [x] nginx.conf 작성 (Vue Router + 캐싱 설정)
+- [x] .dockerignore 작성
+- [x] 로컬 Docker 빌드 테스트 완료
+- [ ] GitHub Actions 워크플로우 작성 (.github/workflows/deploy-front.yml)
+- [ ] GHCR에 이미지 푸시 테스트
+- [ ] EC2에서 docker-compose 테스트
+
+---
+
 ## 🔮 향후 배포 예정 작업
 
 ### 감정레터 API 개발 (백엔드 작업)

@@ -11,9 +11,6 @@
         <p class="emotion-control-subtitle">
           감정 영역별로 추천하는 활동을 소개합니다
         </p>
-        <p class="emotion-control-notice">
-          💡 같은 감정 영역이 3일 이상 반복되면 맞춤 활동을 안내해드려요
-        </p>
       </div>
     </template>
 

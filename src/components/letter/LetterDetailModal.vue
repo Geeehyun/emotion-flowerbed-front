@@ -16,14 +16,52 @@
         <!-- 인사말 -->
         <div class="letter-section greeting">
           <p class="greeting-text">
-            안녕하세요!<br />
-            지난 한 주간의 감정 여정을 정리한 레터가 도착했어요.
+            한 주의 여정을 담은 편지를 전합니다.<br />
+            당신이 가꾼 감정 정원을 함께 돌아봐요.
           </p>
+        </div>
+
+        <!-- 일주일 치 감정 - 꽃 영역 -->
+        <div class="letter-section week-flowers-section">
+          <h3 class="section-title section-label">한 주간 피운 꽃들</h3>
+          <div class="weekly-calendar">
+            <div
+              v-for="(day, index) in letter?.weekFlowers"
+              :key="index"
+              class="calendar-day"
+            >
+              <div class="day-header">
+                <span class="day-date">{{ day.date }}</span>
+                <span class="day-name">{{ day.day }}</span>
+              </div>
+              <div class="day-flower" :class="{ 'has-diary': day.hasEntry }">
+                <div v-if="day.hasEntry" class="flower-wrapper" @click="handleFlowerClick(day)">
+                  <img
+                    :src="getFlowerPotImage(day.flowerKey)"
+                    :alt="day.emotionName"
+                    class="flower-pot-image"
+                    loading="lazy"
+                  />
+                  <!-- 호버 툴팁 -->
+                  <div class="flower-tooltip">
+                    <div class="flower-tooltip-card">
+                      <div class="flower-tooltip-name">{{ day.flowerName }}</div>
+                      <div class="flower-tooltip-meaning">"{{ day.flowerMeaning }}"</div>
+                      <div class="flower-tooltip-emotion">{{ day.emotionName }}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div v-if="day.hasEntry" class="day-emotion">
+                {{ day.emotionName }}
+              </div>
+            </div>
+          </div>
         </div>
 
         <!-- 주간 감정 그래프 -->
         <div class="letter-section">
-          <h3 class="section-title section-label">이번 주 감정 그래프</h3>
+          <h3 class="section-title section-label">마음의 색깔들</h3>
           <div class="emotion-chart">
             <canvas ref="chartCanvas"></canvas>
           </div>
@@ -44,41 +82,81 @@
 
         <!-- 감정 분석 -->
         <div class="letter-section">
-          <h3 class="section-title section-label">감정 분석</h3>
+          <h3 class="section-title section-label">정원사의 관찰 노트</h3>
           <div class="analysis-content">
-            <p>{{ letter?.analysis }}</p>
+            <p>{{ letter?.studentReport }}</p>
           </div>
         </div>
 
         <!-- 주간 하이라이트 -->
-        <div class="letter-section">
-          <h3 class="section-title section-label">이번 주 하이라이트</h3>
-          <div class="highlights">
-            <div
-              v-for="(highlight, index) in letter?.highlights"
-              :key="index"
-              class="highlight-item"
-            >
-              <div class="highlight-icon">{{ highlight.icon }}</div>
-              <div class="highlight-content">
-                <div class="highlight-label">{{ highlight.label }}</div>
-                <div class="highlight-value">{{ highlight.value }}</div>
+        <div class="letter-section" v-if="letter?.highlights">
+          <h3 class="section-title section-label">반짝이는 순간들</h3>
+
+          <!-- 이번 주의 꽃 -->
+          <div class="highlight-main" v-if="letter.highlights.flowerOfTheWeek">
+            <div class="flower-of-week">
+              <div class="flower-of-week-image">
+                <img
+                  :src="getFlowerPotImage(letter.highlights.flowerOfTheWeek.imageFile3d.replace('.png', ''))"
+                  :alt="letter.highlights.flowerOfTheWeek.flowerNameKr"
+                  loading="lazy"
+                />
+              </div>
+              <div class="flower-of-week-info">
+                <div class="flower-of-week-title">🌸 이번 주를 대표하는 꽃</div>
+                <div class="flower-of-week-name">{{ letter.highlights.flowerOfTheWeek.flowerNameKr }}</div>
+                <div class="flower-of-week-emotion">
+                  {{ letter.highlights.flowerOfTheWeek.emotionNameKr }} · {{ letter.highlights.flowerOfTheWeek.count }}일
+                </div>
+                <div class="flower-of-week-meaning">"{{ letter.highlights.flowerOfTheWeek.flowerMeaning }}"</div>
               </div>
             </div>
           </div>
+
+          <!-- 통계 그리드 -->
+          <div class="highlight-stats" v-if="letter.highlights.quickStats">
+            <div class="stat-item">
+              <div class="stat-icon">📝</div>
+              <div class="stat-label">일기 작성</div>
+              <div class="stat-value">{{ letter.highlights.quickStats.totalDiaries }}일</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-icon">🌈</div>
+              <div class="stat-label">감정 다양성</div>
+              <div class="stat-value">{{ letter.highlights.quickStats.emotionVariety }}가지</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-icon">🎨</div>
+              <div class="stat-label">주요 감정 영역</div>
+              <div class="stat-value stat-area">{{ letter.highlights.quickStats.dominantAreaNameKr }}</div>
+            </div>
+          </div>
+
+          <!-- 정원 평가 -->
+          <div class="garden-score" v-if="letter.highlights.gardenDiversity">
+            <div class="score-header">
+              <div class="score-icon">⭐</div>
+              <div class="score-info">
+                <div class="score-level">{{ letter.highlights.gardenDiversity.level }}</div>
+                <div class="score-point">{{ letter.highlights.gardenDiversity.score }}점</div>
+              </div>
+            </div>
+            <div class="score-description">{{ letter.highlights.gardenDiversity.description }}</div>
+          </div>
         </div>
 
-        <!-- 다음 주 응원 메시지 -->
-        <div class="letter-section encouragement">
-          <p class="encouragement-text">
-            {{ letter?.encouragement }}
-          </p>
-        </div>
-
-        <!-- 서명 -->
-        <div class="letter-signature">
-          <p>당신의 감정 정원사 올림</p>
-          <p class="signature-date">{{ letter?.date }}</p>
+        <!-- 감정 정원사의 편지 -->
+        <div class="letter-section gardener-letter">
+          <h3 class="section-title section-label">정원사가 전하는 편지</h3>
+          <div class="letter-paper">
+            <p class="letter-content">
+              {{ letter?.studentEncouragement }}
+            </p>
+            <div class="letter-signature">
+              <p class="signature-text">당신의 감정 정원사 올림</p>
+              <p class="signature-date">{{ letter?.date }}</p>
+            </div>
+          </div>
         </div>
       </div>
     </template>
@@ -93,6 +171,45 @@ import BaseModal from '@/components/common/modals/BaseModal.vue'
 // Chart.js 등록
 Chart.register(DoughnutController, ArcElement, Tooltip, Legend)
 
+/**
+ * Letter 데이터 구조 (API 연동 시 참고)
+ *
+ * {
+ *   title: '2025년 1월 3주차 감정 레터',
+ *   period: '2025.01.20 - 01.26',
+ *   date: '2025.01.26',
+ *
+ *   // 일주일 치 꽃 데이터 (7개)
+ *   weekFlowers: [
+ *     { date: '01/20', day: '월', flowerKey: 'red_rose', emotionName: '기쁨', hasEntry: true },
+ *     { date: '01/21', day: '화', flowerKey: 'sunflower', emotionName: '행복', hasEntry: true },
+ *     { date: '01/22', day: '수', hasEntry: false },  // 일기 작성 안 한 날
+ *     { date: '01/23', day: '목', flowerKey: 'lavender', emotionName: '평온', hasEntry: true },
+ *     { date: '01/24', day: '금', flowerKey: 'forget_me_not', emotionName: '그리움', hasEntry: true },
+ *     { date: '01/25', day: '토', hasEntry: false },
+ *     { date: '01/26', day: '일', flowerKey: 'chamomile', emotionName: '안정', hasEntry: true }
+ *   ],
+ *
+ *   // AI 분석 내용
+ *   studentReport: "이번 주에는 노랑 영역의 기쁨과 초록 영역의 평온한 감정을 많이 느꼈어요...",
+ *
+ *   // AI 응원 메시지
+ *   studentEncouragement: "월요일 친구와 함께 웃으며 놀던 순간, 그때 당신의 감정 화단에 환한 기쁨의 꽃이 피었어요...",
+ *
+ *   // 감정 차트 데이터
+ *   emotions: [
+ *     { name: '기쁨', count: 3, color: '#FFD700' },
+ *     { name: '평온', count: 2, color: '#90EE90' }
+ *   ],
+ *
+ *   // 하이라이트
+ *   highlights: [
+ *     { icon: '🌟', label: '가장 많이 느낀 감정', value: '기쁨 (3일)' },
+ *     { icon: '🌈', label: '감정 다양성', value: '5가지 감정' }
+ *   ]
+ * }
+ */
+
 const props = defineProps({
   modelValue: {
     type: Boolean,
@@ -104,7 +221,7 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['update:modelValue', 'close'])
+const emit = defineEmits(['update:modelValue', 'close', 'open-diary'])
 
 const isOpen = computed({
   get: () => props.modelValue,
@@ -117,6 +234,24 @@ const handleClose = () => {
 
 const chartCanvas = ref(null)
 let chartInstance = null
+
+// 화분 이미지 가져오기
+const getFlowerPotImage = (flowerKey) => {
+  if (!flowerKey) return ''
+  try {
+    return new URL(`../../assets/images/flowers/3d_pot/${flowerKey}.png`, import.meta.url).href
+  } catch (error) {
+    console.error('화분 이미지 로드 실패:', flowerKey, error)
+    return ''
+  }
+}
+
+// 꽃 클릭 핸들러 (일기로 이동)
+const handleFlowerClick = (day) => {
+  if (day.hasEntry && day.diaryId) {
+    emit('open-diary', day.diaryId)
+  }
+}
 
 // 차트 생성
 const createChart = () => {

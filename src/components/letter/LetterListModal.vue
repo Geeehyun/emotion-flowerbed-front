@@ -61,8 +61,9 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import BaseModal from '@/components/common/modals/BaseModal.vue'
+import * as weeklyReportApi from '@/services/weeklyReportApi.js'
 
 const props = defineProps({
   modelValue: {
@@ -91,40 +92,37 @@ const filters = [
 ]
 
 const selectedFilter = ref('all')
-
-// TODO: API 연동 필요 (DEPLOYMENT_TODO.md 참고)
-// 감정 레터 기능은 추후 구현 예정
-// const mockLetters = [
-//   {
-//     id: 1,
-//     title: '2024년 1월 1주차 감정 레터',
-//     date: '2024.01.07',
-//     period: '2024.01.01 - 01.07',
-//     preview: '이번 주는 행복한 감정이 많았던 한 주였어요! 특히 기쁨과 평온함이 주를 이뤘습니다...',
-//     emotionCount: 7,
-//     isRead: false
-//   },
-//   {
-//     id: 2,
-//     title: '2023년 12월 4주차 감정 레터',
-//     date: '2023.12.31',
-//     period: '2023.12.25 - 12.31',
-//     preview: '한 해를 마무리하는 한 주, 다양한 감정들이 교차했어요. 설렘과 아쉬움이 공존했습니다...',
-//     emotionCount: 6,
-//     isRead: true
-//   },
-//   {
-//     id: 3,
-//     title: '2023년 12월 3주차 감정 레터',
-//     date: '2023.12.24',
-//     period: '2023.12.18 - 12.24',
-//     preview: '크리스마스를 앞둔 한 주, 들뜬 마음과 함께 여유로운 시간을 보냈어요...',
-//     emotionCount: 5,
-//     isRead: true
-//   }
-// ]
-
 const letters = ref([])
+const isLoading = ref(false)
+
+// 주간 리포트 목록 조회
+const loadLetterList = async () => {
+  isLoading.value = true
+  try {
+    const reportList = await weeklyReportApi.getWeeklyReportList(selectedFilter.value)
+
+    // API 응답을 UI 형식으로 변환
+    letters.value = reportList.map(report => {
+      const startDate = new Date(report.startDate)
+      const endDate = new Date(report.endDate)
+
+      return {
+        id: report.reportId,
+        title: `${startDate.getFullYear()}년 ${startDate.getMonth() + 1}월 ${Math.ceil(startDate.getDate() / 7)}주차 감정 레터`,
+        date: report.createdAt.split('T')[0].replace(/-/g, '.'),
+        period: `${report.startDate.replace(/-/g, '.')} - ${report.endDate.replace(/-/g, '.')}`,
+        preview: '이번 주 감정 여정을 담은 특별한 레터입니다. 클릭해서 자세히 확인해보세요!',
+        emotionCount: report.diaryCount,
+        isRead: report.readYn
+      }
+    })
+  } catch (error) {
+    console.error('레터 목록 조회 실패:', error)
+    letters.value = []
+  } finally {
+    isLoading.value = false
+  }
+}
 
 const filteredLetters = computed(() => {
   if (letters.value.length === 0) return []
@@ -140,5 +138,17 @@ const filteredLetters = computed(() => {
     default:
       return letters.value
   }
+})
+
+// 모달이 열릴 때마다 목록 새로고침
+watch(() => props.modelValue, (newValue) => {
+  if (newValue) {
+    loadLetterList()
+  }
+})
+
+// 필터 변경 시 목록 새로고침
+watch(selectedFilter, () => {
+  loadLetterList()
 })
 </script>
