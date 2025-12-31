@@ -23,6 +23,41 @@ Claude가 직접 수행할 수 없는 작업(서버 설정, 배포, 인프라 �
 3. 설정 코드나 명령어가 있다면 코드 블록으로 포함해주세요
 4. 작업이 필요한 이유와 예상 효과를 간단히 설명해주세요
 
+# Git Commit/Push 보안 검증 지침
+
+**중요: Git commit/push 전에 자동으로 민감정보 검증이 실행됩니다.**
+
+`.claude/hooks/` 디렉토리에 민감정보 검증 스크립트가 설정되어 있습니다:
+- `validate-git-command.sh`: git commit/push 명령 감지
+- `check-sensitive-info.sh`: 민감정보 패턴 검증
+
+## 차단되는 민감정보 패턴:
+
+### 파일명
+- docker-compose.yml / docker-compose.yaml
+- .env.local
+- secrets.json, credentials.json
+- private-key.pem, id_rsa
+
+### 파일 내용
+- API 키 (Claude, OpenAI, AWS 등)
+- 데이터베이스 비밀번호
+- JWT 토큰
+- Private Key
+- Redis 비밀번호
+- DB 연결 문자열 (계정 정보 포함 시)
+
+## 민감정보 관리 규칙:
+
+1. **환경변수 파일**: `.env.development`, `.env.production`은 상대 경로만 사용 (실제 값 금지)
+2. **민감정보 파일**: `study/` 디렉토리에 보관 (Git에 올라가지 않음)
+3. **Docker Compose**: 실제 배포용 설정은 EC2 서버에만 보관
+4. **API 키**: GitHub Secrets 사용
+
+검증이 실패하면 커밋/푸시가 자동으로 차단됩니다.
+
+---
+
 # 학습 노트 기록 지침
 
 사용자가 학습적인 질문을 하는 경우:
