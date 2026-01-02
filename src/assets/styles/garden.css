@@ -118,7 +118,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 100;
   /* 스크롤 시 상단 고정 */
 }
 
@@ -410,7 +409,7 @@
   cursor: pointer;
   transition: transform 0.3s ease;
   width: 50px; /* 기본 영역 */
-  height: 100px; /* 꽃이 위로 자라날 수 있도록 높이 증가 */
+  height: 50px; /* 기본 영역 */
 }
 
 .flower-image {
@@ -6300,6 +6299,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.flower-grid .lazy-image-wrapper {
+  align-items: end;
 }
 
 /* LazyImage 내부 이미지 */
