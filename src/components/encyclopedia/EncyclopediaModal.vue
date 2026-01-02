@@ -157,7 +157,7 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import BaseModal from '@/components/common/modals/BaseModal.vue'
 import LazyImage from '@/components/common/LazyImage.vue'
 import { getAreaInfo, AREA_DISPLAY_ORDER } from '@/utils/emotionAreaMapper'
@@ -259,4 +259,11 @@ const filteredAndSortedEmotions = computed(() => {
 const openMoodMeterGuide = () => {
   emit('open-mood-meter-guide')
 }
+
+// 모달이 열릴 때 필터 초기화
+watch(() => props.modelValue, (newValue) => {
+  if (newValue) {
+    selectedAreaFilter.value = 'ALL'
+  }
+})
 </script>

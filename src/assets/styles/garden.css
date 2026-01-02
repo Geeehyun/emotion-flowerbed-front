@@ -99,7 +99,7 @@
   display: flex;
   flex-direction: column;
   position: relative;
-  z-index: 1;
+  z-index: 100;
   max-width: 480px;
   margin: 0 auto;
   width: 100%;
@@ -111,17 +111,22 @@
 
 /* 상단 타이틀 */
 .header-section {
-  padding: 20px 20px 10px;
-  text-align: center;
   position: sticky;
   top: 0;
+  left: 0;
+  width: 100%;
+  padding: 15px 20px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
+  z-index: 10;
+  background: transparent;
   /* 스크롤 시 상단 고정 */
 }
 
 .page-title {
+  position: absolute;
+  left: 50%;
   font-family: 'Cafe24Ssurround', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 48px;
   font-weight: 900;
@@ -139,13 +144,11 @@
   letter-spacing: 3px;
   animation: titleBounce 2s ease-in-out infinite;
   transform-style: preserve-3d;
+  /* 중앙 정렬 - 애니메이션에서 처리 */
 }
 
 /* 햄버거 메뉴 버튼 */
 .hamburger-btn {
-  position: fixed;
-  left: 10px;
-  top: 20px;
   width: 50px;
   height: 50px;
   background: rgba(255, 218, 185, 0.3);
@@ -156,7 +159,7 @@
   justify-content: center;
   cursor: pointer;
   transition: all 0.3s ease;
-  padding: 10px;
+  padding: 10px;  
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   color: #8B4513;
   z-index: 30;
@@ -244,7 +247,7 @@
   margin-bottom: 30px; /* 꽃을 안 가리도록 더 위로 */
   opacity: 0;
   pointer-events: none;
-  z-index: 9999; /* 모든 요소보다 위에 표시 */
+  z-index: 10000; /* 헤더보다 위에 표시 */
   transition: all 0.3s ease;
 }
 
@@ -474,7 +477,7 @@
   margin-bottom: 10px;
   opacity: 0;
   pointer-events: none;
-  z-index: 1000;
+  z-index: 10000; /* 헤더보다 위에 표시 */
   transition: all 0.3s ease;
 }
 
@@ -755,7 +758,8 @@
   max-width: 500px;
   width: 90%;
   height: 600px; /* 고정 높이 */
-  max-height: 85vh;
+  max-height: 85vh; /* fallback */
+  max-height: 85dvh; /* 모바일 브라우저 UI 고려 */
   overflow: hidden; /* 외부 스크롤 숨김 */
   box-shadow: 0 10px 30px rgba(0,0,0,0.5);
   padding: 20px 40px 40px 75px;
@@ -794,7 +798,8 @@
   max-width: 500px;
   width: 90%;
   height: 600px;
-  max-height: 85vh;
+  max-height: 85vh; /* fallback */
+  max-height: 85dvh; /* 모바일 브라우저 UI 고려 */
 }
 
 .flip-card-inner {
@@ -1663,7 +1668,8 @@
   border-radius: 20px;
   max-width: 400px;
   width: 90%;
-  max-height: 80vh;
+  max-height: 80vh; /* fallback */
+  max-height: 80dvh; /* 모바일 브라우저 UI 고려 */
   overflow-y: auto;
   box-shadow: 0 10px 40px rgba(0,0,0,0.3);
   animation: modalSlideIn 0.3s ease-out;
@@ -1943,7 +1949,8 @@
   background: white;
   border-radius: 20px;
   width: 90%;
-  max-height: 85vh;
+  max-height: 85vh; /* fallback */
+  max-height: 85dvh; /* 모바일 브라우저 UI 고려 */
   overflow: hidden;
   box-shadow: 0 10px 40px rgba(0,0,0,0.3);
   animation: modalSlideIn 0.3s ease-out;
@@ -2012,7 +2019,8 @@
 
 .guide-card {
   min-width: 100%;
-  height: calc(80vh - 100px);
+  height: calc(80vh - 100px); /* fallback */
+  height: calc(80dvh - 100px); /* 모바일 브라우저 UI 고려 */
   padding: 24px;
   border-radius: 24px;
   box-shadow: 0 8px 30px rgba(139, 111, 71, 0.12);
@@ -2776,7 +2784,8 @@
 
   .guide-card {
     padding: 18px;
-    height: calc(85vh - 80px);
+    height: calc(85vh - 80px); /* fallback */
+    height: calc(85dvh - 80px); /* 모바일 브라우저 UI 고려 */
   }
 
   .card-emoji {
@@ -3093,7 +3102,8 @@
   padding: 0;
   max-width: 1000px;
   width: 95%;
-  max-height: 95vh;
+  max-height: 95vh; /* fallback */
+  max-height: 95dvh; /* 모바일 브라우저 UI 고려 */
   overflow: hidden;
   box-shadow: 0 20px 60px rgba(0,0,0,0.5);
   animation: modalSlideIn 0.3s ease-out;
@@ -3130,7 +3140,8 @@
 .preview-image {
   position: relative;
   max-width: 100%;
-  max-height: 75vh;
+  max-height: 75vh; /* fallback */
+  max-height: 75dvh; /* 모바일 브라우저 UI 고려 */
   border-radius: 12px;
   /* box-shadow: 0 8px 24px rgba(0,0,0,0.3); */
   border: 2px solid #E8CD8E;
@@ -4085,10 +4096,10 @@
 
 @keyframes titleBounce {
   0%, 100% {
-    transform: translateY(0px);
+    transform: translateX(-50%) translateY(0px);
   }
   50% {
-    transform: translateY(-5px);
+    transform: translateX(-50%) translateY(-5px);
   }
 }
 
@@ -6254,13 +6265,28 @@
 
 /* EmotionControlModal 모바일 최적화 */
 @media (max-width: 480px) {
-  /* 모바일 모달 높이 조정 */
+  /* 모바일 모달 높이 및 너비 조정 */
   .base-modal-content {
-    max-height: 90vh;
+    max-height: 90vh; /* fallback */
+    max-height: 90dvh; /* 모바일 브라우저 UI 고려 */
+    width: 96%; /* 양옆 여백 최소화 */
   }
 
   .base-modal-body {
-    max-height: calc(90vh - 80px); /* 헤더 높이 제외 */
+    max-height: calc(90vh - 80px); /* fallback */
+    max-height: calc(90dvh - 80px); /* 모바일 브라우저 UI 고려 */
+  }
+
+  /* 모든 모달 너비 최대화 */
+  .modal-content,
+  .flip-card-container,
+  .date-picker-content,
+  .letter-notification-content,
+  .image-preview-content,
+  .mood-meter-content,
+  .letterbox-content,
+  .letterbox-modal-content {
+    width: 96%; /* 양옆 여백 최소화 */
   }
 
   .activities-grid {

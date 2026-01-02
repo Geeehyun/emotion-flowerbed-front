@@ -8,19 +8,20 @@
       <div class="dots-layer dots-layer-4"></div>
     </div>
 
+    <!-- 상단 타이틀 (main-container 밖으로 이동) -->
+    <div class="header-section">
+      <!-- 햄버거 메뉴 버튼 (좌측) -->
+      <button
+        class="hamburger-btn"
+        @click="toggleSidebar"
+        title="메뉴"
+      >
+        <Bars3Icon class="w-8 h-8" />
+      </button>
+      <h1 class="page-title">나의 감정 화단</h1>
+    </div>
+
     <div class="main-container">
-      <!-- 상단 타이틀 -->
-      <div class="header-section">
-        <!-- 햄버거 메뉴 버튼 (좌측) -->
-        <button
-          class="hamburger-btn"
-          @click="toggleSidebar"
-          title="메뉴"
-        >
-          <Bars3Icon class="w-8 h-8" />
-        </button>
-        <h1 class="page-title">나의 감정 화단</h1>
-      </div>
 
       <!-- 화단 영역 -->
       <div class="garden-section">
