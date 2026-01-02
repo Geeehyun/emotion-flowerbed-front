@@ -314,6 +314,7 @@
   flex: 1;
   padding: 10px 5px;
   display: flex;
+  flex-direction: column; /* 요일 헤더와 화단을 세로로 정렬 */
   align-items: center;
   justify-content: center;
   margin-bottom: 10vh; /* 하단 스테이터스에 겹치지 않도록 */
@@ -334,17 +335,17 @@
 
 /* 요일 헤더 컨테이너 (화단과 분리, 화단 그리드와 정확히 정렬) */
 .weekday-header-container {
-  position: relative;
-  width: 84%; /* 화단과 동일한 너비 */
-  margin: 0 auto 8px;
-  margin-left: 8%; /* 화단과 동일한 left 위치 */
-  padding: 8px 4%; /* 화단과 동일한 좌우 패딩 */
+  width: 100%; /* garden-wrapper와 동일한 너비 */
+  max-width: 480px; /* main-container와 동일한 최대 너비 */
+  margin-bottom: 8px;
+  padding: 8px 8% 8px 8%; /* 좌우 8% 패딩으로 화단 그리드 영역과 일치 */
   display: grid;
   grid-template-columns: repeat(7, 1fr); /* 화단과 동일한 7열 그리드 */
   gap: 2%; /* 화단과 동일한 간격 */
   background: linear-gradient(135deg, rgba(255, 249, 232, 0.95) 0%, rgba(255, 243, 205, 0.95) 100%);
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(139, 111, 71, 0.15);
+  box-sizing: border-box;
 }
 
 /* 요일 헤더 */
