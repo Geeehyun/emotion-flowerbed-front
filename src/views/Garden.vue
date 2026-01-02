@@ -49,7 +49,7 @@
                   <LazyImage
                     :src="getFlowerImageUrl(day)"
                     :alt="getFlowerName(day)"
-                    image-class="flower-image"
+                    :image-class="getFlowerDataForDay(day).emotionCode === 'UNKNOWN' ? 'flower-image unknown-flower' : 'flower-image'"
                     skeleton-type="default"
                   />
                   <div class="tooltip">
