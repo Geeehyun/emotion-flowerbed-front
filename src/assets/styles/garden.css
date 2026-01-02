@@ -655,6 +655,12 @@
     letter-spacing: 2px;
   }
 
+  /* 화단 섹션 상단 여백 축소 */
+  .garden-section {
+    padding-top: 50px;
+    justify-content: flex-start;
+  }
+
   /* 요일 헤더 컨테이너 모바일 대응 */
   .weekday-header-container {
     padding: 6px 10%;
