@@ -107,8 +107,9 @@ const handleSubmit = async () => {
 }
 
 const handleTestLogin = () => {
-  loginForm.value.userId = 'student1'
-  loginForm.value.password = '1234'
+  // 환경변수에서 테스트 계정 정보 가져오기
+  loginForm.value.userId = import.meta.env.VITE_TEST_USER_ID || 'student1'
+  loginForm.value.password = import.meta.env.VITE_TEST_PASSWORD || '1234'
   handleSubmit()
 }
 

@@ -161,6 +161,7 @@ import { computed, ref } from 'vue'
 import BaseModal from '@/components/common/modals/BaseModal.vue'
 import LazyImage from '@/components/common/LazyImage.vue'
 import { getAreaInfo, AREA_DISPLAY_ORDER } from '@/utils/emotionAreaMapper'
+import { DEFAULT_PRIORITY } from '@/constants/uiConstants.js'
 
 const props = defineProps({
   modelValue: {
@@ -248,8 +249,8 @@ const filteredAndSortedEmotions = computed(() => {
 
   // 영역별 정렬 (RED > YELLOW > BLUE > GREEN)
   return emotions.slice().sort((a, b) => {
-    const priorityA = AREA_PRIORITY[a.area] || 999
-    const priorityB = AREA_PRIORITY[b.area] || 999
+    const priorityA = AREA_PRIORITY[a.area] || DEFAULT_PRIORITY
+    const priorityB = AREA_PRIORITY[b.area] || DEFAULT_PRIORITY
     return priorityA - priorityB
   })
 })

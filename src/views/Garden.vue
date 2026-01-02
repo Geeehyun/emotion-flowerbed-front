@@ -261,7 +261,23 @@ import EmotionControlModal from '@/components/common/modals/EmotionControlModal.
 import EmotionContinuousToast from '@/components/common/EmotionContinuousToast.vue'
 
 // 유틸리티
-// (감정 가꾸기 저장/수정 기능 제거됨)
+import * as dateUtils from '@/utils/dateUtils.js'
+
+// 상수
+import {
+  MIN_MONTH,
+  MAX_MONTH,
+  YEAR_RANGE_PAST,
+  YEAR_RANGE_FUTURE,
+  YEAR_LIMIT_PAST,
+  YEAR_LIMIT_FUTURE
+} from '@/constants/dateConstants.js'
+import {
+  GARDEN_GRID_SIZE,
+  ANIMATION_DELAY,
+  REPORT_CAPTURE
+} from '@/constants/uiConstants.js'
+import { STORAGE_KEYS } from '@/constants/storageKeys.js'
 
 // 상태 관리
 const currentDay = ref(null)
@@ -274,12 +290,13 @@ const showAlert = ref(false)
 const alertMessage = ref('')
 const alertType = ref('success')
 // const selectedEmotion = ref('기쁨') // AI 감정 분석으로 대체됨
-const currentYear = ref(new Date().getFullYear())
-const currentMonth = ref(new Date().getMonth() + 1)  // 현재 월 (1~12)
+const { year: currentYearInit, month: currentMonthInit, day: currentDayInit } = dateUtils.getCurrentDate()
+const currentYear = ref(currentYearInit)
+const currentMonth = ref(currentMonthInit)
 const showDatePicker = ref(false)
-const selectedYear = ref(new Date().getFullYear())
-const selectedMonth = ref(new Date().getMonth() + 1)  // 현재 월 (1~12)
-const selectedDay = ref(new Date().getDate())
+const selectedYear = ref(currentYearInit)
+const selectedMonth = ref(currentMonthInit)
+const selectedDay = ref(currentDayInit)
 const isFlipped = ref(false) // 일기 모달 뒤집기 상태
 const isWriteDiaryMode = ref(false) // 일기 작성 버튼으로 날짜 선택 모드
 const showEncyclopedia = ref(false) // 도감 모달 표시 상태
@@ -449,9 +466,9 @@ const writeModalDate = computed(() => {
 })
 
 const yearOptions = computed(() => {
-  const currentYearValue = new Date().getFullYear()
+  const currentYearValue = dateUtils.getCurrentDate().year
   const years = []
-  for (let i = currentYearValue - 5; i <= currentYearValue + 5; i++) {
+  for (let i = currentYearValue - YEAR_RANGE_PAST; i <= currentYearValue + YEAR_RANGE_FUTURE; i++) {
     years.push(i)
   }
   return years
@@ -459,18 +476,17 @@ const yearOptions = computed(() => {
 
 // 선택된 월의 일 수 계산
 const daysInSelectedMonth = computed(() => {
-  const days = new Date(selectedYear.value, selectedMonth.value, 0).getDate()
-  return Array.from({ length: days }, (_, i) => i + 1)
+  return dateUtils.getMonthDays(selectedYear.value, selectedMonth.value)
 })
 
 // 현재 월의 일 수 계산
 const daysInCurrentMonth = computed(() => {
-  return new Date(currentYear.value, currentMonth.value, 0).getDate()
+  return dateUtils.getDaysInMonth(currentYear.value, currentMonth.value)
 })
 
-// 빈 칸 개수 계산 (35칸 중 남은 칸)
+// 빈 칸 개수 계산 (그리드 총 칸 수 - 현재 월의 일 수)
 const emptySlotCount = computed(() => {
-  return 35 - daysInCurrentMonth.value
+  return GARDEN_GRID_SIZE - daysInCurrentMonth.value
 })
 
 // 월별 일기 목록 로드
@@ -478,7 +494,7 @@ const loadMonthlyDiaries = async () => {
   loadingMessage.value = '일기 목록을 불러오는 중...'
   showLoading.value = true
   try {
-    const yearMonth = `${currentYear.value}-${String(currentMonth.value).padStart(2, '0')}`
+    const yearMonth = dateUtils.formatYearMonth(currentYear.value, currentMonth.value)
     const response = await diaryApi.getDiaries(yearMonth)
 
     console.log('월별 일기 목록:', response)
@@ -514,12 +530,12 @@ const loadMonthlyDiaries = async () => {
 // 월 변경
 const changeMonth = (delta) => {
   currentMonth.value += delta
-  if (currentMonth.value < 1) {
-    currentMonth.value = 12
+  if (currentMonth.value < MIN_MONTH) {
+    currentMonth.value = MAX_MONTH
     currentYear.value -= 1
   }
-  if (currentMonth.value > 12) {
-    currentMonth.value = 1
+  if (currentMonth.value > MAX_MONTH) {
+    currentMonth.value = MIN_MONTH
     currentYear.value += 1
   }
 
@@ -554,13 +570,13 @@ const selectDay = (day) => {
 // 선택된 연도 변경
 const changeSelectedYear = (delta) => {
   selectedYear.value += delta
-  // 연도 범위 제한 (현재 연도 기준 ±10년)
-  const currentYearValue = new Date().getFullYear()
-  if (selectedYear.value < currentYearValue - 10) {
-    selectedYear.value = currentYearValue - 10
+  // 연도 범위 제한
+  const currentYearValue = dateUtils.getCurrentDate().year
+  if (selectedYear.value < currentYearValue - YEAR_LIMIT_PAST) {
+    selectedYear.value = currentYearValue - YEAR_LIMIT_PAST
   }
-  if (selectedYear.value > currentYearValue + 10) {
-    selectedYear.value = currentYearValue + 10
+  if (selectedYear.value > currentYearValue + YEAR_LIMIT_FUTURE) {
+    selectedYear.value = currentYearValue + YEAR_LIMIT_FUTURE
   }
 }
 
@@ -657,7 +673,7 @@ const saveDiary = async (isTest = true, area = null) => {
 
   try {
     // 1. 일기 작성 API 호출
-    const diaryDate = `${currentYear.value}-${String(currentMonth.value).padStart(2, '0')}-${String(currentDay.value).padStart(2, '0')}`
+    const diaryDate = dateUtils.formatFullDate(currentYear.value, currentMonth.value, currentDay.value)
 
     const createdDiary = await diaryApi.createDiary({
       diaryDate: diaryDate,
@@ -858,11 +874,11 @@ const saveFlowerAsImage = async () => {
 
     const canvas = await html2canvas(reportCaptureRef.value, {
       backgroundColor: '#FFF9E8', // 노트 테마 배경색
-      scale: 2, // 고해상도
+      scale: REPORT_CAPTURE.SCALE,
       useCORS: true,
       logging: false,
-      width: 800, // 리포트 너비 고정
-      windowWidth: 800
+      width: REPORT_CAPTURE.WIDTH,
+      windowWidth: REPORT_CAPTURE.WIDTH
     })
 
     // 캔버스를 Data URL로 변환하여 미리보기에 표시
@@ -1209,11 +1225,11 @@ const handleOpenDiaryFromLetter = async (diaryId) => {
     loadingMessage.value = '일기를 불러오는 중...'
 
     // 일기 상세 조회 API 호출
-    const diary = await diaryApi.getDiary(diaryId)
+    const diary = await diaryApi.getDiaryDetail(diaryId)
 
     // 일기가 존재하면 모달 데이터 설정
     currentDiary.value = diary
-    currentDay.value = diary.date.split('-')[2] // 'YYYY-MM-DD'에서 일(DD) 추출
+    currentDay.value = dateUtils.extractDay(diary.date) // 'YYYY-MM-DD'에서 일(DD) 추출
 
     // 레터 모달 닫고 일기 모달 열기
     showLetterDetail.value = false
@@ -1283,21 +1299,21 @@ const checkWeeklyReports = async () => {
     hasNewLetter.value = unreadResult.hasUnread || false
 
     // 2. 새 리포트 존재 여부 확인 (알림 모달 1회 노출용 - 하루 1회만 체크)
-    const today = new Date().toISOString().split('T')[0] // YYYY-MM-DD
-    const lastCheck = localStorage.getItem('lastLetterNotificationCheck')
+    const today = dateUtils.formatDateToISO(new Date())
+    const lastCheck = localStorage.getItem(STORAGE_KEYS.LAST_LETTER_CHECK)
 
     if (lastCheck !== today) {
       // 오늘 아직 체크 안 했으면 API 호출
       const newResult = await weeklyReportApi.checkNewReports()
 
       // localStorage 업데이트 (오늘 체크했다고 기록)
-      localStorage.setItem('lastLetterNotificationCheck', today)
+      localStorage.setItem(STORAGE_KEYS.LAST_LETTER_CHECK, today)
 
       if (newResult.hasNew) {
         // 약간의 딜레이를 주고 모달 표시 (자연스러운 효과)
         setTimeout(() => {
           showLetterNotification.value = true
-        }, 500)
+        }, ANIMATION_DELAY.NOTIFICATION)
       }
     }
   } catch (error) {

@@ -1,17 +1,11 @@
 import axios from 'axios';
 import { refreshAccessToken } from './authApi';
-
-// API Base URL 설정
-const API_BASE_URL = import.meta.env.VITE_APP_API_URL || '/api/v1';
+import { API_CONFIG } from '@/config/apiConfig.js';
+import { STORAGE_KEYS } from '@/constants/storageKeys.js';
+import { HTTP_STATUS } from '@/constants/httpStatus.js';
 
 // Axios 인스턴스 생성
-const apiClient = axios.create({
-  baseURL: API_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json'
-  },
-  timeout: 30000 // 30초 타임아웃
-});
+const apiClient = axios.create(API_CONFIG);
 
 // 토큰 갱신 중인지 여부
 let isRefreshing = false;
@@ -33,7 +27,7 @@ const processQueue = (error, token = null) => {
 // 요청 인터셉터 (인증 토큰 추가)
 apiClient.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('accessToken');
+    const token = localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN);
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -51,7 +45,7 @@ apiClient.interceptors.response.use(
     const originalRequest = error.config;
 
     // 401 에러이고 토큰 갱신 요청이 아닌 경우
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    if (error.response?.status === HTTP_STATUS.UNAUTHORIZED && !originalRequest._retry) {
       if (isRefreshing) {
         // 이미 토큰 갱신 중이면 큐에 추가
         return new Promise((resolve, reject) => {
@@ -69,7 +63,7 @@ apiClient.interceptors.response.use(
       originalRequest._retry = true;
       isRefreshing = true;
 
-      const refreshToken = localStorage.getItem('refreshToken');
+      const refreshToken = localStorage.getItem(STORAGE_KEYS.REFRESH_TOKEN);
 
       if (!refreshToken) {
         // refresh token이 없으면 로그아웃
@@ -82,9 +76,9 @@ apiClient.interceptors.response.use(
         const data = await refreshAccessToken(refreshToken);
 
         // 새 토큰 저장
-        localStorage.setItem('accessToken', data.accessToken);
+        localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, data.accessToken);
         if (data.refreshToken) {
-          localStorage.setItem('refreshToken', data.refreshToken);
+          localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, data.refreshToken);
         }
 
         // 기존 요청들에 새 토큰 적용
@@ -120,8 +114,8 @@ apiClient.interceptors.response.use(
 
 // 로그아웃 처리
 const handleLogout = () => {
-  localStorage.removeItem('accessToken');
-  localStorage.removeItem('refreshToken');
+  localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
+  localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN);
 
   // 인증 상태 업데이트
   if (window.setAuth) {

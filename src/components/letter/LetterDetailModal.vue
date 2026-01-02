@@ -167,6 +167,7 @@
 import { ref, computed, watch, onMounted } from 'vue'
 import { Chart, DoughnutController, ArcElement, Tooltip, Legend } from 'chart.js'
 import BaseModal from '@/components/common/modals/BaseModal.vue'
+import { ANIMATION_DELAY } from '@/constants/uiConstants.js'
 
 // Chart.js 등록
 Chart.register(DoughnutController, ArcElement, Tooltip, Legend)
@@ -298,7 +299,7 @@ watch(() => props.letter, () => {
   if (props.modelValue && props.letter) {
     setTimeout(() => {
       createChart()
-    }, 100)
+    }, ANIMATION_DELAY.CHART_RENDER)
   }
 }, { deep: true })
 
@@ -306,7 +307,7 @@ watch(() => props.modelValue, (newValue) => {
   if (newValue && props.letter) {
     setTimeout(() => {
       createChart()
-    }, 100)
+    }, ANIMATION_DELAY.CHART_RENDER)
   }
 })
 </script>

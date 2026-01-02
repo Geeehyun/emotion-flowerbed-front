@@ -1,21 +1,14 @@
 import axios from 'axios';
-
-// API Base URL 설정
-const API_BASE_URL = import.meta.env.VITE_APP_API_URL || '/api/v1';
+import { API_CONFIG } from '@/config/apiConfig.js';
+import { STORAGE_KEYS } from '@/constants/storageKeys.js';
 
 // Axios 인스턴스 생성
-const apiClient = axios.create({
-  baseURL: API_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json'
-  },
-  timeout: 30000
-});
+const apiClient = axios.create(API_CONFIG);
 
 // 요청 인터셉터 (인증 토큰 추가)
 apiClient.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('accessToken');
+    const token = localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN);
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }

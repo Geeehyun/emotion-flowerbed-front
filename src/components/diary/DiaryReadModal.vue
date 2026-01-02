@@ -205,6 +205,7 @@ import {
   Tooltip,
   Legend
 } from 'chart.js'
+import { PERCENT_MAX } from '@/constants/uiConstants.js'
 
 // Chart.js 컴포넌트 등록
 ChartJS.register(
@@ -355,7 +356,7 @@ const emotionChartOptions = computed(() => {
     scales: {
       x: {
         beginAtZero: true,
-        max: 100,
+        max: PERCENT_MAX,
         ticks: {
           callback: (value) => `${value}%`,
           font: {
