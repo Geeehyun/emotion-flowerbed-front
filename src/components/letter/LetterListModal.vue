@@ -20,7 +20,7 @@
       </div>
 
       <!-- 레터 목록 -->
-      <div class="letter-list">
+      <div v-if="filteredLetters.length > 0" class="letter-list">
         <div
           v-for="letter in filteredLetters"
           :key="letter.id"
@@ -52,8 +52,9 @@
       </div>
 
       <!-- 레터가 없을 때 -->
-      <div v-if="filteredLetters.length === 0" class="empty-state">
-        <p class="empty-message">아직 받은 레터가 없어요</p>
+      <div v-else class="empty-state">
+        <div class="empty-icon">📭</div>
+        <p class="empty-message">표시할 레터가 없어요</p>
         <p class="empty-sub">일기를 꾸준히 작성하면 매주 감정 레터를 받을 수 있어요!</p>
       </div>
     </template>
