@@ -275,10 +275,10 @@ const alertMessage = ref('')
 const alertType = ref('success')
 // const selectedEmotion = ref('기쁨') // AI 감정 분석으로 대체됨
 const currentYear = ref(new Date().getFullYear())
-const currentMonth = ref(12)
+const currentMonth = ref(new Date().getMonth() + 1)  // 현재 월 (1~12)
 const showDatePicker = ref(false)
 const selectedYear = ref(new Date().getFullYear())
-const selectedMonth = ref(12)
+const selectedMonth = ref(new Date().getMonth() + 1)  // 현재 월 (1~12)
 const selectedDay = ref(new Date().getDate())
 const isFlipped = ref(false) // 일기 모달 뒤집기 상태
 const isWriteDiaryMode = ref(false) // 일기 작성 버튼으로 날짜 선택 모드
@@ -1244,10 +1244,16 @@ const handleSelectLetter = async (letter) => {
     showLetterList.value = false
     showLetterDetail.value = true
 
-    // 읽음 처리 (비동기, 에러 무시)
-    weeklyReportApi.markReportAsRead(letter.id).catch(error => {
-      console.error('읽음 처리 실패:', error)
-    })
+    // 읽음 처리 후 hasNew 상태 즉시 업데이트
+    weeklyReportApi.markReportAsRead(letter.id)
+      .then(async () => {
+        // 안 읽은 리포트 존재 여부 다시 확인 (사이드바 배지 즉시 업데이트)
+        const unreadResult = await weeklyReportApi.checkUnreadReports()
+        hasNewLetter.value = unreadResult.hasUnread || false
+      })
+      .catch(error => {
+        console.error('읽음 처리 실패:', error)
+      })
   } catch (error) {
     console.error('레터 상세 조회 실패:', error)
     showAlert.value = true
