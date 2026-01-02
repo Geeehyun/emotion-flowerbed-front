@@ -4,7 +4,7 @@
     <transition name="fade">
       <div
         v-if="modelValue"
-        class="fixed inset-0 bg-black bg-opacity-50 z-40"
+        class="fixed inset-0 bg-black bg-opacity-50 z-[9999]"
         @click="$emit('update:modelValue', false)"
       ></div>
     </transition>
@@ -13,7 +13,7 @@
     <transition name="slide">
       <div
         v-if="modelValue"
-        class="sidebar-container fixed top-0 left-0 h-full w-80 bg-white shadow-2xl z-50 flex flex-col"
+        class="sidebar-container fixed top-0 left-0 h-full w-80 bg-white shadow-2xl z-[10001] flex flex-col"
       >
         <!-- 헤더 -->
         <div class="sidebar-header flex items-center justify-between p-5 border-b-2 border-gray-200">

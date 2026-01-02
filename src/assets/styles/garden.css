@@ -139,11 +139,14 @@
     5px 5px 0px #C0A466,
     6px 6px 0px #C0A466,
     7px 7px 0px #AC9052,
-    8px 8px 10px rgba(0, 0, 0, 0.4),
-    10px 10px 20px rgba(0, 0, 0, 0.3);
+    8px 8px 6px rgba(0, 0, 0, 0.2),
+    10px 10px 12px rgba(0, 0, 0, 0.15);
   letter-spacing: 3px;
   animation: titleBounce 2s ease-in-out infinite;
-  transform-style: preserve-3d;
+  white-space: nowrap; /* 줄넘김 방지 */
+  -webkit-font-smoothing: antialiased; /* 사파리 폰트 렌더링 최적화 */
+  -moz-osx-font-smoothing: grayscale;
+  will-change: transform; /* 애니메이션 최적화 */
   /* 중앙 정렬 - 애니메이션에서 처리 */
 }
 
@@ -524,7 +527,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: 100;
+  z-index: 9998;
   background: rgba(139, 111, 71, 0.95);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px); /* Safari 지원 */
@@ -646,6 +649,18 @@
 
 /* 작은 화면 대응 (하단 바) */
 @media (max-width: 480px) {
+  /* 타이틀 글자 크기 축소 */
+  .page-title {
+    font-size: 32px;
+    letter-spacing: 2px;
+  }
+
+  /* 화단 섹션 상단 여백 축소 */
+  .garden-section {
+    padding-top: 5px;
+    justify-content: flex-start;
+  }
+
   /* 요일 헤더 컨테이너 모바일 대응 */
   .weekday-header-container {
     padding: 6px 10%;
@@ -6504,8 +6519,8 @@
 @media (max-width: 360px) {
   /* 페이지 타이틀 */
   .page-title {
-    font-size: 30px;
-    letter-spacing: 2px;
+    font-size: 26px;
+    letter-spacing: 1px;
   }
 
   /* 서비스 타이틀 (랜딩) */
