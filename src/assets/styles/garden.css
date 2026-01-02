@@ -4672,6 +4672,9 @@
 .emotion-chart {
   max-width: 300px;
   margin: 0 auto 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .chart-legend {
@@ -5176,6 +5179,8 @@
   /* 일주일 꽃 영역 모바일 */
   .weekly-calendar {
     gap: 5px;
+    row-gap: 25px;
+    grid-template-columns: repeat(4, 2fr);
   }
 
   .day-flower {
