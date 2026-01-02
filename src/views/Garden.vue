@@ -24,17 +24,19 @@
 
       <!-- 화단 영역 -->
       <div class="garden-section">
+        <!-- 요일 헤더 (화단과 분리) -->
+        <div class="weekday-header-container">
+          <div class="weekday-header" v-for="day in weekDays" :key="`weekday-${day}`">
+            {{ day }}
+          </div>
+        </div>
+
         <div class="garden-wrapper">
           <!-- 화단 배경 이미지 -->
           <img src="../assets/images/garden-bg-rectangle.png" alt="화단" class="garden-bg-image" loading="lazy">
 
           <!-- 격자 그리드로 꽃 배치 -->
           <div class="flower-grid">
-            <!-- 요일 헤더 -->
-            <div class="weekday-header" v-for="day in weekDays" :key="`weekday-${day}`">
-              {{ day }}
-            </div>
-
             <!-- 1일 이전 빈 칸 -->
             <div class="grid-cell" v-for="i in emptyDaysBeforeFirst" :key="`before-${i}`">
               <div class="empty-slot" style="opacity: 0; cursor: default;"></div>
