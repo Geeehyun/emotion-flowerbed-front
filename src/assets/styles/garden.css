@@ -657,8 +657,7 @@
 
   /* 화단 섹션 상단 여백 축소 */
   .garden-section {
-    padding-top: 5px;
-    justify-content: flex-start;
+    justify-content: center;
   }
 
   /* 요일 헤더 컨테이너 모바일 대응 */
