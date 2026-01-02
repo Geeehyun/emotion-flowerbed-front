@@ -869,24 +869,45 @@ const saveFlowerAsImage = async () => {
   }
 
   try {
+    // iOS 감지
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream
+
     // DOM이 완전히 렌더링될 때까지 대기
     await nextTick()
 
+    // iOS에서는 이미지 로딩을 추가로 대기
+    if (isIOS) {
+      await new Promise(resolve => setTimeout(resolve, 500))
+    }
+
     const canvas = await html2canvas(reportCaptureRef.value, {
       backgroundColor: '#FFF9E8', // 노트 테마 배경색
-      scale: REPORT_CAPTURE.SCALE,
+      scale: isIOS ? 1 : REPORT_CAPTURE.SCALE, // iOS는 scale을 낮춰서 메모리 문제 방지
       useCORS: true,
-      logging: false,
+      allowTaint: true, // iOS에서 cross-origin 이미지 허용
+      logging: true, // iOS 디버깅용 로그 활성화
       width: REPORT_CAPTURE.WIDTH,
-      windowWidth: REPORT_CAPTURE.WIDTH
+      windowWidth: REPORT_CAPTURE.WIDTH,
+      imageTimeout: 15000, // iOS에서 이미지 로딩 시간 증가
+      foreignObjectRendering: false // iOS Safari 호환성 개선
     })
 
     // 캔버스를 Data URL로 변환하여 미리보기에 표시
-    previewImageUrl.value = canvas.toDataURL('image/png')
+    previewImageUrl.value = canvas.toDataURL('image/png', 0.95) // iOS 메모리 절약을 위해 품질 조정
     showImagePreview.value = true
+
+    console.log('이미지 생성 성공 (iOS:', isIOS, ')')
   } catch (error) {
     console.error('이미지 저장 에러:', error)
-    showCustomAlert('이미지 저장에 실패했습니다.', 'error')
+    console.error('에러 상세:', error.message, error.stack)
+
+    // iOS에서 더 명확한 에러 메시지
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream
+    if (isIOS) {
+      showCustomAlert('iOS에서 이미지 생성 실패. 페이지를 새로고침 후 다시 시도해주세요.', 'error')
+    } else {
+      showCustomAlert('이미지 저장에 실패했습니다.', 'error')
+    }
   }
 }
 
@@ -896,19 +917,84 @@ const closeImagePreview = () => {
   previewImageUrl.value = ''
 }
 
-// 이미지 다운로드 (데스크톱/안드로이드용)
+// 이미지 다운로드 (모든 브라우저 지원)
 const downloadImage = () => {
-  const link = document.createElement('a')
-
   // 파일명 생성 (감정_리포트_날짜.png)
   let emotionName = currentEmotionName.value || '알수없음'
   const date = currentDiary.value?.date?.replace(/\./g, '') || 'unknown'
   const fileName = `${emotionName}_리포트_${date}.png`
 
-  link.download = fileName
-  link.href = previewImageUrl.value
-  link.click()
-  showCustomAlert('리포트가 저장되었습니다!', 'success')
+  // iOS 감지
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream
+
+  if (isIOS) {
+    // iOS: 새 탭에서 이미지 열기 (사용자가 길게 눌러서 저장)
+    const newWindow = window.open()
+    if (newWindow) {
+      newWindow.document.write(`
+        <html>
+          <head>
+            <title>${fileName}</title>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <style>
+              body {
+                margin: 0;
+                padding: 20px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                min-height: 100vh;
+                background: #f5f5f5;
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+              }
+              .instructions {
+                text-align: center;
+                margin-bottom: 20px;
+                padding: 15px;
+                background: white;
+                border-radius: 10px;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+              }
+              .instructions h2 {
+                margin: 0 0 10px 0;
+                color: #333;
+                font-size: 18px;
+              }
+              .instructions p {
+                margin: 5px 0;
+                color: #666;
+                font-size: 14px;
+                line-height: 1.5;
+              }
+              img {
+                max-width: 100%;
+                height: auto;
+                border-radius: 10px;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+              }
+            </style>
+          </head>
+          <body>
+            <div class="instructions">
+              <h2>📥 이미지 저장 방법</h2>
+              <p>아래 이미지를 <strong>길게 눌러</strong> "이미지 저장"을 선택하세요</p>
+            </div>
+            <img src="${previewImageUrl.value}" alt="${fileName}">
+          </body>
+        </html>
+      `)
+      newWindow.document.close()
+    }
+    showCustomAlert('새 창에서 이미지를 길게 눌러 저장하세요', 'success')
+  } else {
+    // 데스크톱/안드로이드: 일반 다운로드
+    const link = document.createElement('a')
+    link.download = fileName
+    link.href = previewImageUrl.value
+    link.click()
+    showCustomAlert('리포트가 저장되었습니다!', 'success')
+  }
 }
 
 // 일기 재분석 요청 (테스트)
