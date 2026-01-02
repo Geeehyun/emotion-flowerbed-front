@@ -30,6 +30,16 @@
 
           <!-- 격자 그리드로 꽃 배치 -->
           <div class="flower-grid">
+            <!-- 요일 헤더 -->
+            <div class="weekday-header" v-for="day in weekDays" :key="`weekday-${day}`">
+              {{ day }}
+            </div>
+
+            <!-- 1일 이전 빈 칸 -->
+            <div class="grid-cell" v-for="i in emptyDaysBeforeFirst" :key="`before-${i}`">
+              <div class="empty-slot" style="opacity: 0; cursor: default;"></div>
+            </div>
+
             <!-- 일기가 있는 날들 -->
             <template v-for="day in daysInCurrentMonth" :key="day">
               <div class="grid-cell" v-if="diaryData[day]" :data-day="day">
@@ -64,8 +74,8 @@
               </div>
             </template>
 
-            <!-- 빈 셀들 (달력 채우기용, 35칸 맞추기) -->
-            <div class="grid-cell" v-for="i in emptySlotCount" :key="`fill-${i}`">
+            <!-- 1일 이후 빈 칸 (7의 배수로 맞추기) -->
+            <div class="grid-cell" v-for="i in emptyDaysAfterLast" :key="`after-${i}`">
               <div class="empty-slot" style="opacity: 0; cursor: default;"></div>
             </div>
           </div>
@@ -484,7 +494,29 @@ const daysInCurrentMonth = computed(() => {
   return dateUtils.getDaysInMonth(currentYear.value, currentMonth.value)
 })
 
-// 빈 칸 개수 계산 (그리드 총 칸 수 - 현재 월의 일 수)
+// 요일 이름 배열
+const weekDays = ['일', '월', '화', '수', '목', '금', '토']
+
+// 현재 월의 1일이 무슨 요일인지 계산 (0: 일요일, 6: 토요일)
+const firstDayOfWeek = computed(() => {
+  const firstDay = new Date(currentYear.value, currentMonth.value - 1, 1)
+  return firstDay.getDay()
+})
+
+// 1일 이전 빈 칸 개수
+const emptyDaysBeforeFirst = computed(() => {
+  return firstDayOfWeek.value
+})
+
+// 1일 이후 빈 칸 개수 (7의 배수로 맞추기)
+const emptyDaysAfterLast = computed(() => {
+  const totalCells = emptyDaysBeforeFirst.value + daysInCurrentMonth.value
+  const remainder = totalCells % 7
+  return remainder === 0 ? 0 : 7 - remainder
+})
+
+// 기존 빈 칸 개수 계산 (그리드 총 칸 수 - 현재 월의 일 수)
+// 요일 정렬 방식으로 변경되어 더 이상 사용하지 않음
 const emptySlotCount = computed(() => {
   return GARDEN_GRID_SIZE - daysInCurrentMonth.value
 })

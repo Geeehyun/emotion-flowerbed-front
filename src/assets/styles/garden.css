@@ -113,11 +113,15 @@
 .header-section {
   padding: 20px 20px 10px;
   text-align: center;
-  position: relative;
+  position: sticky;
+  top: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  /* z-index 제거: 툴팁이 타이틀 위에 표시되도록 */
+  background: rgba(255, 249, 232, 0.95);
+  backdrop-filter: blur(10px);
+  z-index: 100;
+  /* 스크롤 시 상단 고정 */
 }
 
 .page-title {
@@ -333,16 +337,31 @@
 /* 격자 그리드 - 고정 레이어 구조 */
 .flower-grid {
   position: absolute;
-  top: 25%;
+  top: 23%;
   left: 8%;
   width: 84%;
-  height: 55%;
+  height: 60%;
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  grid-template-rows: repeat(5, 1fr);
+  grid-auto-rows: minmax(0, 1fr);
   gap: 2%;
   padding: 2% 4%;
   z-index: 10;
+}
+
+/* 요일 헤더 */
+.weekday-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #8B6F47;
+  background: rgba(255, 249, 232, 0.9);
+  border-radius: 8px;
+  padding: 4px;
+  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
 }
 
 .grid-cell {
@@ -598,6 +617,12 @@
 
 /* 작은 화면 대응 (하단 바) */
 @media (max-width: 480px) {
+  /* 요일 헤더 모바일 대응 */
+  .weekday-header {
+    font-size: 11px;
+    padding: 2px;
+  }
+
   .month-selector-bar {
     padding: 12px 10px;
     padding-bottom: calc(12px + env(safe-area-inset-bottom));
@@ -1266,11 +1291,7 @@
   transition: all 0.2s ease;
 }
 
-.detail-section:hover {
-  background: rgba(255, 255, 255, 0.8);
-  transform: translateX(5px);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
+/* hover 애니메이션 제거 (터치 디바이스 대응) */
 
 .detail-section.story-section {
   border-left-color: #FFB4D5;
@@ -6197,6 +6218,15 @@
 
 /* EmotionControlModal 모바일 최적화 */
 @media (max-width: 480px) {
+  /* 모바일 모달 높이 조정 */
+  .base-modal-content {
+    max-height: 90vh;
+  }
+
+  .base-modal-body {
+    max-height: calc(90vh - 80px); /* 헤더 높이 제외 */
+  }
+
   .activities-grid {
     grid-template-columns: 1fr;
     gap: 12px;
