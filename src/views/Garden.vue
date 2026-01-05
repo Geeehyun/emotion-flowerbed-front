@@ -1379,10 +1379,9 @@ const handleOpenDiaryFromLetter = async (diaryId) => {
 
     // 일기가 존재하면 모달 데이터 설정
     currentDiary.value = diary
-    currentDay.value = dateUtils.extractDay(diary.date) // 'YYYY-MM-DD'에서 일(DD) 추출
+    currentDay.value = dateUtils.extractDay(diary.diaryDate) // 'YYYY-MM-DD'에서 일(DD) 추출
 
-    // 레터 모달 닫고 일기 모달 열기
-    showLetterDetail.value = false
+    // 일기 모달 열기
     showDiaryModal.value = true
   } catch (error) {
     console.error('일기 조회 실패:', error)

@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>감정 화단 - 통합 교사용 대시보드</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #f8fafc; /* Slate-50 */
+        }
+        .fade-enter-active, .fade-leave-active {
+            transition: opacity 0.3s ease;
+        }
+        .fade-enter-from, .fade-leave-to {
+            opacity: 0;
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+        
+        /* Flower Animation from Teacher2 */
+        .flower-card:hover {
+            transform: translateY(-5px);
+        }
+    </style>
+</head>
+<body class="text-slate-800 h-screen overflow-hidden">
+
+    <div id="app" class="flex h-full">
+        
+        <aside class="w-64 bg-white shadow-lg flex flex-col z-10 transition-all duration-300" :class="{'w-20': isCollapsed}">
+            <div class="p-6 flex items-center justify-between border-b border-gray-100">
+                <div class="flex items-center gap-3 overflow-hidden whitespace-nowrap">
+                    <div class="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center text-white shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+                            <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" />
+                        </svg>
+                    </div>
+                    <span v-if="!isCollapsed" class="font-bold text-xl text-indigo-900">감정 화단</span>
+                </div>
+                <button @click="isCollapsed = !isCollapsed" class="text-gray-400 hover:text-indigo-600 lg:hidden">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                    </svg>
+                </button>
+            </div>
+
+            <nav class="flex-1 p-4 space-y-2">
+                <a @click="currentView = 'dashboard'" 
+                   :class="{'bg-indigo-50 text-indigo-700': currentView === 'dashboard', 'text-gray-600 hover:bg-gray-50': currentView !== 'dashboard'}"
+                   class="flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 shrink-0">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6a7.5 7.5 0 107.5 7.5h-7.5V6z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5H21A7.5 7.5 0 0013.5 3v7.5z" />
+                    </svg>
+                    <span v-if="!isCollapsed" class="font-medium">대시보드</span>
+                </a>
+                
+                <a @click="currentView = 'classMap'" 
+                   :class="{'bg-indigo-50 text-indigo-700': currentView === 'classMap', 'text-gray-600 hover:bg-gray-50': currentView !== 'classMap'}"
+                   class="flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 shrink-0">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
+                    </svg>
+                    <span v-if="!isCollapsed" class="font-medium">학급 감정 지도</span>
+                </a>
+
+                <a @click="currentView = 'studentMap'" 
+                   :class="{'bg-indigo-50 text-indigo-700': currentView === 'studentMap', 'text-gray-600 hover:bg-gray-50': currentView !== 'studentMap'}"
+                   class="flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 shrink-0">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.499 5.221 69.17 69.17 0 0 1-2.192.943M8.119 16.489A15.495 15.495 0 0 1 12 15c2.31 0 4.438.784 6.131 2.1.43-.25.873-.49 1.334-.716-.98-1.78-2.68-3.09-4.715-3.633a6.002 6.002 0 0 0-5.5 0c-2.035.543-3.735 1.853-4.715 3.633.461.226.904.466 1.334.716a15.495 15.495 0 0 1 2.25-1.611Z" />
+                    </svg>
+                    <span v-if="!isCollapsed" class="font-medium">학생 상세 분석</span>
+                </a>
+
+                <a @click="currentView = 'missions'" 
+                   :class="{'bg-indigo-50 text-indigo-700': currentView === 'missions', 'text-gray-600 hover:bg-gray-50': currentView !== 'missions'}"
+                   class="flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 shrink-0">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
+                    </svg>
+                    <span v-if="!isCollapsed" class="font-medium">꽃별 미션 관리</span>
+                </a>
+            </nav>
+
+            <div class="p-4 border-t border-gray-100">
+                <div class="flex items-center gap-3" v-if="!isCollapsed">
+                    <div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-gray-500">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-sm font-bold">김교사 선생님</p>
+                        <p class="text-xs text-gray-500">3학년 2반 담임</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="flex-1 flex flex-col overflow-hidden relative">
+            
+            <div v-if="dangerStudents.length > 0" class="bg-slate-800 text-white px-6 py-3 flex items-center justify-between shadow-md z-20">
+                <div class="flex items-center gap-3">
+                    <div class="w-2 h-2 rounded-full bg-red-500 animate-ping"></div>
+                    <span class="font-bold text-red-300">위험 신호 감지:</span>
+                    <span>심리적 위기 가능성이 있는 학생이 {{ dangerStudents.length }}명 있습니다.</span>
+                </div>
+                <button @click="currentView = 'studentMap'" class="text-xs bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded-lg font-bold transition">
+                    확인하기
+                </button>
+            </div>
+
+            <header class="bg-white/90 backdrop-blur-md border-b border-gray-200 px-8 py-4 flex justify-between items-center z-10">
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-800">{{ viewTitle }}</h1>
+                    <p class="text-sm text-gray-500" v-if="currentView === 'missions'">36가지 감정 꽃의 마음을 읽고 필요한 미션을 수행해보세요.</p>
+                    <p class="text-sm text-gray-500" v-else-if="currentView === 'dashboard'">모든 감정은 소중합니다. 아이들의 마음 날씨를 확인해보세요.</p>
+                </div>
+                <div class="flex items-center gap-4">
+                    <span class="text-sm text-gray-500">{{ todayDate }}</span>
+                    <button class="w-9 h-9 rounded-full bg-gray-50 border border-gray-200 flex items-center justify-center hover:bg-gray-100 relative">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-gray-600">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
+                        </svg>
+                        <span class="absolute top-0 right-0 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white"></span>
+                    </button>
+                </div>
+            </header>
+
+            <div class="flex-1 overflow-y-auto p-8 bg-slate-50">
+                
+                <div v-if="currentView === 'dashboard'" class="space-y-8">
+                    <section class="grid grid-cols-1 lg:grid-cols-4 gap-4">
+                        <div class="col-span-1 lg:col-span-4 bg-white p-5 rounded-2xl shadow-sm border border-gray-200">
+                            <h2 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-indigo-500">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9.53 16.122a3 3 0 00-5.78 1.128 2.25 2.25 0 01-2.4 2.245 4.5 4.5 0 008.4-2.245c0-.399-.078-.78-.22-1.128zm0 0a15.998 15.998 0 003.388-1.62m-5.043-.025a15.994 15.994 0 011.622-3.395m3.42 3.42a15.995 15.995 0 004.764-4.635m3.61 3.61a16.005 16.005 0 01-4.764-4.615m4.602 4.617a16.006 16.006 0 00-1.615 3.396m-4.616-4.616a16.005 16.005 0 014.615-4.617m0 0a3.001 3.001 0 00-4.453-4.453m0 0a15.996 15.996 0 01-3.4 1.62m3.4-1.62a15.994 15.994 0 00-4.764 4.635" />
+                                </svg>
+                                오늘의 학급 감정 분포
+                            </h2>
+                            <div class="flex flex-col md:flex-row items-center justify-around gap-8">
+                                <div class="w-48 h-48 relative">
+                                    <canvas id="quadrantChart"></canvas>
+                                    <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                                        <div class="text-center">
+                                            <span class="text-2xl font-bold text-gray-700">30<span class="text-sm font-normal">명</span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="w-full max-w-2xl">
+                                    <div class="grid grid-cols-2 lg:grid-cols-3 gap-4">
+                                        <div class="bg-red-50 p-3 rounded-xl border border-red-100">
+                                            <h4 class="font-bold text-red-700 text-sm mb-1">빨강 영역</h4>
+                                            <div class="text-2xl font-bold text-red-800">{{ getZoneCount('red') }}<span class="text-sm font-normal text-red-600">명 ({{ getZonePercent('red') }}%)</span></div>
+                                        </div>
+                                        <div class="bg-yellow-50 p-3 rounded-xl border border-yellow-100">
+                                            <h4 class="font-bold text-yellow-700 text-sm mb-1">노랑 영역</h4>
+                                            <div class="text-2xl font-bold text-yellow-800">{{ getZoneCount('yellow') }}<span class="text-sm font-normal text-yellow-600">명 ({{ getZonePercent('yellow') }}%)</span></div>
+                                        </div>
+                                        <div class="bg-blue-50 p-3 rounded-xl border border-blue-100">
+                                            <h4 class="font-bold text-blue-700 text-sm mb-1">파랑 영역</h4>
+                                            <div class="text-2xl font-bold text-blue-800">{{ getZoneCount('blue') }}<span class="text-sm font-normal text-blue-600">명 ({{ getZonePercent('blue') }}%)</span></div>
+                                        </div>
+                                        <div class="bg-green-50 p-3 rounded-xl border border-green-100">
+                                            <h4 class="font-bold text-green-700 text-sm mb-1">초록 영역</h4>
+                                            <div class="text-2xl font-bold text-green-800">{{ getZoneCount('green') }}<span class="text-sm font-normal text-green-600">명 ({{ getZonePercent('green') }}%)</span></div>
+                                        </div>
+                                        <div class="bg-slate-100 p-3 rounded-xl border border-slate-200 col-span-2 lg:col-span-1">
+                                            <h4 class="font-bold text-slate-700 text-sm mb-1">미제출</h4>
+                                            <div class="text-2xl font-bold text-slate-600">{{ getZoneCount('gray') }}<span class="text-sm font-normal text-slate-500">명 ({{ getZonePercent('gray') }}%)</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <div class="grid lg:grid-cols-2 gap-8">
+                        <section class="space-y-4">
+                            <h3 class="font-bold text-gray-700 text-lg flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-red-500">
+                                    <path d="M12 15a3 3 0 100-6 3 3 0 000 6z" />
+                                    <path fill-rule="evenodd" d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 010-1.113zM17.25 12a5.25 5.25 0 11-10.5 0 5.25 5.25 0 0110.5 0z" clip-rule="evenodd" />
+                                </svg>
+                                집중 케어 필요
+                            </h3>
+                            <div v-for="student in dangerStudents" :key="student.id" class="bg-white rounded-xl shadow-sm border-l-4 border-red-500 p-4">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <div class="flex items-center gap-2 mb-1">
+                                            <span class="font-bold text-lg">{{ student.name }}</span>
+                                            <span class="px-2 py-0.5 rounded text-xs font-bold bg-red-100 text-red-600">위험</span>
+                                        </div>
+                                        <p class="text-sm text-gray-600 mb-2">"{{ student.dangerSignal }}"</p>
+                                    </div>
+                                    <button @click="openStudentDetail(student)" class="text-sm border border-red-200 text-red-600 px-3 py-1.5 rounded hover:bg-red-50 transition">분석 보기</button>
+                                </div>
+                            </div>
+                            <div v-for="student in attentionStudents" :key="student.id" class="bg-white rounded-xl shadow-sm border-l-4 border-orange-400 p-4">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <div class="flex items-center gap-2 mb-1">
+                                            <span class="font-bold text-lg">{{ student.name }}</span>
+                                            <span class="px-2 py-0.5 rounded text-xs font-bold bg-orange-100 text-orange-600">주의</span>
+                                        </div>
+                                        <p class="text-sm text-gray-600 mb-2">{{ student.attentionReason }}</p>
+                                    </div>
+                                    <button @click="openStudentDetail(student)" class="text-sm border border-gray-200 text-gray-600 px-3 py-1.5 rounded hover:bg-gray-50 transition">살펴보기</button>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="bg-indigo-900 text-white rounded-2xl p-6 shadow-lg flex flex-col justify-between relative overflow-hidden">
+                            <div class="absolute top-0 right-0 p-8 opacity-10">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-32 h-32">
+                                    <path fill-rule="evenodd" d="M3 6a3 3 0 013-3h12a3 3 0 013 3v12a3 3 0 01-3 3H6a3 3 0 01-3-3V6zm14.25 6a.75.75 0 01-.22.53l-2.25 2.25a.75.75 0 11-1.06-1.06L15.44 12l-1.72-1.72a.75.75 0 111.06-1.06l2.25 2.25c.141.14.22.331.22.53zm-10.28-.53a.75.75 0 000 1.06l2.25 2.25a.75.75 0 101.06-1.06L8.56 12l1.72-1.72a.75.75 0 10-1.06-1.06l-2.25 2.25z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-lg mb-4 text-indigo-100 flex items-center gap-2">AI 선생님 어시스턴트</h3>
+                                <div class="bg-indigo-800/50 p-4 rounded-xl border border-indigo-700/50 backdrop-blur-sm mb-4">
+                                    <p class="leading-relaxed text-sm">
+                                        전체 학생의 <span class="font-bold text-white">87%</span>가 일기를 제출했습니다. 제출된 일기 중에는 <span class="text-yellow-300 font-bold">노랑 영역</span>의 비율이 높습니다.
+                                    </p>
+                                </div>
+                                <div class="bg-indigo-800/50 p-4 rounded-xl border border-indigo-700/50 backdrop-blur-sm">
+                                    <p class="text-indigo-200 text-xs mb-1 font-bold">오늘의 추천 활동</p>
+                                    <div class="flex items-center justify-between">
+                                        <span class="font-bold text-white">차분한 명상 음악 3분 듣기</span>
+                                        <button class="bg-white text-indigo-900 text-xs px-3 py-1 rounded-full font-bold hover:bg-indigo-100">플레이</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+
+                <div v-show="currentView === 'classMap'" class="space-y-6">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-xl font-bold text-gray-800">학급 감정 흐름 (최근 1개월)</h2>
+                        <div class="flex gap-4 text-sm">
+                            <div class="flex items-center gap-1"><div class="w-3 h-3 bg-red-400 rounded-sm"></div>빨강</div>
+                            <div class="flex items-center gap-1"><div class="w-3 h-3 bg-yellow-400 rounded-sm"></div>노랑</div>
+                            <div class="flex items-center gap-1"><div class="w-3 h-3 bg-blue-400 rounded-sm"></div>파랑</div>
+                            <div class="flex items-center gap-1"><div class="w-3 h-3 bg-green-400 rounded-sm"></div>초록</div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm h-[400px] relative">
+                        <canvas id="classTrendChart"></canvas>
+                    </div>
+                    <div class="bg-indigo-50 p-6 rounded-2xl border border-indigo-100">
+                        <h3 class="font-bold text-indigo-900 mb-2">💡 교사를 위한 사회정서교육 팁</h3>
+                        <p class="text-sm text-indigo-800">
+                            "화내지 마" 대신 "에너지가 뜨겁구나, 잠시 식혀볼까?"라며 심호흡을 유도하세요. 
+                            억지로 기운을 내게 하기보다, 충분히 쉬고 충전할 시간을 주세요.
+                        </p>
+                    </div>
+                </div>
+
+                <div v-if="currentView === 'studentMap'" class="flex gap-6 h-full overflow-hidden">
+                    <div class="w-1/3 bg-white rounded-2xl shadow-sm overflow-hidden flex flex-col border border-gray-200">
+                        <div class="p-4 bg-gray-50 border-b border-gray-200 relative">
+                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-gray-400 absolute left-7 top-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                             </svg>
+                            <input v-model="searchQuery" type="text" placeholder="학생 이름 검색..." class="w-full pl-10 pr-4 py-2 border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-indigo-300 text-sm">
+                        </div>
+                        <div class="overflow-y-auto flex-1 p-2 space-y-1">
+                            <div v-for="student in filteredStudents" :key="student.id" 
+                                 @click="selectStudent(student)"
+                                 :class="{'bg-indigo-50 border-indigo-500': selectedStudent?.id === student.id, 'border-transparent hover:bg-gray-50': selectedStudent?.id !== student.id}"
+                                 class="p-3 rounded-xl border-l-4 cursor-pointer flex items-center justify-between transition-all">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold text-white shadow-sm" :class="getStudentLatestZoneColor(student)">
+                                        {{ student.dominantZone === 'gray' ? '-' : student.name[0] }}
+                                    </div>
+                                    <div>
+                                        <p class="font-bold text-gray-700 text-sm">{{ student.name }}</p>
+                                        <p class="text-xs text-gray-400">최근: {{ getZoneName(student.dominantZone) }}</p>
+                                    </div>
+                                </div>
+                                <span v-if="student.status !== 'normal'" class="w-2 h-2 rounded-full" 
+                                      :class="student.status === 'danger' ? 'bg-red-500' : 'bg-orange-400'">
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="w-2/3 bg-white rounded-2xl shadow-sm border border-gray-200 p-8 overflow-y-auto" v-if="selectedStudent">
+                        <div class="flex justify-between items-start mb-6">
+                            <div>
+                                <h2 class="text-2xl font-bold text-gray-800 flex items-center gap-2">
+                                    {{ selectedStudent.name }}
+                                    <span v-if="selectedStudent.status === 'danger'" class="bg-red-100 text-red-600 text-xs px-2 py-1 rounded-full">상담 요망</span>
+                                </h2>
+                                <p class="text-gray-500 text-sm mt-1">최근 주된 감정 영역: <span class="font-bold" :class="getTextColor(selectedStudent.dominantZone)">{{ getZoneName(selectedStudent.dominantZone) }}</span></p>
+                            </div>
+                            <div class="flex gap-2">
+                                <span v-for="tag in selectedStudent.tags" class="px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-xs font-bold">#{{ tag }}</span>
+                            </div>
+                        </div>
+
+                        <div v-if="selectedStudent.dominantZone === 'gray'" class="flex flex-col items-center justify-center h-64 text-center space-y-4">
+                             <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center text-gray-400">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                                </svg>
+                            </div>
+                            <h3 class="text-lg font-bold text-gray-600">아직 일기가 제출되지 않았습니다</h3>
+                        </div>
+
+                        <div v-else>
+                            <div class="bg-slate-50 border border-slate-200 rounded-xl p-5 mb-8 relative">
+                                <div class="flex items-start gap-4">
+                                    <div class="bg-white p-2 rounded-full shadow-sm text-indigo-500 mt-1">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-bold text-gray-800 text-sm mb-1">AI 성향 분석</h3>
+                                        <p class="text-lg font-medium text-gray-700 leading-snug">{{ selectedStudent.aiAnalysis }}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-8">
+                                <h3 class="font-bold text-gray-700 mb-3 text-sm">최근 7일 감정 일기 흐름</h3>
+                                <div class="flex gap-2">
+                                    <div v-for="(day, index) in selectedStudent.recentEmotions" :key="index" class="flex-1 flex flex-col gap-2">
+                                        <div class="aspect-[4/5] rounded-xl flex flex-col items-center justify-center gap-1 shadow-sm border" :class="getStudentListZoneBg(day.zone)">
+                                            <span class="text-2xl">{{ day.emoji }}</span>
+                                            <span class="text-xs font-bold opacity-70">{{ day.label }}</span>
+                                        </div>
+                                        <span class="text-xs text-center text-gray-400 font-medium">{{ day.date }}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="rounded-xl p-5 border" :class="getGuideBoxClass(selectedStudent.dominantZone)">
+                                <h3 class="font-bold mb-3 flex items-center gap-2" :class="getGuideTitleClass(selectedStudent.dominantZone)">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.355 0-2.697-.056-4.024-.166-1.137-.091-1.98-1.057-1.98-2.192v-4.286c0-.897.514-1.683 1.29-2.043C10.665 8.168 12.33 8 14.002 8s3.336.168 4.962.511z" />
+                                    </svg>
+                                    {{ selectedStudent.name }} 학생 맞춤 대화 가이드
+                                </h3>
+                                <div class="bg-white/60 rounded-lg p-4 backdrop-blur-sm">
+                                    <ul class="space-y-3">
+                                        <li v-for="(q, idx) in selectedStudent.suggestedQuestions" :key="idx" class="flex gap-3 text-sm text-gray-800">
+                                            <span class="font-bold opacity-50">Q{{ idx+1 }}.</span> {{ q }}
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div v-if="currentView === 'missions'" class="space-y-6">
+                    
+                    <div class="flex justify-center mb-8">
+                        <div class="bg-white p-1.5 rounded-2xl shadow-sm border border-gray-100 flex gap-1">
+                            <button @click="missionZone = 'red'" 
+                                    :class="{'bg-red-50 text-red-600 shadow-sm border-red-100': missionZone === 'red', 'text-gray-400 hover:text-gray-600': missionZone !== 'red'}"
+                                    class="px-6 py-2.5 rounded-xl font-bold transition flex items-center gap-2">
+                                <span class="w-3 h-3 rounded-full bg-red-500"></span> 빨강 (긴장/불쾌)
+                            </button>
+                            <button @click="missionZone = 'yellow'" 
+                                    :class="{'bg-yellow-50 text-yellow-600 shadow-sm border-yellow-100': missionZone === 'yellow', 'text-gray-400 hover:text-gray-600': missionZone !== 'yellow'}"
+                                    class="px-6 py-2.5 rounded-xl font-bold transition flex items-center gap-2">
+                                <span class="w-3 h-3 rounded-full bg-yellow-400"></span> 노랑 (활기/유쾌)
+                            </button>
+                            <button @click="missionZone = 'blue'" 
+                                    :class="{'bg-blue-50 text-blue-600 shadow-sm border-blue-100': missionZone === 'blue', 'text-gray-400 hover:text-gray-600': missionZone !== 'blue'}"
+                                    class="px-6 py-2.5 rounded-xl font-bold transition flex items-center gap-2">
+                                <span class="w-3 h-3 rounded-full bg-blue-500"></span> 파랑 (지침/불쾌)
+                            </button>
+                            <button @click="missionZone = 'green'" 
+                                    :class="{'bg-green-50 text-green-600 shadow-sm border-green-100': missionZone === 'green', 'text-gray-400 hover:text-gray-600': missionZone !== 'green'}"
+                                    class="px-6 py-2.5 rounded-xl font-bold transition flex items-center gap-2">
+                                <span class="w-3 h-3 rounded-full bg-green-500"></span> 초록 (편안/유쾌)
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div v-for="flower in currentZoneFlowers" :key="flower.name" 
+                             @click="selectedFlower = flower"
+                             class="flower-card bg-white rounded-2xl p-6 shadow-sm border border-gray-100 cursor-pointer transition-all hover:shadow-md relative overflow-hidden group">
+                            
+                            <div class="absolute top-0 right-0 w-16 h-16 rounded-bl-full opacity-10 transition-opacity group-hover:opacity-20" :class="getFlowerZoneBg(missionZone)"></div>
+
+                            <div class="flex items-center gap-4 mb-4">
+                                <div class="w-12 h-12 rounded-full flex items-center justify-center text-2xl bg-gray-50 shadow-inner">
+                                    🌸
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-lg text-gray-800">{{ flower.name }}</h3>
+                                    <p class="text-xs text-gray-500">{{ getZoneName(missionZone) }}의 꽃</p>
+                                </div>
+                            </div>
+                            
+                            <div class="text-sm text-gray-600 bg-gray-50 p-3 rounded-xl">
+                                <span class="font-bold text-indigo-600">추천 미션:</span>
+                                <p class="line-clamp-2 mt-1">{{ flower.mission }}</p>
+                            </div>
+
+                            <div class="mt-4 flex justify-end">
+                                <span class="text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1 transition-colors group-hover:bg-indigo-50 group-hover:text-indigo-600 text-gray-400 bg-gray-50">
+                                    상세보기 
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-3 h-3">
+                                        <path fill-rule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clip-rule="evenodd" />
+                                    </svg>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div v-if="selectedFlower" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" @click.self="selectedFlower = null">
+                        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden transform transition-all">
+                            <div class="p-8 pb-0 text-center relative">
+                                <button @click="selectedFlower = null" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                                <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center text-4xl mx-auto mb-4 shadow-inner">
+                                    🌸
+                                </div>
+                                <h2 class="text-2xl font-bold text-gray-800 mb-1">{{ selectedFlower.name }}</h2>
+                                <p class="text-sm font-medium" :class="getTextColor(missionZone)">{{ getZoneDescription(missionZone) }}</p>
+                            </div>
+
+                            <div class="p-8">
+                                <div class="bg-indigo-50 rounded-2xl p-6 border border-indigo-100 mb-6">
+                                    <h3 class="font-bold text-indigo-900 mb-2 flex items-center gap-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-indigo-500">
+                                            <path fill-rule="evenodd" d="M9 4.5a.75.75 0 01.721.544l.813 2.846a3.75 3.75 0 002.576 2.576l2.846.813a.75.75 0 010 1.442l-2.846.813a3.75 3.75 0 00-2.576 2.576l-.813 2.846a.75.75 0 01-1.442 0l-.813-2.846a3.75 3.75 0 00-2.576-2.576l-2.846-.813a.75.75 0 010-1.442l2.846-.813a3.75 3.75 0 002.576-2.576l.813-2.846A.75.75 0 019 4.5zM18 1.5a.75.75 0 01.728.568l.258 1.036c.236.94.97 1.674 1.91 1.91l1.036.258a.75.75 0 010 1.456l-1.036.258c-.94.236-1.674.97-1.91 1.91l-.258 1.036a.75.75 0 01-1.456 0l-.258-1.036a2.625 2.625 0 00-1.91-1.91l-1.036-.258a.75.75 0 010-1.456l1.036-.258a2.625 2.625 0 001.91-1.91l.258-1.036A.75.75 0 0118 1.5zM16.5 15a.75.75 0 01.712.513l.394 1.183c.15.447.5.799.948.948l1.183.395a.75.75 0 010 1.422l-1.183.395c-.447.15-.799.5-.948.948l-.395 1.183a.75.75 0 01-1.422 0l-.395-1.183a1.5 1.5 0 00-.948-.948l-1.183-.395a.75.75 0 010-1.422l1.183-.395c.447-.15.799-.5.948-.948l.395-1.183A.75.75 0 0116.5 15z" clip-rule="evenodd" />
+                                        </svg>
+                                        AI 추천 미션
+                                    </h3>
+                                    <p class="text-gray-800 text-lg font-bold leading-relaxed">"{{ selectedFlower.mission }}"</p>
+                                    <p class="text-sm text-gray-500 mt-2">이 미션을 수행하면 감정의 균형을 찾는 데 도움이 됩니다.</p>
+                                </div>
+                                <button class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold shadow-lg transition transform active:scale-95">
+                                    이 미션을 오늘의 학급 활동으로 등록하기
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const { createApp, ref, computed, onMounted, watch } = Vue;
+
+        createApp({
+            setup() {
+                const currentView = ref('dashboard');
+                const isCollapsed = ref(false);
+                const selectedStudent = ref(null);
+                const searchQuery = ref('');
+                
+                // Mission View specific states
+                const missionZone = ref('red');
+                const selectedFlower = ref(null);
+                
+                const todayDate = new Date().toLocaleDateString('ko-KR', { month: 'long', day: 'numeric', weekday: 'long' });
+
+                // Mock Student Data
+                const students = ref([
+                    {
+                        id: 1, name: "김민준", status: "danger", tags: ["내향적", "게임좋아함"],
+                        dominantZone: "blue",
+                        dangerSignal: "무기력감 지속, '사라지고 싶다' 표현",
+                        lastDiaryDate: "어제",
+                        aiAnalysis: "민준 학생은 최근 '파랑 영역'에 깊게 머물러 있습니다. 에너지가 매우 낮아 활동 참여가 저조하며, 교우 관계 단절이 고립감을 심화시키고 있습니다.",
+                        attentionReason: "최근 7일 중 '파랑' 영역 비율 80% 이상",
+                        recentEmotions: [
+                            { date: "5/08", emoji: "😢", label: "슬픔", zone: "blue" },
+                            { date: "5/09", emoji: "😢", label: "슬픔", zone: "blue" },
+                            { date: "5/10", emoji: "😠", label: "화남", zone: "red" },
+                            { date: "5/11", emoji: "😶‍🌫️", label: "우울", zone: "blue" },
+                            { date: "5/12", emoji: "😶‍🌫️", label: "우울", zone: "blue" },
+                            { date: "5/13", emoji: "😫", label: "지침", zone: "blue" },
+                            { date: "5/14", emoji: "😶‍🌫️", label: "절망", zone: "blue" }
+                        ],
+                        suggestedQuestions: [
+                            "지금 몸의 에너지가 많이 낮은 것 같아 보여. 혹시 잠깐 쉴 시간이 필요하니?",
+                            "오늘 하루 중 아주 조금이라도 편안했던 순간이 있었다면 언제였을까?"
+                        ]
+                    },
+                    {
+                        id: 2, name: "이서연", status: "attention", tags: ["성실함", "완벽주의"],
+                        dominantZone: "red",
+                        dangerSignal: "",
+                        lastDiaryDate: "오늘",
+                        aiAnalysis: "서연 학생은 '노랑 영역(기대감)'과 '빨강 영역(불안)'을 오가고 있습니다. 성취 욕구가 강하지만, 실패에 대한 두려움으로 인해 빨강 영역(긴장/불안)으로 자주 이동합니다.",
+                        attentionReason: "최근 '불안/긴장' 감정 빈도 급증",
+                        recentEmotions: [
+                            { date: "5/08", emoji: "😊", label: "뿌듯", zone: "yellow" },
+                            { date: "5/09", emoji: "😨", label: "긴장", zone: "red" },
+                            { date: "5/10", emoji: "😨", label: "걱정", zone: "red" },
+                            { date: "5/11", emoji: "😫", label: "피곤", zone: "blue" },
+                            { date: "5/12", emoji: "😨", label: "불안", zone: "red" },
+                            { date: "5/13", emoji: "😨", label: "초조", zone: "red" },
+                            { date: "5/14", emoji: "😠", label: "짜증", zone: "red" }
+                        ],
+                        suggestedQuestions: [
+                            "잘하고 싶은 마음이 커서 몸에 힘이 많이 들어간 것 같아. 어깨를 한번 으쓱해볼까?",
+                            "결과도 중요하지만, 선생님은 서연이가 노력하는 모습이 참 멋지다고 생각해."
+                        ]
+                    },
+                    {
+                        id: 3, name: "박지수", status: "normal", tags: ["활발함", "리더쉽"],
+                        dominantZone: "yellow",
+                        dangerSignal: "",
+                        aiAnalysis: "지수 학생은 전형적인 '노랑 영역'의 에너지를 발산합니다. 긍정적이지만 에너지가 과할 때가 있어, 때로는 친구들의 이야기를 듣는 '초록 영역'으로의 전환 연습이 필요합니다.",
+                        recentEmotions: [
+                            { date: "5/08", emoji: "😆", label: "신남", zone: "yellow" },
+                            { date: "5/09", emoji: "😆", label: "기대", zone: "yellow" },
+                            { date: "5/10", emoji: "😌", label: "편안", zone: "green" },
+                            { date: "5/11", emoji: "😆", label: "최고", zone: "yellow" },
+                            { date: "5/12", emoji: "😊", label: "기쁨", zone: "yellow" },
+                            { date: "5/13", emoji: "😆", label: "흥분", zone: "yellow" },
+                            { date: "5/14", emoji: "😌", label: "감사", zone: "green" }
+                        ],
+                        suggestedQuestions: [
+                            "오늘 에너지가 정말 넘치는구나! 이 멋진 에너지를 친구를 돕는 데 써보면 어떨까?",
+                            "잠깐 눈을 감고 심호흡을 하면서 마음의 속도를 조금만 늦춰볼까?"
+                        ]
+                    },
+                    {
+                        id: 4, name: "최도현", status: "attention", tags: ["운동", "충동적"],
+                        dominantZone: "red",
+                        dangerSignal: "",
+                        aiAnalysis: "도현 학생은 분노 조절이 어려워 빨강 영역에서 머무는 시간이 깁니다. 특히 억울함을 느낄 때 에너지가 폭발하는 경향이 있습니다.",
+                        attentionReason: "공격적인 어휘(빨강 영역) 사용 증가",
+                        recentEmotions: [
+                            { date: "5/08", emoji: "😠", label: "화남", zone: "red" },
+                            { date: "5/09", emoji: "😠", label: "분노", zone: "red" },
+                            { date: "5/10", emoji: "😐", label: "보통", zone: "green" },
+                            { date: "5/11", emoji: "😠", label: "짜증", zone: "red" },
+                            { date: "5/12", emoji: "😐", label: "심심", zone: "blue" },
+                            { date: "5/13", emoji: "😠", label: "억울", zone: "red" },
+                            { date: "5/14", emoji: "😠", label: "폭발", zone: "red" }
+                        ],
+                        suggestedQuestions: [
+                            "지금 마음속 온도계가 빨간색으로 올라간 것 같네. 잠시 물 한 잔 마시고 올까?",
+                            "어떤 점이 도현이를 가장 화나게 했는지 차근차근 들어보고 싶어."
+                        ]
+                    },
+                    {
+                        id: 5, name: "정하은", status: "normal", tags: ["예술적", "조용함"],
+                        dominantZone: "green",
+                        dangerSignal: "",
+                        aiAnalysis: "하은 학생은 '초록 영역'에 안정적으로 머물러 있습니다. 감정 기복이 적고 편안한 상태를 유지하며, 이는 학습 몰입도에 긍정적인 영향을 줍니다.",
+                        recentEmotions: [
+                            { date: "5/08", emoji: "😌", label: "편안", zone: "green" },
+                            { date: "5/09", emoji: "😌", label: "차분", zone: "green" },
+                            { date: "5/10", emoji: "😊", label: "만족", zone: "green" },
+                            { date: "5/11", emoji: "😌", label: "휴식", zone: "green" },
+                            { date: "5/12", emoji: "😌", label: "온화", zone: "green" },
+                            { date: "5/13", emoji: "😌", label: "평화", zone: "green" },
+                            { date: "5/14", emoji: "😌", label: "감사", zone: "green" }
+                        ],
+                        suggestedQuestions: [
+                            "요즘 하은이의 마음이 참 편안해 보여서 선생님도 기분이 좋아.",
+                            "평화로운 마음으로 그림을 그리니 더 멋진 작품이 나오는 것 같아."
+                        ]
+                    },
+                    {
+                        id: 6, name: "강민호", status: "normal", tags: ["호기심", "장난꾸러기"],
+                        dominantZone: "gray",
+                        dangerSignal: "",
+                        aiAnalysis: "", 
+                        recentEmotions: [], 
+                        suggestedQuestions: []
+                    }
+                ]);
+
+                // Flower Mission Data (36 Emotions)
+                const flowerEmotions = {
+                    red: [
+                        { name: "분노하다", mission: "잠시 멈추고 심호흡 5번 하기 (4초 들이마시고 6초 내뱉기)" },
+                        { name: "스트레스 받다", mission: "종이에 스트레스 원인을 적고 구겨서 쓰레기통에 던지기" },
+                        { name: "신경질이 나다", mission: "차가운 물 한 잔 천천히 마시기" },
+                        { name: "겁나다", mission: "나를 지켜주는 상상 속의 방패 그려보기" },
+                        { name: "화나다", mission: "10부터 1까지 거꾸로 숫자 세기" },
+                        { name: "밉다", mission: "미운 마음을 빨간색 크레파스로 마구 칠해서 표현해보기" },
+                        { name: "걱정하다", mission: "걱정 인형에게 내 걱정 이야기해주기" },
+                        { name: "짜증이 나다", mission: "양손 주먹을 꽉 쥐었다가 툭 하고 힘 빼기 (3회 반복)" },
+                        { name: "불안하다", mission: "눈을 감고 안전한 장소(내 방, 바닷가 등) 상상하기" }
+                    ],
+                    yellow: [
+                        { name: "들뜨다", mission: "친구와 하이파이브 하고 '파이팅!' 외치기" },
+                        { name: "신나다", mission: "좋아하는 노래의 후렴구 흥얼거려보기" },
+                        { name: "벅차오르다", mission: "이 기분을 일기장에 기록해서 간직하기" },
+                        { name: "용감하다", mission: "발표 시간에 가장 먼저 손들어 보기" },
+                        { name: "기쁘다", mission: "기쁜 이유를 짝꿍에게 이야기해주기" },
+                        { name: "감격하다", mission: "나 자신에게 '정말 잘했어'라고 칭찬해주기" },
+                        { name: "자랑스럽다", mission: "오늘의 성공 요인을 한 문장으로 적어보기" },
+                        { name: "재미있다", mission: "재미있는 이야기를 친구에게 공유해서 같이 웃기" },
+                        { name: "행복하다", mission: "행복한 순간을 그림으로 그려서 게시판에 붙이기" }
+                    ],
+                    blue: [
+                        { name: "서운하다", mission: "서운했던 점을 '나는 ~해서 서운했어' 문장으로 말해보기" },
+                        { name: "부럽다", mission: "부러운 친구의 장점을 찾아 칭찬해주기 (나도 할 수 있어!)" },
+                        { name: "지루하다", mission: "자리에서 일어나 가볍게 스트레칭 하기" },
+                        { name: "외롭다", mission: "먼저 친구에게 다가가 '안녕'하고 인사하기" },
+                        { name: "슬프다", mission: "슬픈 마음이 흘러가도록 충분히 눈물 흘리거나 슬픈 음악 듣기" },
+                        { name: "지치다", mission: "책상에 엎드려 5분간 '꿀잠' 휴식 취하기" },
+                        { name: "절망하다", mission: "가장 좋아하는 간식을 먹으며 기분 전환하기" },
+                        { name: "우울하다", mission: "창밖의 풍경이나 하늘을 1분 동안 바라보기" },
+                        { name: "기운 빠지다", mission: "친구에게 따뜻한 응원의 말 한마디 부탁하기" }
+                    ],
+                    green: [
+                        { name: "미안하다", mission: "진심을 담은 사과 쪽지 전달하기" },
+                        { name: "만족하다", mission: "지금 이 순간 감사한 것 3가지 찾기" },
+                        { name: "사랑하다", mission: "부모님이나 선생님께 '사랑해요' 문자 보내기" },
+                        { name: "차분하다", mission: "조용히 독서 10분 하기" },
+                        { name: "편안하다", mission: "눈을 감고 내 숨소리에 집중해보기" },
+                        { name: "감사하다", mission: "감사한 사람에게 '고마워'라고 말하기" },
+                        { name: "흐뭇하다", mission: "도움이 필요한 친구를 조용히 도와주기" },
+                        { name: "평화롭다", mission: "명상 음악을 들으며 마음의 정원 가꾸기" },
+                        { name: "안도하다", mission: "오늘 하루 무사히 보낸 나를 토닥여주기" }
+                    ]
+                };
+
+                // --- Computed ---
+                const dangerStudents = computed(() => students.value.filter(s => s.status === 'danger'));
+                const attentionStudents = computed(() => students.value.filter(s => s.status === 'attention'));
+                
+                const filteredStudents = computed(() => {
+                    if (!searchQuery.value) return students.value;
+                    return students.value.filter(s => s.name.includes(searchQuery.value));
+                });
+
+                const currentZoneFlowers = computed(() => flowerEmotions[missionZone.value]);
+
+                const viewTitle = computed(() => {
+                    switch(currentView.value) {
+                        case 'dashboard': return '오늘의 학급 현황';
+                        case 'classMap': return '학급 감정 지도';
+                        case 'studentMap': return '학생별 상세 분석';
+                        case 'missions': return '꽃별 미션 관리';
+                        default: return '';
+                    }
+                });
+
+                // --- Helper Methods ---
+                const getZoneName = (zone) => {
+                    const names = { red: '빨강 영역', yellow: '노랑 영역', blue: '파랑 영역', green: '초록 영역', gray: '미제출' };
+                    return names[zone] || zone;
+                };
+
+                const getZoneDescription = (zone) => {
+                    const desc = {
+                        red: '에너지가 높고 다소 불쾌한 상태 (긴장, 분노)',
+                        yellow: '에너지가 높고 유쾌한 상태 (활기, 기쁨)',
+                        blue: '에너지가 낮고 다소 불쾌한 상태 (지침, 우울)',
+                        green: '에너지가 낮고 유쾌한 상태 (편안, 안정)'
+                    };
+                    return desc[zone];
+                };
+
+                const getZoneCount = (zone) => {
+                    const base = { red: 5, yellow: 12, blue: 4, green: 5, gray: 4 };
+                    return base[zone];
+                };
+
+                const getZonePercent = (zone) => {
+                    const count = getZoneCount(zone);
+                    return Math.round((count / 30) * 100);
+                };
+
+                const getStudentLatestZoneColor = (student) => {
+                    if (student.dominantZone === 'gray') return 'bg-slate-300';
+                    const zone = student.recentEmotions[6].zone;
+                    const map = { red: 'bg-red-500', yellow: 'bg-yellow-400', blue: 'bg-blue-500', green: 'bg-green-500' };
+                    return map[zone];
+                };
+
+                // For Student List & Detail UI
+                const getStudentListZoneBg = (zone) => {
+                    const map = {
+                        red: 'bg-red-50 border-red-100 text-red-700',
+                        yellow: 'bg-yellow-50 border-yellow-100 text-yellow-700',
+                        blue: 'bg-blue-50 border-blue-100 text-blue-700',
+                        green: 'bg-green-50 border-green-100 text-green-700',
+                        gray: 'bg-slate-50 border-slate-200 text-slate-500'
+                    };
+                    return map[zone] || map['gray'];
+                };
+
+                // For Flower Cards (Background only)
+                const getFlowerZoneBg = (zone) => {
+                    const map = { red: 'bg-red-500', yellow: 'bg-yellow-400', blue: 'bg-blue-500', green: 'bg-green-500' };
+                    return map[zone];
+                };
+
+                const getTextColor = (zone) => {
+                    const map = { red: 'text-red-600', yellow: 'text-yellow-600', blue: 'text-blue-600', green: 'text-green-600', gray: 'text-slate-500' };
+                    return map[zone];
+                };
+
+                const getGuideBoxClass = (zone) => {
+                     const map = {
+                        red: 'bg-red-50 border-red-200',
+                        yellow: 'bg-yellow-50 border-yellow-200',
+                        blue: 'bg-blue-50 border-blue-200',
+                        green: 'bg-green-50 border-green-200',
+                        gray: 'bg-slate-50 border-slate-200'
+                    };
+                    return map[zone];
+                };
+
+                const getGuideTitleClass = (zone) => {
+                    const map = { red: 'text-red-800', yellow: 'text-yellow-800', blue: 'text-blue-800', green: 'text-green-800', gray: 'text-slate-600' };
+                    return map[zone];
+                }
+
+                const selectStudent = (student) => {
+                    selectedStudent.value = student;
+                    currentView.value = 'studentMap';
+                };
+                
+                const openStudentDetail = (student) => {
+                    selectedStudent.value = student;
+                    currentView.value = 'studentMap';
+                };
+
+                // --- Chart Logic ---
+                let donutChart = null;
+                let trendChart = null;
+
+                const renderDonutChart = () => {
+                    const ctx = document.getElementById('quadrantChart');
+                    if (!ctx) return;
+                    if (donutChart) donutChart.destroy();
+
+                    donutChart = new Chart(ctx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: ['빨강', '노랑', '파랑', '초록', '미제출'],
+                            datasets: [{
+                                data: [5, 12, 4, 5, 4], 
+                                backgroundColor: ['#ef4444', '#facc15', '#3b82f6', '#22c55e', '#cbd5e1'],
+                                borderWidth: 0,
+                                hoverOffset: 4
+                            }]
+                        },
+                        options: {
+                            cutout: '75%',
+                            plugins: { legend: { display: false } }
+                        }
+                    });
+                };
+
+                const renderTrendChart = () => {
+                    const ctx = document.getElementById('classTrendChart');
+                    if (!ctx) return;
+                    if (trendChart) trendChart.destroy();
+
+                    trendChart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: ['1주차', '2주차', '3주차', '4주차(현재)'],
+                            datasets: [
+                                { 
+                                    label: '빨강(긴장)', data: [15, 25, 45, 10], 
+                                    borderColor: '#ef4444', backgroundColor: 'rgba(239, 68, 68, 0.1)', tension: 0.4, fill: true
+                                },
+                                { 
+                                    label: '노랑(활기)', data: [30, 45, 35, 25], 
+                                    borderColor: '#facc15', backgroundColor: 'rgba(250, 204, 21, 0.1)', tension: 0.4, fill: true
+                                },
+                                { 
+                                    label: '파랑(우울)', data: [10, 10, 15, 20], 
+                                    borderColor: '#3b82f6', backgroundColor: 'rgba(59, 130, 246, 0.1)', tension: 0.4, fill: true
+                                },
+                                { 
+                                    label: '초록(편안)', data: [45, 20, 5, 45], 
+                                    borderColor: '#22c55e', backgroundColor: 'rgba(34, 197, 94, 0.1)', tension: 0.4, fill: true
+                                },
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            interaction: { mode: 'index', intersect: false },
+                            scales: {
+                                x: { grid: { display: false } },
+                                y: { beginAtZero: true, max: 100, grid: { borderDash: [2, 4] } }
+                            },
+                            plugins: { legend: { display: false } }
+                        }
+                    });
+                };
+
+                // Watchers
+                watch(currentView, (newView) => {
+                    setTimeout(() => {
+                        if (newView === 'dashboard') renderDonutChart();
+                        if (newView === 'classMap') renderTrendChart();
+                    }, 100);
+                });
+
+                onMounted(() => {
+                    if(students.value.length > 0) selectedStudent.value = students.value[0];
+                    renderDonutChart();
+                });
+
+                return {
+                    currentView, isCollapsed, todayDate,
+                    students, filteredStudents, selectedStudent,
+                    dangerStudents, attentionStudents,
+                    missionZone, selectedFlower, currentZoneFlowers, flowerEmotions,
+                    viewTitle, searchQuery,
+                    getZoneName, getZoneDescription, getZoneCount, getZonePercent, 
+                    getStudentLatestZoneColor, getStudentListZoneBg, getFlowerZoneBg, getTextColor,
+                    getGuideBoxClass, getGuideTitleClass,
+                    selectStudent, openStudentDetail
+                };
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>
