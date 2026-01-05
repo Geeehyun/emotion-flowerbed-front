@@ -4,8 +4,6 @@
     <div class="polka-dot-bg">
       <div class="dots-layer dots-layer-1"></div>
       <div class="dots-layer dots-layer-2"></div>
-      <div class="dots-layer dots-layer-3"></div>
-      <div class="dots-layer dots-layer-4"></div>
     </div>
 
     <!-- 상단 타이틀 (main-container 밖으로 이동) -->

@@ -1,21 +1,14 @@
 <template>
   <div class="landing-container">
-    <!-- 움직이는 물방울 배경 -->
-    <!-- <div class="polka-dot-bg">
-      <div class="dots-layer dots-layer-1"></div>
-      <div class="dots-layer dots-layer-2"></div>
-      <div class="dots-layer dots-layer-3"></div>
-      <div class="dots-layer dots-layer-4"></div>
-    </div> -->
 
     <div class="landing-content">
       <!-- 로고 영역 -->
       <div class="logo-section">
+        <h1 class="service-title">나의 감정 화단</h1>
+        <p class="service-subtitle">My Emotion Flowerbed</p>
         <div class="logo-placeholder">
           <img src="@/assets/images/logo.png" alt="나의 감정 화단 로고" class="logo-image" loading="lazy" />
         </div>
-        <h1 class="service-title">나의 감정 화단</h1>
-        <p class="service-subtitle">My Emotion Garden</p>
       </div>
 
       <!-- 서비스 소개 -->

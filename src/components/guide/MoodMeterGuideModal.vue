@@ -13,6 +13,10 @@
               @touchstart="handleTouchStart"
               @touchmove="handleTouchMove"
               @touchend="handleTouchEnd"
+              @mousedown="handleMouseDown"
+              @mousemove="handleMouseMove"
+              @mouseup="handleMouseUp"
+              @mouseleave="handleMouseLeave"
             >
               <div
                 class="cards-wrapper"
@@ -215,6 +219,10 @@ const currentIndex = ref(0)
 const totalCards = 5
 let touchStartX = 0
 let touchEndX = 0
+let isDragging = false
+let startX = 0
+let currentTranslate = 0
+let prevTranslate = 0
 
 // 카드 네비게이션
 const nextCard = () => {
@@ -236,13 +244,22 @@ const goToCard = (index) => {
 // 터치 이벤트 핸들러
 const handleTouchStart = (e) => {
   touchStartX = e.touches[0].clientX
+  isDragging = true
+  startX = e.touches[0].clientX
+  prevTranslate = -currentIndex.value * 100
 }
 
 const handleTouchMove = (e) => {
+  if (!isDragging) return
   touchEndX = e.touches[0].clientX
+  const currentPosition = e.touches[0].clientX
+  const diff = currentPosition - startX
+  const movePercent = (diff / window.innerWidth) * 100
+  currentTranslate = prevTranslate + movePercent
 }
 
 const handleTouchEnd = () => {
+  isDragging = false
   const swipeThreshold = 50
   const diff = touchStartX - touchEndX
 
@@ -254,6 +271,53 @@ const handleTouchEnd = () => {
       // 오른쪽으로 스와이프 (이전 카드)
       prevCard()
     }
+  }
+  // 카드 위치를 스냅
+  currentTranslate = -currentIndex.value * 100
+}
+
+// 마우스 이벤트 핸들러 (PC 드래그)
+const handleMouseDown = (e) => {
+  isDragging = true
+  startX = e.clientX
+  prevTranslate = -currentIndex.value * 100
+  e.preventDefault()
+}
+
+const handleMouseMove = (e) => {
+  if (!isDragging) return
+  const currentPosition = e.clientX
+  const diff = currentPosition - startX
+  const movePercent = (diff / window.innerWidth) * 100
+  currentTranslate = prevTranslate + movePercent
+}
+
+const handleMouseUp = (e) => {
+  if (!isDragging) return
+  isDragging = false
+
+  const endX = e.clientX
+  const diff = startX - endX
+  const swipeThreshold = 50
+
+  if (Math.abs(diff) > swipeThreshold) {
+    if (diff > 0) {
+      // 왼쪽으로 드래그 (다음 카드)
+      nextCard()
+    } else {
+      // 오른쪽으로 드래그 (이전 카드)
+      prevCard()
+    }
+  }
+  // 카드 위치를 스냅
+  currentTranslate = -currentIndex.value * 100
+}
+
+const handleMouseLeave = () => {
+  if (isDragging) {
+    isDragging = false
+    // 카드 위치를 스냅
+    currentTranslate = -currentIndex.value * 100
   }
 }
 

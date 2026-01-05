@@ -16,14 +16,19 @@
         class="sidebar-container fixed top-0 left-0 h-full w-80 bg-white shadow-2xl z-[10001] flex flex-col"
       >
         <!-- 헤더 -->
-        <div class="sidebar-header flex items-center justify-between p-5 border-b-2 border-gray-200">
-          <h2 class="sidebar-title text-xl font-bold">메뉴</h2>
-          <button
-            @click="$emit('update:modelValue', false)"
-            class="close-btn"
-          >
-            <XMarkIcon class="w-6 h-6" />
-          </button>
+        <div class="sidebar-header flex items-center gap-3 p-5 border-b-2 border-gray-200">
+          <h1 class="sidebar-title">
+            <button
+              @click="$emit('update:modelValue', false)"
+              class="close-btn sidebar-close-btn"
+            >
+              <ChevronLeftIcon class="w-6 h-6" />
+            </button>
+            <div class="sidebar-title-divider"></div>
+            <span class="sidebar-title-text">나의 감정 화단</span>
+          </h1>
+          <div class="sidebar-divider"></div>
+          <h2 class="sidebar-menu-text text-xl font-bold">메뉴</h2>
         </div>
 
         <!-- 메뉴 목록 -->
@@ -57,7 +62,7 @@
 
 <script setup>
 import { computed } from 'vue'
-import { XMarkIcon } from '@heroicons/vue/24/outline'
+import { ChevronLeftIcon } from '@heroicons/vue/24/outline'
 import { menuItems as baseMenuItems } from '@/config/menuConfig.js'
 
 const props = defineProps({
