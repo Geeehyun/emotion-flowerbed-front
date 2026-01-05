@@ -968,7 +968,7 @@ const saveFlowerAsImage = async () => {
           clonedElement.style.left = '0'
           clonedElement.style.top = '0'
           clonedElement.style.transform = 'none'
-clonedElement.stype.width = '600';
+          clonedElement.style.width = '600';
 
           // 모든 이미지에 대해 로드 완료 보장
           const images = clonedElement.querySelectorAll('img')
