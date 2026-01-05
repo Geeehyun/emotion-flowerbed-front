@@ -956,7 +956,7 @@ const saveFlowerAsImage = async () => {
       scrollX: 0, // 명시적으로 0 설정
       imageTimeout: 30000, // 타임아웃 증가
       foreignObjectRendering: false, // Safari 호환성
-      removeContainer: false, // 렌더링 후 임시 컨테이너 제거
+      removeContainer: true, // 렌더링 후 임시 컨테이너 제거
       // Safari 전용 콜백
       onclone: (clonedDoc) => {
         console.log('#2 onclone 콜백 실행')
