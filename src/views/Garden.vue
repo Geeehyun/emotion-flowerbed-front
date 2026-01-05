@@ -946,12 +946,12 @@ const saveFlowerAsImage = async () => {
     const element = reportCaptureRef.value
     const canvasOptions = {
       backgroundColor: '#FFF9E8',
-      scale: isIOS ? 1 : REPORT_CAPTURE.SCALE, // iOS는 scale을 더 낮춤 (메모리 절약)
+      scale: REPORT_CAPTURE.SCALE, // iOS는 scale을 더 낮춤 (메모리 절약)
       useCORS: true,
       allowTaint: false, // Safari에서 CORS 문제 회피 (중요!)
       logging: true, // 디버깅을 위해 항상 로그 활성화
-      width: isIOS ? 600 : REPORT_CAPTURE.WIDTH,
-      windowWidth: isIOS ? 600 : REPORT_CAPTURE.WIDTH,
+      width: REPORT_CAPTURE.WIDTH,
+      windowWidth: REPORT_CAPTURE.WIDTH,
       scrollY: 0, // 명시적으로 0 설정
       scrollX: 0, // 명시적으로 0 설정
       imageTimeout: 30000, // 타임아웃 증가
@@ -968,7 +968,6 @@ const saveFlowerAsImage = async () => {
           clonedElement.style.left = '0'
           clonedElement.style.top = '0'
           clonedElement.style.transform = 'none'
-          clonedElement.style.width = '600';
 
           // 모든 이미지에 대해 로드 완료 보장
           const images = clonedElement.querySelectorAll('img')
@@ -1035,7 +1034,7 @@ const downloadImage = () => {
   // 파일명 생성 (감정_리포트_날짜.png)
   let emotionName = currentEmotionName.value || '알수없음'
   const date = currentDiary.value?.date?.replace(/\./g, '') || 'unknown'
-  const fileName = `${emotionName}_리포트_${date}.png`
+  const fileName = `${date}_리포트_${emotionName}.png`
 
   // iOS 감지
   const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream

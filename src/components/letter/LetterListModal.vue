@@ -86,13 +86,13 @@ const handleClose = () => {
 
 // 필터
 const filters = [
-  { label: '전체', value: 'all' },
+  { label: '최근 3개월', value: 'recent' },
   { label: '읽지 않음', value: 'unread' },
   { label: '읽음', value: 'read' },
-  { label: '최근 3개월', value: 'recent' }
+  { label: '전체', value: 'all' }
 ]
 
-const selectedFilter = ref('all')
+const selectedFilter = ref('recent')
 const letters = ref([])
 const isLoading = ref(false)
 
