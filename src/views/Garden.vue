@@ -946,7 +946,7 @@ const saveFlowerAsImage = async () => {
     const element = reportCaptureRef.value
     const canvasOptions = {
       backgroundColor: '#FFF9E8',
-      scale: REPORT_CAPTURE.SCALE, // iOS는 scale을 더 낮춤 (메모리 절약)
+      scale: isIOS ? 1 : REPORT_CAPTURE.SCALE, // iOS는 scale을 더 낮춤 (메모리 절약)
       useCORS: true,
       allowTaint: false, // Safari에서 CORS 문제 회피 (중요!)
       logging: true, // 디버깅을 위해 항상 로그 활성화
