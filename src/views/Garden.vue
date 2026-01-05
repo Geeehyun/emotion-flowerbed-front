@@ -1105,7 +1105,7 @@ const downloadImage = () => {
     link.download = fileName
     link.href = previewImageUrl.value
     link.click()
-    showCustomAlert('리포트가 저장되었습니다!', 'success')
+    // showCustomAlert('리포트가 저장되었습니다!', 'success')
   }
 }
 
