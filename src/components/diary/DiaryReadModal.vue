@@ -1,5 +1,5 @@
 <template>
-  <div v-if="modelValue" class="modal active" @click="handleBackgroundClick">
+  <div v-if="modelValue" class="modal active diary-modal-overlay" @click="handleBackgroundClick">
     <div class="flip-card-container">
       <div class="flip-card-inner" :class="{ 'is-flipped': isFlipped }">
         <!-- 앞면: 일기 내용 -->
