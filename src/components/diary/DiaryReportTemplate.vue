@@ -8,7 +8,7 @@
 
     <!-- 꽃 이미지 -->
     <div class="report-flower-image">
-      <img :src="realisticImage" :alt="flowerName" />
+      <img :src="realisticImage" :alt="flowerName" crossorigin="anonymous" />
     </div>
 
     <!-- 꽃 정보 -->

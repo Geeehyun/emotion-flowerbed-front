@@ -946,9 +946,9 @@ const saveFlowerAsImage = async () => {
     const element = reportCaptureRef.value
     const canvasOptions = {
       backgroundColor: '#FFF9E8',
-      scale: isIOS ? 0.5 : REPORT_CAPTURE.SCALE, // iOS는 scale을 더 낮춤 (메모리 절약)
+      scale: isIOS ? 1 : REPORT_CAPTURE.SCALE, // iOS는 scale을 더 낮춤 (메모리 절약)
       useCORS: true,
-      allowTaint: true, // Safari에서 CORS 문제 회피 (중요!)
+      allowTaint: false, // Safari에서 CORS 문제 회피 (중요!)
       logging: true, // 디버깅을 위해 항상 로그 활성화
       width: isIOS ? 600 : REPORT_CAPTURE.WIDTH,
       windowWidth: isIOS ? 600 : REPORT_CAPTURE.WIDTH,
@@ -956,7 +956,7 @@ const saveFlowerAsImage = async () => {
       scrollX: 0, // 명시적으로 0 설정
       imageTimeout: 30000, // 타임아웃 증가
       foreignObjectRendering: false, // Safari 호환성
-      removeContainer: true, // 렌더링 후 임시 컨테이너 제거
+      removeContainer: false, // 렌더링 후 임시 컨테이너 제거
       // Safari 전용 콜백
       onclone: (clonedDoc) => {
         console.log('#2 onclone 콜백 실행')
