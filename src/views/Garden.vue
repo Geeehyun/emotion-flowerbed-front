@@ -920,26 +920,74 @@ const saveFlowerAsImage = async () => {
 
     // iOS에서는 이미지 로딩을 추가로 대기
     if (isIOS) {
-      await new Promise(resolve => setTimeout(resolve, 1000)) // iOS는 더 길게 대기
+      console.log('#0 iOS 이미지 로딩 대기 시작 (2초)')
+      await new Promise(resolve => setTimeout(resolve, 2000)) // iOS는 더 길게 대기 (2초)
+
+      // 모든 이미지가 로드될 때까지 대기
+      const images = reportCaptureRef.value.querySelectorAll('img')
+      console.log('#0-1 이미지 로드 확인:', images.length, '개')
+
+      await Promise.all(
+        Array.from(images).map((img) => {
+          if (img.complete) return Promise.resolve()
+          return new Promise((resolve) => {
+            img.onload = resolve
+            img.onerror = resolve // 에러가 나도 계속 진행
+            // 5초 타임아웃
+            setTimeout(resolve, 5000)
+          })
+        })
+      )
+
+      console.log('#0-2 모든 이미지 로드 완료 또는 타임아웃')
     }
 
     // iOS Safari 호환 설정
+    const element = reportCaptureRef.value
     const canvasOptions = {
       backgroundColor: '#FFF9E8',
-      scale: isIOS ? 0.8 : REPORT_CAPTURE.SCALE, // iOS는 scale을 더 낮춤
+      scale: isIOS ? 0.5 : REPORT_CAPTURE.SCALE, // iOS는 scale을 더 낮춤 (메모리 절약)
       useCORS: true,
-      allowTaint: false, // allowTaint와 useCORS 충돌 방지
-      logging: isIOS, // iOS에서만 로그 활성화
-      width: isIOS ? 600 : REPORT_CAPTURE.WIDTH, // iOS는 더 작은 너비
+      allowTaint: true, // Safari에서 CORS 문제 회피 (중요!)
+      logging: true, // 디버깅을 위해 항상 로그 활성화
+      width: isIOS ? 600 : REPORT_CAPTURE.WIDTH,
       windowWidth: isIOS ? 600 : REPORT_CAPTURE.WIDTH,
-      imageTimeout: 20000,
-      foreignObjectRendering: false,
-      removeContainer: true // 렌더링 후 임시 컨테이너 제거
+      scrollY: 0, // 명시적으로 0 설정
+      scrollX: 0, // 명시적으로 0 설정
+      imageTimeout: 30000, // 타임아웃 증가
+      foreignObjectRendering: false, // Safari 호환성
+      removeContainer: true, // 렌더링 후 임시 컨테이너 제거
+      // Safari 전용 콜백
+      onclone: (clonedDoc) => {
+        console.log('#2 onclone 콜백 실행')
+        const clonedElement = clonedDoc.querySelector('.report-capture-container')
+        if (clonedElement) {
+          // Safari에서 스타일 강제 적용
+          clonedElement.style.display = 'block'
+          clonedElement.style.position = 'relative'
+          clonedElement.style.left = '0'
+          clonedElement.style.top = '0'
+          clonedElement.style.transform = 'none'
+
+          // 모든 이미지에 대해 로드 완료 보장
+          const images = clonedElement.querySelectorAll('img')
+          console.log('#3 이미지 개수:', images.length)
+          images.forEach((img, index) => {
+            if (img.complete) {
+              console.log(`#4-${index} 이미지 로드 완료:`, img.src.substring(0, 50))
+            } else {
+              console.warn(`#4-${index} 이미지 미완료:`, img.src.substring(0, 50))
+              // 이미지가 로드되지 않았으면 강제로 빈 이미지 대체
+              img.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg"%3E%3C/svg%3E'
+            }
+          })
+        }
+      }
     }
 
     console.log('html2canvas 옵션:', canvasOptions)
 
-    const canvas = await html2canvas(reportCaptureRef.value, canvasOptions)
+    const canvas = await html2canvas(element, canvasOptions)
 
     console.log('캔버스 생성 완료:', canvas.width, 'x', canvas.height)
 
