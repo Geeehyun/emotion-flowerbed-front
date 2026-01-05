@@ -33,5 +33,27 @@
   <body>
     <div id="app"></div>
     <script type="module" src="/src/main.js"></script>
+
+    <!-- 모바일 디버깅 콘솔 (Eruda) - 개발 환경에서만 사용 -->
+    <script>
+      // URL에 ?debug=true가 있을 때만 Eruda 활성화
+      (function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const isDebug = urlParams.get('debug') === 'true';
+
+        if (isDebug) {
+          const script = document.createElement('script');
+          script.src = "https://cdn.jsdelivr.net/npm/eruda";
+          document.body.appendChild(script);
+          script.onload = function () {
+            eruda.init();
+            console.log('🔧 Eruda 모바일 콘솔이 활성화되었습니다!');
+          };
+          script.onerror = function() {
+            console.error('❌ Eruda 로드 실패');
+          };
+        }
+      })();
+    </script>
   </body>
 </html>

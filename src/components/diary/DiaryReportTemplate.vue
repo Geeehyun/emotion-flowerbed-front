@@ -70,7 +70,11 @@
 
       <div class="info-item">
         <div class="info-label">대표 감정</div>
-        <div class="info-value highlight">{{ emotionName }}</div>
+        <div class="info-value highlight">
+          <p class="highlight-content">
+            {{ emotionName }}
+          </p>
+        </div>
       </div>
 
       <!-- 감정 분포 차트 -->
@@ -110,7 +114,7 @@
 
     <!-- 푸터 -->
     <div class="report-footer">
-      <p>감정 화원 일기</p>
+      <p>감정 화단</p>
     </div>
   </div>
 </template>
@@ -236,13 +240,22 @@ const flowerName = computed(() => {
 }
 
 .info-value.highlight {
+  background: rgba(232, 205, 142, 0.3);
+  border-radius: 8px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.info-value.highlight .highlight-content {
+  line-height: 0;
+  text-align: center;
+  padding: 20px 0 40px 0;
+  margin: 0;
   font-size: 22px;
   font-weight: bold;
   color: #8B6F47;
-  text-align: center;
-  padding: 12px;
-  background: rgba(232, 205, 142, 0.3);
-  border-radius: 8px;
 }
 
 /* 색상 칩 */
@@ -295,7 +308,7 @@ const flowerName = computed(() => {
 .emotion-percent {
   position: absolute;
   right: 12px;
-  top: 50%;
+  top: 25%;
   transform: translateY(-50%);
   font-size: 14px;
   font-weight: bold;

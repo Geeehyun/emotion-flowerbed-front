@@ -116,25 +116,19 @@
                 />
               </div>
 
-              <!-- 포스트잇: 꽃 이름(학명) -->
+              <!-- 포스트잇: 꽃 이름 + 꽃말 -->
               <div
-                class="postit postit-name draggable"
+                class="postit postit-info draggable"
                 @mousedown="$emit('drag-start', $event, 'name')"
-                :style="postitPositions.name"
+                :style="{ ...postitPositions.name, backgroundColor: postitColor }"
               >
                 <div class="postit-text">
-                  {{ flowerDetail?.flowerNameKr || flowerInfo.name }}
-                  <span class="latin-name">({{ flowerDetail?.flowerNameEn || flowerInfo.nameEn }})</span>
+                  <div class="flower-name">
+                    {{ flowerDetail?.flowerNameKr || flowerInfo.name }}
+                    <span class="latin-name">({{ flowerDetail?.flowerNameEn || flowerInfo.nameEn }})</span>
+                  </div>
+                  <div class="flower-meaning">"{{ flowerDetail?.flowerMeaning || flowerInfo.meaning }}"</div>
                 </div>
-              </div>
-
-              <!-- 포스트잇: 꽃말 -->
-              <div
-                class="postit postit-meaning draggable"
-                @mousedown="$emit('drag-start', $event, 'meaning')"
-                :style="postitPositions.meaning"
-              >
-                <div class="postit-text">"{{ flowerDetail?.flowerMeaning || flowerInfo.meaning }}"</div>
               </div>
             </div>
             <!-- 하단 상세 정보 -->
@@ -291,6 +285,20 @@ const flowerInfo = computed(() => {
 
 const emotionName = computed(() => {
   return flowerData.value.emotionNameKr || '알 수 없음'
+})
+
+// 감정 영역별 파스텔톤 포스트잇 색상
+const AREA_POSTIT_COLORS = {
+  red: '#FFCDD2',    // 연한 빨강
+  yellow: '#FFF9C4', // 연한 노랑
+  blue: '#BBDEFB',   // 연한 파랑
+  green: '#C8E6C9'   // 연한 초록
+}
+
+// 포스트잇 색상 (감정 영역에 따라 동적으로 변경)
+const postitColor = computed(() => {
+  const area = flowerData.value.area?.toLowerCase()
+  return AREA_POSTIT_COLORS[area] || '#FFF9C4' // 기본값: 연한 노랑
 })
 
 // 감정 코드로 감정 이름 가져오기

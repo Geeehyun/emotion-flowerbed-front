@@ -150,6 +150,17 @@
   /* 중앙 정렬 - 애니메이션에서 처리 */
 }
 
+/* 데스크톱: 한 줄 타이틀 표시 */
+.desktop-title {
+  display: block;
+}
+
+/* 모바일: 두 줄 타이틀 숨김 */
+.mobile-title {
+  display: none;
+}
+
+
 /* 햄버거 메뉴 버튼 */
 .hamburger-btn {
   width: 50px;
@@ -649,10 +660,27 @@
 
 /* 작은 화면 대응 (하단 바) */
 @media (max-width: 480px) {
-  /* 타이틀 글자 크기 축소 */
-  .page-title {
+  /* 모바일: 헤더 높이 증가 */
+  .header-section {
+    padding: 20px 20px 15px;
+  }
+
+  /* 모바일: 한 줄 타이틀 숨기고 두 줄 타이틀 표시 */
+  .desktop-title {
+    display: none;
+  }
+
+  .mobile-title {
+    display: block;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
     font-size: 32px;
     letter-spacing: 2px;
+    line-height: 1.2;
+    text-align: center;
+    white-space: normal; /* 줄바꿈 허용 */
+    animation: none; /* 모바일에서는 애니메이션 제거 */
   }
 
   /* 화단 섹션 상단 여백 축소 */
@@ -1286,21 +1314,27 @@
     0 8px 16px rgba(0,0,0,0.15);
 }
 
-/* 꽃 이름 포스트잇 (왼쪽 하단) */
-.postit-name {
+/* 꽃 정보 포스트잇 (꽃 이름 + 꽃말 통합) */
+.postit-info {
   bottom: 30px;
   left: 30px;
-  background: #FFE66D;
-  transform: rotate(-5deg);
+  /* background 색상은 감정 영역에 따라 동적으로 설정됨 */
+  transform: rotate(-3deg);
 }
 
-.postit-name .postit-text {
+.postit-info .postit-text {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.postit-info .flower-name {
   font-size: 24px;
   font-weight: bold;
   color: #5D4E37;
 }
 
-.postit-name .latin-name {
+.postit-info .latin-name {
   display: block;
   font-size: 14px;
   font-weight: normal;
@@ -1309,19 +1343,13 @@
   margin-top: 4px;
 }
 
-/* 꽃말 포스트잇 (오른쪽 하단) */
-.postit-meaning {
-  bottom: 30px;
-  right: 30px;
-  background: #FFB4D5;
-  transform: rotate(8deg);
-}
-
-.postit-meaning .postit-text {
+.postit-info .flower-meaning {
   font-size: 18px;
   font-weight: 600;
-  color: #8B3A62;
+  color: #3f2c20;
   line-height: 1.6;
+  padding-top: 8px;
+  border-top: 1px dashed rgba(139, 58, 98, 0.3);
 }
 
 /* 하단 상세 정보 */
@@ -3153,39 +3181,11 @@
 }
 
 .preview-image {
-  position: relative;
-  max-width: 100%;
-  max-height: 75vh; /* fallback */
-  max-height: 75dvh; /* 모바일 브라우저 UI 고려 */
-  border-radius: 12px;
-  /* box-shadow: 0 8px 24px rgba(0,0,0,0.3); */
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
   border: 2px solid #E8CD8E;
-  padding: 20px 10px;
   background-color: #FFF9E8;
-  object-fit: contain;
-}
-
-/* preview-image용 왼쪽 마진선 제거됨 */
-
-/* preview-image용 스프링 구멍들 */
-.preview-image::after {
-  content: '';
-  position: absolute;
-  left: 20px;
-  top: 40px;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background-color: #D4C5B0;
-  box-shadow:
-    0 50px 0 #D4C5B0,
-    0 100px 0 #D4C5B0,
-    0 150px 0 #D4C5B0,
-    0 200px 0 #D4C5B0,
-    0 250px 0 #D4C5B0,
-    0 300px 0 #D4C5B0,
-    0 350px 0 #D4C5B0,
-    0 400px 0 #D4C5B0;
 }
 
 /* 캡쳐 옵션 */
@@ -3254,7 +3254,6 @@
   box-shadow: 0 4px 12px rgba(0,0,0,0.2);
   font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   width: 100%;
-  max-width: 280px;
 }
 
 .download-btn:hover {
@@ -6517,8 +6516,8 @@
    360px 이하 초소형 화면 대응 (Galaxy Fold, 작은 iPhone 등)
 ============================================ */
 @media (max-width: 360px) {
-  /* 페이지 타이틀 */
-  .page-title {
+  /* 타이틀 폰트 크기 더 축소 */
+  .mobile-title {
     font-size: 26px;
     letter-spacing: 1px;
   }

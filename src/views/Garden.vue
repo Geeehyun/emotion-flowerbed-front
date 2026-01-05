@@ -18,7 +18,10 @@
       >
         <Bars3Icon class="w-8 h-8" />
       </button>
-      <h1 class="page-title">나의 감정 화단</h1>
+      <!-- 데스크톱: 한 줄 타이틀 -->
+      <h1 class="page-title desktop-title">나의 감정 화단</h1>
+      <!-- 모바일: 두 줄 타이틀 -->
+      <h1 class="page-title mobile-title">나의<br>감정 화단</h1>
     </div>
 
     <div class="main-container">
@@ -907,41 +910,69 @@ const saveFlowerAsImage = async () => {
     // iOS 감지
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream
 
+    console.log('리포트 생성 시작 (iOS:', isIOS, ')')
+    console.log('reportCaptureRef:', reportCaptureRef.value)
+
+    // 로딩 모달 표시
+    loadingMessage.value = '리포트를 생성하는 중...'
+    showLoading.value = true
+
     // DOM이 완전히 렌더링될 때까지 대기
     await nextTick()
 
     // iOS에서는 이미지 로딩을 추가로 대기
     if (isIOS) {
-      await new Promise(resolve => setTimeout(resolve, 500))
+      await new Promise(resolve => setTimeout(resolve, 1000)) // iOS는 더 길게 대기
     }
 
-    const canvas = await html2canvas(reportCaptureRef.value, {
-      backgroundColor: '#FFF9E8', // 노트 테마 배경색
-      scale: isIOS ? 1 : REPORT_CAPTURE.SCALE, // iOS는 scale을 낮춰서 메모리 문제 방지
+    // iOS Safari 호환 설정
+    const canvasOptions = {
+      backgroundColor: '#FFF9E8',
+      scale: isIOS ? 0.8 : REPORT_CAPTURE.SCALE, // iOS는 scale을 더 낮춤
       useCORS: true,
-      allowTaint: true, // iOS에서 cross-origin 이미지 허용
-      logging: true, // iOS 디버깅용 로그 활성화
-      width: REPORT_CAPTURE.WIDTH,
-      windowWidth: REPORT_CAPTURE.WIDTH,
-      imageTimeout: 15000, // iOS에서 이미지 로딩 시간 증가
-      foreignObjectRendering: false // iOS Safari 호환성 개선
-    })
+      allowTaint: false, // allowTaint와 useCORS 충돌 방지
+      logging: isIOS, // iOS에서만 로그 활성화
+      width: isIOS ? 600 : REPORT_CAPTURE.WIDTH, // iOS는 더 작은 너비
+      windowWidth: isIOS ? 600 : REPORT_CAPTURE.WIDTH,
+      imageTimeout: 20000,
+      foreignObjectRendering: false,
+      removeContainer: true // 렌더링 후 임시 컨테이너 제거
+    }
+
+    console.log('html2canvas 옵션:', canvasOptions)
+
+    const canvas = await html2canvas(reportCaptureRef.value, canvasOptions)
+
+    console.log('캔버스 생성 완료:', canvas.width, 'x', canvas.height)
 
     // 캔버스를 Data URL로 변환하여 미리보기에 표시
-    previewImageUrl.value = canvas.toDataURL('image/png', 0.95) // iOS 메모리 절약을 위해 품질 조정
+    const quality = isIOS ? 0.8 : 0.95 // iOS는 품질을 더 낮춤
+    previewImageUrl.value = canvas.toDataURL('image/png', quality)
+
+    console.log('이미지 데이터 생성 완료')
+
+    // 로딩 모달 숨김
+    showLoading.value = false
+
+    // 미리보기 모달 표시
     showImagePreview.value = true
 
     console.log('이미지 생성 성공 (iOS:', isIOS, ')')
   } catch (error) {
     console.error('이미지 저장 에러:', error)
-    console.error('에러 상세:', error.message, error.stack)
+    console.error('에러 타입:', error.name)
+    console.error('에러 메시지:', error.message)
+    console.error('에러 스택:', error.stack)
+
+    // 로딩 모달 숨김
+    showLoading.value = false
 
     // iOS에서 더 명확한 에러 메시지
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream
     if (isIOS) {
-      showCustomAlert('iOS에서 이미지 생성 실패. 페이지를 새로고침 후 다시 시도해주세요.', 'error')
+      showCustomAlert(`iOS에서 이미지 생성 실패했습니다.\n에러: ${error.message}\n\n페이지를 새로고침 후 다시 시도해주세요.`, 'error')
     } else {
-      showCustomAlert('이미지 저장에 실패했습니다.', 'error')
+      showCustomAlert(`이미지 저장에 실패했습니다.\n에러: ${error.message}`, 'error')
     }
   }
 }

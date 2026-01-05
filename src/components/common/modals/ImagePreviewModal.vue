@@ -8,8 +8,7 @@
         </button>
       </div>
       <div class="image-preview-body">
-        <img :src="imageUrl" alt="일기 리포트 미리보기" class="preview-image" loading="lazy" />
-
+        <!-- 안내 문구 -->
         <div class="image-preview-info">
           <p class="text-sm text-gray-600">
             <strong>iPhone 사용자:</strong> 이미지를 길게 눌러 저장하세요
@@ -18,10 +17,15 @@
             <strong>데스크톱/안드로이드:</strong> 아래 버튼으로 다운로드하세요
           </p>
         </div>
+
+        <!-- 다운로드 버튼 -->
         <button class="download-btn" @click="$emit('download')">
           <ArrowDownTrayIcon class="w-5 h-5 mr-2" />
           이미지 다운로드
         </button>
+
+        <!-- 이미지 (전체 너비) -->
+        <img :src="imageUrl" alt="일기 리포트 미리보기" class="preview-image" loading="lazy" />
       </div>
     </div>
   </div>
