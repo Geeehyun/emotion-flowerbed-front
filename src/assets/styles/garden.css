@@ -4792,6 +4792,7 @@
   height: 500px;
   overflow-y: auto;
   padding-right: 5px;
+  padding-top: 5px;
 }
 
 .letter-item {
