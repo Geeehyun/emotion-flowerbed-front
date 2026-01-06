@@ -5,9 +5,14 @@
     @close="handleClose"
   >
     <template #header>
-      <div>
-        <h2 class="text-xl font-bold text-gray-800">{{ letter?.title }}</h2>
-        <p class="text-sm text-gray-500 mt-1">{{ letter?.period }}</p>
+      <div class="letter-detail-header">
+        <button @click="handleBackToList" class="back-to-list-btn">
+          ← 목록으로
+        </button>
+        <div class="letter-header-info">
+          <h2 class="text-xl font-bold text-gray-800">{{ letter?.title }}</h2>
+          <p class="text-sm text-gray-500 mt-1">{{ letter?.period }}</p>
+        </div>
       </div>
     </template>
 
@@ -222,7 +227,7 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['update:modelValue', 'close', 'open-diary'])
+const emit = defineEmits(['update:modelValue', 'close', 'open-diary', 'back-to-list'])
 
 const isOpen = computed({
   get: () => props.modelValue,
@@ -231,6 +236,10 @@ const isOpen = computed({
 
 const handleClose = () => {
   emit('close')
+}
+
+const handleBackToList = () => {
+  emit('back-to-list')
 }
 
 const chartCanvas = ref(null)

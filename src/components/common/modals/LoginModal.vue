@@ -93,6 +93,11 @@ const handleSubmit = async () => {
       localStorage.setItem('refreshToken', data.refreshToken)
     }
 
+    // userType 저장
+    if (data.userType) {
+      localStorage.setItem('userType', data.userType)
+    }
+
     // 인증 상태 업데이트
     window.setAuth(true)
 

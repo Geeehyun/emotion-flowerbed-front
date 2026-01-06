@@ -203,6 +203,7 @@
       :letter="selectedLetter"
       @close="showLetterDetail = false"
       @open-diary="handleOpenDiaryFromLetter"
+      @back-to-list="handleBackToLetterList"
     />
 
     <!-- 감정 무드미터 가이드 모달 -->
@@ -358,6 +359,8 @@ const dragState = ref({
 
 // 일기 데이터 - API에서 로드됨
 const diaryData = ref({})
+// 레터에서 직접 조회한 일기 데이터 (화단 데이터와 분리)
+const directDiary = ref(null)
 
 // 현재 일기의 상세 꽃 정보
 const currentFlowerDetail = computed(() => {
@@ -472,6 +475,11 @@ const getEmotionNameKr = (day) => {
 
 // Computed
 const currentDiary = computed(() => {
+  // 레터에서 직접 조회한 일기가 있으면 우선 사용 (화단 데이터와 분리)
+  if (directDiary.value) {
+    return directDiary.value
+  }
+  // 화단에서 선택한 일기
   return currentDay.value ? diaryData.value[currentDay.value] : null
 })
 
@@ -796,6 +804,7 @@ const closeDiaryModal = () => {
   showDiaryModal.value = false
   currentDay.value = null
   isFlipped.value = false // 뒤집기 상태 초기화
+  directDiary.value = null // 레터에서 조회한 일기 데이터 초기화
 }
 
 // 일기 모달 뒤집기
@@ -1425,9 +1434,25 @@ const handleOpenDiaryFromLetter = async (diaryId) => {
     // 일기 상세 조회 API 호출
     const diary = await diaryApi.getDiaryDetail(diaryId)
 
-    // 일기가 존재하면 모달 데이터 설정
-    currentDiary.value = diary
-    currentDay.value = dateUtils.extractDay(diary.diaryDate) // 'YYYY-MM-DD'에서 일(DD) 추출
+    // API 응답 데이터를 화면 형식으로 변환하여 directDiary에 저장
+    const diaryDate = new Date(diary.diaryDate)
+    const day = diaryDate.getDate()
+    const month = diaryDate.getMonth() + 1
+
+    directDiary.value = {
+      id: diary.id,
+      date: `${month}월 ${day}일`,
+      emotion: diary.coreEmotion,
+      content: diary.content,
+      summary: diary.summary,
+      flower: diary.flower,
+      floriography: diary.floriography,
+      emotions: diary.emotions || [],
+      reason: diary.reason || '',
+      flowerDetail: diary.flowerDetail || null
+    }
+
+    currentDay.value = day // 일(DD) 설정 (currentDiary computed에서 사용)
 
     // 일기 모달 열기
     showDiaryModal.value = true
@@ -1473,6 +1498,13 @@ const handleSelectLetter = async (letter) => {
     alertType.value = 'error'
     alertMessage.value = '레터를 불러오는 중 문제가 발생했습니다.'
   }
+}
+
+// 레터 상세에서 목록으로 돌아가기
+const handleBackToLetterList = () => {
+  showLetterDetail.value = false
+  showLetterList.value = true
+  directDiary.value = null // 레터에서 조회한 일기 데이터 초기화
 }
 
 // ESC 키로 모달 닫기

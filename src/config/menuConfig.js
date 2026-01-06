@@ -17,13 +17,13 @@ export const menuItems = [
   },
   {
     id: 'encyclopedia',
-    label: '나의 감정도감',
+    label: '나의 감정 도감',
     icon: BookOpenIcon,
     active: false
   },
   {
     id: 'write',
-    label: '감정일기 작성',
+    label: '감정 일기 작성',
     icon: PencilSquareIcon,
     active: false
   },

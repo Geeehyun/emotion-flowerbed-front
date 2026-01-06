@@ -433,10 +433,10 @@
 /* 격자 그리드 - 고정 레이어 구조 */
 .flower-grid {
   position: absolute;
-  top: 12%;
+  top: 13%;
   left: 8%;
   width: 84%;
-  height: 64%;
+  height: 63%;
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   grid-template-rows: repeat(5, 1fr);
@@ -3993,10 +3993,9 @@
 }
 
 .detail-flower-image {
-  width: 100%;
+  width: 70%;
   height: auto;
   border-radius: 16px;
-  /* 수채화 이미지 자체에 그림자가 있어서 box-shadow 제거 */
 }
 
 .detail-flower-image.silhouette {
@@ -7039,5 +7038,48 @@
   .area-activities {
     grid-template-columns: repeat(2, 1fr);
   }
+}
+
+/* ============================================
+   레터 상세 모달 - 목록으로 버튼
+============================================ */
+.letter-detail-header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.back-to-list-btn {
+  align-self: flex-start;
+  background: transparent;
+  border: 2px solid #E8CD8E;
+  border-radius: 12px;
+  padding: 6px 12px;
+  color: #8B7355;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.back-to-list-btn:hover {
+  background: #FFF9E6;
+  border-color: #D4B87A;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(139, 115, 85, 0.2);
+}
+
+.back-to-list-btn:active {
+  transform: translateY(0);
+}
+
+.letter-header-info {
+  width: 100%;
 }
 

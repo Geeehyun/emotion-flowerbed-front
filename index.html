@@ -6,29 +6,53 @@
     <title>나의 감정 화단 - 감정을 꽃으로 피우다</title>
 
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="/src/assets/images/favicon/favicon.ico" />
-    <link rel="icon" type="image/png" sizes="16x16" href="/src/assets/images/favicon/favicon-16x16.png" />
-    <link rel="icon" type="image/png" sizes="32x32" href="/src/assets/images/favicon/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="96x96" href="/src/assets/images/favicon/favicon-96x96.png" />
+    <link rel="icon" type="image/x-icon" href="/public/favicon/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/public/favicon/favicon-16x16.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/public/favicon/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="96x96" href="/public/favicon/favicon-96x96.png" />
 
     <!-- Apple Touch Icon -->
-    <link rel="apple-touch-icon" sizes="57x57" href="/src/assets/images/favicon/apple-icon-57x57.png" />
-    <link rel="apple-touch-icon" sizes="60x60" href="/src/assets/images/favicon/apple-icon-60x60.png" />
-    <link rel="apple-touch-icon" sizes="72x72" href="/src/assets/images/favicon/apple-icon-72x72.png" />
-    <link rel="apple-touch-icon" sizes="76x76" href="/src/assets/images/favicon/apple-icon-76x76.png" />
-    <link rel="apple-touch-icon" sizes="114x114" href="/src/assets/images/favicon/apple-icon-114x114.png" />
-    <link rel="apple-touch-icon" sizes="120x120" href="/src/assets/images/favicon/apple-icon-120x120.png" />
-    <link rel="apple-touch-icon" sizes="144x144" href="/src/assets/images/favicon/apple-icon-144x144.png" />
-    <link rel="apple-touch-icon" sizes="152x152" href="/src/assets/images/favicon/apple-icon-152x152.png" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/src/assets/images/favicon/apple-icon-180x180.png" />
+    <link rel="apple-touch-icon" sizes="57x57" href="/public/favicon/apple-icon-57x57.png" />
+    <link rel="apple-touch-icon" sizes="60x60" href="/public/favicon/apple-icon-60x60.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="/public/favicon/apple-icon-72x72.png" />
+    <link rel="apple-touch-icon" sizes="76x76" href="/public/favicon/apple-icon-76x76.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="/public/favicon/apple-icon-114x114.png" />
+    <link rel="apple-touch-icon" sizes="120x120" href="/public/favicon/apple-icon-120x120.png" />
+    <link rel="apple-touch-icon" sizes="144x144" href="/public/favicon/apple-icon-144x144.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="/public/favicon/apple-icon-152x152.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/public/favicon/apple-icon-180x180.png" />
 
     <!-- Android Chrome Icon -->
-    <link rel="icon" type="image/png" sizes="192x192" href="/src/assets/images/favicon/android-icon-192x192.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/public/favicon/android-icon-192x192.png" />
 
     <!-- MS Tile Icon -->
     <meta name="msapplication-TileColor" content="#FFE9AE" />
-    <meta name="msapplication-TileImage" content="/src/assets/images/favicon/ms-icon-144x144.png" />
+    <meta name="msapplication-TileImage" content="/public/favicon/ms-icon-144x144.png" />
     <meta name="theme-color" content="#FFE9AE" />
+
+    <!-- SEO 기본 메타 태그 -->
+    <meta name="description" content="당신의 감정을 화단으로 가꿔보세요! 일기를 쓰면 AI가 감정을 분석해 꽃으로 피워드립니다." />
+    <meta name="keywords" content="감정 일기, 감정 화단, 감정 기록, AI 감정 분석, 감정 꽃" />
+    <meta name="author" content="감정화단" />
+
+    <!-- Open Graph (Facebook, KakaoTalk 등) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://emotion-flowerbed.my/" />
+    <meta property="og:site_name" content="감정화단" />
+    <meta property="og:title" content="감정화단 - 감정을 꽃으로 피우다" />
+    <meta property="og:description" content="당신의 감정을 화단으로 가꿔보세요! 일기를 쓰면 AI가 감정을 분석해 꽃으로 피워드립니다." />
+    <meta property="og:image" content="https://emotion-flowerbed.my/logos/preview_thumbnail.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="감정화단 - 나의 감정 정원" />
+    <meta property="og:locale" content="ko_KR" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="감정화단 - 감정을 꽃으로 피우다" />
+    <meta name="twitter:description" content="당신의 감정을 화단으로 가꿔보세요! 일기를 쓰면 AI가 감정을 분석해 꽃으로 피워드립니다." />
+    <meta name="twitter:image" content="https://emotion-flowerbed.my/logos/preview_thumbnail.png" />
+    <meta name="twitter:image:alt" content="감정화단 - 나의 감정 정원" />
   </head>
   <body>
     <div id="app"></div>
@@ -37,20 +61,20 @@
     <!-- 모바일 디버깅 콘솔 (Eruda) - 개발 환경에서만 사용 -->
     <script>
       // URL에 ?debug=true가 있을 때만 Eruda 활성화
-      (function() {
+      (function () {
         const urlParams = new URLSearchParams(window.location.search);
-        const isDebug = urlParams.get('debug') === 'true';
+        const isDebug = urlParams.get("debug") === "true";
 
         if (isDebug) {
-          const script = document.createElement('script');
+          const script = document.createElement("script");
           script.src = "https://cdn.jsdelivr.net/npm/eruda";
           document.body.appendChild(script);
           script.onload = function () {
             eruda.init();
-            console.log('🔧 Eruda 모바일 콘솔이 활성화되었습니다!');
+            console.log("🔧 Eruda 모바일 콘솔이 활성화되었습니다!");
           };
-          script.onerror = function() {
-            console.error('❌ Eruda 로드 실패');
+          script.onerror = function () {
+            console.error("❌ Eruda 로드 실패");
           };
         }
       })();
