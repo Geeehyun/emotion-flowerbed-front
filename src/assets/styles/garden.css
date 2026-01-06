@@ -433,10 +433,10 @@
 /* 격자 그리드 - 고정 레이어 구조 */
 .flower-grid {
   position: absolute;
-  top: 9%;
+  top: 12%;
   left: 8%;
   width: 84%;
-  height: 68%;
+  height: 64%;
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   grid-template-rows: repeat(5, 1fr);
@@ -6523,13 +6523,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 80px;
 }
 
 .activity-icon img {
   width: 80px;
-  height: 80px;
-  object-fit: contain;
+  height: auto;
 }
 
 .activity-name {
@@ -6668,12 +6666,11 @@
 
   .activity-icon {
     font-size: 40px;
-    min-height: 100px;
   }
 
   .activity-icon img {
     width: 100px;
-    height: 100px;
+    height: auto;
   }
 
   .activity-name {

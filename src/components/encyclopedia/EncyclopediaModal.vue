@@ -16,7 +16,7 @@
           title="감정 무드미터란?"
         >
           <span class="guide-icon">💡</span>
-          <span class="guide-text">무드미터란?</span>
+          <span class="guide-text">감정 무드미터란?</span>
         </button>
       </div>
     </template>

@@ -113,7 +113,7 @@
                 <!-- 카드 4: 감정화단 사용법 -->
                 <div class="guide-card section-usage">
                   <div class="card-emoji">✏️</div>
-                  <h3 class="card-title">감정화단은<br />이렇게 사용해요!</h3>
+                  <h3 class="card-title">감정 화단은<br />이렇게 사용해요!</h3>
                   <div class="steps-container">
                     <div class="cute-step">
                       <div class="step-circle">1</div>

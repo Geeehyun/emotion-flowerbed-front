@@ -4,7 +4,7 @@
       <div class="modal-header">
         <div>
           <h2 class="text-2xl font-bold text-gray-800">{{ date }}</h2>
-          <p class="text-sm text-gray-500 mt-1">오늘 하루를 기록해보세요</p>
+          <p class="text-sm text-gray-500 mt-1">오늘 하루를 기록해 보세요</p>
         </div>
         <button class="close-btn" @click="$emit('close')">
           <XMarkIcon class="w-6 h-6" />
