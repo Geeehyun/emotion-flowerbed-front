@@ -708,7 +708,7 @@ const saveDiary = async (isTest = true, area = null) => {
   }
 
   console.log(`${currentDay.value}일 일기 저장:`, diaryContent.value)
-  console.log(`분석 모드: ${isTest ? '테스트(랜덤)' : 'Claude AI'}`)
+  console.log(`분석 모드: ${isTest ? '테스트(랜덤)' : 'AI LLM'}`)
   if (area) console.log(`선택 영역: ${area}`)
 
   // 로딩 화면 표시
@@ -725,16 +725,24 @@ const saveDiary = async (isTest = true, area = null) => {
       content: diaryContent.value
     })
 
+    // 2. 일기 저장된 데이터로 우선 표시 (분석 후 한번 더 추가)
+    diaryData.value[currentDay.value] = {
+      id: createdDiary.id,
+      date: `${currentMonth.value}월 ${currentDay.value}일`,
+      content: createdDiary.content,
+      isAnalyzed: false
+    }
+
     console.log('일기 생성 성공:', createdDiary)
 
-    // 2. 감정 분석 API 호출 (테스트 or Claude AI)
+    // 3. 감정 분석 API 호출 (테스트 or Claude AI)
     const analyzedDiary = isTest
       ? await diaryApi.analyzeDiaryTest(createdDiary.diaryId, area)
       : await diaryApi.analyzeDiary(createdDiary.diaryId)
 
     console.log('감정 분석 결과:', analyzedDiary)
 
-    // 3. 화면에 표시
+    // 4. 화면에 표시
     diaryData.value[currentDay.value] = {
       id: analyzedDiary.id,
       date: `${currentMonth.value}월 ${currentDay.value}일`,
@@ -749,7 +757,7 @@ const saveDiary = async (isTest = true, area = null) => {
       flowerDetail: analyzedDiary.flowerDetail || null
     }
 
-    // 4. 감정 조절 팁 체크 및 표시
+    // 5. 감정 조절 팁 체크 및 표시
     if (analyzedDiary.showEmotionControlTip && analyzedDiary.emotionControlTipCode) {
       try {
         // emotionControlTipCode로 활동 조회
