@@ -409,7 +409,7 @@ const currentEmotionName = computed(() => {
 
 // 분석 안된 일기인지 확인
 const isUnanalyzed = computed(() => {
-  return currentDiary.value && !currentDiary.value.emotions
+  return !currentDiary.value || !currentDiary.value.isAnalyzed
 })
 
 // 획득한 감정 목록 (전체 기간 기준 - API 데이터)
@@ -551,6 +551,7 @@ const loadMonthlyDiaries = async () => {
       diaryData.value[day] = {
         id: diary.id,
         date: `${currentMonth.value}월 ${day}일`,
+        isAnalyzed: diary.isAnalyzed,
         emotion: diary.coreEmotion,
         content: diary.content,
         summary: diary.summary,
@@ -739,11 +740,12 @@ const saveDiary = async (isTest = true, area = null) => {
       date: `${currentMonth.value}월 ${currentDay.value}일`,
       emotion: analyzedDiary.coreEmotion, // 영어 코드 (JOY, PEACE 등)
       content: analyzedDiary.content,
+      isAnalyzed: analyzedDiary.isAnalyzed,
       summary: analyzedDiary.summary,
       flower: analyzedDiary.flower,
       floriography: analyzedDiary.floriography,
       emotions: analyzedDiary.emotions || [],
-      reason: analyzedDiary.reason || '',
+      reason: analyzedDiary.emotionReason || '',
       flowerDetail: analyzedDiary.flowerDetail || null
     }
 

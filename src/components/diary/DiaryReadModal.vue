@@ -33,21 +33,8 @@
 
             <div class="diary-content">{{ diary?.content }}</div>
 
-            <!-- 분석 안된 일기: 재분석/삭제 버튼 -->
-            <div class="unanalyzed-actions" v-if="isUnanalyzed">
-              <div class="unanalyzed-message">
-                <div class="unanalyzed-icon">🤔</div>
-                <div class="unanalyzed-text">아직 감정 분석이 완료되지 않았어요</div>
-              </div>
-              <div class="action-buttons">
-                <button class="reanalyze-btn test-btn" @click="$emit('reanalyze-test')">테스트 분석</button>
-                <button class="reanalyze-btn" @click="$emit('reanalyze')">AI 분석</button>
-                <button class="delete-btn" @click="$emit('delete')">삭제</button>
-              </div>
-            </div>
-
             <!-- AI 분석 정보 -->
-            <div class="ai-analysis-section" v-if="diary && !isUnanalyzed">
+            <div class="ai-analysis-section" v-if="diary">
               <h3 class="analysis-title">AI 분석 정보</h3>
 
               <!-- 요약 -->
@@ -77,6 +64,25 @@
                     :options="emotionChartOptions"
                   />
                 </div>
+              </div>
+            </div>
+
+            <!-- 분석 안된 일기: 재분석/삭제 버튼 -->
+            <div class="unanalyzed-actions">
+              <div class="unanalyzed-message"  v-if="isUnanalyzed">
+                <div class="unanalyzed-header">
+                  <InformationCircleIcon  class="w-6 h-6" />
+                  일기작성 TIP
+                </div>
+                <div class="unanalyzed-content">
+                  너무 짧거나 의미없는 문장만으로 작성된 일기는 감정을 분석할 수 없습니다.<br>
+                  오늘 있었던 일을 문장으로 한두 줄 이상으로 적어보세요.
+                </div>
+              </div>
+              <div class="action-buttons">
+                <!-- <button class="reanalyze-btn test-btn" @click="$emit('reanalyze-test')">테스트 분석</button> -->
+                <!--<button class="reanalyze-btn" @click="$emit('reanalyze')">수정</button>-->
+                <button class="delete-btn" @click="$emit('delete')">삭제</button>
               </div>
             </div>
           </div>
@@ -186,7 +192,7 @@
 
 <script setup>
 import { computed } from 'vue'
-import { ArrowPathIcon, XMarkIcon, ArrowDownTrayIcon } from '@heroicons/vue/24/outline'
+import { ArrowPathIcon, XMarkIcon, ArrowDownTrayIcon, InformationCircleIcon } from '@heroicons/vue/24/outline'
 import { getEmotionData, UNKNOWN_EMOTION } from '@/utils/flowerMapper.js'
 import LazyImage from '@/components/common/LazyImage.vue'
 import { Bar } from 'vue-chartjs'
