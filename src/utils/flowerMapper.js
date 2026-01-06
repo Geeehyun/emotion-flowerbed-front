@@ -11,11 +11,11 @@
  */
 export function get3dImageFromDetail(imageFile3d) {
   if (!imageFile3d) {
-    return new URL(`../assets/images/flowers/3d/unknown.png`, import.meta.url).href
+    return `/flowers/3d/unknown.png`
   }
   // 확장자를 .png로 강제 변경
   const fileName = imageFile3d.replace(/\.(jpg|jpeg|gif)$/i, '.png')
-  return new URL(`../assets/images/flowers/3d/${fileName}`, import.meta.url).href
+  return `/flowers/3d/${fileName}`
 }
 
 /**
@@ -25,11 +25,11 @@ export function get3dImageFromDetail(imageFile3d) {
  */
 export function get3dPotImageFromDetail(imageFile3d) {
   if (!imageFile3d) {
-    return new URL(`../assets/images/flowers/3d_pot/unknown.png`, import.meta.url).href
+    return `/flowers/3d_pot/unknown.png`
   }
   // 확장자를 .png로 강제 변경
   const fileName = imageFile3d.replace(/\.(jpg|jpeg|gif)$/i, '.png')
-  return new URL(`../assets/images/flowers/3d_pot/${fileName}`, import.meta.url).href
+  return `/flowers/3d_pot/${fileName}`
 }
 
 /**
@@ -39,11 +39,11 @@ export function get3dPotImageFromDetail(imageFile3d) {
  */
 export function getRealisticImageFromDetail(imageFileRealistic) {
   if (!imageFileRealistic) {
-    return new URL(`../assets/images/flowers/realistic/unknown.png`, import.meta.url).href
+    return `/flowers/realistic/unknown.png`
   }
   // 확장자를 .png로 강제 변경
   const fileName = imageFileRealistic.replace(/\.(jpg|jpeg|gif)$/i, '.png')
-  return new URL(`../assets/images/flowers/realistic/${fileName}`, import.meta.url).href
+  return `/flowers/realistic/${fileName}`
 }
 
 /**

@@ -95,7 +95,7 @@
         <div class="month-display" @click="openDatePicker">{{ currentYear }}년 {{ currentMonth }}월</div>
         <button class="month-nav" @click="changeMonth(1)">▶</button>
         <button class="write-diary-btn" @click="openWriteDiaryWithDatePicker" title="일기 작성">
-          <img src="../assets/images/trowel.png" alt="일기 작성" class="trowel-icon" loading="lazy" />
+          <img src="/icons/trowel.png" alt="일기 작성" class="trowel-icon" loading="lazy" />
         </button>
       </div>
     </div>

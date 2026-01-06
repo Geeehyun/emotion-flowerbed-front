@@ -30,7 +30,7 @@
         >
           <div class="letter-icon">
             <img
-              src="@/assets/images/letterbox.png"
+              src="/icons/letterbox.png"
               alt="편지"
               class="letterbox-icon"
               loading="lazy"

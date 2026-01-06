@@ -141,14 +141,10 @@ const isOpen = computed({
   }
 })
 
-// assets 폴더의 모든 이미지를 자동으로 로드
-const images = import.meta.glob('@/assets/images/emtion-control/*', { eager: true })
-
 // 파일명으로 이미지 URL 가져오기
 const getImageUrl = (filename) => {
   if (!filename) return null
-  const key = `/src/assets/images/emtion-control/${filename}`
-  return images[key]?.default || null
+  return `/emotion-control/${filename}`
 }
 
 // API 응답을 UI 형식으로 변환

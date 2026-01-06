@@ -239,12 +239,7 @@ let chartInstance = null
 // 화분 이미지 가져오기
 const getFlowerPotImage = (flowerKey) => {
   if (!flowerKey) return ''
-  try {
-    return new URL(`../../assets/images/flowers/3d_pot/${flowerKey}.png`, import.meta.url).href
-  } catch (error) {
-    console.error('화분 이미지 로드 실패:', flowerKey, error)
-    return ''
-  }
+  return `/flowers/3d_pot/${flowerKey}.png`
 }
 
 // 꽃 클릭 핸들러 (일기로 이동)

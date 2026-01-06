@@ -7,7 +7,7 @@
         <h1 class="service-title">나의 감정 화단</h1>
         <p class="service-subtitle">My Emotion Flowerbed</p>
         <div class="logo-placeholder">
-          <img src="@/assets/images/logo.png" alt="나의 감정 화단 로고" class="logo-image" loading="lazy" />
+          <img src="/logos/logo.png" alt="나의 감정 화단 로고" class="logo-image" loading="lazy" />
         </div>
       </div>
 

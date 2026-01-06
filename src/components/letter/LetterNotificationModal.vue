@@ -4,7 +4,7 @@
       <div class="letter-notification-content">
         <!-- 우체통 이미지 -->
         <div class="letterbox-animation flex justify-around">
-          <img src="@/assets/images/letterbox.png" alt="우체통" class="letterbox-img" loading="lazy" />
+          <img src="/icons/letterbox.png" alt="우체통" class="letterbox-img" loading="lazy" />
         </div>
 
         <!-- 메시지 -->
