@@ -5,12 +5,19 @@ const API_BASE_URL = import.meta.env.VITE_APP_API_URL || '/api/v1'
 /**
  * 로그인
  * @param {object} credentials - { userId: string, password: string }
- * @returns {Promise} - { accessToken: string, refreshToken: string }
+ * @returns {Promise} - { accessToken: string, refreshToken: string, userType: string }
+ * userType: 'STUDENT' | 'TEACHER'
  */
 export async function login(credentials) {
   try {
     const response = await axios.post(`${API_BASE_URL}/auth/login`, credentials)
-    return response.data
+    const data = response.data
+
+    // API 응답의 userTypeCd를 userType으로 변환
+    return {
+      ...data,
+      userType: data.userTypeCd
+    }
   } catch (error) {
     if (error.response?.status === 401) {
       throw new Error('아이디 또는 비밀번호가 잘못되었습니다.')

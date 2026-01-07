@@ -44,8 +44,11 @@
           <span v-else>로그인 중...</span>
         </button>
 
-        <button type="button" class="test-login-btn" @click="handleTestLogin" :disabled="isLoading">
+        <button type="button" class="test-login-btn" data-type="STUDENT" @click="handleTestLogin" :disabled="isLoading">
           테스트 로그인 (student1)
+        </button>
+        <button type="button" class="test-login-btn" data-type="TEACHER" @click="handleTestLogin" :disabled="isLoading">
+          테스트 로그인 (teacher1)
         </button>
       </form>
     </template>
@@ -111,10 +114,13 @@ const handleSubmit = async () => {
   }
 }
 
-const handleTestLogin = () => {
+const handleTestLogin = (event) => {
+  const target = event.target;
+  const type = target.dataset.type;
+  console.log(type);
   // 환경변수에서 테스트 계정 정보 가져오기
-  loginForm.value.userId = import.meta.env.VITE_TEST_USER_ID || 'student1'
-  loginForm.value.password = import.meta.env.VITE_TEST_PASSWORD || '1234'
+  loginForm.value.userId = import.meta.env[`VITE_TEST_${type}_USER_ID`];
+  loginForm.value.password = import.meta.env[`VITE_TEST_${type}_PASSWORD`];
   handleSubmit()
 }
 

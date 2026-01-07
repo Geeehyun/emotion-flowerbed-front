@@ -8,7 +8,28 @@
 # 코드 구현 지침
 
 프로젝트 코드를 파악하여 유사하게 구현해주세요.
-CSS 파일의 경우 내부 스타일 시트 방식이나 인라인 스타일 방식이 아닌, '\src\assets\styles\garden.css' 파일에 주석으로 영역을 표시 후 추가해 주세요.
+
+## CSS 파일 관리 규칙
+
+CSS 파일의 경우 내부 스타일 시트 방식이나 인라인 스타일 방식이 아닌, 각 뷰에 맞는 CSS 파일에 작성해 주세요:
+
+### 학생 화면 (Garden.vue)
+- **파일**: `\src\assets\styles\garden.css`
+- **규칙**: 주석으로 영역을 표시 후 추가
+- **네이밍**: 일반 클래스명 사용 (예: `.card`, `.button`)
+
+### 선생님 화면 (Teacher.vue)
+- **파일**: `\src\assets\styles\teacher.css`
+- **규칙**: **모든 최상위 클래스는 반드시 `teacher-` prefix 사용**
+- **네이밍 예시**:
+  - ✅ `.teacher-header`, `.teacher-card`, `.teacher-button`
+  - ❌ `.header`, `.card`, `.button` (garden.css와 충돌)
+- **하위 요소**: `.teacher-card .card-title` 형태는 허용
+- **이유**: garden.css와 teacher.css의 클래스명 충돌 방지
+
+### Landing 화면 (Landing.vue)
+- **파일**: `\src\assets\styles\garden.css` (공유)
+- **규칙**: 주석으로 영역을 표시 후 추가
 
 # 작업 진행 지침
 
