@@ -6,11 +6,7 @@
         <!-- 메뉴 헤더 -->
         <div class="mobile-menu-header">
           <div class="mobile-menu-logo">
-            <div class="logo-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" />
-              </svg>
-            </div>
+            <img src="/logos/logo.png" alt="감정 화단 로고" class="logo-image">
             <span class="logo-text">감정 화단</span>
           </div>
           <button @click="isMobileMenuOpen = false" class="mobile-menu-close">
@@ -42,7 +38,7 @@
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
             </svg>
-            <span>학급 감정 지도</span>
+            <span>학급 감정 화단</span>
           </a>
 
           <a
@@ -84,11 +80,7 @@
     <aside class="teacher-sidebar" :class="{ collapsed: isCollapsed }">
       <div class="teacher-sidebar-header">
         <div class="sidebar-logo">
-          <div class="logo-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" />
-            </svg>
-          </div>
+          <img src="/logos/logo.png" alt="감정 화단 로고" class="logo-image">
           <span v-if="!isCollapsed" class="logo-text">감정 화단</span>
         </div>
         <button @click="isCollapsed = !isCollapsed" class="collapse-btn">
@@ -119,7 +111,7 @@
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
           </svg>
-          <span v-if="!isCollapsed">학급 감정 지도</span>
+          <span v-if="!isCollapsed">학급 감정 화단</span>
         </a>
 
         <a
@@ -327,7 +319,7 @@
           </div>
         </div>
 
-        <!-- 학급 감정 지도 뷰 -->
+        <!-- 학급 감정 화단 뷰 -->
         <div v-else-if="currentView === 'classMap'" class="classmap-view">
           <div class="classmap-header">
             <h2 class="classmap-title">학급 감정 흐름 (최근 1개월)</h2>
@@ -588,7 +580,7 @@ const viewTitle = computed(() => {
     case 'dashboard':
       return '오늘의 학급 현황'
     case 'classMap':
-      return '학급 감정 지도'
+      return '학급 감정 화단'
     case 'studentMap':
       return '학생별 상세 분석'
     default:
