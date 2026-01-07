@@ -364,10 +364,11 @@
 }
 
 .welcome-card {
-  background: white;
+  background: #FFFEF7;
   padding: 48px;
   border-radius: 16px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(93, 78, 55, 0.08);
+  border: 1px solid #E8D5B5;
   text-align: center;
   max-width: 800px;
   margin: 0 auto;
@@ -375,19 +376,19 @@
 
 .welcome-card h2 {
   font-size: 28px;
-  color: #1e293b;
+  color: #5D4E37;
   margin-bottom: 16px;
 }
 
 .welcome-card p {
   font-size: 16px;
-  color: #64748b;
+  color: #8B7355;
   margin-bottom: 8px;
 }
 
 .dev-note {
   font-size: 18px;
-  color: #94a3b8;
+  color: #A68B6A;
   margin-top: 24px;
 }
 
@@ -408,17 +409,17 @@
 }
 
 .section-card {
-  background: white;
+  background: #FFFEF7;
   padding: 24px;
   border-radius: 16px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  border: 1px solid #e2e8f0;
+  box-shadow: 0 2px 8px rgba(93, 78, 55, 0.08);
+  border: 1px solid #E8D5B5;
 }
 
 .teacher-section-title {
   font-size: 18px;
   font-weight: 700;
-  color: #1e293b;
+  color: #5D4E37;
   margin-bottom: 24px;
   display: flex;
   align-items: center;
@@ -428,7 +429,7 @@
 .teacher-section-title svg {
   width: 24px;
   height: 24px;
-  color: #6366f1;
+  color: #D2A679;
 }
 
 .distribution-content {
@@ -470,21 +471,21 @@
   width: 144px;
   height: 144px;
   border-radius: 50%;
-  background: white;
+  background: #FFFEF7;
 }
 
 .total-count {
   position: absolute;
   font-size: 32px;
   font-weight: 700;
-  color: #1e293b;
+  color: #5D4E37;
   z-index: 1;
 }
 
 .count-unit {
   font-size: 14px;
   font-weight: 400;
-  color: #64748b;
+  color: #8B7355;
 }
 
 /* 영역 통계 */
@@ -622,7 +623,7 @@
 .attention-title {
   font-size: 18px;
   font-weight: 700;
-  color: #1e293b;
+  color: #5D4E37;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -631,13 +632,13 @@
 .attention-title svg {
   width: 24px;
   height: 24px;
-  color: #ef4444;
+  color: #D32F2F;
 }
 
 .attention-card {
-  background: white;
+  background: #FFFEF7;
   border-radius: 12px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(93, 78, 55, 0.08);
   border-left: 4px solid;
   padding: 16px;
   display: flex;
@@ -647,11 +648,12 @@
 }
 
 .danger-card {
-  border-left-color: #ef4444;
+  border-left-color: #D32F2F;
+  background: #FFF9E8;
 }
 
 .attention-card-warning {
-  border-left-color: #f59e0b;
+  border-left-color: #D2A679;
 }
 
 .attention-card-content {
@@ -668,7 +670,7 @@
 .student-name {
   font-size: 18px;
   font-weight: 700;
-  color: #1e293b;
+  color: #5D4E37;
 }
 
 .danger-badge {
@@ -676,8 +678,8 @@
   border-radius: 6px;
   font-size: 12px;
   font-weight: 700;
-  background: #fef2f2;
-  color: #dc2626;
+  background: #FFE4E1;
+  color: #D32F2F;
 }
 
 .attention-badge {
@@ -685,28 +687,28 @@
   border-radius: 6px;
   font-size: 12px;
   font-weight: 700;
-  background: #fffbeb;
-  color: #f59e0b;
+  background: #FFF4E0;
+  color: #D2A679;
 }
 
 .danger-signal {
   font-size: 14px;
-  color: #64748b;
+  color: #8B7355;
   margin-bottom: 0;
 }
 
 .attention-reason {
   font-size: 14px;
-  color: #64748b;
+  color: #8B7355;
   margin-bottom: 0;
 }
 
 .detail-btn {
   padding: 6px 12px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #E8D5B5;
   border-radius: 8px;
-  background: white;
-  color: #64748b;
+  background: #FFFEF7;
+  color: #8B6F47;
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
@@ -715,25 +717,26 @@
 }
 
 .detail-btn:hover {
-  background: #f8fafc;
+  background: #FFF9E8;
+  border-color: #D2A679;
 }
 
 .danger-btn {
-  border-color: #fecaca;
-  color: #dc2626;
+  border-color: #D32F2F;
+  color: #D32F2F;
 }
 
 .danger-btn:hover {
-  background: #fef2f2;
+  background: #FFE4E1;
 }
 
 /* AI 어시스턴트 섹션 */
 .ai-assistant-section {
-  background: linear-gradient(135deg, #312e81 0%, #4c1d95 100%);
+  background: linear-gradient(135deg, #8B6F47 0%, #6F5835 100%);
   color: white;
   border-radius: 16px;
   padding: 24px;
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+  box-shadow: 0 4px 12px rgba(139, 111, 71, 0.3);
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -748,20 +751,20 @@
   right: 0;
   width: 128px;
   height: 128px;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.08);
   border-radius: 0 16px 0 100%;
 }
 
 .ai-assistant-title {
   font-size: 18px;
   font-weight: 700;
-  color: #e0e7ff;
+  color: #FFE4B5;
   z-index: 1;
 }
 
 .ai-analysis-card {
-  background: rgba(99, 102, 241, 0.3);
-  border: 1px solid rgba(99, 102, 241, 0.4);
+  background: rgba(210, 166, 121, 0.25);
+  border: 1px solid rgba(210, 166, 121, 0.3);
   border-radius: 12px;
   padding: 16px;
   backdrop-filter: blur(10px);
@@ -777,16 +780,16 @@
 
 .ai-analysis-text strong {
   font-weight: 700;
-  color: white;
+  color: #FFE4B5;
 }
 
 .highlight-yellow {
-  color: #fde047;
+  color: #FFE4B5;
 }
 
 .ai-recommendation-card {
-  background: rgba(99, 102, 241, 0.3);
-  border: 1px solid rgba(99, 102, 241, 0.4);
+  background: rgba(210, 166, 121, 0.25);
+  border: 1px solid rgba(210, 166, 121, 0.3);
   border-radius: 12px;
   padding: 16px;
   backdrop-filter: blur(10px);
@@ -796,7 +799,7 @@
 .recommendation-label {
   font-size: 12px;
   font-weight: 700;
-  color: #c7d2fe;
+  color: #FFF4E0;
   margin-bottom: 8px;
 }
 
@@ -815,7 +818,7 @@
 
 .play-btn {
   background: white;
-  color: #312e81;
+  color: #6F5835;
   border: none;
   padding: 6px 16px;
   border-radius: 20px;
@@ -827,7 +830,7 @@
 }
 
 .play-btn:hover {
-  background: #e0e7ff;
+  background: #FFE4B5;
   transform: scale(1.05);
 }
 
@@ -852,13 +855,14 @@
 .classmap-title {
   font-size: 20px;
   font-weight: 700;
-  color: #1e293b;
+  color: #5D4E37;
 }
 
 .teacher-legend-group {
   display: flex;
   gap: 16px;
   font-size: 14px;
+  color: #8B7355;
 }
 
 .teacher-legend-item {
@@ -890,11 +894,11 @@
 }
 
 .trend-chart-container {
-  background: white;
+  background: #FFFEF7;
   padding: 24px;
   border-radius: 16px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  border: 1px solid #e2e8f0;
+  box-shadow: 0 2px 8px rgba(93, 78, 55, 0.08);
+  border: 1px solid #E8D5B5;
   min-height: 400px;
   position: relative;
 }
@@ -904,34 +908,34 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px dashed #e2e8f0;
+  border: 2px dashed #E8D5B5;
   border-radius: 12px;
-  background: #f8fafc;
+  background: #FFFBF0;
 }
 
 .chart-note {
   font-size: 16px;
-  color: #94a3b8;
+  color: #A68B6A;
   margin: 0;
 }
 
 .teacher-tip-card {
-  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+  background: linear-gradient(135deg, #FFFBF0 0%, #FFF4E0 100%);
   padding: 24px;
   border-radius: 16px;
-  border: 1px solid #bfdbfe;
+  border: 1px solid #E8D5B5;
 }
 
 .tip-card-title {
   font-size: 18px;
   font-weight: 700;
-  color: #1e40af;
+  color: #8B6F47;
   margin-bottom: 12px;
 }
 
 .tip-card-content {
   font-size: 14px;
-  color: #1e3a8a;
+  color: #5D4E37;
   line-height: 1.6;
   margin: 0;
 }
@@ -950,26 +954,26 @@
 /* 학생 목록 패널 */
 .student-list-panel {
   width: 33.333%;
-  background: white;
+  background: #FFFEF7;
   border-radius: 16px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(93, 78, 55, 0.08);
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #E8D5B5;
 }
 
 .student-list-header {
   padding: 16px;
-  background: #f8fafc;
-  border-bottom: 1px solid #e2e8f0;
+  background: #FFF9E8;
+  border-bottom: 1px solid #E8D5B5;
   position: relative;
 }
 
 .search-icon {
   width: 20px;
   height: 20px;
-  color: #94a3b8;
+  color: #A68B6A;
   position: absolute;
   left: 28px;
   top: 24px;
@@ -979,17 +983,22 @@
 .student-search-input {
   width: 100%;
   padding: 8px 12px 8px 36px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #E8D5B5;
   border-radius: 8px;
-  background: white;
+  background: #FFFEF7;
+  color: #5D4E37;
   font-size: 14px;
   outline: none;
   transition: all 0.2s;
 }
 
+.student-search-input::placeholder {
+  color: #A68B6A;
+}
+
 .student-search-input:focus {
-  border-color: #6366f1;
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+  border-color: #D2A679;
+  box-shadow: 0 0 0 3px rgba(210, 166, 121, 0.15);
 }
 
 .student-list-body {
@@ -1011,12 +1020,12 @@
 }
 
 .student-list-item:hover {
-  background: #f8fafc;
+  background: #FFF9E8;
 }
 
 .student-list-item.active {
-  background: #eef2ff;
-  border-left-color: #6366f1;
+  background: linear-gradient(135deg, #FFFBF0 0%, #FFF4E0 100%);
+  border-left-color: #D2A679;
 }
 
 .student-item-info {
@@ -1053,12 +1062,12 @@
 .student-item-name {
   font-weight: 700;
   font-size: 14px;
-  color: #1e293b;
+  color: #5D4E37;
 }
 
 .student-item-meta {
   font-size: 12px;
-  color: #94a3b8;
+  color: #A68B6A;
 }
 
 .student-status-dot {
@@ -1078,11 +1087,11 @@
 /* 학생 상세 패널 */
 .student-detail-panel {
   flex: 1;
-  background: white;
+  background: #FFFEF7;
   border-radius: 16px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(93, 78, 55, 0.08);
   overflow-y: auto;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #E8D5B5;
 }
 
 /* 빈 상태 */
@@ -1099,7 +1108,7 @@
 .teacher-empty-icon {
   width: 80px;
   height: 80px;
-  background: #f1f5f9;
+  background: #FFF9E8;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -1110,19 +1119,19 @@
 .teacher-empty-icon svg {
   width: 40px;
   height: 40px;
-  color: #94a3b8;
+  color: #A68B6A;
 }
 
 .teacher-empty-state h3 {
   font-size: 18px;
   font-weight: 700;
-  color: #64748b;
+  color: #8B7355;
   margin-bottom: 8px;
 }
 
 .teacher-empty-state p {
   font-size: 14px;
-  color: #94a3b8;
+  color: #A68B6A;
 }
 
 /* 레터 리스트 뷰 */
@@ -1137,13 +1146,13 @@
 .letter-list-header h2 {
   font-size: 24px;
   font-weight: 700;
-  color: #1e293b;
+  color: #5D4E37;
   margin-bottom: 8px;
 }
 
 .letter-list-header p {
   font-size: 14px;
-  color: #64748b;
+  color: #8B7355;
 }
 
 .letter-list-body {
@@ -1157,18 +1166,18 @@
   align-items: center;
   gap: 16px;
   padding: 20px;
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
+  background: #FFF9E8;
+  border: 1px solid #E8D5B5;
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .letter-list-item:hover {
-  background: #eef2ff;
-  border-color: #6366f1;
+  background: linear-gradient(135deg, #FFFBF0 0%, #FFF4E0 100%);
+  border-color: #D2A679;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.1);
+  box-shadow: 0 4px 12px rgba(210, 166, 121, 0.2);
 }
 
 .letter-item-icon {
@@ -1183,13 +1192,13 @@
 .letter-item-title {
   font-size: 16px;
   font-weight: 700;
-  color: #1e293b;
+  color: #5D4E37;
   margin-bottom: 4px;
 }
 
 .letter-item-period {
   font-size: 13px;
-  color: #64748b;
+  color: #8B7355;
   margin-bottom: 8px;
 }
 
@@ -1210,7 +1219,7 @@
 .letter-item-arrow {
   width: 20px;
   height: 20px;
-  color: #94a3b8;
+  color: #D2A679;
   flex-shrink: 0;
 }
 
@@ -1224,10 +1233,10 @@
   align-items: center;
   gap: 6px;
   padding: 8px 16px;
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
+  background: #FFF9E8;
+  border: 1px solid #E8D5B5;
   border-radius: 8px;
-  color: #64748b;
+  color: #8B6F47;
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
@@ -1236,9 +1245,9 @@
 }
 
 .teacher-back-to-list-btn:hover {
-  background: #eef2ff;
-  border-color: #6366f1;
-  color: #6366f1;
+  background: linear-gradient(135deg, #FFFBF0 0%, #FFF4E0 100%);
+  border-color: #D2A679;
+  color: #6F5835;
 }
 
 .teacher-back-to-list-btn svg {
@@ -1249,28 +1258,28 @@
 .teacher-letter-detail-content h2 {
   font-size: 24px;
   font-weight: 700;
-  color: #1e293b;
+  color: #5D4E37;
   margin-bottom: 8px;
 }
 
 .teacher-letter-detail-period {
   font-size: 14px;
-  color: #64748b;
+  color: #8B7355;
   margin-bottom: 24px;
 }
 
 .teacher-tip-section {
   margin-top: 32px;
   padding: 24px;
-  background: #eff6ff;
-  border: 1px solid #bfdbfe;
+  background: linear-gradient(135deg, #FFFBF0 0%, #FFF4E0 100%);
+  border: 1px solid #E8D5B5;
   border-radius: 12px;
 }
 
 .teacher-tip-section h3 {
   font-size: 18px;
   font-weight: 700;
-  color: #1e40af;
+  color: #8B6F47;
   margin-bottom: 16px;
 }
 
