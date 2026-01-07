@@ -441,6 +441,32 @@
   gap: 16px;
 }
 
+.moodmeter-info-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #C4915C 0%, #8B6F47 100%);
+  border: none;
+  color: white;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 2px 8px rgba(196, 145, 92, 0.3);
+}
+
+.moodmeter-info-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(196, 145, 92, 0.4);
+}
+
+.moodmeter-info-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
 .today-date {
   font-size: 14px;
   color: #8B7355;
@@ -540,13 +566,23 @@
   border-radius: 16px;
   box-shadow: 0 2px 8px rgba(93, 78, 55, 0.08);
   border: 1px solid #D4C4B0;
+  overflow: visible;
+}
+
+.section-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 16px;
 }
 
 .teacher-section-title {
   font-size: 18px;
   font-weight: 700;
   color: #5D4E37;
-  margin-bottom: 24px;
+  margin-bottom: 0;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -558,12 +594,51 @@
   color: #C4915C;
 }
 
+.date-selector {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #F0E8D8;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #D4C4B0;
+}
+
+.calendar-icon {
+  width: 20px;
+  height: 20px;
+  color: #8B6F47;
+  flex-shrink: 0;
+}
+
+.date-input {
+  border: none;
+  background: transparent;
+  color: #5D4E37;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+  font-family: inherit;
+}
+
+.date-input::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+.date-input::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+}
+
 .distribution-content {
   display: flex;
   align-items: center;
   justify-content: space-around;
   gap: 32px;
   flex-wrap: wrap;
+  overflow: visible;
 }
 
 /* 차트 placeholder */
@@ -621,6 +696,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 16px;
+  overflow: visible;
 }
 
 .zone-stat-item {
@@ -653,7 +729,7 @@
   opacity: 0;
   visibility: hidden;
   transition: all 0.2s;
-  z-index: 150;
+  z-index: 9999;
   pointer-events: none;
 }
 
