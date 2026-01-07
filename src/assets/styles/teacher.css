@@ -9,14 +9,14 @@
      예: .teacher-header, .teacher-card, .teacher-button
 
   2. 하위 요소는 parent > child 구조로 작성할 수 있습니다.
-     예: .teacher-card .card-title (O)
-         .card-title (X - garden.css와 충돌 가능)
+     예: .teacher-card .teacher-card-title (O)
+         .teacher-card-title (X - garden.teacher-css와 충돌 가능)
 
   3. 예외: .teacher-container 내부의 일반 태그 선택자는 허용
      예: .teacher-container h1, .teacher-container p
 
   4. 새로운 스타일 추가 시 이 규칙을 반드시 따라주세요!
-     - garden.css와의 클래스명 충돌을 방지하기 위함입니다.
+     - garden.teacher-css와의 클래스명 충돌을 방지하기 위함입니다.
 
 ===============================================
 */
@@ -71,28 +71,28 @@
   border-bottom: 1px solid #D4C4B0;
 }
 
-.sidebar-logo {
+.teacher-sidebar-logo {
   display: flex;
   align-items: center;
   gap: 12px;
   overflow: hidden;
 }
 
-.teacher-sidebar-header .logo-image {
+.teacher-sidebar-header .teacher-logo-image {
   width: 32px;
   height: 32px;
   object-fit: contain;
   flex-shrink: 0;
 }
 
-.teacher-sidebar-header .logo-text {
+.teacher-sidebar-header .teacher-logo-text {
   font-weight: 700;
   font-size: 18px;
   color: #5D4E37;
   white-space: nowrap;
 }
 
-.collapse-btn {
+.teacher-collapse-btn {
   background: none;
   border: none;
   color: #A68B6A;
@@ -101,17 +101,17 @@
   transition: color 0.2s;
 }
 
-.collapse-btn:hover {
+.teacher-collapse-btn:hover {
   color: #8B6F47;
 }
 
-.collapse-btn svg {
+.teacher-collapse-btn svg {
   width: 24px;
   height: 24px;
 }
 
 /* 사이드바 네비게이션 */
-.sidebar-nav {
+.teacher-sidebar-nav {
   flex: 1;
   padding: 16px;
   display: flex;
@@ -120,7 +120,7 @@
   overflow-y: auto;
 }
 
-.nav-item {
+.teacher-nav-item {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -133,28 +133,28 @@
   font-weight: 500;
 }
 
-.nav-item svg {
+.teacher-nav-item svg {
   width: 24px;
   height: 24px;
   flex-shrink: 0;
 }
 
-.nav-item:hover {
+.teacher-nav-item:hover {
   background: #F0E8D8;
   color: #5D4E37;
 }
 
-.nav-item.active {
+.teacher-nav-item.active {
   background: linear-gradient(135deg, #F5F1E8 0%, #EDE3D0 100%);
   color: #8B6F47;
   border-left: 3px solid #C4915C;
 }
 
-.collapsed .nav-item {
+.collapsed .teacher-nav-item {
   justify-content: center;
 }
 
-.collapsed .nav-item span {
+.collapsed .teacher-nav-item span {
   display: none;
 }
 
@@ -165,13 +165,13 @@
   background: #F0E8D8;
 }
 
-.user-profile {
+.teacher-user-profile {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
-.user-avatar {
+.teacher-user-avatar {
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -183,28 +183,28 @@
   flex-shrink: 0;
 }
 
-.user-avatar svg {
+.teacher-user-avatar svg {
   width: 24px;
   height: 24px;
 }
 
-.user-info {
+.teacher-user-info {
   flex: 1;
 }
 
-.user-name {
+.teacher-user-name {
   font-weight: 700;
   font-size: 14px;
   color: #5D4E37;
   margin-bottom: 2px;
 }
 
-.user-school {
+.teacher-user-school {
   font-size: 10px;
   color: #5D4E37;
 }
 
-.logout-btn {
+.teacher-logout-btn {
   font-size: 12px;
   color: #8B7355;
   background: none;
@@ -214,18 +214,18 @@
   transition: color 0.2s;
 }
 
-.logout-btn:hover {
+.teacher-logout-btn:hover {
   color: #D32F2F;
 }
 
 /* 축약 상태 사용자 프로필 */
-.user-profile-collapsed {
+.teacher-user-profile-collapsed {
   display: flex;
   justify-content: center;
   position: relative;
 }
 
-.user-avatar-btn {
+.teacher-user-avatar-btn {
   width: 48px;
   height: 48px;
   border-radius: 50%;
@@ -240,18 +240,18 @@
   box-shadow: 0 2px 8px rgba(205, 165, 116, 0.3);
 }
 
-.user-avatar-btn:hover {
+.teacher-user-avatar-btn:hover {
   transform: scale(1.05);
   box-shadow: 0 4px 12px rgba(205, 165, 116, 0.4);
 }
 
-.user-avatar-btn svg {
+.teacher-user-avatar-btn svg {
   width: 24px;
   height: 24px;
 }
 
 /* 사용자 툴팁 */
-.user-tooltip {
+.teacher-user-tooltip {
   position: absolute;
   bottom: 100%;
   left: 0;
@@ -272,7 +272,7 @@
   }
 }
 
-.tooltip-arrow {
+.teacher-tooltip-arrow {
   position: absolute;
   bottom: -8px;
   left: 32px;
@@ -284,7 +284,7 @@
   filter: drop-shadow(0 2px 4px rgba(93, 78, 55, 0.1));
 }
 
-.tooltip-content {
+.teacher-tooltip-content {
   background: #F8F3E8;
   border: 1px solid #D4C4B0;
   border-radius: 12px;
@@ -293,32 +293,32 @@
   min-width: 200px;
 }
 
-.tooltip-user-info {
+.teacher-tooltip-user-info {
   margin-bottom: 12px;
   padding-bottom: 12px;
   border-bottom: 1px solid #D4C4B0;
 }
 
-.tooltip-user-name {
+.teacher-tooltip-user-name {
   font-weight: 700;
   font-size: 14px;
   color: #5D4E37;
   margin: 0 0 4px 0;
 }
 
-.tooltip-user-school {
+.teacher-tooltip-user-school {
   font-size: 12px;
   color: #8B7355;
   margin: 0 0 4px 0;
 }
 
-.tooltip-user-id {
+.teacher-tooltip-user-id {
   font-size: 11px;
   color: #A68B6A;
   margin: 0;
 }
 
-.tooltip-logout-btn {
+.teacher-tooltip-logout-btn {
   width: 100%;
   display: flex;
   align-items: center;
@@ -335,13 +335,13 @@
   transition: all 0.2s;
 }
 
-.tooltip-logout-btn:hover {
+.teacher-tooltip-logout-btn:hover {
   background: #FFE4E1;
   border-color: #D32F2F;
   color: #D32F2F;
 }
 
-.tooltip-logout-btn svg {
+.teacher-tooltip-logout-btn svg {
   width: 16px;
   height: 16px;
 }
@@ -358,7 +358,7 @@
 }
 
 /* 위험 신호 경고 바 */
-.danger-alert-bar {
+.teacher-danger-alert-bar {
   background: linear-gradient(135deg, #5D4E37 0%, #6F5835 100%);
   color: white;
   padding: 12px 24px;
@@ -369,13 +369,13 @@
   z-index: 20;
 }
 
-.danger-alert-content {
+.teacher-danger-alert-content {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
-.danger-alert-icon {
+.teacher-danger-alert-icon {
   width: 8px;
   height: 8px;
   border-radius: 50%;
@@ -390,12 +390,12 @@
   }
 }
 
-.danger-alert-label {
+.teacher-danger-alert-label {
   font-weight: 700;
   color: #E8D5A8;
 }
 
-.danger-alert-btn {
+.teacher-danger-alert-btn {
   background: #D32F2F;
   color: white;
   border: none;
@@ -407,7 +407,7 @@
   transition: background 0.2s;
 }
 
-.danger-alert-btn:hover {
+.teacher-danger-alert-btn:hover {
   background: #B71C1C;
 }
 
@@ -435,13 +435,13 @@
   color: #8B7355;
 }
 
-.header-actions {
+.teacher-header-actions {
   display: flex;
   align-items: center;
   gap: 16px;
 }
 
-.moodmeter-info-btn {
+.teacher-moodmeter-info-btn {
   display: flex;
   align-items: center;
   gap: 6px;
@@ -457,22 +457,22 @@
   box-shadow: 0 2px 8px rgba(196, 145, 92, 0.3);
 }
 
-.moodmeter-info-btn:hover {
+.teacher-moodmeter-info-btn:hover {
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(196, 145, 92, 0.4);
 }
 
-.moodmeter-info-btn svg {
+.teacher-moodmeter-info-btn svg {
   width: 18px;
   height: 18px;
 }
 
-.today-date {
+.teacher-today-date {
   font-size: 14px;
   color: #8B7355;
 }
 
-.notification-btn {
+.teacher-notification-btn {
   width: 36px;
   height: 36px;
   border-radius: 50%;
@@ -486,18 +486,18 @@
   transition: all 0.2s;
 }
 
-.notification-btn:hover {
+.teacher-notification-btn:hover {
   background: #F0E8D8;
   border-color: #C4915C;
 }
 
-.notification-btn svg {
+.teacher-notification-btn svg {
   width: 20px;
   height: 20px;
   color: #8B6F47;
 }
 
-.notification-badge {
+.teacher-notification-badge {
   position: absolute;
   top: 0;
   right: 0;
@@ -512,10 +512,11 @@
 .teacher-content {
   flex: 1;
   overflow-y: auto;
+  overflow-x: visible;
   padding: 32px;
 }
 
-.welcome-card {
+.teacher-welcome-card {
   background: #F8F3E8;
   padding: 48px;
   border-radius: 16px;
@@ -526,19 +527,19 @@
   margin: 0 auto;
 }
 
-.welcome-card h2 {
+.teacher-welcome-card h2 {
   font-size: 28px;
   color: #5D4E37;
   margin-bottom: 16px;
 }
 
-.welcome-card p {
+.teacher-welcome-card p {
   font-size: 16px;
   color: #8B7355;
   margin-bottom: 8px;
 }
 
-.dev-note {
+.teacher-dev-note {
   font-size: 18px;
   color: #A68B6A;
   margin-top: 24px;
@@ -549,18 +550,20 @@
 ============================================ */
 
 /* 대시보드 뷰 컨테이너 */
-.dashboard-view {
+.teacher-dashboard-view {
   display: flex;
   flex-direction: column;
   gap: 32px;
+  overflow: visible;
 }
 
 /* 학급 감정 분포 섹션 */
-.emotion-distribution-section {
+.teacher-emotion-distribution-section {
   width: 100%;
+  overflow: visible;
 }
 
-.section-card {
+.teacher-section-card {
   background: #F8F3E8;
   padding: 24px;
   border-radius: 16px;
@@ -569,7 +572,7 @@
   overflow: visible;
 }
 
-.section-header-row {
+.teacher-section-header-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -594,7 +597,7 @@
   color: #C4915C;
 }
 
-.date-selector {
+.teacher-date-selector {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -604,14 +607,14 @@
   border: 1px solid #D4C4B0;
 }
 
-.calendar-icon {
+.teacher-calendar-icon {
   width: 20px;
   height: 20px;
   color: #8B6F47;
   flex-shrink: 0;
 }
 
-.date-input {
+.teacher-date-input {
   border: none;
   background: transparent;
   color: #5D4E37;
@@ -622,17 +625,17 @@
   font-family: inherit;
 }
 
-.date-input::-webkit-calendar-picker-indicator {
+.teacher-date-input::-webkit-calendar-picker-indicator {
   cursor: pointer;
   opacity: 0.6;
   transition: opacity 0.2s;
 }
 
-.date-input::-webkit-calendar-picker-indicator:hover {
+.teacher-date-input::-webkit-calendar-picker-indicator:hover {
   opacity: 1;
 }
 
-.distribution-content {
+.teacher-distribution-content {
   display: flex;
   align-items: center;
   justify-content: space-around;
@@ -642,13 +645,13 @@
 }
 
 /* 차트 placeholder */
-.chart-placeholder {
+.teacher-chart-placeholder {
   width: 192px;
   height: 192px;
   position: relative;
 }
 
-.chart-circle {
+.teacher-chart-circle {
   width: 100%;
   height: 100%;
   border-radius: 50%;
@@ -666,7 +669,7 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.chart-circle::before {
+.teacher-chart-circle::before {
   content: '';
   position: absolute;
   width: 144px;
@@ -675,7 +678,7 @@
   background: #F8F3E8;
 }
 
-.total-count {
+.teacher-total-count {
   position: absolute;
   font-size: 32px;
   font-weight: 700;
@@ -683,14 +686,14 @@
   z-index: 1;
 }
 
-.count-unit {
+.teacher-count-unit {
   font-size: 14px;
   font-weight: 400;
   color: #8B7355;
 }
 
 /* 영역 통계 */
-.zone-stats {
+.teacher-zone-stats {
   flex: 1;
   max-width: 640px;
   display: grid;
@@ -699,7 +702,7 @@
   overflow: visible;
 }
 
-.zone-stat-item {
+.teacher-zone-stat-item {
   padding: 16px;
   border-radius: 12px;
   border: 1px solid;
@@ -708,19 +711,20 @@
   transition: all 0.2s;
 }
 
-.zone-stat-item:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(93, 78, 55, 0.15);
+.teacher-zone-stat-item:hover {
+  box-shadow: 0 6px 16px rgba(93, 78, 55, 0.2);
+  border-width: 2px;
+  padding: 15px; /* border 1px 증가로 인한 레이아웃 시프트 방지 */
 }
 
-.zone-stat-item h4 {
+.teacher-zone-stat-item h4 {
   font-size: 14px;
   font-weight: 700;
   margin-bottom: 8px;
 }
 
 /* 영역별 툴팁 */
-.zone-tooltip {
+.teacher-zone-tooltip {
   position: absolute;
   bottom: 100%;
   left: 50%;
@@ -733,12 +737,12 @@
   pointer-events: none;
 }
 
-.zone-stat-item:hover .zone-tooltip {
+.teacher-zone-stat-item:hover .teacher-zone-tooltip {
   opacity: 1;
   visibility: visible;
 }
 
-.zone-tooltip-arrow {
+.teacher-zone-tooltip-arrow {
   position: absolute;
   bottom: -8px;
   left: 50%;
@@ -751,7 +755,7 @@
   filter: drop-shadow(0 2px 4px rgba(93, 78, 55, 0.1));
 }
 
-.zone-tooltip-content {
+.teacher-zone-tooltip-content {
   background: #F8F3E8;
   border: 1px solid #D4C4B0;
   border-radius: 12px;
@@ -761,7 +765,7 @@
   max-width: 200px;
 }
 
-.zone-tooltip-title {
+.teacher-zone-tooltip-title {
   font-size: 13px;
   font-weight: 700;
   color: #5D4E37;
@@ -770,7 +774,7 @@
   border-bottom: 1px solid #D4C4B0;
 }
 
-.zone-tooltip-list {
+.teacher-zone-tooltip-list {
   list-style: none;
   padding: 0;
   margin: 0;
@@ -778,14 +782,14 @@
   overflow-y: auto;
 }
 
-.zone-tooltip-list li {
+.teacher-zone-tooltip-list li {
   font-size: 12px;
   color: #8B7355;
   padding: 4px 0;
   line-height: 1.4;
 }
 
-.zone-tooltip-list li:not(:last-child) {
+.teacher-zone-tooltip-list li:not(:last-child) {
   border-bottom: 1px solid #EDE3D0;
 }
 
@@ -794,113 +798,113 @@
   font-weight: 700;
 }
 
-.stat-percent {
+.teacher-stat-percent {
   font-size: 14px;
   font-weight: 400;
   margin-left: 4px;
 }
 
 /* 각 영역별 색상 */
-.red-zone {
+.teacher-red-zone {
   background: #fef2f2;
   border-color: #fecaca;
 }
 
-.red-zone h4 {
+.teacher-red-zone h4 {
   color: #b91c1c;
 }
 
-.red-zone .teacher-stat-value {
+.teacher-red-zone .teacher-stat-value {
   color: #dc2626;
 }
 
-.red-zone .stat-percent {
+.teacher-red-zone .teacher-stat-percent {
   color: #ef4444;
 }
 
-.yellow-zone {
+.teacher-yellow-zone {
   background: #fefce8;
   border-color: #fef08a;
 }
 
-.yellow-zone h4 {
+.teacher-yellow-zone h4 {
   color: #a16207;
 }
 
-.yellow-zone .teacher-stat-value {
+.teacher-yellow-zone .teacher-stat-value {
   color: #ca8a04;
 }
 
-.yellow-zone .stat-percent {
+.teacher-yellow-zone .teacher-stat-percent {
   color: #eab308;
 }
 
-.blue-zone {
+.teacher-blue-zone {
   background: #eff6ff;
   border-color: #bfdbfe;
 }
 
-.blue-zone h4 {
+.teacher-blue-zone h4 {
   color: #1e40af;
 }
 
-.blue-zone .teacher-stat-value {
+.teacher-blue-zone .teacher-stat-value {
   color: #2563eb;
 }
 
-.blue-zone .stat-percent {
+.teacher-blue-zone .teacher-stat-percent {
   color: #3b82f6;
 }
 
-.green-zone {
+.teacher-green-zone {
   background: #f0fdf4;
   border-color: #bbf7d0;
 }
 
-.green-zone h4 {
+.teacher-green-zone h4 {
   color: #15803d;
 }
 
-.green-zone .teacher-stat-value {
+.teacher-green-zone .teacher-stat-value {
   color: #16a34a;
 }
 
-.green-zone .stat-percent {
+.teacher-green-zone .teacher-stat-percent {
   color: #22c55e;
 }
 
-.gray-zone {
+.teacher-gray-zone {
   background: #f8fafc;
   border-color: #e2e8f0;
 }
 
-.gray-zone h4 {
+.teacher-gray-zone h4 {
   color: #475569;
 }
 
-.gray-zone .teacher-stat-value {
+.teacher-gray-zone .teacher-stat-value {
   color: #64748b;
 }
 
-.gray-zone .stat-percent {
+.teacher-gray-zone .teacher-stat-percent {
   color: #94a3b8;
 }
 
 /* 대시보드 그리드 (집중 케어 + AI 어시스턴트) */
-.dashboard-grid {
+.teacher-dashboard-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 32px;
 }
 
 /* 집중 케어 필요 섹션 */
-.attention-section {
+.teacher-attention-section {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
-.attention-title {
+.teacher-attention-title {
   font-size: 18px;
   font-weight: 700;
   color: #5D4E37;
@@ -909,13 +913,13 @@
   gap: 8px;
 }
 
-.attention-title svg {
+.teacher-attention-title svg {
   width: 24px;
   height: 24px;
   color: #D32F2F;
 }
 
-.attention-card {
+.teacher-attention-card {
   background: #F8F3E8;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(93, 78, 55, 0.08);
@@ -927,33 +931,33 @@
   gap: 16px;
 }
 
-.danger-card {
+.teacher-danger-card {
   border-left-color: #D32F2F;
   background: #F0E8D8;
 }
 
-.attention-card-warning {
+.teacher-attention-card-warning {
   border-left-color: #C4915C;
 }
 
-.attention-card-content {
+.teacher-attention-card-content {
   flex: 1;
 }
 
-.attention-header {
+.teacher-attention-header {
   display: flex;
   align-items: center;
   gap: 8px;
   margin-bottom: 8px;
 }
 
-.student-name {
+.teacher-student-name {
   font-size: 18px;
   font-weight: 700;
   color: #5D4E37;
 }
 
-.danger-badge {
+.teacher-danger-badge {
   padding: 2px 8px;
   border-radius: 6px;
   font-size: 12px;
@@ -962,7 +966,7 @@
   color: #D32F2F;
 }
 
-.attention-badge {
+.teacher-attention-badge {
   padding: 2px 8px;
   border-radius: 6px;
   font-size: 12px;
@@ -971,19 +975,19 @@
   color: #C4915C;
 }
 
-.danger-signal {
+.teacher-danger-signal {
   font-size: 14px;
   color: #8B7355;
   margin-bottom: 0;
 }
 
-.attention-reason {
+.teacher-attention-reason {
   font-size: 14px;
   color: #8B7355;
   margin-bottom: 0;
 }
 
-.detail-btn {
+.teacher-detail-btn {
   padding: 6px 12px;
   border: 1px solid #D4C4B0;
   border-radius: 8px;
@@ -996,22 +1000,22 @@
   white-space: nowrap;
 }
 
-.detail-btn:hover {
+.teacher-detail-btn:hover {
   background: #F0E8D8;
   border-color: #C4915C;
 }
 
-.danger-btn {
+.teacher-danger-btn {
   border-color: #D32F2F;
   color: #D32F2F;
 }
 
-.danger-btn:hover {
+.teacher-danger-btn:hover {
   background: #FFE4E1;
 }
 
 /* AI 어시스턴트 섹션 */
-.ai-assistant-section {
+.teacher-ai-assistant-section {
   background: linear-gradient(135deg, #8B6F47 0%, #6F5835 100%);
   color: white;
   border-radius: 16px;
@@ -1024,7 +1028,7 @@
   overflow: hidden;
 }
 
-.ai-assistant-section::before {
+.teacher-ai-assistant-section::before {
   content: '';
   position: absolute;
   top: 0;
@@ -1035,14 +1039,14 @@
   border-radius: 0 16px 0 100%;
 }
 
-.ai-assistant-title {
+.teacher-ai-assistant-title {
   font-size: 18px;
   font-weight: 700;
   color: #E8D5A8;
   z-index: 1;
 }
 
-.ai-analysis-card {
+.teacher-ai-analysis-card {
   background: rgba(210, 166, 121, 0.25);
   border: 1px solid rgba(210, 166, 121, 0.3);
   border-radius: 12px;
@@ -1051,23 +1055,23 @@
   z-index: 1;
 }
 
-.ai-analysis-text {
+.teacher-ai-analysis-text {
   font-size: 14px;
   line-height: 1.6;
   color: white;
   margin: 0;
 }
 
-.ai-analysis-text strong {
+.teacher-ai-analysis-text strong {
   font-weight: 700;
   color: #E8D5A8;
 }
 
-.highlight-yellow {
+.teacher-highlight-yellow {
   color: #E8D5A8;
 }
 
-.ai-recommendation-card {
+.teacher-ai-recommendation-card {
   background: rgba(210, 166, 121, 0.25);
   border: 1px solid rgba(210, 166, 121, 0.3);
   border-radius: 12px;
@@ -1076,14 +1080,14 @@
   z-index: 1;
 }
 
-.recommendation-label {
+.teacher-recommendation-label {
   font-size: 12px;
   font-weight: 700;
   color: #EDE3D0;
   margin-bottom: 8px;
 }
 
-.recommendation-content {
+.teacher-recommendation-content {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -1096,7 +1100,7 @@
   color: white;
 }
 
-.play-btn {
+.teacher-play-btn {
   background: white;
   color: #6F5835;
   border: none;
@@ -1109,7 +1113,7 @@
   white-space: nowrap;
 }
 
-.play-btn:hover {
+.teacher-play-btn:hover {
   background: #E8D5A8;
   transform: scale(1.05);
 }
@@ -1118,13 +1122,13 @@
    학급 감정 지도 뷰
 ============================================ */
 
-.classmap-view {
+.teacher-classmap-view {
   display: flex;
   flex-direction: column;
   gap: 24px;
 }
 
-.classmap-header {
+.teacher-classmap-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -1132,7 +1136,7 @@
   gap: 16px;
 }
 
-.classmap-title {
+.teacher-classmap-title {
   font-size: 20px;
   font-weight: 700;
   color: #5D4E37;
@@ -1157,23 +1161,23 @@
   border-radius: 2px;
 }
 
-.red-legend {
+.teacher-red-legend {
   background: #ef4444;
 }
 
-.yellow-legend {
+.teacher-yellow-legend {
   background: #facc15;
 }
 
-.blue-legend {
+.teacher-blue-legend {
   background: #3b82f6;
 }
 
-.green-legend {
+.teacher-green-legend {
   background: #22c55e;
 }
 
-.trend-chart-container {
+.teacher-trend-chart-container {
   background: #F8F3E8;
   padding: 24px;
   border-radius: 16px;
@@ -1183,7 +1187,7 @@
   position: relative;
 }
 
-.chart-placeholder-trend {
+.teacher-chart-placeholder-trend {
   height: 350px;
   display: flex;
   align-items: center;
@@ -1193,7 +1197,7 @@
   background: #F5F1E8;
 }
 
-.chart-note {
+.teacher-chart-note {
   font-size: 16px;
   color: #A68B6A;
   margin: 0;
@@ -1206,14 +1210,14 @@
   border: 1px solid #D4C4B0;
 }
 
-.tip-card-title {
+.teacher-tip-card-title {
   font-size: 18px;
   font-weight: 700;
   color: #8B6F47;
   margin-bottom: 12px;
 }
 
-.tip-card-content {
+.teacher-tip-card-content {
   font-size: 14px;
   color: #5D4E37;
   line-height: 1.6;
@@ -1225,14 +1229,14 @@
 ============================================ */
 
 /* 학생 분석 컨테이너 */
-.student-analysis-container {
+.teacher-student-analysis-container {
   display: flex;
   gap: 24px;
   height: 100%;
 }
 
 /* 학생 목록 패널 */
-.student-list-panel {
+.teacher-student-list-panel {
   width: 33.333%;
   background: #F8F3E8;
   border-radius: 16px;
@@ -1243,14 +1247,14 @@
   border: 1px solid #D4C4B0;
 }
 
-.student-list-header {
+.teacher-student-list-header {
   padding: 16px;
   background: #F0E8D8;
   border-bottom: 1px solid #D4C4B0;
   position: relative;
 }
 
-.search-icon {
+.teacher-search-icon {
   width: 20px;
   height: 20px;
   color: #A68B6A;
@@ -1260,7 +1264,7 @@
   pointer-events: none;
 }
 
-.student-search-input {
+.teacher-student-search-input {
   width: 100%;
   padding: 8px 12px 8px 36px;
   border: 1px solid #D4C4B0;
@@ -1272,22 +1276,22 @@
   transition: all 0.2s;
 }
 
-.student-search-input::placeholder {
+.teacher-student-search-input::placeholder {
   color: #A68B6A;
 }
 
-.student-search-input:focus {
+.teacher-student-search-input:focus {
   border-color: #C4915C;
   box-shadow: 0 0 0 3px rgba(210, 166, 121, 0.15);
 }
 
-.student-list-body {
+.teacher-student-list-body {
   flex: 1;
   overflow-y: auto;
   padding: 8px;
 }
 
-.student-list-item {
+.teacher-student-list-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -1299,22 +1303,22 @@
   margin-bottom: 4px;
 }
 
-.student-list-item:hover {
+.teacher-student-list-item:hover {
   background: #F0E8D8;
 }
 
-.student-list-item.active {
+.teacher-student-list-item.active {
   background: linear-gradient(135deg, #F5F1E8 0%, #EDE3D0 100%);
   border-left-color: #C4915C;
 }
 
-.student-item-info {
+.teacher-student-item-info {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
-.student-avatar {
+.teacher-student-avatar {
   width: 36px;
   height: 36px;
   border-radius: 50%;
@@ -1327,45 +1331,45 @@
   flex-shrink: 0;
 }
 
-.student-avatar.status-danger {
+.teacher-student-avatar.teacher-status-danger {
   background: #ef4444;
 }
 
-.student-avatar.status-attention {
+.teacher-student-avatar.teacher-status-attention {
   background: #f59e0b;
 }
 
-.student-avatar.status-normal {
+.teacher-student-avatar.teacher-status-normal {
   background: #22c55e;
 }
 
-.student-item-name {
+.teacher-student-item-name {
   font-weight: 700;
   font-size: 14px;
   color: #5D4E37;
 }
 
-.student-item-meta {
+.teacher-student-item-meta {
   font-size: 12px;
   color: #A68B6A;
 }
 
-.student-status-dot {
+.teacher-student-status-dot {
   width: 8px;
   height: 8px;
   border-radius: 50%;
 }
 
-.student-status-dot.danger {
+.teacher-student-status-dot.teacher-danger {
   background: #ef4444;
 }
 
-.student-status-dot.attention {
+.teacher-student-status-dot.teacher-attention {
   background: #f59e0b;
 }
 
 /* 학생 상세 패널 */
-.student-detail-panel {
+.teacher-student-detail-panel {
   flex: 1;
   background: #F8F3E8;
   border-radius: 16px;
@@ -1415,33 +1419,33 @@
 }
 
 /* 레터 리스트 뷰 */
-.letter-list-view {
+.teacher-letter-list-view {
   padding: 32px;
 }
 
-.letter-list-header {
+.teacher-letter-list-header {
   margin-bottom: 24px;
 }
 
-.letter-list-header h2 {
+.teacher-letter-list-header h2 {
   font-size: 24px;
   font-weight: 700;
   color: #5D4E37;
   margin-bottom: 8px;
 }
 
-.letter-list-header p {
+.teacher-letter-list-header p {
   font-size: 14px;
   color: #8B7355;
 }
 
-.letter-list-body {
+.teacher-letter-list-body {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
-.letter-list-item {
+.teacher-letter-list-item {
   display: flex;
   align-items: center;
   gap: 16px;
@@ -1453,42 +1457,42 @@
   transition: all 0.2s;
 }
 
-.letter-list-item:hover {
+.teacher-letter-list-item:hover {
   background: linear-gradient(135deg, #F5F1E8 0%, #EDE3D0 100%);
   border-color: #C4915C;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(210, 166, 121, 0.2);
 }
 
-.letter-item-icon {
+.teacher-letter-item-icon {
   font-size: 32px;
   flex-shrink: 0;
 }
 
-.letter-item-info {
+.teacher-letter-item-info {
   flex: 1;
 }
 
-.letter-item-title {
+.teacher-letter-item-title {
   font-size: 16px;
   font-weight: 700;
   color: #5D4E37;
   margin-bottom: 4px;
 }
 
-.letter-item-period {
+.teacher-letter-item-period {
   font-size: 13px;
   color: #8B7355;
   margin-bottom: 8px;
 }
 
-.letter-item-emotions {
+.teacher-letter-item-emotions {
   display: flex;
   gap: 6px;
   flex-wrap: wrap;
 }
 
-.emotion-badge {
+.teacher-emotion-badge {
   padding: 4px 8px;
   border-radius: 6px;
   font-size: 11px;
@@ -1496,7 +1500,7 @@
   color: white;
 }
 
-.letter-item-arrow {
+.teacher-letter-item-arrow {
   width: 20px;
   height: 20px;
   color: #C4915C;
@@ -1504,7 +1508,7 @@
 }
 
 /* 레터 상세 뷰 */
-.letter-detail-view {
+.teacher-letter-detail-view {
   padding: 32px;
 }
 
@@ -1568,7 +1572,7 @@
 ============================================ */
 
 /* 햄버거 버튼 (모바일) */
-.mobile-menu-btn {
+.teacher-mobile-menu-btn {
   display: none;
   width: 40px;
   height: 40px;
@@ -1581,19 +1585,19 @@
   transition: all 0.2s;
 }
 
-.mobile-menu-btn:hover {
+.teacher-mobile-menu-btn:hover {
   background: #F0E8D8;
   border-color: #C4915C;
 }
 
-.mobile-menu-btn svg {
+.teacher-mobile-menu-btn svg {
   width: 24px;
   height: 24px;
   color: #5D4E37;
 }
 
 /* 헤더 타이틀 섹션 */
-.header-title-section {
+.teacher-header-title-section {
   flex: 1;
 }
 
@@ -1601,7 +1605,7 @@
    모바일 풀페이지 메뉴
 ============================================ */
 
-.mobile-menu-overlay {
+.teacher-mobile-menu-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -1613,7 +1617,7 @@
   display: none;
 }
 
-.mobile-menu-content {
+.teacher-mobile-menu-content {
   position: absolute;
   top: 0;
   left: 0;
@@ -1635,7 +1639,7 @@
   }
 }
 
-.mobile-menu-header {
+.teacher-mobile-menu-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -1643,13 +1647,13 @@
   border-bottom: 1px solid #D4C4B0;
 }
 
-.mobile-menu-logo {
+.teacher-mobile-menu-logo {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
-.mobile-menu-close {
+.teacher-mobile-menu-close {
   width: 32px;
   height: 32px;
   border-radius: 8px;
@@ -1662,17 +1666,17 @@
   transition: all 0.2s;
 }
 
-.mobile-menu-close:hover {
+.teacher-mobile-menu-close:hover {
   background: #F0E8D8;
 }
 
-.mobile-menu-close svg {
+.teacher-mobile-menu-close svg {
   width: 20px;
   height: 20px;
   color: #5D4E37;
 }
 
-.mobile-menu-nav {
+.teacher-mobile-menu-nav {
   flex: 1;
   padding: 16px;
   display: flex;
@@ -1681,7 +1685,7 @@
   overflow-y: auto;
 }
 
-.mobile-nav-item {
+.teacher-mobile-nav-item {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -1695,37 +1699,37 @@
   font-size: 15px;
 }
 
-.mobile-nav-item svg {
+.teacher-mobile-nav-item svg {
   width: 24px;
   height: 24px;
   flex-shrink: 0;
 }
 
-.mobile-nav-item:hover {
+.teacher-mobile-nav-item:hover {
   background: #F0E8D8;
   color: #5D4E37;
 }
 
-.mobile-nav-item.active {
+.teacher-mobile-nav-item.active {
   background: linear-gradient(135deg, #F5F1E8 0%, #EDE3D0 100%);
   color: #8B6F47;
   border-left: 3px solid #C4915C;
 }
 
-.mobile-menu-footer {
+.teacher-mobile-menu-footer {
   padding: 16px;
   border-top: 1px solid #D4C4B0;
   background: #F0E8D8;
 }
 
-.mobile-user-profile {
+.teacher-mobile-user-profile {
   display: flex;
   align-items: center;
   gap: 12px;
   margin-bottom: 12px;
 }
 
-.mobile-user-avatar {
+.teacher-mobile-user-avatar {
   width: 48px;
   height: 48px;
   border-radius: 50%;
@@ -1737,29 +1741,29 @@
   flex-shrink: 0;
 }
 
-.mobile-user-avatar svg {
+.teacher-mobile-user-avatar svg {
   width: 28px;
   height: 28px;
 }
 
-.mobile-user-info {
+.teacher-mobile-user-info {
   flex: 1;
 }
 
-.mobile-user-name {
+.teacher-mobile-user-name {
   font-weight: 700;
   font-size: 15px;
   color: #5D4E37;
   margin: 0 0 4px 0;
 }
 
-.mobile-user-school {
+.teacher-mobile-user-school {
   font-size: 12px;
   color: #8B7355;
   margin: 0;
 }
 
-.mobile-logout-btn {
+.teacher-mobile-logout-btn {
   width: 100%;
   display: flex;
   align-items: center;
@@ -1776,13 +1780,13 @@
   transition: all 0.2s;
 }
 
-.mobile-logout-btn:hover {
+.teacher-mobile-logout-btn:hover {
   background: #FFE4E1;
   border-color: #D32F2F;
   color: #D32F2F;
 }
 
-.mobile-logout-btn svg {
+.teacher-mobile-logout-btn svg {
   width: 20px;
   height: 20px;
 }
@@ -1791,11 +1795,11 @@
    반응형
 ============================================ */
 @media (max-width: 1024px) {
-  .student-analysis-container {
+  .teacher-student-analysis-container {
     flex-direction: column;
   }
 
-  .student-list-panel {
+  .teacher-student-list-panel {
     width: 100%;
     max-height: 300px;
   }
@@ -1808,12 +1812,12 @@
   }
 
   /* 햄버거 버튼 표시 */
-  .mobile-menu-btn {
+  .teacher-mobile-menu-btn {
     display: flex;
   }
 
   /* 모바일 메뉴 오버레이 표시 */
-  .mobile-menu-overlay {
+  .teacher-mobile-menu-overlay {
     display: block;
   }
 
@@ -1833,8 +1837,8 @@
   }
 
   /* 데스크톱 헤더 액션 숨김 */
-  .header-actions .today-date,
-  .header-actions .notification-btn {
+  .teacher-header-actions .teacher-today-date,
+  .teacher-header-actions .teacher-notification-btn {
     display: none;
   }
 
@@ -1844,7 +1848,7 @@
   }
 
   /* 대시보드 그리드 모바일 대응 */
-  .dashboard-grid {
+  .teacher-dashboard-grid {
     grid-template-columns: 1fr;
   }
 }

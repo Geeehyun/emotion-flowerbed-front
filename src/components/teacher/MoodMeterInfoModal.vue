@@ -20,7 +20,10 @@
         >
           <div
             class="teacher-cards-wrapper"
-            :style="{ transform: `translateX(-${currentIndex * 100}%)` }"
+            :style="{
+              transform: `translateX(-${currentIndex * 100}%)`,
+              transition: isDragging ? 'none' : 'transform 0.3s ease-out'
+            }"
           >
             <!-- 카드 1: 감정 무드미터 소개 -->
             <div class="teacher-info-card">
@@ -287,9 +290,9 @@ const isOpen = computed({
 // 카드 슬라이더 상태
 const currentIndex = ref(0)
 const totalCards = 5
+const isDragging.value = ref(false)
 let touchStartX = 0
 let touchEndX = 0
-let isDragging = false
 let startX = 0
 let currentTranslate = 0
 let prevTranslate = 0
@@ -314,13 +317,13 @@ const goToCard = (index) => {
 // 터치 이벤트 핸들러
 const handleTouchStart = (e) => {
   touchStartX = e.touches[0].clientX
-  isDragging = true
+  isDragging.value = true
   startX = e.touches[0].clientX
   prevTranslate = -currentIndex.value * 100
 }
 
 const handleTouchMove = (e) => {
-  if (!isDragging) return
+  if (!isDragging.value) return
   touchEndX = e.touches[0].clientX
   const currentPosition = e.touches[0].clientX
   const diff = currentPosition - startX
@@ -329,7 +332,7 @@ const handleTouchMove = (e) => {
 }
 
 const handleTouchEnd = () => {
-  isDragging = false
+  isDragging.value = false
   const swipeThreshold = 50
   const diff = touchStartX - touchEndX
 
@@ -345,14 +348,14 @@ const handleTouchEnd = () => {
 
 // 마우스 이벤트 핸들러
 const handleMouseDown = (e) => {
-  isDragging = true
+  isDragging.value = true
   startX = e.clientX
   prevTranslate = -currentIndex.value * 100
   e.preventDefault()
 }
 
 const handleMouseMove = (e) => {
-  if (!isDragging) return
+  if (!isDragging.value) return
   const currentPosition = e.clientX
   const diff = currentPosition - startX
   const movePercent = (diff / window.innerWidth) * 100
@@ -360,8 +363,8 @@ const handleMouseMove = (e) => {
 }
 
 const handleMouseUp = (e) => {
-  if (!isDragging) return
-  isDragging = false
+  if (!isDragging.value) return
+  isDragging.value = false
 
   const endX = e.clientX
   const diff = startX - endX
@@ -378,8 +381,8 @@ const handleMouseUp = (e) => {
 }
 
 const handleMouseLeave = () => {
-  if (isDragging) {
-    isDragging = false
+  if (isDragging.value) {
+    isDragging.value = false
     currentTranslate = -currentIndex.value * 100
   }
 }
@@ -444,8 +447,8 @@ const handleClose = () => {
 
 .teacher-cards-wrapper {
   display: flex;
-  transition: transform 0.3s ease-out;
   will-change: transform;
+  /* transition은 Vue 스타일 바인딩으로 동적 제어 */
 }
 
 .teacher-info-card {
@@ -489,7 +492,8 @@ const handleClose = () => {
 }
 
 .teacher-definition-image {
-  max-width: 100%;
+  max-width: 350px;
+  width: 100%;
   height: auto;
   border-radius: 8px;
 }
