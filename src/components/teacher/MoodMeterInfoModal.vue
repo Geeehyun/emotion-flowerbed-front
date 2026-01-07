@@ -429,7 +429,6 @@ const handleClose = () => {
 .teacher-modal-container {
   position: relative;
   width: 100%;
-  min-height: 500px;
   overflow: hidden;
 }
 
@@ -455,8 +454,6 @@ const handleClose = () => {
   width: 100%;
   flex-shrink: 0;
   padding: 24px;
-  max-height: 500px;
-  overflow-y: auto;
   box-sizing: border-box;
 }
 
