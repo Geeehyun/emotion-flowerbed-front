@@ -1,5 +1,85 @@
 <template>
   <div class="teacher-container">
+    <!-- 모바일 풀페이지 메뉴 -->
+    <div v-if="isMobileMenuOpen" class="mobile-menu-overlay" @click="isMobileMenuOpen = false">
+      <div class="mobile-menu-content" @click.stop>
+        <!-- 메뉴 헤더 -->
+        <div class="mobile-menu-header">
+          <div class="mobile-menu-logo">
+            <div class="logo-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" />
+              </svg>
+            </div>
+            <span class="logo-text">감정 화단</span>
+          </div>
+          <button @click="isMobileMenuOpen = false" class="mobile-menu-close">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- 메뉴 네비게이션 -->
+        <nav class="mobile-menu-nav">
+          <a
+            @click="currentView = 'dashboard'; isMobileMenuOpen = false"
+            :class="{ active: currentView === 'dashboard' }"
+            class="mobile-nav-item"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6a7.5 7.5 0 107.5 7.5h-7.5V6z" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5H21A7.5 7.5 0 0013.5 3v7.5z" />
+            </svg>
+            <span>대시보드</span>
+          </a>
+
+          <a
+            @click="currentView = 'classMap'; isMobileMenuOpen = false"
+            :class="{ active: currentView === 'classMap' }"
+            class="mobile-nav-item"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
+            </svg>
+            <span>학급 감정 지도</span>
+          </a>
+
+          <a
+            @click="currentView = 'studentMap'; isMobileMenuOpen = false"
+            :class="{ active: currentView === 'studentMap' }"
+            class="mobile-nav-item"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.499 5.221 69.17 69.17 0 0 1-2.192.943M8.119 16.489A15.495 15.495 0 0 1 12 15c2.31 0 4.438.784 6.131 2.1.43-.25.873-.49 1.334-.716-.98-1.78-2.68-3.09-4.715-3.633a6.002 6.002 0 0 0-5.5 0c-2.035.543-3.735 1.853-4.715 3.633.461.226.904.466 1.334.716a15.495 15.495 0 0 1 2.25-1.611Z" />
+            </svg>
+            <span>학생별 상세 분석</span>
+          </a>
+        </nav>
+
+        <!-- 사용자 정보 (모바일) -->
+        <div class="mobile-menu-footer">
+          <div class="mobile-user-profile">
+            <div class="mobile-user-avatar">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+              </svg>
+            </div>
+            <div class="mobile-user-info">
+              <p class="mobile-user-name">{{ teacherInfo.name }} 선생님</p>
+              <p class="mobile-user-school">{{ teacherInfo.schoolNm }}</p>
+            </div>
+          </div>
+          <button @click="handleLogout" class="mobile-logout-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
+            </svg>
+            <span>로그아웃</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
     <!-- 사이드바 -->
     <aside class="teacher-sidebar" :class="{ collapsed: isCollapsed }">
       <div class="teacher-sidebar-header">
@@ -54,7 +134,9 @@
         </a>
       </nav>
 
+      <!-- 사이드바 푸터 (계정정보) -->
       <div class="teacher-sidebar-footer">
+        <!-- 확장 상태: 전체 정보 표시 -->
         <div v-if="!isCollapsed" class="user-profile">
           <div class="user-avatar">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -62,8 +144,39 @@
             </svg>
           </div>
           <div class="user-info">
-            <p class="user-name">선생님</p>
+            <p class="user-name">{{ teacherInfo.name }} 선생님</p>
+            <p class="user-school">{{ teacherInfo.schoolNm }}</p>
             <button @click="handleLogout" class="logout-btn">로그아웃</button>
+          </div>
+        </div>
+
+        <!-- 축약 상태: 아이콘만 표시 + 툴팁 -->
+        <div v-else class="user-profile-collapsed">
+          <button
+            @click="isUserTooltipOpen = !isUserTooltipOpen"
+            class="user-avatar-btn"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+            </svg>
+          </button>
+
+          <!-- 툴팁 -->
+          <div v-if="isUserTooltipOpen" class="user-tooltip">
+            <div class="tooltip-arrow"></div>
+            <div class="tooltip-content">
+              <div class="tooltip-user-info">
+                <p class="tooltip-user-name">{{ teacherInfo.name }} 선생님</p>
+                <p class="tooltip-user-school">{{ teacherInfo.schoolNm }}</p>
+                <p class="tooltip-user-id">{{ teacherInfo.userId }}</p>
+              </div>
+              <button @click="handleLogout" class="tooltip-logout-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
+                </svg>
+                로그아웃
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -85,10 +198,20 @@
 
       <!-- 헤더 -->
       <header class="teacher-header">
-        <div>
+        <!-- 햄버거 버튼 (모바일) -->
+        <button @click="isMobileMenuOpen = true" class="mobile-menu-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+          </svg>
+        </button>
+
+        <!-- 페이지 타이틀 -->
+        <div class="header-title-section">
           <h1 class="teacher-page-title">{{ viewTitle }}</h1>
           <p class="teacher-page-subtitle" v-if="pageSubtitle">{{ pageSubtitle }}</p>
         </div>
+
+        <!-- 헤더 액션 -->
         <div class="header-actions">
           <span class="today-date">{{ todayDate }}</span>
           <button class="notification-btn">
@@ -350,9 +473,24 @@
 import { ref, computed } from 'vue'
 import { logout } from '@/services/authApi.js'
 
+// 선생님 정보 로드
+const getUserInfo = () => {
+  try {
+    const userInfoStr = localStorage.getItem('userInfo')
+    return userInfoStr ? JSON.parse(userInfoStr) : {}
+  } catch (error) {
+    console.error('사용자 정보 로드 실패:', error)
+    return {}
+  }
+}
+
+const teacherInfo = ref(getUserInfo())
+
 // 상태
 const currentView = ref('dashboard')
 const isCollapsed = ref(false)
+const isMobileMenuOpen = ref(false)
+const isUserTooltipOpen = ref(false)
 const selectedStudent = ref(null)
 const selectedLetter = ref(null)
 const searchQuery = ref('')
@@ -460,7 +598,9 @@ const viewTitle = computed(() => {
 
 const pageSubtitle = computed(() => {
   if (currentView.value === 'dashboard') {
-    return '모든 감정은 소중합니다. 아이들의 마음 날씨를 확인해보세요.'
+    const { schoolNm, classCode } = teacherInfo.value
+    const classInfo = schoolNm && classCode ? `${schoolNm} ${classCode}반 | ` : ''
+    return `${classInfo}모든 감정은 소중합니다. 아이들의 감정화단을 확인해보세요.`
   }
   return ''
 })

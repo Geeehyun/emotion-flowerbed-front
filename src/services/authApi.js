@@ -13,6 +13,18 @@ export async function login(credentials) {
     const response = await axios.post(`${API_BASE_URL}/auth/login`, credentials)
     const data = response.data
 
+    // 사용자 정보를 localStorage에 저장
+    const userInfo = {
+      userSn: data.userSn,
+      userId: data.userId,
+      name: data.name,
+      userTypeCd: data.userTypeCd,
+      schoolCode: data.schoolCode,
+      schoolNm: data.schoolNm,
+      classCode: data.classCode
+    }
+    localStorage.setItem('userInfo', JSON.stringify(userInfo))
+
     // API 응답의 userTypeCd를 userType으로 변환
     return {
       ...data,
@@ -62,6 +74,7 @@ export async function logout() {
     // 로컬 스토리지 정리
     localStorage.removeItem('accessToken')
     localStorage.removeItem('refreshToken')
+    localStorage.removeItem('userInfo')
   }
 }
 
