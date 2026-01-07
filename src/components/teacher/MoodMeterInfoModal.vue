@@ -290,7 +290,7 @@ const isOpen = computed({
 // 카드 슬라이더 상태
 const currentIndex = ref(0)
 const totalCards = 5
-const isDragging.value = ref(false)
+const isDragging = ref(false)
 let touchStartX = 0
 let touchEndX = 0
 let startX = 0
