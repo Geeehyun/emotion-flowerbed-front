@@ -68,7 +68,7 @@ export const UNKNOWN_EMOTION = {
   flowerNameKr: '알 수 없음',
   flowerNameEn: 'Unknown',
   flowerMeaning: '감정을 분석할 수 없어요',
-  imageFile3d: 'Shasta_Daisy.png', // 데이지 꽃 사용
-  imageFileRealistic: 'Shasta_Daisy.png',
+  imageFile3d: 'unknown.png',
+  imageFileRealistic: 'unknown.png',
   isPositive: true
 }

@@ -547,10 +547,13 @@ const loadMonthlyDiaries = async () => {
     diaryData.value = {}
 
     response.diaries.forEach(diary => {
-      const day = new Date(diary.date).getDate()
+      const date = new Date(diary.date);
+      const day = date.getDate();
+      const month = date.getMonth() + 1;
+      const year = date.getFullYear();
       diaryData.value[day] = {
         id: diary.id,
-        date: `${currentMonth.value}월 ${day}일`,
+        date: `${year}년 ${month}월 ${day}일`,
         isAnalyzed: diary.isAnalyzed,
         emotion: diary.coreEmotion,
         content: diary.content,
@@ -727,8 +730,8 @@ const saveDiary = async (isTest = true, area = null) => {
 
     // 2. 일기 저장된 데이터로 우선 표시 (분석 후 한번 더 추가)
     diaryData.value[currentDay.value] = {
-      id: createdDiary.id,
-      date: `${currentMonth.value}월 ${currentDay.value}일`,
+      id: createdDiary.diaryId,
+      date: `${currentYear.value}년 ${currentMonth.value}월 ${currentDay.value}일`,
       content: createdDiary.content,
       isAnalyzed: false
     }
@@ -744,8 +747,8 @@ const saveDiary = async (isTest = true, area = null) => {
 
     // 4. 화면에 표시
     diaryData.value[currentDay.value] = {
-      id: analyzedDiary.id,
-      date: `${currentMonth.value}월 ${currentDay.value}일`,
+      id: analyzedDiary.diaryId,
+      date: `${currentYear.value}년 ${currentMonth.value}월 ${currentDay.value}일`,
       emotion: analyzedDiary.coreEmotion, // 영어 코드 (JOY, PEACE 등)
       content: analyzedDiary.content,
       isAnalyzed: analyzedDiary.isAnalyzed,
@@ -1260,7 +1263,11 @@ const reanalyzeDiary = async () => {
 
 // 일기 삭제
 const deleteDiaryEntry = async () => {
-  if (!currentDiary.value?.id) return
+  if (!currentDiary.value?.id) {
+    console.log('삭제불가');
+    console.log(currentDiary.value);
+    return;
+  }
 
   // 확인 요청
   if (!confirm('정말로 이 일기를 삭제하시겠습니까?')) {
@@ -1448,12 +1455,14 @@ const handleOpenDiaryFromLetter = async (diaryId) => {
     const diaryDate = new Date(diary.diaryDate)
     const day = diaryDate.getDate()
     const month = diaryDate.getMonth() + 1
+    const year = diaryDate.getFullYear()
 
     directDiary.value = {
-      id: diary.id,
-      date: `${month}월 ${day}일`,
+      id: diary.diaryId,
+      date: `${year}년 ${month}월 ${day}일`,
       emotion: diary.coreEmotion,
       content: diary.content,
+      isAnalyzed: diary.isAnalyzed,
       summary: diary.summary,
       flower: diary.flower,
       floriography: diary.floriography,

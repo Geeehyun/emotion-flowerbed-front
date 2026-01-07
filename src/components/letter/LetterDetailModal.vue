@@ -177,45 +177,6 @@ import { ANIMATION_DELAY } from '@/constants/uiConstants.js'
 // Chart.js 등록
 Chart.register(DoughnutController, ArcElement, Tooltip, Legend)
 
-/**
- * Letter 데이터 구조 (API 연동 시 참고)
- *
- * {
- *   title: '2025년 1월 3주차 감정 레터',
- *   period: '2025.01.20 - 01.26',
- *   date: '2025.01.26',
- *
- *   // 일주일 치 꽃 데이터 (7개)
- *   weekFlowers: [
- *     { date: '01/20', day: '월', flowerKey: 'red_rose', emotionName: '기쁨', hasEntry: true },
- *     { date: '01/21', day: '화', flowerKey: 'sunflower', emotionName: '행복', hasEntry: true },
- *     { date: '01/22', day: '수', hasEntry: false },  // 일기 작성 안 한 날
- *     { date: '01/23', day: '목', flowerKey: 'lavender', emotionName: '평온', hasEntry: true },
- *     { date: '01/24', day: '금', flowerKey: 'forget_me_not', emotionName: '그리움', hasEntry: true },
- *     { date: '01/25', day: '토', hasEntry: false },
- *     { date: '01/26', day: '일', flowerKey: 'chamomile', emotionName: '안정', hasEntry: true }
- *   ],
- *
- *   // AI 분석 내용
- *   studentReport: "이번 주에는 노랑 영역의 기쁨과 초록 영역의 평온한 감정을 많이 느꼈어요...",
- *
- *   // AI 응원 메시지
- *   studentEncouragement: "월요일 친구와 함께 웃으며 놀던 순간, 그때 당신의 감정 화단에 환한 기쁨의 꽃이 피었어요...",
- *
- *   // 감정 차트 데이터
- *   emotions: [
- *     { name: '기쁨', count: 3, color: '#FFD700' },
- *     { name: '평온', count: 2, color: '#90EE90' }
- *   ],
- *
- *   // 하이라이트
- *   highlights: [
- *     { icon: '🌟', label: '가장 많이 느낀 감정', value: '기쁨 (3일)' },
- *     { icon: '🌈', label: '감정 다양성', value: '5가지 감정' }
- *   ]
- * }
- */
-
 const props = defineProps({
   modelValue: {
     type: Boolean,
