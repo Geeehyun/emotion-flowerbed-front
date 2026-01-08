@@ -223,13 +223,7 @@
                   </ul>
                 </div>
               </div>
-              <div class="teacher-reference">
-                <p class="reference-title">참고 자료</p>
-                <p class="reference-link">
-                  Yale Center for Emotional Intelligence<br/>
-                  <a href="https://www.ycei.org" target="_blank" rel="noopener noreferrer">www.ycei.org</a>
-                </p>
-              </div>
+              
             </div>
           </div>
         </div>
@@ -240,26 +234,15 @@
           class="teacher-nav-btn teacher-nav-btn-prev"
           @click="prevCard"
         >
-          ‹
+          ◀
         </button>
         <button
           v-if="currentIndex < totalCards - 1"
           class="teacher-nav-btn teacher-nav-btn-next"
           @click="nextCard"
         >
-          ›
+          ▶
         </button>
-
-        <!-- 페이지 인디케이터 -->
-        <div class="teacher-card-indicators">
-          <span
-            v-for="(card, index) in totalCards"
-            :key="index"
-            class="teacher-indicator-dot"
-            :class="{ active: currentIndex === index }"
-            @click="goToCard(index)"
-          ></span>
-        </div>
       </div>
     </template>
   </BaseModal>
@@ -425,8 +408,8 @@ const handleClose = () => {
 .teacher-modal-container {
   position: relative;
   width: 100%;
-  height: 550px;
-  overflow: hidden;
+  min-height: 550px;
+  overflow: visible;
 }
 
 /* ============================================
@@ -441,27 +424,27 @@ const handleClose = () => {
   align-items: center;
   gap: 4px;
   background: linear-gradient(135deg, #C4915C 0%, #8B6F47 100%);
-  padding: 8px 16px;
-  border-radius: 0 0 12px 12px;
-  box-shadow: 0 4px 12px rgba(93, 78, 55, 0.2);
+  padding: 6px 12px;
+  border-radius: 0 0 10px 10px;
+  box-shadow: 0 2px 8px rgba(93, 78, 55, 0.25);
 }
 
 .teacher-page-number {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 700;
   color: #FFFFFF;
   line-height: 1;
 }
 
 .teacher-page-divider {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 400;
   color: rgba(255, 255, 255, 0.7);
   line-height: 1;
 }
 
 .teacher-page-total {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
   color: rgba(255, 255, 255, 0.9);
   line-height: 1;
@@ -469,8 +452,10 @@ const handleClose = () => {
 
 .teacher-card-slider {
   width: 100%;
-  height: 100%;
-  overflow: hidden;
+  height: auto;
+  min-height: 500px;
+  overflow-x: hidden;
+  overflow-y: visible;
   position: relative;
   user-select: none;
   cursor: grab;
@@ -482,18 +467,18 @@ const handleClose = () => {
 
 .teacher-cards-wrapper {
   display: flex;
-  height: 100%;
+  height: auto;
+  min-height: 500px;
   will-change: transform;
   /* transition은 Vue 스타일 바인딩으로 동적 제어 */
 }
 
 .teacher-info-card {
   width: 100%;
-  height: 100%;
+  height: auto;
   flex-shrink: 0;
-  padding: 48px 16px 16px 16px;
+  padding: 16px;
   box-sizing: border-box;
-  overflow-y: hidden;
 }
 
 /* ============================================
@@ -925,37 +910,11 @@ const handleClose = () => {
 }
 
 .teacher-nav-btn-prev {
-  left: -12px;
+  left: -20px;
 }
 
 .teacher-nav-btn-next {
-  right: -12px;
-}
-
-.teacher-card-indicators {
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-  margin-top: 24px;
-}
-
-.teacher-indicator-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: #D4C4B0;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.teacher-indicator-dot:hover {
-  background: #C4915C;
-}
-
-.teacher-indicator-dot.active {
-  background: #8B6F47;
-  width: 24px;
-  border-radius: 5px;
+  right: -20px;
 }
 
 /* ============================================
@@ -964,23 +923,23 @@ const handleClose = () => {
 @media (max-width: 768px) {
   .teacher-page-indicator-top {
     right: 8px;
-    padding: 6px 12px;
+    padding: 5px 10px;
   }
 
   .teacher-page-number {
-    font-size: 18px;
+    font-size: 16px;
   }
 
   .teacher-page-divider {
-    font-size: 14px;
+    font-size: 12px;
   }
 
   .teacher-page-total {
-    font-size: 14px;
+    font-size: 12px;
   }
 
   .teacher-info-card {
-    padding: 40px 16px 16px 16px;
+    padding: 16px;
   }
 
   .card-icon {
@@ -996,11 +955,11 @@ const handleClose = () => {
   }
 
   .teacher-nav-btn-prev {
-    left: 8px;
+    left: -8px;
   }
 
   .teacher-nav-btn-next {
-    right: 8px;
+    right: -8px;
   }
 }
 </style>
