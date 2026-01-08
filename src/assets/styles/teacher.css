@@ -610,6 +610,71 @@
   opacity: 1;
 }
 
+/* ============================================
+   v-calendar DatePicker 커스텀 스타일
+============================================ */
+.teacher-date-selector :deep(.vc-popover-content-wrapper) {
+  z-index: 1000;
+}
+
+.teacher-date-selector :deep(.vc-container) {
+  border: 2px solid #D4C4B0;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(93, 78, 55, 0.15);
+  font-family: inherit;
+  background: #FFFFFF;
+}
+
+.teacher-date-selector :deep(.vc-header) {
+  background: #F8F3E8;
+  padding: 12px;
+}
+
+.teacher-date-selector :deep(.vc-title) {
+  color: #5D4E37;
+  font-weight: 700;
+}
+
+.teacher-date-selector :deep(.vc-arrow) {
+  color: #8B6F47;
+}
+
+.teacher-date-selector :deep(.vc-arrow:hover) {
+  background: #F0E8D8;
+}
+
+.teacher-date-selector :deep(.vc-weekday) {
+  color: #8B6F47;
+  font-weight: 600;
+}
+
+.teacher-date-selector :deep(.vc-day-content) {
+  color: #5D4E37;
+  font-weight: 500;
+}
+
+.teacher-date-selector :deep(.vc-day-content:hover) {
+  background: #F0E8D8;
+  color: #5D4E37;
+}
+
+.teacher-date-selector :deep(.vc-highlight) {
+  background: #C4915C !important;
+}
+
+.teacher-date-selector :deep(.vc-highlight-content-light) {
+  color: #FFFFFF !important;
+}
+
+.teacher-date-selector :deep(.is-today .vc-day-content) {
+  border: 2px solid #C4915C;
+  font-weight: 700;
+}
+
+.teacher-date-selector :deep(.vc-day.is-not-in-month .vc-day-content) {
+  color: #D4C4B0;
+}
+
 .teacher-distribution-content {
   display: flex;
   align-items: center;
@@ -974,13 +1039,14 @@
 /* 대시보드 그리드 (집중 케어 + 위험 히스토리) */
 .teacher-dashboard-grid {
   display: grid;
-  grid-template-columns: 1fr 2fr;
+  grid-template-columns: 1fr;
   gap: 32px;
+  transition: grid-template-columns 0.3s ease;
 }
 
-/* 학생 선택 시 히스토리만 표시 (전체 너비) */
-.teacher-dashboard-grid.history-only {
-  grid-template-columns: 1fr;
+/* 위험 히스토리가 있을 때 그리드 분할 */
+.teacher-dashboard-grid.has-history {
+  grid-template-columns: 1fr 2fr;
 }
 
 /* 집중 케어 필요 섹션 */
@@ -1140,13 +1206,28 @@
 /* 집중 케어 카드 추가 스타일 */
 .teacher-attention-card {
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.teacher-attention-card:hover {
+  transform: translateX(4px) scale(1.02);
+  box-shadow: 0 6px 20px rgba(93, 78, 55, 0.15);
+  border-left-width: 6px;
+}
+
+.teacher-danger-card:hover {
+  background: linear-gradient(135deg, #F5EDE8 0%, #F0E8D8 100%);
+}
+
+.teacher-attention-card-warning:hover {
+  background: linear-gradient(135deg, #FBF8F0 0%, #F5F1E8 100%);
 }
 
 .teacher-attention-card.active {
   border-left-width: 6px;
   background: linear-gradient(135deg, #F5F1E8 0%, #EDE3D0 100%);
   box-shadow: 0 4px 16px rgba(93, 78, 55, 0.15);
+  transform: translateX(4px);
 }
 
 .teacher-risk-meta {

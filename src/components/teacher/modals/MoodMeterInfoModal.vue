@@ -7,6 +7,13 @@
   >
     <template #default>
       <div class="teacher-modal-container">
+        <!-- 상단 페이지 인디케이터 -->
+        <div class="teacher-page-indicator-top">
+          <span class="teacher-page-number">{{ currentIndex + 1 }}</span>
+          <span class="teacher-page-divider">/</span>
+          <span class="teacher-page-total">{{ totalCards }}</span>
+        </div>
+
         <!-- 카드 슬라이더 -->
         <div
           class="teacher-card-slider"
@@ -197,7 +204,6 @@
 
             <!-- 카드 5: 참고 사항 -->
             <div class="teacher-info-card">
-              <div class="card-icon">💡</div>
               <h3 class="teacher-card-title">활용 시 유의사항</h3>
               <div class="teacher-notice-section">
                 <div class="notice-box important">
@@ -423,6 +429,44 @@ const handleClose = () => {
   overflow: hidden;
 }
 
+/* ============================================
+   상단 페이지 인디케이터
+============================================ */
+.teacher-page-indicator-top {
+  position: absolute;
+  top: 0;
+  right: 16px;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: linear-gradient(135deg, #C4915C 0%, #8B6F47 100%);
+  padding: 8px 16px;
+  border-radius: 0 0 12px 12px;
+  box-shadow: 0 4px 12px rgba(93, 78, 55, 0.2);
+}
+
+.teacher-page-number {
+  font-size: 20px;
+  font-weight: 700;
+  color: #FFFFFF;
+  line-height: 1;
+}
+
+.teacher-page-divider {
+  font-size: 16px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1;
+}
+
+.teacher-page-total {
+  font-size: 16px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1;
+}
+
 .teacher-card-slider {
   width: 100%;
   height: 100%;
@@ -447,7 +491,7 @@ const handleClose = () => {
   width: 100%;
   height: 100%;
   flex-shrink: 0;
-  padding: 16px;
+  padding: 48px 16px 16px 16px;
   box-sizing: border-box;
   overflow-y: hidden;
 }
@@ -918,8 +962,25 @@ const handleClose = () => {
    반응형
 ============================================ */
 @media (max-width: 768px) {
+  .teacher-page-indicator-top {
+    right: 8px;
+    padding: 6px 12px;
+  }
+
+  .teacher-page-number {
+    font-size: 18px;
+  }
+
+  .teacher-page-divider {
+    font-size: 14px;
+  }
+
+  .teacher-page-total {
+    font-size: 14px;
+  }
+
   .teacher-info-card {
-    padding: 16px;
+    padding: 40px 16px 16px 16px;
   }
 
   .card-icon {
