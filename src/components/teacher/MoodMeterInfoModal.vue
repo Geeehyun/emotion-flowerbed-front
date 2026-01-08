@@ -2,7 +2,7 @@
   <BaseModal
     v-model="isOpen"
     title="감정 무드미터란?"
-    max-width="700px"
+    max-width="900px"
     @close="handleClose"
   >
     <template #default>
@@ -429,11 +429,13 @@ const handleClose = () => {
 .teacher-modal-container {
   position: relative;
   width: 100%;
+  height: 550px;
   overflow: hidden;
 }
 
 .teacher-card-slider {
   width: 100%;
+  height: 100%;
   overflow: hidden;
   position: relative;
   user-select: none;
@@ -446,33 +448,36 @@ const handleClose = () => {
 
 .teacher-cards-wrapper {
   display: flex;
+  height: 100%;
   will-change: transform;
   /* transition은 Vue 스타일 바인딩으로 동적 제어 */
 }
 
 .teacher-info-card {
   width: 100%;
+  height: 100%;
   flex-shrink: 0;
-  padding: 24px;
+  padding: 16px;
   box-sizing: border-box;
+  overflow-y: auto;
 }
 
 /* ============================================
    공통 요소
 ============================================ */
 .card-icon {
-  font-size: 48px;
+  font-size: 40px;
   text-align: center;
-  margin-bottom: 16px;
+  margin-bottom: 8px;
 }
 
 .teacher-card-title {
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 700;
   color: #5D4E37;
   text-align: center;
-  margin-bottom: 24px;
-  line-height: 1.4;
+  margin-bottom: 12px;
+  line-height: 1.3;
 }
 
 /* ============================================
@@ -480,15 +485,15 @@ const handleClose = () => {
 ============================================ */
 .teacher-definition-box {
   background: #F8F3E8;
-  padding: 24px;
+  padding: 16px;
   border-radius: 12px;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
   border: 1px solid #D4C4B0;
 }
 
 .teacher-image-container {
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 12px;
 }
 
 .teacher-definition-image {
@@ -499,10 +504,10 @@ const handleClose = () => {
 }
 
 .teacher-definition-text {
-  font-size: 15px;
-  line-height: 1.8;
+  font-size: 13px;
+  line-height: 1.6;
   color: #5D4E37;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 
 .teacher-definition-text:last-child {
@@ -588,31 +593,31 @@ const handleClose = () => {
 ============================================ */
 .teacher-importance-grid {
   display: grid;
-  gap: 20px;
+  gap: 12px;
 }
 
 .importance-item {
   background: #F8F3E8;
-  padding: 20px;
-  border-radius: 12px;
+  padding: 12px;
+  border-radius: 8px;
   border-left: 4px solid #C4915C;
 }
 
 .importance-icon {
-  font-size: 32px;
-  margin-bottom: 12px;
+  font-size: 24px;
+  margin-bottom: 6px;
 }
 
 .importance-title {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 700;
   color: #5D4E37;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
 }
 
 .importance-desc {
-  font-size: 14px;
-  line-height: 1.7;
+  font-size: 12px;
+  line-height: 1.5;
   color: #8B7355;
   margin: 0;
 }
@@ -623,29 +628,29 @@ const handleClose = () => {
 .teacher-system-flow {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 10px;
 }
 
 .flow-step {
   display: flex;
   align-items: flex-start;
-  gap: 16px;
+  gap: 12px;
   background: #F8F3E8;
-  padding: 20px;
-  border-radius: 12px;
+  padding: 12px;
+  border-radius: 8px;
   border: 1px solid #D4C4B0;
 }
 
 .flow-number {
-  width: 40px;
-  height: 40px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   background: linear-gradient(135deg, #C4915C 0%, #8B6F47 100%);
   color: white;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 18px;
+  font-size: 14px;
   font-weight: 700;
   flex-shrink: 0;
 }
@@ -655,24 +660,25 @@ const handleClose = () => {
 }
 
 .flow-title {
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 700;
   color: #5D4E37;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
 
 .flow-desc {
-  font-size: 13px;
-  line-height: 1.6;
+  font-size: 11px;
+  line-height: 1.5;
   color: #8B7355;
   margin: 0;
 }
 
 .flow-arrow {
   text-align: center;
-  font-size: 24px;
+  font-size: 16px;
   color: #C4915C;
   font-weight: 700;
+  line-height: 1;
 }
 
 /* ============================================
