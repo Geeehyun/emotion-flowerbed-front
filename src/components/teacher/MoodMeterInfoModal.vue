@@ -459,7 +459,7 @@ const handleClose = () => {
   flex-shrink: 0;
   padding: 16px;
   box-sizing: border-box;
-  overflow-y: auto;
+  overflow-y: hidden;
 }
 
 /* ============================================
@@ -687,31 +687,31 @@ const handleClose = () => {
 .teacher-guide-section {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 8px;
 }
 
 .guide-item {
   background: #F8F3E8;
-  padding: 20px;
-  border-radius: 12px;
+  padding: 10px;
+  border-radius: 8px;
   border: 1px solid #D4C4B0;
 }
 
 .guide-title {
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 700;
   color: #5D4E37;
-  margin-bottom: 12px;
+  margin-bottom: 6px;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   flex-wrap: wrap;
 }
 
 .guide-badge {
-  padding: 4px 10px;
-  border-radius: 6px;
-  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
   font-weight: 700;
   color: white;
 }
@@ -739,12 +739,12 @@ const handleClose = () => {
 }
 
 .guide-list li {
-  font-size: 13px;
-  line-height: 1.6;
+  font-size: 11px;
+  line-height: 1.5;
   color: #8B7355;
-  padding-left: 20px;
+  padding-left: 16px;
   position: relative;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
 }
 
 .guide-list li:last-child {
@@ -754,9 +754,10 @@ const handleClose = () => {
 .guide-list li::before {
   content: '•';
   position: absolute;
-  left: 8px;
+  left: 6px;
   color: #C4915C;
   font-weight: 700;
+  font-size: 10px;
 }
 
 /* ============================================
@@ -765,14 +766,14 @@ const handleClose = () => {
 .teacher-notice-section {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  margin-bottom: 24px;
+  gap: 10px;
+  margin-bottom: 10px;
 }
 
 .notice-box {
-  padding: 20px;
-  border-radius: 12px;
-  border-left: 4px solid;
+  padding: 12px;
+  border-radius: 8px;
+  border-left: 3px solid;
 }
 
 .notice-box.important {
@@ -786,9 +787,9 @@ const handleClose = () => {
 }
 
 .notice-title {
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 700;
-  margin-bottom: 12px;
+  margin-bottom: 6px;
 }
 
 .notice-box.important .notice-title {
@@ -806,12 +807,12 @@ const handleClose = () => {
 }
 
 .notice-list li {
-  font-size: 13px;
-  line-height: 1.7;
+  font-size: 11px;
+  line-height: 1.5;
   color: #5D4E37;
-  padding-left: 20px;
+  padding-left: 16px;
   position: relative;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
 }
 
 .notice-list li:last-child {
@@ -821,31 +822,32 @@ const handleClose = () => {
 .notice-list li::before {
   content: '·';
   position: absolute;
-  left: 8px;
+  left: 6px;
   font-weight: 700;
   color: #8B7355;
+  font-size: 10px;
 }
 
 .teacher-reference {
   background: #F8F3E8;
-  padding: 16px;
-  border-radius: 12px;
+  padding: 10px;
+  border-radius: 8px;
   border: 1px solid #D4C4B0;
   text-align: center;
 }
 
 .reference-title {
-  font-size: 13px;
+  font-size: 11px;
   font-weight: 700;
   color: #8B7355;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
 }
 
 .reference-link {
-  font-size: 12px;
+  font-size: 10px;
   color: #A68B6A;
   margin: 0;
-  line-height: 1.6;
+  line-height: 1.4;
 }
 
 .reference-link a {

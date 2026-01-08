@@ -644,46 +644,33 @@
   overflow: visible;
 }
 
-/* 차트 placeholder */
-.teacher-chart-placeholder {
+/* 차트 컨테이너 */
+.teacher-chart-container {
   width: 192px;
   height: 192px;
   position: relative;
 }
 
-.teacher-chart-circle {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  background: conic-gradient(
-    from 0deg,
-    #ef4444 0deg 60deg,
-    #facc15 60deg 204deg,
-    #3b82f6 204deg 252deg,
-    #22c55e 252deg 312deg,
-    #cbd5e1 312deg 360deg
-  );
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+.teacher-chart-container canvas {
+  width: 100% !important;
+  height: 100% !important;
 }
 
-.teacher-chart-circle::before {
-  content: '';
+.teacher-chart-center-text {
   position: absolute;
-  width: 144px;
-  height: 144px;
-  border-radius: 50%;
-  background: #F8F3E8;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  pointer-events: none;
+  z-index: 1;
 }
 
 .teacher-total-count {
-  position: absolute;
   font-size: 32px;
   font-weight: 700;
   color: #5D4E37;
-  z-index: 1;
+  display: block;
 }
 
 .teacher-count-unit {
@@ -787,10 +774,28 @@
   color: #8B7355;
   padding: 4px 0;
   line-height: 1.4;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
 }
 
 .teacher-zone-tooltip-list li:not(:last-child) {
   border-bottom: 1px solid #EDE3D0;
+}
+
+.teacher-zone-tooltip-list .student-name {
+  font-weight: 600;
+  color: #5D4E37;
+}
+
+.teacher-zone-tooltip-list .student-emotion {
+  font-size: 10px;
+  color: #A68B6A;
+  background: #F0E8D8;
+  padding: 2px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
 }
 
 .teacher-stat-value {
@@ -888,6 +893,23 @@
 
 .teacher-gray-zone .teacher-stat-percent {
   color: #94a3b8;
+}
+
+.teacher-unanalyzed-zone {
+  background: #fafaf9;
+  border-color: #d6d3d1;
+}
+
+.teacher-unanalyzed-zone h4 {
+  color: #57534e;
+}
+
+.teacher-unanalyzed-zone .teacher-stat-value {
+  color: #78716c;
+}
+
+.teacher-unanalyzed-zone .teacher-stat-percent {
+  color: #a8a29e;
 }
 
 /* 대시보드 그리드 (집중 케어 + AI 어시스턴트) */

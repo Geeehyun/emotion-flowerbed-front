@@ -248,8 +248,9 @@
                 </div>
               </div>
               <div class="teacher-distribution-content">
-                <div class="teacher-chart-placeholder">
-                  <div class="teacher-chart-circle">
+                <div class="teacher-chart-container">
+                  <canvas ref="emotionChartCanvas"></canvas>
+                  <div class="teacher-chart-center-text">
                     <span class="teacher-total-count">{{ totalStudents }}<span class="teacher-count-unit">명</span></span>
                   </div>
                 </div>
@@ -263,7 +264,8 @@
                         <p class="teacher-zone-tooltip-title">빨강 영역 학생</p>
                         <ul class="teacher-zone-tooltip-list">
                           <li v-for="student in getZoneStudents('red')" :key="student.id">
-                            {{ student.name }}
+                            <span class="student-name">{{ student.name }}</span>
+                            <span v-if="student.coreEmotionNameKr" class="student-emotion">{{ student.coreEmotionNameKr }}</span>
                           </li>
                         </ul>
                       </div>
@@ -278,7 +280,8 @@
                         <p class="teacher-zone-tooltip-title">노랑 영역 학생</p>
                         <ul class="teacher-zone-tooltip-list">
                           <li v-for="student in getZoneStudents('yellow')" :key="student.id">
-                            {{ student.name }}
+                            <span class="student-name">{{ student.name }}</span>
+                            <span v-if="student.coreEmotionNameKr" class="student-emotion">{{ student.coreEmotionNameKr }}</span>
                           </li>
                         </ul>
                       </div>
@@ -293,7 +296,8 @@
                         <p class="teacher-zone-tooltip-title">파랑 영역 학생</p>
                         <ul class="teacher-zone-tooltip-list">
                           <li v-for="student in getZoneStudents('blue')" :key="student.id">
-                            {{ student.name }}
+                            <span class="student-name">{{ student.name }}</span>
+                            <span v-if="student.coreEmotionNameKr" class="student-emotion">{{ student.coreEmotionNameKr }}</span>
                           </li>
                         </ul>
                       </div>
@@ -308,7 +312,8 @@
                         <p class="teacher-zone-tooltip-title">초록 영역 학생</p>
                         <ul class="teacher-zone-tooltip-list">
                           <li v-for="student in getZoneStudents('green')" :key="student.id">
-                            {{ student.name }}
+                            <span class="student-name">{{ student.name }}</span>
+                            <span v-if="student.coreEmotionNameKr" class="student-emotion">{{ student.coreEmotionNameKr }}</span>
                           </li>
                         </ul>
                       </div>
@@ -316,13 +321,28 @@
                   </div>
                   <div class="teacher-zone-stat-item teacher-gray-zone">
                     <h4>미제출</h4>
-                    <div class="teacher-stat-value">{{ getZoneCount('gray') }}<span class="teacher-stat-percent">명 ({{ getZonePercent('gray') }}%)</span></div>
-                    <div v-if="getZoneStudents('gray').length > 0" class="teacher-zone-tooltip">
+                    <div class="teacher-stat-value">{{ getZoneCount('none') }}<span class="teacher-stat-percent">명 ({{ getZonePercent('none') }}%)</span></div>
+                    <div v-if="getZoneStudents('none').length > 0" class="teacher-zone-tooltip">
                       <div class="teacher-zone-tooltip-arrow"></div>
                       <div class="teacher-zone-tooltip-content">
                         <p class="teacher-zone-tooltip-title">미제출 학생</p>
                         <ul class="teacher-zone-tooltip-list">
-                          <li v-for="student in getZoneStudents('gray')" :key="student.id">
+                          <li v-for="student in getZoneStudents('none')" :key="student.id">
+                            {{ student.name }}
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="teacher-zone-stat-item teacher-unanalyzed-zone">
+                    <h4>분석불가</h4>
+                    <div class="teacher-stat-value">{{ getZoneCount('unanalyzed') }}<span class="teacher-stat-percent">명 ({{ getZonePercent('unanalyzed') }}%)</span></div>
+                    <div v-if="getZoneStudents('unanalyzed').length > 0" class="teacher-zone-tooltip">
+                      <div class="teacher-zone-tooltip-arrow"></div>
+                      <div class="teacher-zone-tooltip-content">
+                        <p class="teacher-zone-tooltip-title">분석불가 학생</p>
+                        <ul class="teacher-zone-tooltip-list">
+                          <li v-for="student in getZoneStudents('unanalyzed')" :key="student.id">
                             {{ student.name }}
                           </li>
                         </ul>
@@ -554,10 +574,14 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, nextTick, watch } from 'vue'
 import { logout } from '@/services/authApi.js'
 import { getDailyEmotionStatus } from '@/services/teacherApi.js'
 import MoodMeterInfoModal from '@/components/teacher/MoodMeterInfoModal.vue'
+import { Chart, ArcElement, Tooltip, Legend } from 'chart.js'
+
+// Chart.js 등록
+Chart.register(ArcElement, Tooltip, Legend)
 
 // 선생님 정보 로드
 const getUserInfo = () => {
@@ -583,6 +607,8 @@ const selectedLetter = ref(null)
 const searchQuery = ref('')
 const isLoading = ref(false)
 const errorMessage = ref('')
+const emotionChartCanvas = ref(null)
+let emotionChart = null
 
 // 오늘 날짜를 YYYY-MM-DD 형식으로 가져오기
 const getTodayDateString = () => {
@@ -637,6 +663,7 @@ const mapStudentData = (apiStudent) => {
     name: apiStudent.name,
     area: apiStudent.area,
     coreEmotion: apiStudent.coreEmotion,
+    coreEmotionNameKr: apiStudent.coreEmotionNameKr,
     isAnalyzed: apiStudent.isAnalyzed,
     status: determineStatus(apiStudent.area),
     dangerSignal: getDangerSignal(apiStudent),
@@ -670,11 +697,6 @@ const handleDateChange = () => {
   loadDailyEmotionStatus(selectedDate.value)
 }
 
-// 컴포넌트 마운트 시 선택된 날짜(오늘)의 감정 현황 로드
-onMounted(() => {
-  loadDailyEmotionStatus(selectedDate.value)
-})
-
 // 대시보드 통계 데이터 (API에서 받은 데이터 사용)
 const totalStudents = computed(() => {
   return emotionData.value?.totalCount || 0
@@ -687,20 +709,117 @@ const zoneDistribution = computed(() => {
       yellow: 0,
       blue: 0,
       green: 0,
-      gray: 0
+      none: 0,
+      unanalyzed: 0
     }
   }
 
   // API의 area 데이터를 그대로 사용
   // API: red, green, blue, yellow, unanalyzed, none
-  // 화면: red, yellow, blue, green, gray
+  // 화면: red, yellow, blue, green, none(미제출), unanalyzed(분석불가)
   return {
     red: emotionData.value.area.red || 0,
     yellow: emotionData.value.area.yellow || 0,
     blue: emotionData.value.area.blue || 0,
     green: emotionData.value.area.green || 0,
-    gray: (emotionData.value.area.unanalyzed || 0) + (emotionData.value.area.none || 0) // unanalyzed + none을 gray로 표시
+    none: emotionData.value.area.none || 0, // 미제출
+    unanalyzed: emotionData.value.area.unanalyzed || 0 // 분석불가
   }
+})
+
+// 감정 분포 차트 생성
+const createEmotionChart = () => {
+  if (!emotionChartCanvas.value) return
+
+  // 기존 차트가 있으면 삭제
+  if (emotionChart) {
+    emotionChart.destroy()
+  }
+
+  const ctx = emotionChartCanvas.value.getContext('2d')
+
+  const data = {
+    labels: ['빨강 영역', '노랑 영역', '파랑 영역', '초록 영역', '미제출', '분석불가'],
+    datasets: [{
+      data: [
+        zoneDistribution.value.red,
+        zoneDistribution.value.yellow,
+        zoneDistribution.value.blue,
+        zoneDistribution.value.green,
+        zoneDistribution.value.none,
+        zoneDistribution.value.unanalyzed
+      ],
+      backgroundColor: [
+        '#EF5350', // 빨강
+        '#FFD54F', // 노랑
+        '#42A5F5', // 파랑
+        '#66BB6A', // 초록
+        '#BDBDBD', // 회색 (미제출)
+        '#9E9E9E'  // 어두운 회색 (분석불가)
+      ],
+      borderWidth: 2,
+      borderColor: '#FFFFFF'
+    }]
+  }
+
+  const options = {
+    responsive: true,
+    maintainAspectRatio: true,
+    cutout: '70%',
+    plugins: {
+      legend: {
+        display: false
+      },
+      tooltip: {
+        enabled: true,
+        callbacks: {
+          label: function(context) {
+            const label = context.label || ''
+            const value = context.parsed || 0
+            const total = totalStudents.value
+            const percent = total > 0 ? Math.round((value / total) * 100) : 0
+            return `${label}: ${value}명 (${percent}%)`
+          }
+        }
+      }
+    }
+  }
+
+  emotionChart = new Chart(ctx, {
+    type: 'doughnut',
+    data: data,
+    options: options
+  })
+}
+
+// 차트 업데이트
+const updateEmotionChart = () => {
+  if (!emotionChart) {
+    createEmotionChart()
+    return
+  }
+
+  emotionChart.data.datasets[0].data = [
+    zoneDistribution.value.red,
+    zoneDistribution.value.yellow,
+    zoneDistribution.value.blue,
+    zoneDistribution.value.green,
+    zoneDistribution.value.none,
+    zoneDistribution.value.unanalyzed
+  ]
+  emotionChart.update()
+}
+
+// zoneDistribution 변경 감지하여 차트 업데이트
+watch(zoneDistribution, () => {
+  updateEmotionChart()
+}, { deep: true })
+
+// 컴포넌트 마운트 시 선택된 날짜(오늘)의 감정 현황 로드
+onMounted(async () => {
+  await loadDailyEmotionStatus(selectedDate.value)
+  await nextTick()
+  createEmotionChart()
 })
 
 // 오늘 날짜
@@ -777,11 +896,6 @@ const getZonePercent = (zone) => {
 
 // 각 영역별 학생 목록 반환
 const getZoneStudents = (zone) => {
-  if (zone === 'gray') {
-    // gray는 unanalyzed + none
-    return students.value.filter(s => s.area === 'unanalyzed' || s.area === 'none')
-  }
-  // 나머지는 area가 일치하는 학생들
   return students.value.filter(s => s.area === zone)
 }
 
