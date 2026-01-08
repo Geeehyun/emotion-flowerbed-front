@@ -82,7 +82,7 @@
                   <h3 class="card-title">감정 무드미터는<br />무엇인가요?</h3>
                   <div class="definition-box">
                     <div class="definition-placeholder">
-                      <img src="@/assets/images/emotion-moodmeter.png" alt="감정 무드 미터" class="definition-image" loading="lazy"/>
+                      <img src="@/assets/images/moodmetter_new.png" alt="감정 무드 미터" class="definition-image" loading="lazy"/>
                     </div>
                     <p class="definition-text">
                       지금 내 마음 상태를<br />
@@ -93,19 +93,19 @@
                   <div class="colors-display">
                     <div class="color-item">
                       <div class="color-circle red"></div>
-                      <span>빨강</span>
+                      <span>화남</span>
                     </div>
                     <div class="color-item">
                       <div class="color-circle yellow"></div>
-                      <span>노랑</span>
+                      <span>기쁨</span>
                     </div>
                     <div class="color-item">
                       <div class="color-circle blue"></div>
-                      <span>파랑</span>
+                      <span>슬픔</span>
                     </div>
                     <div class="color-item">
                       <div class="color-circle green"></div>
-                      <span>초록</span>
+                      <span>평온</span>
                     </div>
                   </div>
                 </div>
