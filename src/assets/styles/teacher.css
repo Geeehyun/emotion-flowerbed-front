@@ -1,6 +1,6 @@
 /*
 ===============================================
-  선생님 대시보드 (Teacher) 스타일시트
+  선생님 오늘의 학급 화단 (Teacher) 스타일시트
 ===============================================
 
   ⚠️ 중요: CSS 네이밍 규칙 ⚠️
@@ -521,10 +521,10 @@
 }
 
 /* ============================================
-   대시보드 뷰
+   오늘의 학급 화단  뷰
 ============================================ */
 
-/* 대시보드 뷰 컨테이너 */
+/* 오늘의 학급 화단  뷰 컨테이너 */
 .teacher-dashboard-view {
   display: flex;
   flex-direction: column;
@@ -726,8 +726,8 @@
   flex: 1;
   max-width: 640px;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
   overflow: visible;
 }
 
@@ -1036,7 +1036,7 @@
   box-shadow: 0 2px 8px rgba(196, 145, 92, 0.2);
 }
 
-/* 대시보드 그리드 (집중 케어 + 위험 히스토리) */
+/* 오늘의 학급 화단  그리드 (집중 케어 + 위험 히스토리) */
 .teacher-dashboard-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -1645,7 +1645,7 @@
 }
 
 /* ============================================
-   학생별 상세 분석
+   학생별 감정 레터
 ============================================ */
 
 /* 학생 분석 컨테이너 */
@@ -2073,6 +2073,15 @@
   gap: 12px;
 }
 
+.teacher-mobile-menu-logo img {
+  width: 32px;
+}
+
+.teacher-mobile-menu-logo .teacher-logo-text {
+  font-weight: 700;
+  color: #5D4E37;
+}
+
 .teacher-mobile-menu-close {
   width: 32px;
   height: 32px;
@@ -2266,7 +2275,7 @@
     padding: 16px;
   }
 
-  /* 대시보드 그리드 모바일 대응 */
+  /* 오늘의 학급 화단  그리드 모바일 대응 */
   .teacher-dashboard-grid {
     grid-template-columns: 1fr;
   }
@@ -2274,5 +2283,137 @@
   /* 데스크톱 위험 히스토리 섹션 숨김 (모바일에서는 모달로 표시) */
   .teacher-risk-history-desktop {
     display: none;
+  }
+
+  /* 감정 분포 영역 통계 반응형 */
+  .teacher-zone-stats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .teacher-zone-stat-item {
+    padding: 12px;
+  }
+}
+
+/* 사이드바 펼침 상태 + 중간 화면 (1126px 이하) - 세로 배치 */
+@media (max-width: 1126px) {
+  .teacher-container:not(.sidebar-collapsed) .teacher-zone-stats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .teacher-container:not(.sidebar-collapsed) .teacher-distribution-content {
+    gap: 20px;
+  }
+
+  .teacher-container:not(.sidebar-collapsed) .teacher-dashboard-grid.has-history {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .teacher-container:not(.sidebar-collapsed) .teacher-attention-section {
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 8px;
+  }
+
+  .teacher-container:not(.sidebar-collapsed) .teacher-risk-history-section {
+    max-height: 400px;
+  }
+
+  .teacher-container:not(.sidebar-collapsed) .teacher-risk-history-content {
+    max-height: 400px;
+    overflow-y: auto;
+  }
+
+  /* 스크롤바 스타일링 */
+  .teacher-container:not(.sidebar-collapsed) .teacher-attention-section::-webkit-scrollbar,
+  .teacher-container:not(.sidebar-collapsed) .teacher-risk-history-content::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .teacher-container:not(.sidebar-collapsed) .teacher-attention-section::-webkit-scrollbar-track,
+  .teacher-container:not(.sidebar-collapsed) .teacher-risk-history-content::-webkit-scrollbar-track {
+    background: #F8F3E8;
+    border-radius: 3px;
+  }
+
+  .teacher-container:not(.sidebar-collapsed) .teacher-attention-section::-webkit-scrollbar-thumb,
+  .teacher-container:not(.sidebar-collapsed) .teacher-risk-history-content::-webkit-scrollbar-thumb {
+    background: #C4915C;
+    border-radius: 3px;
+  }
+
+  .teacher-container:not(.sidebar-collapsed) .teacher-attention-section::-webkit-scrollbar-thumb:hover,
+  .teacher-container:not(.sidebar-collapsed) .teacher-risk-history-content::-webkit-scrollbar-thumb:hover {
+    background: #8B6F47;
+  }
+}
+
+/* 모든 화면 950px 이하 - 무조건 세로 배치 */
+@media (max-width: 950px) and (min-width: 769px) {
+  .teacher-zone-stats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .teacher-distribution-content {
+    gap: 20px;
+  }
+
+  .teacher-dashboard-grid.has-history {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .teacher-attention-section {
+    max-height: 350px;
+    overflow-y: auto;
+    padding-right: 8px;
+  }
+
+  .teacher-risk-history-section {
+    max-height: 350px;
+  }
+
+  .teacher-risk-history-content {
+    max-height: 350px;
+    overflow-y: auto;
+  }
+
+  /* 스크롤바 스타일링 */
+  .teacher-attention-section::-webkit-scrollbar,
+  .teacher-risk-history-content::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .teacher-attention-section::-webkit-scrollbar-track,
+  .teacher-risk-history-content::-webkit-scrollbar-track {
+    background: #F8F3E8;
+    border-radius: 3px;
+  }
+
+  .teacher-attention-section::-webkit-scrollbar-thumb,
+  .teacher-risk-history-content::-webkit-scrollbar-thumb {
+    background: #C4915C;
+    border-radius: 3px;
+  }
+
+  .teacher-attention-section::-webkit-scrollbar-thumb:hover,
+  .teacher-risk-history-content::-webkit-scrollbar-thumb:hover {
+    background: #8B6F47;
+  }
+}
+
+/* 더 작은 화면 (480px 이하) */
+@media (max-width: 480px) {
+  .teacher-zone-stats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  .teacher-zone-stat-item {
+    padding: 10px;
   }
 }

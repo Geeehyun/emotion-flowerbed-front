@@ -1,5 +1,5 @@
 <template>
-  <div class="teacher-container">
+  <div class="teacher-container" :class="{ 'sidebar-collapsed': isCollapsed }">
     <!-- 모바일 풀페이지 메뉴 -->
     <TeacherMobileMenu
       v-model:isOpen="isMobileMenuOpen"
@@ -41,7 +41,7 @@
 
       <!-- 컨텐츠 영역 -->
       <div class="teacher-content">
-        <!-- 대시보드 뷰 -->
+        <!-- 오늘의 학급 화단  뷰 -->
         <DashboardView
           v-if="currentView === 'dashboard'"
           v-model:selectedDate="selectedDate"
@@ -61,10 +61,10 @@
           @resolve-danger="openResolveDangerModal"
         />
 
-        <!-- 학급 감정 화단 뷰 -->
+        <!-- 이달의 학급 화단  뷰 -->
         <ClassEmotionMapView v-else-if="currentView === 'classMap'" />
 
-        <!-- 학생별 상세 분석 뷰 -->
+        <!-- 학생별 감정 레터 뷰 -->
         <StudentDetailView
           v-else-if="currentView === 'studentMap'"
           v-model:searchQuery="searchQuery"
@@ -326,7 +326,7 @@ const handleDateChange = () => {
   loadDailyEmotionStatus(selectedDate.value)
 }
 
-// 대시보드 통계 데이터 (API에서 받은 데이터 사용)
+// 오늘의 학급 화단  통계 데이터 (API에서 받은 데이터 사용)
 const totalStudents = computed(() => {
   return emotionData.value?.totalCount || 0
 })
@@ -359,9 +359,9 @@ onMounted(async () => {
   await loadAtRiskStudents() // 위험 학생 리스트 로드
 })
 
-// 대시보드로 돌아올 때 초기화
+// 오늘의 학급 화단 로 돌아올 때 초기화
 watch(currentView, async (newView, oldView) => {
-  // 다른 뷰에서 대시보드로 돌아올 때만
+  // 다른 뷰에서 오늘의 학급 화단 로 돌아올 때만
   if (newView === 'dashboard' && oldView !== 'dashboard') {
     // 날짜를 오늘로 초기화
     selectedDate.value = getTodayDateString()
@@ -388,9 +388,9 @@ const viewTitle = computed(() => {
     case 'dashboard':
       return '오늘의 학급 현황'
     case 'classMap':
-      return '학급 감정 화단'
+      return '이달의 학급 화단 '
     case 'studentMap':
-      return '학생별 상세 분석'
+      return '학생별 감정 레터'
     default:
       return ''
   }
@@ -430,7 +430,7 @@ const goToStudentDetailAnalysis = (riskStudent) => {
     selectedStudent.value = student
   }
 
-  // 학생별 상세 분석 뷰로 이동
+  // 학생별 감정 레터 뷰로 이동
   currentView.value = 'studentMap'
 
   // 모바일 모달이 열려있다면 닫기

@@ -143,7 +143,7 @@
                 <div class="flow-step">
                   <div class="flow-number">4</div>
                   <div class="flow-content">
-                    <h4 class="flow-title">교사 대시보드 제공</h4>
+                    <h4 class="flow-title">교사 오늘의 학급 화단  제공</h4>
                     <p class="flow-desc">
                       학급 전체의 감정 분포 현황을 실시간으로 확인하여,
                       학생 지도에 활용할 수 있습니다.
@@ -223,7 +223,7 @@
                   </ul>
                 </div>
               </div>
-              
+
             </div>
           </div>
         </div>
