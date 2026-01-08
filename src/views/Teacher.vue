@@ -212,12 +212,6 @@
             <span>감정 무드미터란?</span>
           </button>
           <span class="teacher-today-date">{{ todayDate }}</span>
-          <button class="teacher-notification-btn">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
-            </svg>
-            <span class="teacher-notification-badge"></span>
-          </button>
         </div>
       </header>
 
@@ -247,10 +241,46 @@
                   />
                 </div>
               </div>
-              <div class="teacher-distribution-content">
-                <div class="teacher-chart-container">
-                  <canvas ref="emotionChartCanvas"></canvas>
-                  <div class="teacher-chart-center-text">
+
+              <!-- 로딩 상태 -->
+              <div v-if="isLoading" class="teacher-distribution-empty-state">
+                <div class="teacher-empty-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="teacher-loading-icon">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+                  </svg>
+                </div>
+                <p class="teacher-empty-message">데이터를 불러오는 중입니다...</p>
+              </div>
+
+              <!-- 에러 상태 -->
+              <div v-else-if="errorMessage" class="teacher-distribution-empty-state">
+                <div class="teacher-empty-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="teacher-error-icon">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                  </svg>
+                </div>
+                <p class="teacher-empty-message teacher-error-message">{{ errorMessage }}</p>
+                <button @click="handleDateChange" class="teacher-retry-btn">다시 시도</button>
+              </div>
+
+              <!-- 데이터 없음 -->
+              <div v-else-if="totalStudents === 0" class="teacher-distribution-empty-state">
+                <div class="teacher-empty-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
+                  </svg>
+                </div>
+                <p class="teacher-empty-message">조회할 데이터가 없습니다</p>
+                <p class="teacher-empty-description">선택한 날짜에 제출된 감정 일기가 없습니다</p>
+              </div>
+
+              <!-- 데이터 있음 -->
+              <div v-else class="teacher-distribution-content">
+                <div class="teacher-chart-wrapper">
+                  <div class="teacher-chart-container">
+                    <canvas ref="emotionChartCanvas"></canvas>
+                  </div>
+                  <div class="teacher-chart-total-text">
                     <span class="teacher-total-count">{{ totalStudents }}<span class="teacher-count-unit">명</span></span>
                   </div>
                 </div>
@@ -364,6 +394,16 @@
                 </svg>
                 집중 케어 필요
               </h3>
+
+              <!-- 케어 필요 학생 없음 -->
+              <div v-if="dangerStudents.length === 0 && attentionStudents.length === 0" class="teacher-attention-empty-state">
+                <div class="teacher-attention-empty-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <p class="teacher-attention-empty-message">집중 케어 필요 학생이 없습니다</p>
+              </div>
 
               <!-- 위험 학생 -->
               <div v-for="student in dangerStudents" :key="student.id" class="teacher-attention-card teacher-danger-card">
@@ -813,6 +853,14 @@ const updateEmotionChart = () => {
 // zoneDistribution 변경 감지하여 차트 업데이트
 watch(zoneDistribution, () => {
   updateEmotionChart()
+}, { deep: true })
+
+// emotionData 변경 감지하여 차트 재생성
+watch(emotionData, async (newData) => {
+  if (newData && newData.totalCount > 0) {
+    await nextTick()
+    createEmotionChart()
+  }
 }, { deep: true })
 
 // 컴포넌트 마운트 시 선택된 날짜(오늘)의 감정 현황 로드

@@ -472,31 +472,6 @@
   color: #8B7355;
 }
 
-.teacher-notification-btn {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: #F5F1E8;
-  border: 1px solid #D4C4B0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  position: relative;
-  transition: all 0.2s;
-}
-
-.teacher-notification-btn:hover {
-  background: #F0E8D8;
-  border-color: #C4915C;
-}
-
-.teacher-notification-btn svg {
-  width: 20px;
-  height: 20px;
-  color: #8B6F47;
-}
-
 .teacher-notification-badge {
   position: absolute;
   top: 0;
@@ -644,6 +619,14 @@
   overflow: visible;
 }
 
+/* 차트 wrapper */
+.teacher-chart-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
 /* 차트 컨테이너 */
 .teacher-chart-container {
   width: 192px;
@@ -656,21 +639,15 @@
   height: 100% !important;
 }
 
-.teacher-chart-center-text {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+.teacher-chart-total-text {
   text-align: center;
-  pointer-events: none;
-  z-index: 1;
 }
 
 .teacher-total-count {
   font-size: 32px;
   font-weight: 700;
   color: #5D4E37;
-  display: block;
+  display: inline;
 }
 
 .teacher-count-unit {
@@ -912,6 +889,88 @@
   color: #a8a29e;
 }
 
+/* 학급 감정 분포 빈 상태 */
+.teacher-distribution-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 32px;
+  text-align: center;
+  min-height: 300px;
+}
+
+.teacher-distribution-empty-state .teacher-empty-icon {
+  width: 80px;
+  height: 80px;
+  background: #F0E8D8;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.teacher-distribution-empty-state .teacher-empty-icon svg {
+  width: 40px;
+  height: 40px;
+  color: #A68B6A;
+}
+
+.teacher-loading-icon {
+  animation: rotate 1s linear infinite;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.teacher-error-icon {
+  color: #D32F2F !important;
+}
+
+.teacher-empty-message {
+  font-size: 18px;
+  font-weight: 700;
+  color: #5D4E37;
+  margin: 0 0 8px 0;
+}
+
+.teacher-error-message {
+  color: #D32F2F;
+}
+
+.teacher-empty-description {
+  font-size: 14px;
+  color: #8B7355;
+  margin: 0;
+}
+
+.teacher-retry-btn {
+  margin-top: 16px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  background: #F8F3E8;
+  border: 1px solid #D4C4B0;
+  color: #8B6F47;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.teacher-retry-btn:hover {
+  background: #F0E8D8;
+  border-color: #C4915C;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(196, 145, 92, 0.2);
+}
+
 /* 대시보드 그리드 (집중 케어 + AI 어시스턴트) */
 .teacher-dashboard-grid {
   display: grid;
@@ -939,6 +998,43 @@
   width: 24px;
   height: 24px;
   color: #D32F2F;
+}
+
+/* 집중 케어 빈 상태 */
+.teacher-attention-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  text-align: center;
+  background: #F8F3E8;
+  border-radius: 12px;
+  border: 1px solid #D4C4B0;
+}
+
+.teacher-attention-empty-icon {
+  width: 64px;
+  height: 64px;
+  background: #F0E8D8;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.teacher-attention-empty-icon svg {
+  width: 32px;
+  height: 32px;
+  color: #66BB6A;
+}
+
+.teacher-attention-empty-message {
+  font-size: 16px;
+  font-weight: 600;
+  color: #8B7355;
+  margin: 0;
 }
 
 .teacher-attention-card {
@@ -1859,8 +1955,7 @@
   }
 
   /* 데스크톱 헤더 액션 숨김 */
-  .teacher-header-actions .teacher-today-date,
-  .teacher-header-actions .teacher-notification-btn {
+  .teacher-header-actions .teacher-today-date {
     display: none;
   }
 
