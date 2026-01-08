@@ -3,9 +3,6 @@
     <div class="teacher-section-card">
       <div class="teacher-section-header-row">
         <h2 class="teacher-section-title">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M9.53 16.122a3 3 0 00-5.78 1.128 2.25 2.25 0 01-2.4 2.245 4.5 4.5 0 008.4-2.245c0-.399-.078-.78-.22-1.128zm0 0a15.998 15.998 0 003.388-1.62m-5.043-.025a15.994 15.994 0 011.622-3.395m3.42 3.42a15.995 15.995 0 004.764-4.635m3.61 3.61a16.005 16.005 0 01-4.764-4.615m4.602 4.617a16.006 16.006 0 00-1.615 3.396m-4.616-4.616a16.005 16.005 0 014.615-4.617m0 0a3.001 3.001 0 00-4.453-4.453m0 0a15.996 15.996 0 01-3.4 1.62m3.4-1.62a15.994 15.994 0 00-4.764 4.635" />
-          </svg>
           학급 감정 분포 현황
         </h2>
         <div class="teacher-date-selector">
