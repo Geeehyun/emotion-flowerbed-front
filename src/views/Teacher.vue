@@ -454,13 +454,21 @@
                     <h3 class="teacher-risk-history-title">{{ selectedRiskStudent.name }} 학생</h3>
                     <p class="teacher-risk-history-subtitle">위험도 변화 이력</p>
                   </div>
-                  <button
-                    v-if="selectedRiskStudent.riskLevel === 'DANGER'"
-                    @click="openResolveDangerModal"
-                    class="teacher-resolve-danger-btn"
-                  >
-                    위험 해지
-                  </button>
+                  <div class="teacher-history-actions">
+                    <button
+                      @click="goToStudentDetailAnalysis(selectedRiskStudent)"
+                      class="teacher-detail-analysis-btn"
+                    >
+                      상세 분석 보기
+                    </button>
+                    <button
+                      v-if="selectedRiskStudent.riskLevel === 'DANGER'"
+                      @click="openResolveDangerModal"
+                      class="teacher-resolve-danger-btn"
+                    >
+                      위험 해지
+                    </button>
+                  </div>
                 </div>
 
                 <!-- 로딩 중 -->
@@ -718,6 +726,7 @@
       :history="riskHistory?.histories || []"
       :is-loading="isLoadingHistory"
       @resolve="openResolveDangerModal"
+      @detail-analysis="goToStudentDetailAnalysis(selectedRiskStudent)"
     />
   </div>
 </template>
@@ -1069,6 +1078,14 @@ watch(emotionData, async (newData) => {
   }
 }, { deep: true })
 
+// 뷰 변경 감지하여 대시보드로 돌아올 때 차트 재생성
+watch(currentView, async (newView) => {
+  if (newView === 'dashboard' && emotionData.value && emotionData.value.totalCount > 0) {
+    await nextTick()
+    createEmotionChart()
+  }
+})
+
 // 컴포넌트 마운트 시 선택된 날짜(오늘)의 감정 현황 로드
 onMounted(async () => {
   await loadDailyEmotionStatus(selectedDate.value)
@@ -1157,6 +1174,24 @@ const getZoneStudents = (zone) => {
 const openStudentDetail = (student) => {
   selectedStudent.value = student
   currentView.value = 'studentMap'
+}
+
+// 위험 학생 -> 상세 분석 이동
+const goToStudentDetailAnalysis = (riskStudent) => {
+  if (!riskStudent) return
+
+  // students 배열에서 해당 학생 찾기 (userSn으로 매칭)
+  const student = students.value.find(s => s.id === riskStudent.userSn)
+
+  if (student) {
+    selectedStudent.value = student
+  }
+
+  // 학생별 상세 분석 뷰로 이동
+  currentView.value = 'studentMap'
+
+  // 모바일 모달이 열려있다면 닫기
+  isRiskHistoryMobileModalOpen.value = false
 }
 
 // 날짜 포맷 헬퍼 함수

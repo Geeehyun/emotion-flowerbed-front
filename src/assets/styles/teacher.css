@@ -1202,6 +1202,32 @@
   margin: 0;
 }
 
+/* 히스토리 액션 버튼 영역 */
+.teacher-history-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.teacher-detail-analysis-btn {
+  padding: 8px 16px;
+  border-radius: 8px;
+  background: #C4915C;
+  color: white;
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.teacher-detail-analysis-btn:hover {
+  background: #A67B4A;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(196, 145, 92, 0.3);
+}
+
 .teacher-resolve-danger-btn {
   padding: 8px 16px;
   border-radius: 8px;

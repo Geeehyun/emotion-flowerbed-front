@@ -14,9 +14,16 @@
       </div>
 
       <div class="teacher-modal-body">
-        <!-- 위험 해지 버튼 (DANGER 레벨일 때만) -->
-        <div v-if="riskLevel === 'DANGER'" class="teacher-modal-action-section">
-          <button @click="handleResolveClick" class="teacher-resolve-danger-btn">
+        <!-- 액션 버튼들 -->
+        <div class="teacher-modal-action-section">
+          <button @click="handleDetailAnalysisClick" class="teacher-detail-analysis-btn-mobile">
+            상세 분석 보기
+          </button>
+          <button
+            v-if="riskLevel === 'DANGER'"
+            @click="handleResolveClick"
+            class="teacher-resolve-danger-btn"
+          >
             위험 해지
           </button>
         </div>
@@ -127,7 +134,7 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['update:modelValue', 'resolve'])
+const emit = defineEmits(['update:modelValue', 'resolve', 'detail-analysis'])
 
 const handleClose = () => {
   emit('update:modelValue', false)
@@ -135,6 +142,10 @@ const handleClose = () => {
 
 const handleResolveClick = () => {
   emit('resolve')
+}
+
+const handleDetailAnalysisClick = () => {
+  emit('detail-analysis')
 }
 
 // 날짜 포맷 헬퍼 함수
@@ -267,11 +278,33 @@ const formatLevel = (level) => {
   overflow-y: auto;
 }
 
-/* 위험 해지 버튼 섹션 */
+/* 액션 버튼 섹션 */
 .teacher-modal-action-section {
   margin-bottom: 16px;
   padding-bottom: 16px;
   border-bottom: 1px solid #D4C4B0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.teacher-detail-analysis-btn-mobile {
+  width: 100%;
+  padding: 12px;
+  background: #C4915C;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.teacher-detail-analysis-btn-mobile:hover {
+  background: #A67B4A;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(196, 145, 92, 0.3);
 }
 
 .teacher-resolve-danger-btn {
