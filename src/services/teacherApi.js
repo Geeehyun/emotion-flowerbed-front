@@ -28,6 +28,87 @@ export async function getDailyEmotionStatus(date) {
   }
 }
 
+/**
+ * 위험 학생 리스트 조회
+ * @param {string} level - 위험 레벨 필터 (ALL, CAUTION, DANGER)
+ * @returns {Promise} - 위험 학생 목록 데이터
+ */
+export async function getAtRiskStudents(level = 'ALL') {
+  try {
+    const accessToken = localStorage.getItem('accessToken')
+    if (!accessToken) {
+      throw new Error('로그인이 필요합니다.')
+    }
+
+    const response = await axios.get(`${API_BASE_URL}/teachers/students/at-risk`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      params: { level }
+    })
+    return response.data
+  } catch (error) {
+    console.error('위험 학생 리스트 조회 실패:', error)
+    throw new Error('위험 학생 목록을 불러오는데 실패했습니다.')
+  }
+}
+
+/**
+ * 학생별 위험 히스토리 조회
+ * @param {number} studentUserSn - 학생 일련번호
+ * @returns {Promise} - 학생 위험 히스토리 데이터
+ */
+export async function getStudentRiskHistory(studentUserSn) {
+  try {
+    const accessToken = localStorage.getItem('accessToken')
+    if (!accessToken) {
+      throw new Error('로그인이 필요합니다.')
+    }
+
+    const response = await axios.get(`${API_BASE_URL}/teachers/students/${studentUserSn}/risk-history`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    })
+    return response.data
+  } catch (error) {
+    console.error('위험 히스토리 조회 실패:', error)
+    throw new Error('위험 히스토리를 불러오는데 실패했습니다.')
+  }
+}
+
+/**
+ * 위험 상태 해지
+ * @param {number} studentUserSn - 학생 일련번호
+ * @param {string} memo - 해지 사유
+ * @returns {Promise} - 해지 결과
+ */
+export async function resolveDanger(studentUserSn, memo) {
+  try {
+    const accessToken = localStorage.getItem('accessToken')
+    if (!accessToken) {
+      throw new Error('로그인이 필요합니다.')
+    }
+
+    const response = await axios.post(
+      `${API_BASE_URL}/teachers/students/${studentUserSn}/resolve-danger`,
+      { memo },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      }
+    )
+    return response.data
+  } catch (error) {
+    console.error('위험 해지 실패:', error)
+    throw new Error('위험 상태 해지에 실패했습니다.')
+  }
+}
+
 export default {
-  getDailyEmotionStatus
+  getDailyEmotionStatus,
+  getAtRiskStudents,
+  getStudentRiskHistory,
+  resolveDanger
 }

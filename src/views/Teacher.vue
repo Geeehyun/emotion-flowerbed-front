@@ -406,47 +406,139 @@
               </div>
 
               <!-- 위험 학생 -->
-              <div v-for="student in dangerStudents" :key="student.id" class="teacher-attention-card teacher-danger-card">
+              <div
+                v-for="student in dangerStudents"
+                :key="student.userSn"
+                @click="selectRiskStudent(student)"
+                :class="{ active: selectedRiskStudent?.userSn === student.userSn }"
+                class="teacher-attention-card teacher-danger-card"
+              >
                 <div class="teacher-attention-card-content">
                   <div class="teacher-attention-header">
                     <span class="teacher-student-name">{{ student.name }}</span>
                     <span class="teacher-danger-badge">위험</span>
                   </div>
-                  <p class="teacher-danger-signal">"{{ student.dangerSignal }}"</p>
+                  <p class="teacher-danger-signal">{{ student.riskReason }}</p>
+                  <div v-if="student.riskContinuousArea" class="teacher-risk-meta">
+                    <span class="teacher-risk-continuous">{{ student.riskContinuousDays }}일 연속 {{ student.riskContinuousArea }} 영역</span>
+                  </div>
                 </div>
-                <button @click="openStudentDetail(student)" class="teacher-detail-btn teacher-danger-btn">
-                  분석 보기
-                </button>
               </div>
 
               <!-- 주의 학생 -->
-              <div v-for="student in attentionStudents" :key="student.id" class="teacher-attention-card teacher-attention-card-warning">
+              <div
+                v-for="student in attentionStudents"
+                :key="student.userSn"
+                @click="selectRiskStudent(student)"
+                :class="{ active: selectedRiskStudent?.userSn === student.userSn }"
+                class="teacher-attention-card teacher-attention-card-warning"
+              >
                 <div class="teacher-attention-card-content">
                   <div class="teacher-attention-header">
                     <span class="teacher-student-name">{{ student.name }}</span>
                     <span class="teacher-attention-badge">주의</span>
                   </div>
-                  <p class="teacher-attention-reason">{{ student.attentionReason }}</p>
+                  <p class="teacher-attention-reason">{{ student.riskReason }}</p>
+                  <div v-if="student.riskContinuousArea" class="teacher-risk-meta">
+                    <span class="teacher-risk-continuous">{{ student.riskContinuousDays }}일 연속 {{ student.riskContinuousArea }} 영역</span>
+                  </div>
                 </div>
-                <button @click="openStudentDetail(student)" class="teacher-detail-btn">
-                  살펴보기
-                </button>
               </div>
             </section>
 
-            <!-- AI 어시스턴트 -->
-            <section class="teacher-ai-assistant-section">
-              <h3 class="teacher-ai-assistant-title">AI 선생님 어시스턴트</h3>
-              <div class="teacher-ai-analysis-card">
-                <p class="teacher-ai-analysis-text">
-                  전체 학생의 <strong>87%</strong>가 일기를 제출했습니다. 제출된 일기 중에는 <strong class="teacher-highlight-yellow">노랑 영역</strong>의 비율이 높습니다.
-                </p>
-              </div>
-              <div class="teacher-ai-recommendation-card">
-                <p class="teacher-recommendation-label">오늘의 추천 활동</p>
-                <div class="teacher-recommendation-content">
-                  <span class="teacher-activity-name">차분한 명상 음악 3분 듣기</span>
-                  <button class="teacher-play-btn">플레이</button>
+            <!-- 위험 히스토리 패널 (학생 선택 시에만 표시) -->
+            <section v-if="selectedRiskStudent" class="teacher-risk-history-section teacher-risk-history-desktop">
+              <div class="teacher-risk-history-content">
+                <div class="teacher-risk-history-header">
+                  <div>
+                    <h3 class="teacher-risk-history-title">{{ selectedRiskStudent.name }} 학생</h3>
+                    <p class="teacher-risk-history-subtitle">위험도 변화 이력</p>
+                  </div>
+                  <button
+                    v-if="selectedRiskStudent.riskLevel === 'DANGER'"
+                    @click="openResolveDangerModal"
+                    class="teacher-resolve-danger-btn"
+                  >
+                    위험 해지
+                  </button>
+                </div>
+
+                <!-- 로딩 중 -->
+                <div v-if="isLoadingHistory" class="teacher-history-loading">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="teacher-loading-icon">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+                  </svg>
+                  <p>히스토리를 불러오는 중...</p>
+                </div>
+
+                <!-- 히스토리 테이블 -->
+                <div v-else-if="riskHistory && riskHistory.histories.length > 0" class="teacher-history-table-wrapper">
+                  <table class="teacher-history-table">
+                    <thead>
+                      <tr>
+                        <th>날짜/시각</th>
+                        <th>상태 변화</th>
+                        <th>사유</th>
+                        <th>키워드</th>
+                        <th>선생님 메모</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr
+                        v-for="history in riskHistory.histories"
+                        :key="history.historyId"
+                        class="teacher-history-row"
+                      >
+                        <td class="teacher-history-date-cell">
+                          {{ formatDate(history.createdAt) }}
+                        </td>
+                        <td class="teacher-history-level-cell">
+                          <div class="teacher-history-level-change">
+                            <span v-if="history.previousLevel" :class="`teacher-level-badge teacher-level-${history.previousLevel.toLowerCase()}`">
+                              {{ formatLevel(history.previousLevel) }}
+                            </span>
+                            <span v-else class="teacher-level-badge teacher-level-none">-</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="teacher-arrow-icon">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                            </svg>
+                            <span :class="`teacher-level-badge teacher-level-${history.newLevel.toLowerCase()}`">
+                              {{ formatLevel(history.newLevel) }}
+                            </span>
+                          </div>
+                        </td>
+                        <td class="teacher-history-reason-cell">
+                          <p v-if="history.riskReason">{{ history.riskReason }}</p>
+                          <p v-else class="teacher-empty-cell">-</p>
+                        </td>
+                        <td class="teacher-history-keywords-cell">
+                          <div v-if="history.concernKeywords && history.concernKeywords.length > 0" class="teacher-history-keywords">
+                            <span
+                              v-for="keyword in history.concernKeywords"
+                              :key="keyword"
+                              class="teacher-keyword-tag"
+                            >
+                              {{ keyword }}
+                            </span>
+                          </div>
+                          <p v-else class="teacher-empty-cell">-</p>
+                        </td>
+                        <td class="teacher-history-memo-cell">
+                          <div v-if="history.teacherMemo" class="teacher-history-memo">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+                            </svg>
+                            <p>{{ history.teacherMemo }}</p>
+                          </div>
+                          <p v-else class="teacher-empty-cell">-</p>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <!-- 히스토리 없음 -->
+                <div v-else class="teacher-history-empty">
+                  <p>위험도 변화 이력이 없습니다</p>
                 </div>
               </div>
             </section>
@@ -610,14 +702,33 @@
 
     <!-- 감정 무드미터 안내 모달 -->
     <MoodMeterInfoModal v-model="isMoodMeterModalOpen" />
+
+    <!-- 위험 해지 모달 -->
+    <ResolveDangerModal
+      v-model="isResolveDangerModalOpen"
+      :student-name="selectedRiskStudent?.name || ''"
+      @resolve="handleResolveDanger"
+    />
+
+    <!-- 위험 히스토리 모바일 모달 -->
+    <RiskHistoryMobileModal
+      v-model="isRiskHistoryMobileModalOpen"
+      :student-name="selectedRiskStudent?.name || ''"
+      :risk-level="selectedRiskStudent?.riskLevel || ''"
+      :history="riskHistory?.histories || []"
+      :is-loading="isLoadingHistory"
+      @resolve="openResolveDangerModal"
+    />
   </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted, nextTick, watch } from 'vue'
 import { logout } from '@/services/authApi.js'
-import { getDailyEmotionStatus } from '@/services/teacherApi.js'
+import { getDailyEmotionStatus, getAtRiskStudents, getStudentRiskHistory, resolveDanger } from '@/services/teacherApi.js'
 import MoodMeterInfoModal from '@/components/teacher/MoodMeterInfoModal.vue'
+import ResolveDangerModal from '@/components/teacher/ResolveDangerModal.vue'
+import RiskHistoryMobileModal from '@/components/teacher/RiskHistoryMobileModal.vue'
 import { Chart, ArcElement, Tooltip, Legend } from 'chart.js'
 
 // Chart.js 등록
@@ -642,6 +753,8 @@ const isCollapsed = ref(false)
 const isMobileMenuOpen = ref(false)
 const isUserTooltipOpen = ref(false)
 const isMoodMeterModalOpen = ref(false)
+const isResolveDangerModalOpen = ref(false)
+const isRiskHistoryMobileModalOpen = ref(false)
 const selectedStudent = ref(null)
 const selectedLetter = ref(null)
 const searchQuery = ref('')
@@ -666,6 +779,15 @@ const selectedDate = ref(getTodayDateString())
 const currentDate = ref(null) // 현재 조회 중인 날짜
 const emotionData = ref(null) // 전체 감정 현황 데이터
 const students = ref([])
+
+// 위험 학생 데이터
+const atRiskData = ref(null) // 위험 학생 리스트 데이터
+const atRiskStudents = ref([]) // 위험 학생 목록
+const selectedRiskStudent = ref(null) // 선택된 위험 학생
+const riskHistory = ref(null) // 선택된 학생의 위험 히스토리
+const isLoadingRisk = ref(false) // 위험 학생 로딩 상태
+const isLoadingHistory = ref(false) // 히스토리 로딩 상태
+const riskErrorMessage = ref('') // 위험 학생 에러 메시지
 
 // area 값 기반으로 학생 상태 결정
 const determineStatus = (area) => {
@@ -729,6 +851,90 @@ const loadDailyEmotionStatus = async (date = null) => {
     errorMessage.value = error.message || '감정 현황을 불러오는데 실패했습니다.'
   } finally {
     isLoading.value = false
+  }
+}
+
+// 위험 학생 리스트 로드
+const loadAtRiskStudents = async (level = 'ALL') => {
+  try {
+    isLoadingRisk.value = true
+    riskErrorMessage.value = ''
+
+    const data = await getAtRiskStudents(level)
+
+    atRiskData.value = data
+    atRiskStudents.value = data.students
+  } catch (error) {
+    console.error('위험 학생 리스트 로드 실패:', error)
+    riskErrorMessage.value = error.message || '위험 학생 목록을 불러오는데 실패했습니다.'
+  } finally {
+    isLoadingRisk.value = false
+  }
+}
+
+// 학생 위험 히스토리 로드
+const loadStudentRiskHistory = async (studentUserSn) => {
+  try {
+    isLoadingHistory.value = true
+
+    const data = await getStudentRiskHistory(studentUserSn)
+    riskHistory.value = data
+  } catch (error) {
+    console.error('위험 히스토리 로드 실패:', error)
+    riskHistory.value = null
+  } finally {
+    isLoadingHistory.value = false
+  }
+}
+
+// 화면 크기 확인 (모바일 여부)
+const isMobile = () => {
+  return window.innerWidth <= 768
+}
+
+// 위험 학생 선택 핸들러
+const selectRiskStudent = async (student) => {
+  selectedRiskStudent.value = student
+  await loadStudentRiskHistory(student.userSn)
+
+  // 모바일에서는 모달 열기
+  if (isMobile()) {
+    isRiskHistoryMobileModalOpen.value = true
+  }
+}
+
+// 모바일 모달 닫기 핸들러
+const closeRiskHistoryMobileModal = () => {
+  isRiskHistoryMobileModalOpen.value = false
+}
+
+// 위험 해지 모달 열기
+const openResolveDangerModal = () => {
+  isResolveDangerModalOpen.value = true
+}
+
+// 위험 해지 핸들러
+const handleResolveDanger = async (memo) => {
+  try {
+    if (!selectedRiskStudent.value) return
+
+    await resolveDanger(selectedRiskStudent.value.userSn, memo)
+
+    // 모달 닫기
+    isResolveDangerModalOpen.value = false
+
+    // 성공 시 리스트 다시 로드
+    await loadAtRiskStudents()
+
+    // 선택된 학생 초기화
+    selectedRiskStudent.value = null
+    riskHistory.value = null
+
+    alert('위험 상태가 해지되었습니다.')
+  } catch (error) {
+    console.error('위험 해지 실패:', error)
+    alert('위험 상태 해지에 실패했습니다.')
+    // 모달은 열어둠 (재시도 가능)
   }
 }
 
@@ -866,6 +1072,7 @@ watch(emotionData, async (newData) => {
 // 컴포넌트 마운트 시 선택된 날짜(오늘)의 감정 현황 로드
 onMounted(async () => {
   await loadDailyEmotionStatus(selectedDate.value)
+  await loadAtRiskStudents() // 위험 학생 리스트 로드
   await nextTick()
   createEmotionChart()
 })
@@ -901,11 +1108,11 @@ const pageSubtitle = computed(() => {
 })
 
 const dangerStudents = computed(() => {
-  return students.value.filter(s => s.status === 'danger')
+  return atRiskStudents.value.filter(s => s.riskLevel === 'DANGER')
 })
 
 const attentionStudents = computed(() => {
-  return students.value.filter(s => s.status === 'attention')
+  return atRiskStudents.value.filter(s => s.riskLevel === 'CAUTION')
 })
 
 const filteredStudents = computed(() => {
@@ -950,6 +1157,28 @@ const getZoneStudents = (zone) => {
 const openStudentDetail = (student) => {
   selectedStudent.value = student
   currentView.value = 'studentMap'
+}
+
+// 날짜 포맷 헬퍼 함수
+const formatDate = (isoString) => {
+  const date = new Date(isoString)
+  return date.toLocaleDateString('ko-KR', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  })
+}
+
+// 위험도 레벨 포맷 헬퍼 함수
+const formatLevel = (level) => {
+  const levelMap = {
+    'NORMAL': '정상',
+    'CAUTION': '주의',
+    'DANGER': '위험'
+  }
+  return levelMap[level] || level
 }
 
 const handleLogout = async () => {

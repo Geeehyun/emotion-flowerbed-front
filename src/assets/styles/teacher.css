@@ -971,11 +971,16 @@
   box-shadow: 0 2px 8px rgba(196, 145, 92, 0.2);
 }
 
-/* 대시보드 그리드 (집중 케어 + AI 어시스턴트) */
+/* 대시보드 그리드 (집중 케어 + 위험 히스토리) */
 .teacher-dashboard-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 2fr;
   gap: 32px;
+}
+
+/* 학생 선택 시 히스토리만 표시 (전체 너비) */
+.teacher-dashboard-grid.history-only {
+  grid-template-columns: 1fr;
 }
 
 /* 집중 케어 필요 섹션 */
@@ -1132,108 +1137,292 @@
   background: #FFE4E1;
 }
 
-/* AI 어시스턴트 섹션 */
-.teacher-ai-assistant-section {
-  background: linear-gradient(135deg, #8B6F47 0%, #6F5835 100%);
-  color: white;
+/* 집중 케어 카드 추가 스타일 */
+.teacher-attention-card {
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.teacher-attention-card.active {
+  border-left-width: 6px;
+  background: linear-gradient(135deg, #F5F1E8 0%, #EDE3D0 100%);
+  box-shadow: 0 4px 16px rgba(93, 78, 55, 0.15);
+}
+
+.teacher-risk-meta {
+  margin-top: 8px;
+}
+
+.teacher-risk-continuous {
+  font-size: 12px;
+  color: #A68B6A;
+  background: #F0E8D8;
+  padding: 4px 8px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+/* 위험 히스토리 섹션 */
+.teacher-risk-history-section {
+  background: #F8F3E8;
   border-radius: 16px;
-  padding: 24px;
-  box-shadow: 0 4px 12px rgba(139, 111, 71, 0.3);
+  box-shadow: 0 2px 8px rgba(93, 78, 55, 0.08);
+  border: 1px solid #D4C4B0;
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  position: relative;
   overflow: hidden;
 }
 
-.teacher-ai-assistant-section::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 128px;
-  height: 128px;
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 0 16px 0 100%;
+.teacher-risk-history-content {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
-.teacher-ai-assistant-title {
-  font-size: 18px;
+.teacher-risk-history-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #D4C4B0;
+}
+
+.teacher-risk-history-title {
+  font-size: 20px;
   font-weight: 700;
-  color: #E8D5A8;
-  z-index: 1;
+  color: #5D4E37;
+  margin: 0 0 4px 0;
 }
 
-.teacher-ai-analysis-card {
-  background: rgba(210, 166, 121, 0.25);
-  border: 1px solid rgba(210, 166, 121, 0.3);
-  border-radius: 12px;
-  padding: 16px;
-  backdrop-filter: blur(10px);
-  z-index: 1;
-}
-
-.teacher-ai-analysis-text {
+.teacher-risk-history-subtitle {
   font-size: 14px;
-  line-height: 1.6;
-  color: white;
+  color: #8B7355;
   margin: 0;
 }
 
-.teacher-ai-analysis-text strong {
-  font-weight: 700;
-  color: #E8D5A8;
-}
-
-.teacher-highlight-yellow {
-  color: #E8D5A8;
-}
-
-.teacher-ai-recommendation-card {
-  background: rgba(210, 166, 121, 0.25);
-  border: 1px solid rgba(210, 166, 121, 0.3);
-  border-radius: 12px;
-  padding: 16px;
-  backdrop-filter: blur(10px);
-  z-index: 1;
-}
-
-.teacher-recommendation-label {
-  font-size: 12px;
-  font-weight: 700;
-  color: #EDE3D0;
-  margin-bottom: 8px;
-}
-
-.teacher-recommendation-content {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.teacher-activity-name {
-  font-size: 14px;
-  font-weight: 700;
+.teacher-resolve-danger-btn {
+  padding: 8px 16px;
+  border-radius: 8px;
+  background: #D32F2F;
   color: white;
-}
-
-.teacher-play-btn {
-  background: white;
-  color: #6F5835;
   border: none;
-  padding: 6px 16px;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: 700;
+  font-size: 14px;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
   white-space: nowrap;
 }
 
-.teacher-play-btn:hover {
-  background: #E8D5A8;
-  transform: scale(1.05);
+.teacher-resolve-danger-btn:hover {
+  background: #B71C1C;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(211, 47, 47, 0.3);
+}
+
+/* 히스토리 로딩 */
+.teacher-history-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px;
+  text-align: center;
+}
+
+.teacher-history-loading p {
+  font-size: 14px;
+  color: #8B7355;
+  margin-top: 12px;
+}
+
+/* 히스토리 테이블 */
+.teacher-history-table-wrapper {
+  max-height: 500px;
+  overflow-y: auto;
+  overflow-x: auto;
+  border-radius: 8px;
+  border: 1px solid #D4C4B0;
+}
+
+.teacher-history-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  font-size: 14px;
+}
+
+.teacher-history-table thead {
+  background: #F0E8D8;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.teacher-history-table th {
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 700;
+  color: #5D4E37;
+  border-bottom: 2px solid #D4C4B0;
+  white-space: nowrap;
+}
+
+.teacher-history-table tbody tr {
+  border-bottom: 1px solid #EDE3D0;
+  transition: background 0.2s;
+}
+
+.teacher-history-table tbody tr:hover {
+  background: #F8F3E8;
+}
+
+.teacher-history-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.teacher-history-table td {
+  padding: 16px;
+  vertical-align: top;
+}
+
+.teacher-history-date-cell {
+  font-size: 13px;
+  color: #8B7355;
+  font-weight: 600;
+  white-space: nowrap;
+  min-width: 160px;
+}
+
+.teacher-history-level-cell {
+  min-width: 200px;
+}
+
+.teacher-history-reason-cell {
+  min-width: 250px;
+  max-width: 400px;
+}
+
+.teacher-history-reason-cell p {
+  margin: 0;
+  line-height: 1.5;
+  color: #5D4E37;
+}
+
+.teacher-history-keywords-cell {
+  min-width: 150px;
+}
+
+.teacher-history-memo-cell {
+  min-width: 250px;
+  max-width: 350px;
+}
+
+.teacher-empty-cell {
+  color: #C4C4C4;
+  margin: 0;
+}
+
+.teacher-history-level-change {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.teacher-level-badge {
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  display: inline-block;
+}
+
+.teacher-level-normal {
+  background: #E8F5E9;
+  color: #2E7D32;
+}
+
+.teacher-level-caution {
+  background: #FFF8E1;
+  color: #F57C00;
+}
+
+.teacher-level-danger {
+  background: #FFEBEE;
+  color: #C62828;
+}
+
+.teacher-level-none {
+  background: #F5F5F5;
+  color: #9E9E9E;
+}
+
+.teacher-arrow-icon {
+  width: 16px;
+  height: 16px;
+  color: #A68B6A;
+}
+
+.teacher-history-reason {
+  font-size: 14px;
+  color: #5D4E37;
+  line-height: 1.5;
+  margin: 0 0 8px 0;
+}
+
+.teacher-history-keywords {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.teacher-keyword-tag {
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: #FFEBEE;
+  color: #C62828;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.teacher-history-memo {
+  background: #F8F3E8;
+  border: 1px solid #D4C4B0;
+  border-radius: 8px;
+  padding: 10px;
+  display: flex;
+  gap: 8px;
+}
+
+.teacher-history-memo svg {
+  width: 16px;
+  height: 16px;
+  color: #C4915C;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.teacher-history-memo p {
+  font-size: 13px;
+  color: #5D4E37;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* 히스토리 없음 */
+.teacher-history-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px;
+  text-align: center;
+}
+
+.teacher-history-empty p {
+  font-size: 14px;
+  color: #A68B6A;
 }
 
 /* ============================================
@@ -1967,5 +2156,10 @@
   /* 대시보드 그리드 모바일 대응 */
   .teacher-dashboard-grid {
     grid-template-columns: 1fr;
+  }
+
+  /* 데스크톱 위험 히스토리 섹션 숨김 (모바일에서는 모달로 표시) */
+  .teacher-risk-history-desktop {
+    display: none;
   }
 }

@@ -27,12 +27,9 @@
           >
             <!-- 카드 1: 감정 무드미터 소개 -->
             <div class="teacher-info-card">
-              <div class="card-icon">📊</div>
               <h3 class="teacher-card-title">감정 무드미터란?</h3>
               <div class="teacher-definition-box">
-                <div class="teacher-image-container">
-                  <img src="@/assets/images/emotion-moodmeter.png" alt="감정 무드미터" class="teacher-definition-image" loading="lazy"/>
-                </div>
+
                 <p class="teacher-definition-text">
                   감정 무드미터는 <strong>예일대학교 감성지능센터(Yale Center for Emotional Intelligence)</strong>에서 개발한
                   감정 인식 및 조절 도구입니다.
@@ -69,36 +66,31 @@
 
             <!-- 카드 2: 교육적 의의 -->
             <div class="teacher-info-card">
-              <div class="card-icon">🎯</div>
-              <h3 class="teacher-card-title">감정 무드미터의<br/>교육적 의의</h3>
+              <h3 class="teacher-card-title">감정 무드미터의 교육적 의의</h3>
               <div class="teacher-importance-grid">
                 <div class="importance-item">
-                  <div class="importance-icon">🧠</div>
-                  <h4 class="importance-title">감정 인식 능력 향상</h4>
+                  <h4 class="importance-title">🧠 감정 인식 능력 향상</h4>
                   <p class="importance-desc">
                     학생들이 자신의 감정을 명확히 인식하고 언어화하는 능력을 기릅니다.
                     이는 자기 이해의 기초가 됩니다.
                   </p>
                 </div>
                 <div class="importance-item">
-                  <div class="importance-icon">💬</div>
-                  <h4 class="importance-title">감정 표현 및 소통</h4>
+                  <h4 class="importance-title">💬 감정 표현 및 소통</h4>
                   <p class="importance-desc">
                     복잡한 감정을 색상과 이름으로 표현함으로써,
                     학생들이 자신의 감정을 타인에게 효과적으로 전달할 수 있습니다.
                   </p>
                 </div>
                 <div class="importance-item">
-                  <div class="importance-icon">🎨</div>
-                  <h4 class="importance-title">감정 조절 전략 수립</h4>
+                  <h4 class="importance-title">🎨 감정 조절 전략 수립</h4>
                   <p class="importance-desc">
                     현재 감정 상태를 파악함으로써, 상황에 맞는
                     적절한 감정 조절 전략을 선택할 수 있습니다.
                   </p>
                 </div>
                 <div class="importance-item">
-                  <div class="importance-icon">📈</div>
-                  <h4 class="importance-title">사회정서학습(SEL) 지원</h4>
+                  <h4 class="importance-title">📈 사회정서학습(SEL) 지원</h4>
                   <p class="importance-desc">
                     학급 단위의 감정 데이터를 통해 학생들의 정서적 상태를
                     파악하고 맞춤형 지도를 제공할 수 있습니다.
@@ -109,7 +101,6 @@
 
             <!-- 카드 3: 감정 화단 시스템 -->
             <div class="teacher-info-card">
-              <div class="card-icon">🤖</div>
               <h3 class="teacher-card-title">감정 화단 시스템 구조</h3>
               <div class="teacher-system-flow">
                 <div class="flow-step">
@@ -125,7 +116,7 @@
                   <div class="flow-content">
                     <h4 class="flow-title">AI 기반 감정 분석</h4>
                     <p class="flow-desc">
-                      자연어 처리(NLP) 기술을 활용하여 일기 내용을 분석하고,
+                      LLM 기술을 활용하여 일기 내용을 분석하고,
                       감정 무드미터의 영역 및 세부 감정을 자동으로 식별합니다.
                     </p>
                   </div>
@@ -157,7 +148,6 @@
 
             <!-- 카드 4: 활용 가이드 -->
             <div class="teacher-info-card">
-              <div class="card-icon">📋</div>
               <h3 class="teacher-card-title">교사 활용 가이드</h3>
               <div class="teacher-guide-section">
                 <div class="guide-item">
@@ -475,7 +465,7 @@ const handleClose = () => {
   font-size: 20px;
   font-weight: 700;
   color: #5D4E37;
-  text-align: center;
+  text-align: left;
   margin-bottom: 12px;
   line-height: 1.3;
 }
