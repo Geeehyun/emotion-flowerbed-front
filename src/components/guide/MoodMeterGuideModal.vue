@@ -20,7 +20,7 @@
             >
               <div
                 class="cards-wrapper"
-                :style="{ transform: `translateX(-${currentIndex * 100}%)` }"
+                :style="{ transform: `translateX(calc(-${currentIndex * 100}% - ${currentIndex * 2}%))` }"
               >
                 <!-- 카드 1: 감정을 아는 게 왜 중요할까요 -->
                 <div class="guide-card section-importance">
@@ -171,14 +171,14 @@
               class="nav-btn nav-btn-prev"
               @click="prevCard"
             >
-              ‹
+              <span>◀</span>
             </button>
             <button
               v-if="currentIndex < totalCards - 1"
               class="nav-btn nav-btn-next"
               @click="nextCard"
             >
-              ›
+              <span>▶</span>
             </button>
 
             <!-- 페이지 인디케이터 -->

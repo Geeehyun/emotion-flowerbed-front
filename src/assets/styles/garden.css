@@ -2116,13 +2116,13 @@
 .card-slider-container {
   position: relative;
   width: 100%;
-  overflow: hidden;
+  overflow: visible;
   padding-bottom: 45px;
 }
 
 .card-slider {
   width: 100%;
-  overflow: hidden;
+  overflow: visible;
   position: relative;
   touch-action: pan-y;
   cursor: grab;
@@ -2136,6 +2136,7 @@
   display: flex;
   transition: transform 0.45s cubic-bezier(0.25, 0.8, 0.25, 1);
   width: 100%;
+  gap: 2%;
 }
 
 .guide-card {
@@ -2609,6 +2610,11 @@
   right: -20px;
 }
 
+.nav-btn-prev span,
+.nav-btn-next span {
+  font-size: 15px;
+}
+
 /* 페이지 인디케이터 */
 .card-indicators {
   position: absolute;
@@ -2910,6 +2916,14 @@
     height: calc(78dvh - 80px); /* 모바일 브라우저 UI 고려 */
     gap: 2px;
   }
+
+  /* .cards-wrapper:first-child {
+    margin-left: 1%;
+  }
+
+  .cards-wrapper:last-child {
+    margin-right: 1%;
+  } */
 
   .card-emoji {
     font-size: 32px;
