@@ -1338,6 +1338,12 @@
   text-align: center;
 }
 
+.teacher-history-loading svg {
+  width: 32px;
+  height: 32px;
+  color: #8B7355;
+}
+
 .teacher-history-loading p {
   font-size: 14px;
   color: #8B7355;
