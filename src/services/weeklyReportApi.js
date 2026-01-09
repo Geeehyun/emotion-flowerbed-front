@@ -206,6 +206,23 @@ export async function markReportAsRead(reportId) {
 }
 
 /**
+ * 새 감정 레터 알림 확인 처리
+ * @param {number} reportId - 리포트 ID
+ * @returns {Promise<void>}
+ */
+export async function markNotificationAsSent(reportId) {
+  try {
+    await apiClient.put(`/weekly-reports/${reportId}/notification-sent`);
+  } catch (error) {
+    if (error.response?.status === 403) {
+      throw new Error('해당 리포트에 접근 권한이 없습니다.');
+    }
+    console.error('알림 확인 처리 실패:', error);
+    throw new Error('알림 확인 처리 중 문제가 발생했습니다.');
+  }
+}
+
+/**
  * 주간 리포트 데이터를 UI에 맞게 변환
  * @param {Object} reportData - API 응답 데이터
  * @returns {Object} - UI용 데이터

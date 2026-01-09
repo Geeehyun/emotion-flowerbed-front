@@ -243,7 +243,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue'
+import { ref, computed, onMounted, onUnmounted, nextTick, watch } from 'vue'
 import { get3dImageFromDetail, get3dPotImageFromDetail, getRealisticImageFromDetail, getEmotionData, UNKNOWN_EMOTION } from '../utils/flowerMapper.js'
 import { AREA_EMOJIS, AREA_SHORT_NAMES } from '../utils/emotionAreaMapper.js'
 import * as diaryApi from '../services/diaryApi.js'
@@ -1569,6 +1569,23 @@ const checkWeeklyReports = async () => {
     // 에러가 발생해도 화단은 정상 동작하도록 함
   }
 }
+
+// 레터 알림 모달이 열릴 때 자동으로 알림 확인 처리
+watch(showLetterNotification, async (isOpen) => {
+  if (isOpen) {
+    try {
+      // 최신 리포트의 notification-sent를 true로 설정
+      const reports = await weeklyReportApi.getWeeklyReportList('all')
+      if (reports && reports.length > 0) {
+        const latestReport = reports[0] // 최신 리포트
+        await weeklyReportApi.markNotificationAsSent(latestReport.reportId)
+      }
+    } catch (error) {
+      console.error('알림 확인 처리 실패:', error)
+      // 에러가 발생해도 모달은 정상 표시
+    }
+  }
+})
 
 onMounted(async () => {
   document.addEventListener('keydown', handleEscKey)
