@@ -106,9 +106,58 @@ export async function resolveDanger(studentUserSn, memo) {
   }
 }
 
+/**
+ * 학생 목록 조회 (최근 감정 정보 포함)
+ * @returns {Promise} - 학생 목록 데이터
+ */
+export async function getStudents() {
+  try {
+    const accessToken = localStorage.getItem('accessToken')
+    if (!accessToken) {
+      throw new Error('로그인이 필요합니다.')
+    }
+
+    const response = await axios.get(`${API_BASE_URL}/teachers/students`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    })
+    return response.data
+  } catch (error) {
+    console.error('학생 목록 조회 실패:', error)
+    throw new Error('학생 목록을 불러오는데 실패했습니다.')
+  }
+}
+
+/**
+ * 학생별 감정 레터 조회
+ * @param {number} studentUserSn - 학생 일련번호
+ * @returns {Promise} - 감정 레터 목록 데이터
+ */
+export async function getStudentWeeklyReports(studentUserSn) {
+  try {
+    const accessToken = localStorage.getItem('accessToken')
+    if (!accessToken) {
+      throw new Error('로그인이 필요합니다.')
+    }
+
+    const response = await axios.get(`${API_BASE_URL}/teachers/students/${studentUserSn}/weekly-reports`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    })
+    return response.data
+  } catch (error) {
+    console.error('감정 레터 조회 실패:', error)
+    throw new Error('감정 레터를 불러오는데 실패했습니다.')
+  }
+}
+
 export default {
   getDailyEmotionStatus,
   getAtRiskStudents,
   getStudentRiskHistory,
-  resolveDanger
+  resolveDanger,
+  getStudents,
+  getStudentWeeklyReports
 }

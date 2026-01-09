@@ -1732,60 +1732,135 @@
   border-left-color: #C4915C;
 }
 
-.teacher-student-item-info {
+.teacher-student-item-main {
   display: flex;
   align-items: center;
+  width: 100%;
+}
+
+.teacher-student-item-left {
+  display: flex;
+  align-items: flex-start;
   gap: 12px;
+  flex: 1;
+}
+
+.teacher-student-item-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.teacher-student-name-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
 }
 
 .teacher-student-avatar {
-  width: 36px;
-  height: 36px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 700;
   color: white;
   flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  overflow: visible;
+  position: relative;
 }
 
-.teacher-student-avatar.teacher-status-danger {
-  background: #ef4444;
+/* 꽃 이미지 - 화분이 밑으로 삐져나오게 */
+.teacher-avatar-flower-image {
+  width: 110%;
+  height: 110%;
+  object-fit: contain;
+  position: absolute;
+  top: -5%;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
-.teacher-student-avatar.teacher-status-attention {
-  background: #f59e0b;
+/* 감정 영역별 아바타 배경 색상 (이미지 없을 때) */
+.teacher-student-avatar.emotion-red {
+  background: linear-gradient(135deg, #fca5a5 0%, #f87171 100%);
 }
 
-.teacher-student-avatar.teacher-status-normal {
-  background: #22c55e;
+.teacher-student-avatar.emotion-yellow {
+  background: linear-gradient(135deg, #fcd34d 0%, #fbbf24 100%);
+}
+
+.teacher-student-avatar.emotion-blue {
+  background: linear-gradient(135deg, #93c5fd 0%, #60a5fa 100%);
+}
+
+.teacher-student-avatar.emotion-green {
+  background: linear-gradient(135deg, #86efac 0%, #4ade80 100%);
+}
+
+.teacher-student-avatar.emotion-none {
+  background: linear-gradient(135deg, #d1d5db 0%, #9ca3af 100%);
 }
 
 .teacher-student-item-name {
   font-weight: 700;
   font-size: 14px;
   color: #5D4E37;
+  margin: 0;
 }
 
-.teacher-student-item-meta {
-  font-size: 12px;
-  color: #A68B6A;
+/* 위험도 배지 */
+.teacher-risk-badge {
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  color: white;
 }
 
-.teacher-student-status-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-}
-
-.teacher-student-status-dot.teacher-danger {
+.teacher-risk-badge.danger {
   background: #ef4444;
 }
 
-.teacher-student-status-dot.teacher-attention {
+.teacher-risk-badge.caution {
   background: #f59e0b;
+}
+
+/* 감정 정보 */
+.teacher-student-emotion-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+.teacher-emotion-label {
+  font-size: 11px;
+  color: #A68B6A;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.teacher-emotion-name {
+  font-size: 12px;
+  color: #8B6F47;
+  font-weight: 600;
+}
+
+.teacher-emotion-area {
+  font-size: 11px;
+  color: #A68B6A;
+  font-weight: 500;
+}
+
+.teacher-student-no-emotion {
+  font-size: 12px;
+  color: #A68B6A;
+  margin: 2px 0 0 0;
+  font-style: italic;
 }
 
 /* 학생 상세 패널 */
@@ -1865,66 +1940,118 @@
   gap: 16px;
 }
 
-.teacher-letter-list-item {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 20px;
-  background: #F0E8D8;
+/* 감정 레터 테이블 */
+.teacher-letter-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
   border: 1px solid #D4C4B0;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: all 0.2s;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
-.teacher-letter-list-item:hover {
-  background: linear-gradient(135deg, #F5F1E8 0%, #EDE3D0 100%);
-  border-color: #C4915C;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(210, 166, 121, 0.2);
-}
-
-.teacher-letter-item-icon {
-  font-size: 32px;
-  flex-shrink: 0;
-}
-
-.teacher-letter-item-info {
-  flex: 1;
-}
-
-.teacher-letter-item-title {
-  font-size: 16px;
-  font-weight: 700;
-  color: #5D4E37;
-  margin-bottom: 4px;
-}
-
-.teacher-letter-item-period {
+.teacher-letter-table thead th {
+  text-align: left;
   font-size: 13px;
-  color: #8B7355;
-  margin-bottom: 8px;
+  font-weight: 600;
+  color: #8B6F47;
+  padding: 14px 16px;
+  background: #F5F1E8;
+  border-bottom: 2px solid #D4C4B0;
 }
 
-.teacher-letter-item-emotions {
+.teacher-letter-table-row {
+  cursor: pointer;
+  transition: background 0.15s;
+  border-left: 3px solid transparent;
+}
+
+.teacher-letter-table-row:hover {
+  background: #F8F3E8;
+}
+
+.teacher-letter-table-row td {
+  padding: 14px 16px;
+  border-bottom: 1px solid #E5D9C3;
+}
+
+.teacher-letter-table-row:last-child td {
+  border-bottom: none;
+}
+
+/* 읽지 않은 레터 */
+.teacher-letter-table-row.unread {
+  background: #FFFCF5;
+  border-left-color: #FF6B00;
+}
+
+.teacher-letter-table-row.unread:hover {
+  background: #FFF9F0;
+}
+
+/* 기간 셀 */
+.teacher-letter-period-cell {
+  width: 50%;
+}
+
+.teacher-letter-period-text {
   display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 4px;
 }
 
-.teacher-emotion-badge {
-  padding: 4px 8px;
-  border-radius: 6px;
+.teacher-letter-week {
+  font-size: 14px;
+  font-weight: 600;
+  color: #5D4E37;
+}
+
+.teacher-letter-dates {
+  font-size: 12px;
+  color: #8B7355;
+}
+
+/* 일기 개수 셀 */
+.teacher-letter-count-cell {
+  width: 15%;
+  font-size: 14px;
+  color: #8B6F47;
+  font-weight: 500;
+}
+
+/* 상태 셀 */
+.teacher-letter-status-cell {
+  width: 25%;
+}
+
+.teacher-analysis-status {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 12px;
   font-size: 11px;
   font-weight: 600;
-  color: white;
 }
 
-.teacher-letter-item-arrow {
-  width: 20px;
-  height: 20px;
+.teacher-analysis-status.analyzing {
+  background: #FEF3C7;
+  color: #92400E;
+}
+
+.teacher-analysis-status.analyzed {
+  background: #D1FAE5;
+  color: #065F46;
+}
+
+/* 화살표 셀 */
+.teacher-letter-arrow-cell {
+  width: 10%;
+  text-align: right;
+}
+
+.teacher-letter-arrow-icon {
+  width: 18px;
+  height: 18px;
   color: #C4915C;
-  flex-shrink: 0;
 }
 
 /* 레터 상세 뷰 */

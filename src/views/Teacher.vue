@@ -68,12 +68,14 @@
         <StudentDetailView
           v-else-if="currentView === 'studentMap'"
           v-model:searchQuery="searchQuery"
-          :isLoading="isLoading"
-          :errorMessage="errorMessage"
-          :filteredStudents="filteredStudents"
+          :isLoading="isLoadingLetterStudents"
+          :errorMessage="letterErrorMessage"
+          :filteredStudents="filteredLetterStudents"
           :selectedStudent="selectedStudent"
           :selectedLetter="selectedLetter"
-          @reload="loadDailyEmotionStatus()"
+          :weeklyReports="weeklyReports"
+          :isLoadingReports="isLoadingReports"
+          @reload="loadStudentsForLetter()"
           @select-student="selectStudent"
           @select-letter="selectLetter"
           @deselect-letter="selectedLetter = null"
@@ -107,7 +109,7 @@
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
 import { logout } from '@/services/authApi.js'
-import { getDailyEmotionStatus, getAtRiskStudents, getStudentRiskHistory, resolveDanger } from '@/services/teacherApi.js'
+import { getDailyEmotionStatus, getAtRiskStudents, getStudentRiskHistory, resolveDanger, getStudents, getStudentWeeklyReports } from '@/services/teacherApi.js'
 
 // Layout 컴포넌트
 import TeacherSidebar from '@/components/teacher/layout/TeacherSidebar.vue'
@@ -167,6 +169,16 @@ const selectedDate = ref(getTodayDateString())
 const currentDate = ref(null) // 현재 조회 중인 날짜
 const emotionData = ref(null) // 전체 감정 현황 데이터
 const students = ref([])
+
+// 학생 목록 데이터 (감정 레터용)
+const letterStudents = ref([])
+const isLoadingLetterStudents = ref(false)
+const letterErrorMessage = ref('')
+
+// 주간 리포트 데이터
+const weeklyReports = ref([])
+const isLoadingReports = ref(false)
+const reportsErrorMessage = ref('')
 
 // 위험 학생 데이터
 const atRiskData = ref(null) // 위험 학생 리스트 데이터
@@ -260,6 +272,46 @@ const loadAtRiskStudents = async (level = 'ALL') => {
   }
 }
 
+// API 응답을 학생 레터용 데이터로 변환
+const mapLetterStudentData = (apiStudent) => {
+  return {
+    id: apiStudent.userSn,
+    name: apiStudent.name,
+    userId: apiStudent.userId,
+    schoolCode: apiStudent.schoolCode,
+    schoolNm: apiStudent.schoolNm,
+    classCode: apiStudent.classCode,
+    riskLevel: apiStudent.riskLevel,
+    riskReason: apiStudent.riskReason,
+    riskContinuousArea: apiStudent.riskContinuousArea,
+    riskContinuousDays: apiStudent.riskContinuousDays,
+    recentEmotionArea: apiStudent.recentEmotionArea,
+    recentCoreEmotionCd: apiStudent.recentCoreEmotionCd,
+    recentCoreEmotionNameKr: apiStudent.recentCoreEmotionNameKr,
+    recentCoreEmotionImage: apiStudent.recentCoreEmotionImage,
+    // UI용 상태 값
+    status: apiStudent.riskLevel === 'DANGER' ? 'danger' : apiStudent.riskLevel === 'CAUTION' ? 'attention' : 'normal',
+    lastLetterDate: '-', // TODO: 추후 레터 API 추가 시 업데이트
+    letters: [] // TODO: 추후 레터 API 추가 시 업데이트
+  }
+}
+
+// 학생 목록 로드 (감정 레터용)
+const loadStudentsForLetter = async () => {
+  try {
+    isLoadingLetterStudents.value = true
+    letterErrorMessage.value = ''
+
+    const data = await getStudents()
+    letterStudents.value = data.map(mapLetterStudentData)
+  } catch (error) {
+    console.error('학생 목록 로드 실패:', error)
+    letterErrorMessage.value = error.message || '학생 목록을 불러오는데 실패했습니다.'
+  } finally {
+    isLoadingLetterStudents.value = false
+  }
+}
+
 // 학생 위험 히스토리 로드
 const loadStudentRiskHistory = async (studentUserSn) => {
   try {
@@ -272,6 +324,23 @@ const loadStudentRiskHistory = async (studentUserSn) => {
     riskHistory.value = null
   } finally {
     isLoadingHistory.value = false
+  }
+}
+
+// 주간 리포트 로드
+const loadWeeklyReports = async (studentUserSn) => {
+  try {
+    isLoadingReports.value = true
+    reportsErrorMessage.value = ''
+
+    const data = await getStudentWeeklyReports(studentUserSn)
+    weeklyReports.value = data
+  } catch (error) {
+    console.error('주간 리포트 로드 실패:', error)
+    reportsErrorMessage.value = error.message || '주간 리포트를 불러오는데 실패했습니다.'
+    weeklyReports.value = []
+  } finally {
+    isLoadingReports.value = false
   }
 }
 
@@ -359,7 +428,7 @@ onMounted(async () => {
   await loadAtRiskStudents() // 위험 학생 리스트 로드
 })
 
-// 오늘의 학급 화단 로 돌아올 때 초기화
+// 뷰 변경 감지
 watch(currentView, async (newView, oldView) => {
   // 다른 뷰에서 오늘의 학급 화단 로 돌아올 때만
   if (newView === 'dashboard' && oldView !== 'dashboard') {
@@ -372,6 +441,17 @@ watch(currentView, async (newView, oldView) => {
 
     // 오늘 날짜 데이터 다시 로드
     await loadDailyEmotionStatus(selectedDate.value)
+  }
+
+  // 학생별 감정 레터 뷰로 진입할 때
+  if (newView === 'studentMap' && oldView !== 'studentMap') {
+    // 선택된 학생 및 레터 초기화
+    selectedStudent.value = null
+    selectedLetter.value = null
+    searchQuery.value = ''
+
+    // 학생 목록 로드
+    await loadStudentsForLetter()
   }
 })
 
@@ -409,10 +489,20 @@ const filteredStudents = computed(() => {
   return students.value.filter(s => s.name.includes(searchQuery.value))
 })
 
+const filteredLetterStudents = computed(() => {
+  if (!searchQuery.value) return letterStudents.value
+  return letterStudents.value.filter(s => s.name.includes(searchQuery.value))
+})
+
 // 메서드
-const selectStudent = (student) => {
+const selectStudent = async (student) => {
   selectedStudent.value = student
   selectedLetter.value = null
+
+  // 학생의 주간 리포트 로드
+  if (student) {
+    await loadWeeklyReports(student.id)
+  }
 }
 
 const selectLetter = (letter) => {
