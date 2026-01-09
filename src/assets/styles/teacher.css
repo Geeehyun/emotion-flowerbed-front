@@ -3295,7 +3295,7 @@
 
 /* 감정 화단 섹션 (좌측) */
 .teacher-garden-section {
-  flex: 1.5;
+  flex: 1;
   min-width: 0;
 }
 
@@ -3524,7 +3524,8 @@
 
 /* 우측 감정 상세 영역 */
 .teacher-emotion-detail-section {
-  width: 320px;
+  flex: 1;
+  min-width: 0;
   background: #FDFBF7;
   border-radius: 12px;
   padding: 20px;
