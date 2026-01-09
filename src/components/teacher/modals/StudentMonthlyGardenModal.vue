@@ -35,7 +35,7 @@
             </div>
           </div>
 
-          <div class="teacher-garden-wrapper" :style="gardenWrapperStyle">
+          <div class="teacher-garden-wrapper">
             <!-- 화단 배경 이미지 -->
             <img src="@/assets/images/garden-bg-rectangle.png" alt="화단" class="teacher-garden-bg-image" loading="lazy">
 
@@ -276,13 +276,6 @@ const totalWeeks = computed(() => {
 const gardenGridStyle = computed(() => {
   return {
     gridTemplateRows: `repeat(${totalWeeks.value}, 1fr)`
-  }
-})
-
-// 화단 래퍼 스타일 (aspect-ratio 동적 조정)
-const gardenWrapperStyle = computed(() => {
-  return {
-    aspectRatio: `7 / ${totalWeeks.value}`
   }
 })
 

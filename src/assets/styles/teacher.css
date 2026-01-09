@@ -3319,17 +3319,17 @@
 .teacher-garden-wrapper {
   position: relative;
   width: 100%;
-  aspect-ratio: 7 / 6;
+  min-height: 500px;
 }
 
 /* 화단 배경 이미지 */
 .teacher-garden-bg-image {
   position: absolute;
-  top: 5%;
+  top: 0;
   left: 50%;
   transform: translateX(-50%);
   width: 100%;
-  height: auto;
+  height: 100%;
   object-fit: contain;
   border-radius: 12px;
   z-index: 1;
@@ -3338,13 +3338,12 @@
 /* 꽃 그리드 */
 .teacher-flower-grid {
   position: absolute;
-  top: 23%;
+  top: 16%;
   left: 8%;
   width: 84%;
-  height: 62%;
+  height: 55%;
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  grid-template-rows: repeat(6, 1fr);
   gap: 10px;
   padding: 2% 4%;
   z-index: 2;
@@ -3775,7 +3774,7 @@
   }
 
   .teacher-garden-wrapper {
-    aspect-ratio: 7 / 7;
+    min-height: 400px;
   }
 
   .teacher-flower-grid {
