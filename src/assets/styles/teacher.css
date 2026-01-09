@@ -3289,13 +3289,13 @@
 /* 좌우 분할 레이아웃 */
 .teacher-garden-split-layout {
   display: flex;
-  gap: 20px;
+  gap: 24px;
   min-height: 500px;
 }
 
 /* 감정 화단 섹션 (좌측) */
 .teacher-garden-section {
-  flex: 1;
+  flex: 1.5;
   min-width: 0;
 }
 
@@ -3427,8 +3427,7 @@
 }
 
 .teacher-flower-image.unknown-flower {
-  opacity: 0.6;
-  filter: grayscale(50%) drop-shadow(0 3px 6px rgba(0, 0, 0, 0.3));
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.3));
 }
 
 /* 빈 칸 */
@@ -3608,8 +3607,7 @@
 }
 
 .teacher-flower-image-large img.unknown-flower {
-  opacity: 0.6;
-  filter: grayscale(50%) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15));
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15));
 }
 
 .teacher-flower-info {
@@ -3691,7 +3689,77 @@
   background: linear-gradient(135deg, #BDBDBD 0%, #757575 100%);
 }
 
-/* 반응형 */
+/* 감정 분포 카드 */
+.teacher-emotion-distribution-card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid #F0E6D2;
+}
+
+.teacher-emotion-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.teacher-emotion-bar-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.teacher-emotion-bar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.teacher-emotion-bar-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #5A4A3A;
+}
+
+.teacher-emotion-bar-percent {
+  font-size: 13px;
+  font-weight: 700;
+  color: #8B6F47;
+}
+
+.teacher-emotion-bar-track {
+  width: 100%;
+  height: 8px;
+  background: #F5F0E8;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.teacher-emotion-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+/* 반응형 - 태블릿 */
+@media (max-width: 1024px) {
+  .teacher-garden-split-layout {
+    flex-direction: column;
+    min-height: auto;
+    gap: 20px;
+  }
+
+  .teacher-garden-section {
+    flex: 1;
+  }
+
+  .teacher-emotion-detail-section {
+    width: 100%;
+  }
+}
+
+/* 반응형 - 모바일 */
 @media (max-width: 768px) {
   .teacher-letter-list-title-row {
     flex-direction: column;
@@ -3711,13 +3779,7 @@
     padding: 8px;
   }
 
-  .teacher-garden-split-layout {
-    flex-direction: column;
-    min-height: auto;
-  }
-
   .teacher-emotion-detail-section {
-    width: 100%;
-    margin-top: 20px;
+    padding: 16px;
   }
 }

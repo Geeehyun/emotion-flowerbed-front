@@ -118,7 +118,7 @@
               </div>
 
               <div class="teacher-emotion-info-card">
-                <div class="teacher-emotion-label">감정 분석 결과</div>
+                <div class="teacher-emotion-label">핵심 감정</div>
                 <div class="teacher-emotion-name-large" :style="{ color: getEmotionColor(selectedDay) }">
                   {{ getEmotionName(selectedDay) }}
                 </div>
@@ -126,6 +126,29 @@
                   <span class="teacher-area-badge" :class="getEmotionAreaClass(selectedDay)">
                     {{ getEmotionAreaName(selectedDay) }} 영역
                   </span>
+                </div>
+              </div>
+
+              <!-- 감정 분포 -->
+              <div v-if="getEmotionDistribution(selectedDay)" class="teacher-emotion-distribution-card">
+                <div class="teacher-emotion-label">감정 분포</div>
+                <div class="teacher-emotion-bars">
+                  <div
+                    v-for="emotion in getEmotionDistribution(selectedDay)"
+                    :key="emotion.emotion"
+                    class="teacher-emotion-bar-item"
+                  >
+                    <div class="teacher-emotion-bar-header">
+                      <span class="teacher-emotion-bar-name">{{ emotion.emotionNameKr }}</span>
+                      <span class="teacher-emotion-bar-percent">{{ emotion.percent }}%</span>
+                    </div>
+                    <div class="teacher-emotion-bar-track">
+                      <div
+                        class="teacher-emotion-bar-fill"
+                        :style="{ width: emotion.percent + '%', backgroundColor: emotion.color }"
+                      ></div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -267,7 +290,7 @@ const getFlowerName = (day) => {
 const getFlowerMeaning = (day) => {
   const emotion = getEmotionForDay(day)
   if (!emotion?.isAnalyzed || !emotion?.coreEmotionDetail) {
-    return '분석 중...'
+    return '감정을 분석 할 수 없어요'
   }
   return emotion.coreEmotionDetail.flowerMeaning
 }
@@ -276,7 +299,7 @@ const getFlowerMeaning = (day) => {
 const getEmotionName = (day) => {
   const emotion = getEmotionForDay(day)
   if (!emotion?.isAnalyzed || !emotion?.coreEmotionDetail) {
-    return '분석 중'
+    return '알 수 없음'
   }
   return emotion.coreEmotionDetail.emotionNameKr
 }
@@ -313,6 +336,15 @@ const getEmotionAreaName = (day) => {
     green: '초록'
   }
   return areaNames[emotion.coreEmotionDetail.emotionArea] || '알 수 없음'
+}
+
+// 감정 분포 가져오기
+const getEmotionDistribution = (day) => {
+  const emotion = getEmotionForDay(day)
+  if (!emotion?.isAnalyzed || !emotion?.emotions) {
+    return null
+  }
+  return emotion.emotions
 }
 
 // 월 변경
