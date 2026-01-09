@@ -3328,7 +3328,7 @@
   top: 5%;
   left: 50%;
   transform: translateX(-50%);
-  width: 80%;
+  width: 100%;
   height: auto;
   object-fit: contain;
   border-radius: 12px;
@@ -3338,14 +3338,14 @@
 /* 꽃 그리드 */
 .teacher-flower-grid {
   position: absolute;
-  top: 13%;
+  top: 24%;
   left: 8%;
   width: 84%;
-  height: 63%;
+  height: 69%;
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   grid-template-rows: repeat(6, 1fr);
-  gap: 2%;
+  gap: 10px;
   padding: 2% 4%;
   z-index: 2;
 }
@@ -3436,8 +3436,8 @@
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 45px;
-  height: 45px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
   background: linear-gradient(145deg, rgba(139, 111, 71, 0.25), rgba(107, 84, 57, 0.25));
   border: 2px dashed rgba(139, 111, 71, 0.4);
@@ -3764,6 +3764,10 @@
 
   .teacher-emotion-detail-section {
     width: 100%;
+  }
+
+  .teacher-garden-bg-image {
+    width: 80%;
   }
 }
 
