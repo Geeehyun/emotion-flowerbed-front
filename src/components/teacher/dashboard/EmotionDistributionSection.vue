@@ -31,14 +31,7 @@
       </div>
 
       <!-- 로딩 상태 -->
-      <div v-if="isLoading" class="teacher-distribution-empty-state">
-        <div class="teacher-empty-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="teacher-loading-icon">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
-          </svg>
-        </div>
-        <p class="teacher-empty-message">데이터를 불러오는 중입니다...</p>
-      </div>
+      <EmotionDistributionSkeleton v-if="isLoading" />
 
       <!-- 에러 상태 -->
       <div v-else-if="errorMessage" class="teacher-distribution-empty-state">
@@ -104,6 +97,7 @@ import { ref, onMounted, watch, nextTick } from 'vue'
 import { Chart, ArcElement, Tooltip, Legend } from 'chart.js'
 import { DatePicker } from 'v-calendar'
 import 'v-calendar/style.css'
+import EmotionDistributionSkeleton from './EmotionDistributionSkeleton.vue'
 
 // Chart.js 등록
 Chart.register(ArcElement, Tooltip, Legend)

@@ -17,9 +17,7 @@
         </div>
         <div class="teacher-student-list-body">
           <!-- 로딩 상태 -->
-          <div v-if="isLoading" class="teacher-empty-state">
-            <p>학생 목록을 불러오는 중...</p>
-          </div>
+          <StudentListSkeleton v-if="isLoading" :count="5" />
 
           <!-- 에러 상태 -->
           <div v-else-if="errorMessage" class="teacher-empty-state">
@@ -165,6 +163,7 @@
 
 <script setup>
 import TeacherLetterDetailView from './TeacherLetterDetailView.vue'
+import StudentListSkeleton from '../dashboard/StudentListSkeleton.vue'
 
 const props = defineProps({
   searchQuery: {
