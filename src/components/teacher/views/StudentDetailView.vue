@@ -46,6 +46,7 @@
                     :src="`/flowers/3d_pot/${student.recentCoreEmotionImage || 'unknown.png'}`"
                     :alt="student.recentCoreEmotionNameKr || '알 수 없음'"
                     class="teacher-avatar-flower-image"
+                    loading="lazy"
                     @error="(e) => e.target.src = '/flowers/3d_pot/unknown.png'"
                   >
                 </div>
