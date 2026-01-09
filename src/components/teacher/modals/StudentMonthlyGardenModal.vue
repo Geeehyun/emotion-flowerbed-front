@@ -7,18 +7,19 @@
   >
     <template #default>
       <div class="teacher-garden-modal-content">
-        <!-- 로딩 상태 -->
-        <div v-if="isLoading" class="teacher-garden-loading">
-          <p>감정 화단을 불러오는 중...</p>
-        </div>
-
         <!-- 에러 상태 -->
-        <div v-else-if="errorMessage" class="teacher-garden-error">
+        <div v-if="errorMessage" class="teacher-garden-error">
           <p>{{ errorMessage }}</p>
         </div>
 
         <!-- 좌우 분할 레이아웃 -->
-        <div v-else class="teacher-garden-split-layout">
+        <div v-else class="teacher-garden-split-layout" :class="{ 'loading': isLoading }">
+          <!-- 로딩 오버레이 -->
+          <div v-if="isLoading" class="teacher-garden-loading-overlay">
+            <div class="teacher-loading-spinner"></div>
+            <p class="teacher-loading-text">감정 화단을 불러오는 중...</p>
+          </div>
+
           <!-- 좌측: 감정 화단 -->
           <div class="teacher-garden-section">
           <!-- 월 선택 바 -->

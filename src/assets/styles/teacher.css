@@ -3289,8 +3289,53 @@
 /* 좌우 분할 레이아웃 */
 .teacher-garden-split-layout {
   display: flex;
-  gap: 24px;
+  gap: 10px;
   min-height: 500px;
+  position: relative;
+}
+
+.teacher-garden-split-layout.loading {
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+/* 로딩 오버레이 */
+.teacher-garden-loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.95);
+  z-index: 1000;
+  border-radius: 12px;
+  pointer-events: none;
+}
+
+/* 로딩 스피너 */
+.teacher-loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid #F8F3E8;
+  border-top: 4px solid #8B6F47;
+  border-radius: 50%;
+  animation: teacher-spin 1s linear infinite;
+}
+
+@keyframes teacher-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.teacher-loading-text {
+  margin-top: 16px;
+  color: #8B6F47;
+  font-size: 14px;
+  font-weight: 500;
 }
 
 /* 감정 화단 섹션 (좌측) */
@@ -3338,10 +3383,10 @@
 /* 꽃 그리드 */
 .teacher-flower-grid {
   position: absolute;
-  top: 16%;
+  top: 21%;
   left: 8%;
   width: 84%;
-  height: 55%;
+  height: 50%;
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 10px;
@@ -3368,26 +3413,6 @@
   transition: all 0.3s ease;
   width: 50px;
   height: 50px;
-}
-
-/* 선택된 꽃 강조 */
-.teacher-flower.selected {
-  transform: translateX(-50%) scale(1.2);
-  z-index: 200 !important;
-}
-
-.teacher-flower.selected::after {
-  content: '';
-  position: absolute;
-  bottom: -5px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(139, 111, 71, 0.3) 0%, transparent 70%);
-  z-index: -1;
-  animation: pulse 1.5s ease-in-out infinite;
 }
 
 @keyframes pulse {
@@ -3428,7 +3453,7 @@
   left: 50%;
   transform: translateX(-50%);
   width: 50px;
-  height: 50px;
+  height: 30px;
   border-radius: 50%;
   background: linear-gradient(145deg, rgba(139, 111, 71, 0.25), rgba(107, 84, 57, 0.25));
   border: 2px dashed rgba(139, 111, 71, 0.4);
@@ -3500,6 +3525,7 @@
 
 /* 안내 메시지 */
 .teacher-garden-notice {
+  margin-top: 10px;
   background: #FFF9F0;
   padding: 12px 16px;
   border-radius: 8px;
@@ -3584,7 +3610,7 @@
   border: 1px solid #F0E6D2;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 5px;
 }
 
 .teacher-flower-image-large {
@@ -3594,14 +3620,8 @@
 }
 
 .teacher-flower-image-large img {
-  max-width: 140px;
-  max-height: 180px;
+  max-width: 40px;
   object-fit: contain;
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15));
-}
-
-.teacher-flower-image-large img.unknown-flower {
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15));
 }
 
 .teacher-flower-info {
@@ -3635,7 +3655,7 @@
 .teacher-emotion-info-content {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 5px;
 }
 
 .teacher-emotion-label {
@@ -3644,13 +3664,13 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  margin-bottom: 12px;
+  margin-bottom: 5px;
 }
 
 .teacher-emotion-name-large {
-  font-size: 24px;
+  font-size: 15px;
   font-weight: 700;
-  margin-bottom: 12px;
+  margin-bottom: 5px;
 }
 
 .teacher-emotion-area-large {
