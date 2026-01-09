@@ -109,7 +109,7 @@
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
 import { logout } from '@/services/authApi.js'
-import { getDailyEmotionStatus, getAtRiskStudents, getStudentRiskHistory, resolveDanger, getStudents, getStudentWeeklyReports } from '@/services/teacherApi.js'
+import { getDailyEmotionStatus, getAtRiskStudents, getStudentRiskHistory, resolveDanger, getStudents, getStudentWeeklyReports, getStudentWeeklyReportDetail } from '@/services/teacherApi.js'
 
 // Layout 컴포넌트
 import TeacherSidebar from '@/components/teacher/layout/TeacherSidebar.vue'
@@ -505,8 +505,93 @@ const selectStudent = async (student) => {
   }
 }
 
-const selectLetter = (letter) => {
-  selectedLetter.value = letter
+const selectLetter = async (letter) => {
+  if (!letter || !selectedStudent.value) return
+
+  try {
+    isLoadingReports.value = true
+    reportsErrorMessage.value = ''
+
+    // 상세 데이터 로드
+    const detailData = await getStudentWeeklyReportDetail(selectedStudent.value.id, letter.reportId)
+
+    // 상세 데이터 변환 (weeklyReportApi의 transformWeeklyReportData와 유사)
+    const transformedData = transformTeacherReportData(detailData)
+    selectedLetter.value = transformedData
+  } catch (error) {
+    console.error('감정 레터 상세 조회 실패:', error)
+    reportsErrorMessage.value = error.message || '감정 레터를 불러오는데 실패했습니다.'
+    selectedLetter.value = null
+  } finally {
+    isLoadingReports.value = false
+  }
+}
+
+// 선생님용 리포트 데이터 변환
+const transformTeacherReportData = (reportData) => {
+  // startDate ~ endDate로 7일 전체 배열 생성
+  const startDate = new Date(reportData.startDate)
+  const endDate = new Date(reportData.endDate)
+
+  const weekFlowers = []
+  const dayNames = ['일', '월', '화', '수', '목', '금', '토']
+
+  for (let date = new Date(startDate); date <= endDate; date.setDate(date.getDate() + 1)) {
+    const dateStr = date.toISOString().split('T')[0] // YYYY-MM-DD 형식
+    const dayOfWeek = dayNames[date.getDay()]
+    const monthDay = `${String(date.getMonth() + 1).padStart(2, '0')}/${String(date.getDate()).padStart(2, '0')}`
+
+    // weeklyDiaryDetails에서 해당 날짜 찾기
+    const diaryDetail = reportData.weeklyDiaryDetails?.find(d => d.diaryDate === dateStr)
+
+    if (diaryDetail) {
+      // 일기가 있는 날
+      weekFlowers.push({
+        date: monthDay,
+        day: dayOfWeek,
+        flowerKey: diaryDetail.imageFile3d.replace('.png', ''), // .png 제거
+        emotionName: diaryDetail.emotionNameKr,
+        flowerName: diaryDetail.flowerNameKr,
+        flowerMeaning: diaryDetail.flowerMeaning,
+        diaryId: diaryDetail.diaryId,
+        hasEntry: true
+      })
+    } else {
+      // 일기가 없는 날
+      weekFlowers.push({
+        date: monthDay,
+        day: dayOfWeek,
+        hasEntry: false
+      })
+    }
+  }
+
+  // UI용 데이터 반환
+  return {
+    reportId: reportData.reportId,
+    title: `${startDate.getFullYear()}년 ${startDate.getMonth() + 1}월 ${Math.ceil(startDate.getDate() / 7)}주차 감정 레터`,
+    period: `${reportData.startDate.replace(/-/g, '.')} - ${reportData.endDate.replace(/-/g, '.')}`,
+    date: reportData.endDate.replace(/-/g, '.'),
+    weekFlowers,
+    // 학생용 콘텐츠
+    studentReport: reportData.studentReport,
+    studentEncouragement: reportData.studentEncouragement,
+    // 선생님용 콘텐츠
+    teacherReport: reportData.teacherReport,
+    teacherTalkTip: reportData.teacherTalkTip || [],
+    // 공통 데이터
+    emotions: reportData.emotionStats?.map(stat => ({
+      name: stat.emotionNameKr,
+      count: stat.count,
+      color: stat.color
+    })) || [],
+    highlights: reportData.highlights || null,
+    highlightsSummary: reportData.highlights ? {
+      flowerOfTheWeek: reportData.highlights.flowerOfTheWeek,
+      quickStats: reportData.highlights.quickStats,
+      gardenDiversity: reportData.highlights.gardenDiversity
+    } : null
+  }
 }
 
 // 위험 학생 -> 상세 분석 이동

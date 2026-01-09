@@ -146,31 +146,20 @@
           </div>
         </div>
 
-        <!-- 레터 상세 + TIP (레터 선택됨) -->
-        <div v-else class="teacher-letter-detail-view">
-          <button @click="emit('deselect-letter')" class="teacher-back-to-list-btn">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-            </svg>
-            목록으로
-          </button>
-          <div class="teacher-letter-detail-content">
-            <h2>{{ selectedLetter.title }}</h2>
-            <p class="teacher-letter-detail-period">{{ selectedLetter.period }}</p>
-            <p class="teacher-dev-note">📝 레터 상세 내용 개발 중...</p>
-
-            <div class="teacher-tip-section">
-              <h3>💡 선생님을 위한 TIP</h3>
-              <p class="teacher-dev-note">📝 개발 중...</p>
-            </div>
-          </div>
-        </div>
+        <!-- 레터 상세 (레터 선택됨) -->
+        <TeacherLetterDetailView
+          v-if="selectedLetter"
+          :letter="selectedLetter"
+          @back="emit('deselect-letter')"
+        />
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
+import TeacherLetterDetailView from './TeacherLetterDetailView.vue'
+
 const props = defineProps({
   searchQuery: {
     type: String,

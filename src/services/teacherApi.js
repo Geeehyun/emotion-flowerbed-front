@@ -153,11 +153,42 @@ export async function getStudentWeeklyReports(studentUserSn) {
   }
 }
 
+/**
+ * 학생별 감정 레터 상세 조회
+ * @param {number} studentUserSn - 학생 일련번호
+ * @param {number} reportId - 리포트 ID
+ * @returns {Promise} - 감정 레터 상세 데이터
+ */
+export async function getStudentWeeklyReportDetail(studentUserSn, reportId) {
+  try {
+    const accessToken = localStorage.getItem('accessToken')
+    if (!accessToken) {
+      throw new Error('로그인이 필요합니다.')
+    }
+
+    const response = await axios.get(`${API_BASE_URL}/teachers/students/${studentUserSn}/weekly-reports/${reportId}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    })
+    return response.data
+  } catch (error) {
+    if (error.response?.status === 403) {
+      throw new Error('해당 학생의 감정 레터에 접근 권한이 없습니다.')
+    } else if (error.response?.status === 404) {
+      throw new Error('감정 레터를 찾을 수 없습니다.')
+    }
+    console.error('감정 레터 상세 조회 실패:', error)
+    throw new Error('감정 레터를 불러오는데 실패했습니다.')
+  }
+}
+
 export default {
   getDailyEmotionStatus,
   getAtRiskStudents,
   getStudentRiskHistory,
   resolveDanger,
   getStudents,
-  getStudentWeeklyReports
+  getStudentWeeklyReports,
+  getStudentWeeklyReportDetail
 }
