@@ -99,13 +99,14 @@
 
             <div v-else class="teacher-emotion-detail-content">
               <div class="teacher-emotion-detail-header">
-                <h3 class="teacher-detail-date">{{ currentYear }}.{{ String(currentMonth).padStart(2, '0') }}.{{ String(selectedDay).padStart(2, '0') }}</h3>
+                <h3 class="teacher-detail-date">{{ currentYear }}.{{ String(currentMonth).padStart(2, '0') }}.{{ String(selectedDay).padStart(2, '0') }} ({{ getDayOfWeek(selectedDay) }})</h3>
               </div>
 
+              <!-- 꽃 & 핵심 감정 카드 (통합) -->
               <div class="teacher-emotion-flower-card">
                 <div class="teacher-flower-image-large">
                   <img
-                    :src="getFlowerImageUrl(selectedDay)"
+                    :src="getFlowerPotImageUrl(selectedDay)"
                     :alt="getFlowerName(selectedDay)"
                     :class="isUnknownEmotion(selectedDay) ? 'unknown-flower' : ''"
                     loading="lazy"
@@ -115,17 +116,17 @@
                   <div class="teacher-flower-name-large">{{ getFlowerName(selectedDay) }}</div>
                   <div class="teacher-flower-meaning-large">"{{ getFlowerMeaning(selectedDay) }}"</div>
                 </div>
-              </div>
-
-              <div class="teacher-emotion-info-card">
-                <div class="teacher-emotion-label">핵심 감정</div>
-                <div class="teacher-emotion-name-large" :style="{ color: getEmotionColor(selectedDay) }">
-                  {{ getEmotionName(selectedDay) }}
-                </div>
-                <div class="teacher-emotion-area-large">
-                  <span class="teacher-area-badge" :class="getEmotionAreaClass(selectedDay)">
-                    {{ getEmotionAreaName(selectedDay) }} 영역
-                  </span>
+                <div class="teacher-emotion-divider"></div>
+                <div class="teacher-emotion-info-content">
+                  <div class="teacher-emotion-label">핵심 감정</div>
+                  <div class="teacher-emotion-name-large" :style="{ color: getEmotionColor(selectedDay) }">
+                    {{ getEmotionName(selectedDay) }}
+                  </div>
+                  <div class="teacher-emotion-area-large">
+                    <span class="teacher-area-badge" :class="getEmotionAreaClass(selectedDay)">
+                      {{ getEmotionAreaName(selectedDay) }} 영역
+                    </span>
+                  </div>
                 </div>
               </div>
 
@@ -345,6 +346,24 @@ const getEmotionDistribution = (day) => {
     return null
   }
   return emotion.emotions
+}
+
+// 날짜의 요일 가져오기
+const getDayOfWeek = (day) => {
+  const year = currentYear.value
+  const month = currentMonth.value
+  const date = new Date(year, month - 1, day)
+  const dayIndex = date.getDay()
+  return weekDays[dayIndex]
+}
+
+// 꽃 화분 이미지 URL (우측 상세용)
+const getFlowerPotImageUrl = (day) => {
+  const emotion = getEmotionForDay(day)
+  if (!emotion?.isAnalyzed || !emotion?.coreEmotionDetail) {
+    return '/flowers/3d_pot/unknown.png'
+  }
+  return `/flowers/3d_pot/${emotion.coreEmotionDetail.imageFile3d}`
 }
 
 // 월 변경
