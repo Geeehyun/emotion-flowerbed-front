@@ -3295,7 +3295,7 @@
 
 /* 감정 화단 섹션 (좌측) */
 .teacher-garden-section {
-  flex: 1;
+  flex: 1.3;
   min-width: 0;
 }
 
@@ -3338,10 +3338,10 @@
 /* 꽃 그리드 */
 .teacher-flower-grid {
   position: absolute;
-  top: 24%;
+  top: 23%;
   left: 8%;
   width: 84%;
-  height: 69%;
+  height: 62%;
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   grid-template-rows: repeat(6, 1fr);
