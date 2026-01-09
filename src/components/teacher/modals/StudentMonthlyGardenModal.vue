@@ -7,13 +7,6 @@
   >
     <template #default>
       <div class="teacher-garden-modal-content">
-        <!-- 월 선택 바 -->
-        <div class="teacher-month-selector">
-          <button class="teacher-month-nav" @click="changeMonth(-1)">◀</button>
-          <div class="teacher-month-display">{{ currentYear }}년 {{ currentMonth }}월</div>
-          <button class="teacher-month-nav" @click="changeMonth(1)">▶</button>
-        </div>
-
         <!-- 로딩 상태 -->
         <div v-if="isLoading" class="teacher-garden-loading">
           <p>감정 화단을 불러오는 중...</p>
@@ -28,6 +21,13 @@
         <div v-else class="teacher-garden-split-layout">
           <!-- 좌측: 감정 화단 -->
           <div class="teacher-garden-section">
+          <!-- 월 선택 바 -->
+          <div class="teacher-month-selector">
+            <button class="teacher-month-nav" @click="changeMonth(-1)">◀</button>
+            <div class="teacher-month-display">{{ currentYear }}년 {{ currentMonth }}월</div>
+            <button class="teacher-month-nav" @click="changeMonth(1)">▶</button>
+          </div>
+
           <!-- 요일 헤더 -->
           <div class="teacher-weekday-header-container">
             <div class="teacher-weekday-header" v-for="day in weekDays" :key="`weekday-${day}`">
