@@ -24,8 +24,10 @@
           <p>{{ errorMessage }}</p>
         </div>
 
-        <!-- 감정 화단 -->
-        <div v-else class="teacher-garden-section">
+        <!-- 좌우 분할 레이아웃 -->
+        <div v-else class="teacher-garden-split-layout">
+          <!-- 좌측: 감정 화단 -->
+          <div class="teacher-garden-section">
           <!-- 요일 헤더 -->
           <div class="teacher-weekday-header-container">
             <div class="teacher-weekday-header" v-for="day in weekDays" :key="`weekday-${day}`">
@@ -47,7 +49,11 @@
               <!-- 감정 일기가 있는 날들 -->
               <template v-for="day in daysInCurrentMonth" :key="day">
                 <div class="teacher-grid-cell" v-if="getEmotionForDay(day)" :data-day="day">
-                  <div class="teacher-flower">
+                  <div
+                    class="teacher-flower"
+                    :class="{ 'selected': selectedDay === day }"
+                    @click="selectDay(day)"
+                  >
                     <img
                       :src="getFlowerImageUrl(day)"
                       :alt="getFlowerName(day)"
@@ -78,10 +84,56 @@
               </div>
             </div>
           </div>
+          </div>
+
+          <!-- 우측: 선택한 날짜의 감정 상세 -->
+          <div class="teacher-emotion-detail-section">
+            <div v-if="!selectedDay" class="teacher-emotion-detail-empty">
+              <div class="teacher-detail-empty-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15.182 15.182a4.5 4.5 0 01-6.364 0M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75zm-.375 0h.008v.015h-.008V9.75zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75zm-.375 0h.008v.015h-.008V9.75z" />
+                </svg>
+              </div>
+              <p class="teacher-detail-empty-text">화단에서 꽃을 클릭하면<br/>감정 정보를 확인할 수 있습니다</p>
+            </div>
+
+            <div v-else class="teacher-emotion-detail-content">
+              <div class="teacher-emotion-detail-header">
+                <h3 class="teacher-detail-date">{{ currentYear }}.{{ String(currentMonth).padStart(2, '0') }}.{{ String(selectedDay).padStart(2, '0') }}</h3>
+              </div>
+
+              <div class="teacher-emotion-flower-card">
+                <div class="teacher-flower-image-large">
+                  <img
+                    :src="getFlowerImageUrl(selectedDay)"
+                    :alt="getFlowerName(selectedDay)"
+                    :class="isUnknownEmotion(selectedDay) ? 'unknown-flower' : ''"
+                    loading="lazy"
+                  />
+                </div>
+                <div class="teacher-flower-info">
+                  <div class="teacher-flower-name-large">{{ getFlowerName(selectedDay) }}</div>
+                  <div class="teacher-flower-meaning-large">"{{ getFlowerMeaning(selectedDay) }}"</div>
+                </div>
+              </div>
+
+              <div class="teacher-emotion-info-card">
+                <div class="teacher-emotion-label">감정 분석 결과</div>
+                <div class="teacher-emotion-name-large" :style="{ color: getEmotionColor(selectedDay) }">
+                  {{ getEmotionName(selectedDay) }}
+                </div>
+                <div class="teacher-emotion-area-large">
+                  <span class="teacher-area-badge" :class="getEmotionAreaClass(selectedDay)">
+                    {{ getEmotionAreaName(selectedDay) }} 영역
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <!-- 안내 메시지 -->
-        <div class="teacher-garden-notice">
+        <div v-if="!isLoading && !errorMessage" class="teacher-garden-notice">
           <p>💡 일기 내용은 조회할 수 없으며, 감정 정보만 확인할 수 있습니다</p>
         </div>
       </div>
@@ -129,6 +181,14 @@ const handleClose = () => {
 
 // 요일
 const weekDays = ['일', '월', '화', '수', '목', '금', '토']
+
+// 선택한 날짜
+const selectedDay = ref(null)
+
+// 날짜 선택
+const selectDay = (day) => {
+  selectedDay.value = day
+}
 
 // 현재 년월 (monthlyEmotions에서 추출)
 const currentYear = computed(() => {
@@ -221,6 +281,40 @@ const getEmotionName = (day) => {
   return emotion.coreEmotionDetail.emotionNameKr
 }
 
+// 감정 색상 가져오기
+const getEmotionColor = (day) => {
+  const emotion = getEmotionForDay(day)
+  if (!emotion?.isAnalyzed || !emotion?.coreEmotionDetail) {
+    return '#A0927D'
+  }
+  return emotion.coreEmotionDetail.color || '#8B6F47'
+}
+
+// 감정 영역 클래스
+const getEmotionAreaClass = (day) => {
+  const emotion = getEmotionForDay(day)
+  if (!emotion?.isAnalyzed || !emotion?.coreEmotionDetail) {
+    return 'area-none'
+  }
+  const area = emotion.coreEmotionDetail.emotionArea
+  return `area-${area}`
+}
+
+// 감정 영역명
+const getEmotionAreaName = (day) => {
+  const emotion = getEmotionForDay(day)
+  if (!emotion?.isAnalyzed || !emotion?.coreEmotionDetail) {
+    return '없음'
+  }
+  const areaNames = {
+    red: '빨강',
+    yellow: '노랑',
+    blue: '파랑',
+    green: '초록'
+  }
+  return areaNames[emotion.coreEmotionDetail.emotionArea] || '알 수 없음'
+}
+
 // 월 변경
 const changeMonth = (delta) => {
   const year = currentYear.value
@@ -238,6 +332,7 @@ const changeMonth = (delta) => {
   }
 
   const yearMonth = `${newYear}-${String(newMonth).padStart(2, '0')}`
+  selectedDay.value = null // 월 변경 시 선택 초기화
   emit('change-month', yearMonth)
 }
 </script>

@@ -3286,9 +3286,17 @@
   color: #D32F2F;
 }
 
-/* 감정 화단 섹션 */
+/* 좌우 분할 레이아웃 */
+.teacher-garden-split-layout {
+  display: flex;
+  gap: 20px;
+  min-height: 500px;
+}
+
+/* 감정 화단 섹션 (좌측) */
 .teacher-garden-section {
-  margin-bottom: 20px;
+  flex: 1;
+  min-width: 0;
 }
 
 /* 요일 헤더 */
@@ -3365,10 +3373,41 @@
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  cursor: default;
-  transition: transform 0.3s ease;
+  cursor: pointer;
+  transition: all 0.3s ease;
   width: 50px;
   height: 50px;
+}
+
+/* 선택된 꽃 강조 */
+.teacher-flower.selected {
+  transform: translateX(-50%) scale(1.2);
+  z-index: 200 !important;
+}
+
+.teacher-flower.selected::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(139, 111, 71, 0.3) 0%, transparent 70%);
+  z-index: -1;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.6;
+    transform: translateX(-50%) scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1.1);
+  }
 }
 
 /* 꽃 이미지 */
@@ -3484,6 +3523,174 @@
   color: #8B6F47;
 }
 
+/* 우측 감정 상세 영역 */
+.teacher-emotion-detail-section {
+  width: 320px;
+  background: #FDFBF7;
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid #E8CDB2;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 빈 상태 */
+.teacher-emotion-detail-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-align: center;
+  color: #A0927D;
+}
+
+.teacher-detail-empty-icon {
+  width: 64px;
+  height: 64px;
+  color: #D4C4B0;
+  margin-bottom: 16px;
+}
+
+.teacher-detail-empty-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.teacher-detail-empty-text {
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* 감정 상세 내용 */
+.teacher-emotion-detail-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.teacher-emotion-detail-header {
+  text-align: center;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #E8CDB2;
+}
+
+.teacher-detail-date {
+  font-size: 18px;
+  font-weight: 700;
+  color: #5A4A3A;
+  margin: 0;
+}
+
+/* 꽃 카드 */
+.teacher-emotion-flower-card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid #F0E6D2;
+}
+
+.teacher-flower-image-large {
+  margin-bottom: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.teacher-flower-image-large img {
+  max-width: 120px;
+  max-height: 160px;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15));
+}
+
+.teacher-flower-image-large img.unknown-flower {
+  opacity: 0.6;
+  filter: grayscale(50%) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15));
+}
+
+.teacher-flower-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.teacher-flower-name-large {
+  font-size: 18px;
+  font-weight: 700;
+  color: #5A4A3A;
+}
+
+.teacher-flower-meaning-large {
+  font-size: 14px;
+  color: #8B6F47;
+  font-style: italic;
+  line-height: 1.5;
+}
+
+/* 감정 정보 카드 */
+.teacher-emotion-info-card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid #F0E6D2;
+}
+
+.teacher-emotion-label {
+  font-size: 12px;
+  color: #A0927D;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+}
+
+.teacher-emotion-name-large {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.teacher-emotion-area-large {
+  display: flex;
+  justify-content: center;
+}
+
+/* 감정 영역 뱃지 */
+.teacher-area-badge {
+  display: inline-block;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  color: white;
+}
+
+.teacher-area-badge.area-red {
+  background: linear-gradient(135deg, #E57373 0%, #D32F2F 100%);
+}
+
+.teacher-area-badge.area-yellow {
+  background: linear-gradient(135deg, #FFD54F 0%, #FFA000 100%);
+}
+
+.teacher-area-badge.area-blue {
+  background: linear-gradient(135deg, #64B5F6 0%, #1976D2 100%);
+}
+
+.teacher-area-badge.area-green {
+  background: linear-gradient(135deg, #81C784 0%, #388E3C 100%);
+}
+
+.teacher-area-badge.area-none {
+  background: linear-gradient(135deg, #BDBDBD 0%, #757575 100%);
+}
+
 /* 반응형 */
 @media (max-width: 768px) {
   .teacher-letter-list-title-row {
@@ -3502,5 +3709,15 @@
   .teacher-flower-grid {
     gap: 2px;
     padding: 8px;
+  }
+
+  .teacher-garden-split-layout {
+    flex-direction: column;
+    min-height: auto;
+  }
+
+  .teacher-emotion-detail-section {
+    width: 100%;
+    margin-top: 20px;
   }
 }
