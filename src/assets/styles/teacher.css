@@ -3176,3 +3176,331 @@
     padding: 8px 4px;
   }
 }
+
+/* ========================================
+   학생별 감정 레터 리스트 (StudentDetailView)
+   ======================================== */
+
+/* 타이틀 행 */
+.teacher-letter-list-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+/* 월간 감정 화단 버튼 */
+.teacher-monthly-garden-btn {
+  background: linear-gradient(135deg, #8B6F47 0%, #6B5537 100%);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  white-space: nowrap;
+}
+
+.teacher-monthly-garden-btn:hover {
+  background: linear-gradient(135deg, #6B5537 0%, #5A4A3A 100%);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  transform: translateY(-1px);
+}
+
+.teacher-monthly-garden-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* 감정 레터 서브타이틀 */
+.teacher-letter-section-subtitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: #5A4A3A;
+  margin: 0 0 16px 0;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #F8F3E8;
+}
+
+/* ========================================
+   월간 감정 화단 모달 (StudentMonthlyGardenModal)
+   ======================================== */
+
+.teacher-garden-modal-content {
+  padding: 0;
+}
+
+/* 월 선택 바 */
+.teacher-month-selector {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: #F8F3E8;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+.teacher-month-nav {
+  background: white;
+  border: 1px solid #D4C4B0;
+  color: #8B6F47;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.teacher-month-nav:hover {
+  background: #8B6F47;
+  color: white;
+  border-color: #8B6F47;
+}
+
+.teacher-month-display {
+  font-size: 15px;
+  font-weight: 700;
+  color: #5A4A3A;
+  min-width: 120px;
+  text-align: center;
+}
+
+/* 로딩/에러 상태 */
+.teacher-garden-loading,
+.teacher-garden-error {
+  text-align: center;
+  padding: 40px 20px;
+  color: #8B6F47;
+}
+
+.teacher-garden-error {
+  color: #D32F2F;
+}
+
+/* 감정 화단 섹션 */
+.teacher-garden-section {
+  margin-bottom: 20px;
+}
+
+/* 요일 헤더 */
+.teacher-weekday-header-container {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  margin-bottom: 4px;
+}
+
+.teacher-weekday-header {
+  text-align: center;
+  font-size: 11px;
+  font-weight: 600;
+  color: #8B6F47;
+  padding: 4px 0;
+}
+
+/* 화단 래퍼 */
+.teacher-garden-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 7 / 6;
+}
+
+/* 화단 배경 이미지 */
+.teacher-garden-bg-image {
+  position: absolute;
+  top: 5%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  height: auto;
+  object-fit: contain;
+  border-radius: 12px;
+  z-index: 1;
+}
+
+/* 꽃 그리드 */
+.teacher-flower-grid {
+  position: absolute;
+  top: 13%;
+  left: 8%;
+  width: 84%;
+  height: 63%;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: repeat(6, 1fr);
+  gap: 2%;
+  padding: 2% 4%;
+  z-index: 2;
+}
+
+/* 그리드 셀 */
+.teacher-grid-cell {
+  position: relative;
+  overflow: visible;
+}
+
+/* 행별 z-index - 아래 행이 위로 */
+.teacher-grid-cell:nth-child(n+1):nth-child(-n+7) { z-index: 1; } /* 1행 */
+.teacher-grid-cell:nth-child(n+8):nth-child(-n+14) { z-index: 2; } /* 2행 */
+.teacher-grid-cell:nth-child(n+15):nth-child(-n+21) { z-index: 3; } /* 3행 */
+.teacher-grid-cell:nth-child(n+22):nth-child(-n+28) { z-index: 4; } /* 4행 */
+.teacher-grid-cell:nth-child(n+29):nth-child(-n+35) { z-index: 5; } /* 5행 */
+.teacher-grid-cell:nth-child(n+36):nth-child(-n+42) { z-index: 6; } /* 6행 */
+
+/* 꽃 - 하단 기준 배치 */
+.teacher-flower {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  cursor: default;
+  transition: transform 0.3s ease;
+  width: 50px;
+  height: 50px;
+}
+
+/* 꽃 이미지 */
+.teacher-flower-image {
+  width: auto;
+  height: auto;
+  max-width: 50px;
+  max-height: 100px;
+  object-fit: contain;
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.3));
+  transition: transform 0.2s;
+}
+
+.teacher-flower:hover {
+  transform: translateX(-50%) scale(1.15);
+  z-index: 100;
+}
+
+.teacher-flower-image.unknown-flower {
+  opacity: 0.6;
+  filter: grayscale(50%) drop-shadow(0 3px 6px rgba(0, 0, 0, 0.3));
+}
+
+/* 빈 칸 */
+.teacher-empty-slot {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, rgba(139, 111, 71, 0.25), rgba(107, 84, 57, 0.25));
+  border: 2px dashed rgba(139, 111, 71, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: rgba(232, 205, 142, 0.9);
+  font-weight: bold;
+  box-shadow:
+    inset 0 2px 4px rgba(0, 0, 0, 0.15),
+    0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* 툴팁 */
+.teacher-tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  margin-bottom: 10px;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s ease;
+  z-index: 1000;
+  white-space: nowrap;
+}
+
+.teacher-flower:hover .teacher-tooltip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.teacher-tooltip-card {
+  background: white;
+  padding: 12px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  border: 1px solid #D4C4B0;
+  min-width: 150px;
+  white-space: normal;
+}
+
+.teacher-tooltip-flower-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: #5A4A3A;
+  margin-bottom: 4px;
+}
+
+.teacher-tooltip-meaning {
+  font-size: 12px;
+  color: #8B6F47;
+  font-style: italic;
+  margin-bottom: 6px;
+}
+
+.teacher-tooltip-date {
+  font-size: 11px;
+  color: #A0927D;
+  margin-bottom: 4px;
+}
+
+.teacher-tooltip-emotion {
+  font-size: 12px;
+  color: #6B5537;
+  font-weight: 600;
+}
+
+/* 안내 메시지 */
+.teacher-garden-notice {
+  background: #FFF9F0;
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1px solid #FFE0B2;
+  text-align: center;
+}
+
+.teacher-garden-notice p {
+  margin: 0;
+  font-size: 13px;
+  color: #8B6F47;
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+  .teacher-letter-list-title-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .teacher-monthly-garden-btn {
+    width: 100%;
+  }
+
+  .teacher-garden-wrapper {
+    aspect-ratio: 7 / 7;
+  }
+
+  .teacher-flower-grid {
+    gap: 2px;
+    padding: 8px;
+  }
+}

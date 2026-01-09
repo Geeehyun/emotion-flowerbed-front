@@ -86,8 +86,12 @@
         <!-- 레터 리스트 (학생 선택됨, 레터 미선택) -->
         <div v-else-if="!selectedLetter" class="teacher-letter-list-view">
           <div class="teacher-letter-list-header">
-            <h2>{{ selectedStudent.name }} 학생의 감정 레터</h2>
-            <p>주간 감정 분석 레터입니다</p>
+            <div class="teacher-letter-list-title-row">
+              <h2>{{ selectedStudent.name }}</h2>
+              <button @click="emit('open-monthly-garden')" class="teacher-monthly-garden-btn">
+                월간 감정 화단
+              </button>
+            </div>
           </div>
 
           <!-- 로딩 상태 -->
@@ -107,6 +111,7 @@
 
           <!-- 리포트 테이블 -->
           <div v-else class="teacher-letter-list-body">
+            <h3 class="teacher-letter-section-subtitle">감정 레터</h3>
             <table class="teacher-letter-table">
               <thead>
                 <tr>
@@ -195,7 +200,7 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['update:searchQuery', 'reload', 'select-student', 'select-letter', 'deselect-letter'])
+const emit = defineEmits(['update:searchQuery', 'reload', 'select-student', 'select-letter', 'deselect-letter', 'open-monthly-garden'])
 
 // 감정 영역에 따른 아바타 색상 클래스
 const getEmotionAreaClass = (student) => {

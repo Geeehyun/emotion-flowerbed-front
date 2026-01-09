@@ -79,9 +79,21 @@
           @select-student="selectStudent"
           @select-letter="selectLetter"
           @deselect-letter="selectedLetter = null"
+          @open-monthly-garden="openMonthlyGarden"
         />
       </div>
     </main>
+
+    <!-- 월간 감정 화단 모달 -->
+    <StudentMonthlyGardenModal
+      v-model="showMonthlyGardenModal"
+      :student-name="selectedStudent?.name || ''"
+      :monthly-emotions="monthlyEmotions"
+      :is-loading="isLoadingMonthlyEmotions"
+      :error-message="monthlyEmotionsError"
+      @close="showMonthlyGardenModal = false"
+      @change-month="changeMonthlyGardenMonth"
+    />
 
     <!-- 감정 무드미터 안내 모달 -->
     <MoodMeterInfoModal v-model="isMoodMeterModalOpen" />
@@ -109,7 +121,7 @@
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
 import { logout } from '@/services/authApi.js'
-import { getDailyEmotionStatus, getAtRiskStudents, getStudentRiskHistory, resolveDanger, getStudents, getStudentWeeklyReports, getStudentWeeklyReportDetail } from '@/services/teacherApi.js'
+import { getDailyEmotionStatus, getAtRiskStudents, getStudentRiskHistory, resolveDanger, getStudents, getStudentWeeklyReports, getStudentWeeklyReportDetail, getStudentMonthlyEmotions } from '@/services/teacherApi.js'
 
 // Layout 컴포넌트
 import TeacherSidebar from '@/components/teacher/layout/TeacherSidebar.vue'
@@ -125,6 +137,7 @@ import StudentDetailView from '@/components/teacher/views/StudentDetailView.vue'
 import MoodMeterInfoModal from '@/components/teacher/modals/MoodMeterInfoModal.vue'
 import ResolveDangerModal from '@/components/teacher/modals/ResolveDangerModal.vue'
 import RiskHistoryMobileModal from '@/components/teacher/modals/RiskHistoryMobileModal.vue'
+import StudentMonthlyGardenModal from '@/components/teacher/modals/StudentMonthlyGardenModal.vue'
 
 // 선생님 정보 로드
 const getUserInfo = () => {
@@ -179,6 +192,12 @@ const letterErrorMessage = ref('')
 const weeklyReports = ref([])
 const isLoadingReports = ref(false)
 const reportsErrorMessage = ref('')
+
+// 월간 감정 화단 모달 데이터
+const showMonthlyGardenModal = ref(false)
+const monthlyEmotions = ref(null)
+const isLoadingMonthlyEmotions = ref(false)
+const monthlyEmotionsError = ref('')
 
 // 위험 학생 데이터
 const atRiskData = ref(null) // 위험 학생 리스트 데이터
@@ -592,6 +611,43 @@ const transformTeacherReportData = (reportData) => {
       gardenDiversity: reportData.highlights.gardenDiversity
     } : null
   }
+}
+
+// 월간 감정 화단 열기
+const openMonthlyGarden = async () => {
+  if (!selectedStudent.value) return
+
+  showMonthlyGardenModal.value = true
+
+  // 현재 년월 가져오기
+  const today = new Date()
+  const yearMonth = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}`
+
+  await loadMonthlyEmotions(yearMonth)
+}
+
+// 월간 감정 데이터 로드
+const loadMonthlyEmotions = async (yearMonth) => {
+  if (!selectedStudent.value) return
+
+  try {
+    isLoadingMonthlyEmotions.value = true
+    monthlyEmotionsError.value = ''
+
+    const data = await getStudentMonthlyEmotions(selectedStudent.value.id, yearMonth)
+    monthlyEmotions.value = data
+  } catch (error) {
+    console.error('월간 감정 조회 실패:', error)
+    monthlyEmotionsError.value = error.message || '월간 감정을 불러오는데 실패했습니다.'
+    monthlyEmotions.value = null
+  } finally {
+    isLoadingMonthlyEmotions.value = false
+  }
+}
+
+// 월간 감정 화단 월 변경
+const changeMonthlyGardenMonth = (yearMonth) => {
+  loadMonthlyEmotions(yearMonth)
 }
 
 // 위험 학생 -> 상세 분석 이동

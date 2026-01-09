@@ -183,6 +183,39 @@ export async function getStudentWeeklyReportDetail(studentUserSn, reportId) {
   }
 }
 
+/**
+ * 학생별 월간 감정 조회
+ * @param {number} studentUserSn - 학생 일련번호
+ * @param {string} yearMonth - 조회할 년월 (YYYY-MM 형식)
+ * @returns {Promise} - 월간 감정 데이터
+ */
+export async function getStudentMonthlyEmotions(studentUserSn, yearMonth) {
+  try {
+    const accessToken = localStorage.getItem('accessToken')
+    if (!accessToken) {
+      throw new Error('로그인이 필요합니다.')
+    }
+
+    const response = await axios.get(`${API_BASE_URL}/teachers/students/${studentUserSn}/monthly-emotions`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      params: { yearMonth }
+    })
+    return response.data
+  } catch (error) {
+    if (error.response?.status === 403) {
+      throw new Error('해당 학생의 감정 정보에 접근 권한이 없습니다.')
+    } else if (error.response?.status === 404) {
+      throw new Error('학생을 찾을 수 없습니다.')
+    } else if (error.response?.status === 400) {
+      throw new Error('날짜 형식이 올바르지 않습니다.')
+    }
+    console.error('월간 감정 조회 실패:', error)
+    throw new Error('월간 감정을 불러오는데 실패했습니다.')
+  }
+}
+
 export default {
   getDailyEmotionStatus,
   getAtRiskStudents,
@@ -190,5 +223,6 @@ export default {
   resolveDanger,
   getStudents,
   getStudentWeeklyReports,
-  getStudentWeeklyReportDetail
+  getStudentWeeklyReportDetail,
+  getStudentMonthlyEmotions
 }
