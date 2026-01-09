@@ -35,20 +35,30 @@
             </div>
           </div>
 
-          <div class="teacher-garden-wrapper">
+          <div class="teacher-garden-wrapper" :style="gardenWrapperStyle">
             <!-- 화단 배경 이미지 -->
             <img src="@/assets/images/garden-bg-rectangle.png" alt="화단" class="teacher-garden-bg-image" loading="lazy">
 
             <!-- 격자 그리드로 꽃 배치 -->
-            <div class="teacher-flower-grid">
+            <div class="teacher-flower-grid" :style="gardenGridStyle">
               <!-- 1일 이전 빈 칸 -->
-              <div class="teacher-grid-cell" v-for="i in emptyDaysBeforeFirst" :key="`before-${i}`">
+              <div
+                class="teacher-grid-cell"
+                v-for="(i, index) in emptyDaysBeforeFirst"
+                :key="`before-${i}`"
+                :style="{ zIndex: getCellZIndex(index) }"
+              >
                 <div class="teacher-empty-slot" style="opacity: 0;"></div>
               </div>
 
               <!-- 감정 일기가 있는 날들 -->
-              <template v-for="day in daysInCurrentMonth" :key="day">
-                <div class="teacher-grid-cell" v-if="getEmotionForDay(day)" :data-day="day">
+              <template v-for="(day, index) in daysInCurrentMonth" :key="day">
+                <div
+                  class="teacher-grid-cell"
+                  v-if="getEmotionForDay(day)"
+                  :data-day="day"
+                  :style="{ zIndex: getCellZIndex(emptyDaysBeforeFirst + index) }"
+                >
                   <div
                     class="teacher-flower"
                     :class="{ 'selected': selectedDay === day }"
@@ -71,7 +81,12 @@
                   </div>
                 </div>
                 <!-- 빈 칸 (일기 없음) -->
-                <div class="teacher-grid-cell" v-else :data-day="day">
+                <div
+                  class="teacher-grid-cell"
+                  v-else
+                  :data-day="day"
+                  :style="{ zIndex: getCellZIndex(emptyDaysBeforeFirst + index) }"
+                >
                   <div class="teacher-empty-slot">
                     {{ day }}
                   </div>
@@ -79,7 +94,12 @@
               </template>
 
               <!-- 1일 이후 빈 칸 (7의 배수로 맞추기) -->
-              <div class="teacher-grid-cell" v-for="i in emptyDaysAfterLast" :key="`after-${i}`">
+              <div
+                class="teacher-grid-cell"
+                v-for="(i, index) in emptyDaysAfterLast"
+                :key="`after-${i}`"
+                :style="{ zIndex: getCellZIndex(emptyDaysBeforeFirst + daysInCurrentMonth + index) }"
+              >
                 <div class="teacher-empty-slot" style="opacity: 0;"></div>
               </div>
             </div>
@@ -245,6 +265,33 @@ const emptyDaysAfterLast = computed(() => {
   const remainder = totalCells % 7
   return remainder === 0 ? 0 : 7 - remainder
 })
+
+// 필요한 주차 수 (행 개수)
+const totalWeeks = computed(() => {
+  const totalCells = emptyDaysBeforeFirst.value + daysInCurrentMonth.value
+  return Math.ceil(totalCells / 7)
+})
+
+// 화단 그리드 스타일
+const gardenGridStyle = computed(() => {
+  return {
+    gridTemplateRows: `repeat(${totalWeeks.value}, 1fr)`
+  }
+})
+
+// 화단 래퍼 스타일 (aspect-ratio 동적 조정)
+const gardenWrapperStyle = computed(() => {
+  return {
+    aspectRatio: `7 / ${totalWeeks.value}`
+  }
+})
+
+// 셀의 z-index 계산 (행 번호 기준)
+const getCellZIndex = (cellIndex) => {
+  // cellIndex는 0부터 시작, 행 번호는 Math.floor(cellIndex / 7) + 1
+  const rowNumber = Math.floor(cellIndex / 7) + 1
+  return rowNumber
+}
 
 // 일기 데이터를 날짜별로 매핑
 const emotionsByDate = computed(() => {

@@ -3356,14 +3356,6 @@
   overflow: visible;
 }
 
-/* 행별 z-index - 아래 행이 위로 */
-.teacher-grid-cell:nth-child(n+1):nth-child(-n+7) { z-index: 1; } /* 1행 */
-.teacher-grid-cell:nth-child(n+8):nth-child(-n+14) { z-index: 2; } /* 2행 */
-.teacher-grid-cell:nth-child(n+15):nth-child(-n+21) { z-index: 3; } /* 3행 */
-.teacher-grid-cell:nth-child(n+22):nth-child(-n+28) { z-index: 4; } /* 4행 */
-.teacher-grid-cell:nth-child(n+29):nth-child(-n+35) { z-index: 5; } /* 5행 */
-.teacher-grid-cell:nth-child(n+36):nth-child(-n+42) { z-index: 6; } /* 6행 */
-
 /* 꽃 - 하단 기준 배치 */
 .teacher-flower {
   position: absolute;
