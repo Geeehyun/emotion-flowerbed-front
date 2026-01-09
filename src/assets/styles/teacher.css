@@ -3386,10 +3386,10 @@
   top: 21%;
   left: 8%;
   width: 84%;
-  height: 50%;
+  height: 49%;
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 10px;
+  gap: 5px;
   padding: 2% 4%;
   z-index: 2;
 }

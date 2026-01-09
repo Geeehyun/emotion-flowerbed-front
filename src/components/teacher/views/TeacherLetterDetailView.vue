@@ -33,11 +33,11 @@
             </div>
             <div class="teacher-day-flower" :class="{ 'has-diary': day.hasEntry }">
               <div v-if="day.hasEntry" class="teacher-flower-wrapper">
-                <img
+                <LazyImage
                   :src="getFlowerPotImage(day.flowerKey)"
                   :alt="day.emotionName"
-                  class="teacher-flower-pot-image"
-                  loading="lazy"
+                  image-class="teacher-flower-pot-image"
+                  skeleton-type="card"
                 />
               </div>
               <!-- 호버 툴팁 (wrapper 밖으로 이동) -->
@@ -93,10 +93,10 @@
         <div class="teacher-highlight-main" v-if="letter.highlights.flowerOfTheWeek">
           <div class="teacher-flower-of-week">
             <div class="teacher-flower-of-week-image">
-              <img
+              <LazyImage
                 :src="getFlowerPotImage(letter.highlights.flowerOfTheWeek.imageFile3d.replace('.png', ''))"
                 :alt="letter.highlights.flowerOfTheWeek.flowerNameKr"
-                loading="lazy"
+                skeleton-type="card"
               />
             </div>
             <div class="teacher-flower-of-week-info">
@@ -194,6 +194,7 @@
 import { ref, watch } from 'vue'
 import { Chart, DoughnutController, ArcElement, Tooltip, Legend } from 'chart.js'
 import { ANIMATION_DELAY } from '@/constants/uiConstants.js'
+import LazyImage from '@/components/common/LazyImage.vue'
 
 // Chart.js 등록
 Chart.register(DoughnutController, ArcElement, Tooltip, Legend)

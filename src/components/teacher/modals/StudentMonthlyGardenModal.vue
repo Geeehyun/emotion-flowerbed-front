@@ -65,11 +65,11 @@
                     :class="{ 'selected': selectedDay === day }"
                     @click="selectDay(day)"
                   >
-                    <img
+                    <LazyImage
                       :src="getFlowerImageUrl(day)"
                       :alt="getFlowerName(day)"
-                      :class="isUnknownEmotion(day) ? 'teacher-flower-image unknown-flower' : 'teacher-flower-image'"
-                      loading="lazy"
+                      :image-class="isUnknownEmotion(day) ? 'teacher-flower-image unknown-flower' : 'teacher-flower-image'"
+                      skeleton-type="default"
                     />
                     <div class="teacher-tooltip">
                       <div class="teacher-tooltip-card">
@@ -126,11 +126,11 @@
               <!-- 꽃 & 핵심 감정 카드 (통합) -->
               <div class="teacher-emotion-flower-card">
                 <div class="teacher-flower-image-large">
-                  <img
+                  <LazyImage
                     :src="getFlowerPotImageUrl(selectedDay)"
                     :alt="getFlowerName(selectedDay)"
-                    :class="isUnknownEmotion(selectedDay) ? 'unknown-flower' : ''"
-                    loading="lazy"
+                    :image-class="isUnknownEmotion(selectedDay) ? 'unknown-flower' : ''"
+                    skeleton-type="card"
                   />
                 </div>
                 <div class="teacher-flower-info">
@@ -189,6 +189,7 @@
 <script setup>
 import { ref, computed, watch } from 'vue'
 import BaseModal from '@/components/common/modals/BaseModal.vue'
+import LazyImage from '@/components/common/LazyImage.vue'
 
 const props = defineProps({
   modelValue: {

@@ -40,13 +40,12 @@
               <div class="teacher-student-item-left">
                 <!-- 꽃 이미지 아바타 -->
                 <div class="teacher-student-avatar" :class="getEmotionAreaClass(student)">
-                  <img
+                  <LazyImage
                     :src="`/flowers/3d_pot/${student.recentCoreEmotionImage || 'unknown.png'}`"
                     :alt="student.recentCoreEmotionNameKr || '알 수 없음'"
-                    class="teacher-avatar-flower-image"
-                    loading="lazy"
-                    @error="(e) => e.target.src = '/flowers/3d_pot/unknown.png'"
-                  >
+                    image-class="teacher-avatar-flower-image"
+                    skeleton-type="default"
+                  />
                 </div>
                 <div class="teacher-student-item-text">
                   <div class="teacher-student-name-row">
@@ -164,6 +163,7 @@
 <script setup>
 import TeacherLetterDetailView from './TeacherLetterDetailView.vue'
 import StudentListSkeleton from '../dashboard/StudentListSkeleton.vue'
+import LazyImage from '@/components/common/LazyImage.vue'
 
 const props = defineProps({
   searchQuery: {
