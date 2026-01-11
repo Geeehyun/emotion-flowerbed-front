@@ -94,7 +94,7 @@
 
 <script setup>
 import { ref, onMounted, watch, nextTick } from 'vue'
-import { Chart, ArcElement, Tooltip, Legend } from 'chart.js'
+import { Chart, ArcElement, Tooltip, Legend } from 'chart.js/auto'
 import { DatePicker } from 'v-calendar'
 import 'v-calendar/style.css'
 import EmotionDistributionSkeleton from './EmotionDistributionSkeleton.vue'

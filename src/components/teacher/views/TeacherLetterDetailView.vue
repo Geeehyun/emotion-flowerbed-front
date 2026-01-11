@@ -192,7 +192,7 @@
 
 <script setup>
 import { ref, watch } from 'vue'
-import { Chart, DoughnutController, ArcElement, Tooltip, Legend } from 'chart.js'
+import { Chart, DoughnutController, ArcElement, Tooltip, Legend } from 'chart.js/auto'
 import { ANIMATION_DELAY } from '@/constants/uiConstants.js'
 import LazyImage from '@/components/common/LazyImage.vue'
 
