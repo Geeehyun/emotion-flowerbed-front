@@ -1,6 +1,6 @@
 <template>
   <div class="teacher-classmap-view">
-    <!-- 헤더 (월 네비게이션) -->
+    <!-- 헤더 (월 네비게이션 + 탭 + 범례) -->
     <div class="teacher-classmap-header">
       <div class="teacher-month-navigation">
         <button @click="previousMonth" class="teacher-month-nav-btn">
@@ -15,6 +15,29 @@
           </svg>
         </button>
       </div>
+
+      <!-- 탭 전환 -->
+      <div class="teacher-view-tabs">
+        <button
+          @click="currentViewType = 'chart'"
+          :class="['teacher-view-tab', { active: currentViewType === 'chart' }]"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
+          </svg>
+          그래프형
+        </button>
+        <button
+          @click="currentViewType = 'calendar'"
+          :class="['teacher-view-tab', { active: currentViewType === 'calendar' }]"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+          </svg>
+          달력형
+        </button>
+      </div>
+
       <div class="teacher-legend-group">
         <div class="teacher-legend-item">
           <div class="teacher-legend-color teacher-red-legend"></div>
@@ -44,19 +67,13 @@
     </div>
 
     <!-- 로딩 상태 -->
-    <div v-if="isLoading" class="teacher-calendar-skeleton">
-      <div class="teacher-calendar-grid">
-        <div class="teacher-weekday-header" v-for="day in weekdays" :key="day">
-          {{ day }}
-        </div>
-        <div class="teacher-calendar-day-skeleton" v-for="i in 35" :key="i">
-          <div class="teacher-skeleton-pulse"></div>
-        </div>
-      </div>
+    <div v-if="isLoading" class="teacher-loading-container">
+      <div class="teacher-loading-spinner"></div>
+      <p class="teacher-loading-text">데이터를 불러오는 중...</p>
     </div>
 
     <!-- 에러 상태 -->
-    <div v-else-if="errorMessage" class="teacher-calendar-error">
+    <div v-else-if="errorMessage" class="teacher-error-container">
       <div class="teacher-error-icon">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
@@ -66,8 +83,15 @@
       <button @click="loadMonthlyData" class="teacher-retry-btn">다시 시도</button>
     </div>
 
-    <!-- 캘린더 뷰 -->
-    <div v-else class="teacher-calendar-container">
+    <!-- 그래프형 뷰 -->
+    <div v-else-if="currentViewType === 'chart'" class="teacher-chart-view">
+      <div class="teacher-chart-container-wrapper">
+        <canvas ref="emotionLineChart"></canvas>
+      </div>
+    </div>
+
+    <!-- 달력형 뷰 -->
+    <div v-else-if="currentViewType === 'calendar'" class="teacher-calendar-container">
       <div class="teacher-calendar-grid">
         <!-- 요일 헤더 -->
         <div class="teacher-weekday-header" v-for="day in weekdays" :key="day">
@@ -86,39 +110,39 @@
           ]"
         >
           <div class="teacher-day-number">{{ day.date }}</div>
-          <div v-if="day.hasData && day.isCurrentMonth" class="teacher-emotion-bars">
+          <div v-if="day.hasData && day.isCurrentMonth && day.area" class="teacher-emotion-bars">
             <div
-              v-if="day.area.red > 0"
+              v-if="day.area?.red > 0"
               class="teacher-emotion-bar teacher-red-bar"
               :style="{ height: getBarHeight(day.area.red, day.total) }"
               :title="`빨강: ${day.area.red}명`"
             ></div>
             <div
-              v-if="day.area.yellow > 0"
+              v-if="day.area?.yellow > 0"
               class="teacher-emotion-bar teacher-yellow-bar"
               :style="{ height: getBarHeight(day.area.yellow, day.total) }"
               :title="`노랑: ${day.area.yellow}명`"
             ></div>
             <div
-              v-if="day.area.blue > 0"
+              v-if="day.area?.blue > 0"
               class="teacher-emotion-bar teacher-blue-bar"
               :style="{ height: getBarHeight(day.area.blue, day.total) }"
               :title="`파랑: ${day.area.blue}명`"
             ></div>
             <div
-              v-if="day.area.green > 0"
+              v-if="day.area?.green > 0"
               class="teacher-emotion-bar teacher-green-bar"
               :style="{ height: getBarHeight(day.area.green, day.total) }"
               :title="`초록: ${day.area.green}명`"
             ></div>
             <div
-              v-if="day.area.none > 0"
+              v-if="day.area?.none > 0"
               class="teacher-emotion-bar teacher-gray-bar"
               :style="{ height: getBarHeight(day.area.none, day.total) }"
               :title="`미제출: ${day.area.none}명`"
             ></div>
             <div
-              v-if="day.area.unanalyzed > 0"
+              v-if="day.area?.unanalyzed > 0"
               class="teacher-emotion-bar teacher-unanalyzed-bar"
               :style="{ height: getBarHeight(day.area.unanalyzed, day.total) }"
               :title="`분석불가: ${day.area.unanalyzed}명`"
@@ -151,15 +175,22 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted, watch, nextTick } from 'vue'
+import { Chart, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler } from 'chart.js'
 import { getClassMonthlyEmotionDistribution } from '@/services/teacherApi.js'
+
+// Chart.js 등록
+Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler)
 
 // 상태 관리
 const currentYear = ref(new Date().getFullYear())
 const currentMonth = ref(new Date().getMonth() + 1) // 1-12
+const currentViewType = ref('chart') // 'chart' or 'calendar', 기본값: 그래프형
 const isLoading = ref(false)
 const errorMessage = ref('')
 const monthlyData = ref(null)
+const emotionLineChart = ref(null)
+let chartInstance = null
 
 const weekdays = ['일', '월', '화', '수', '목', '금', '토']
 
@@ -216,6 +247,11 @@ const calendarDays = computed(() => {
         (area.green || 0) + (area.none || 0) + (area.unanalyzed || 0)
       : 0
 
+    // 디버깅: 첫 번째 데이터가 있는 날짜만 로그
+    if (hasData && date <= 3) {
+      console.log(`📅 ${dateString}:`, { hasData, area, total })
+    }
+
     days.push({
       date,
       isCurrentMonth: true,
@@ -257,6 +293,166 @@ const getBarHeight = (count, total) => {
   return `${percent}%`
 }
 
+// 라인 차트 생성
+const createLineChart = () => {
+  if (!emotionLineChart.value || !monthlyData.value?.dailyDistribution) return
+
+  // 기존 차트 삭제
+  if (chartInstance) {
+    chartInstance.destroy()
+  }
+
+  const ctx = emotionLineChart.value.getContext('2d')
+
+  // 날짜 레이블 (일자만)
+  const labels = monthlyData.value.dailyDistribution.map(d => {
+    const date = new Date(d.date)
+    return `${date.getMonth() + 1}/${date.getDate()}`
+  })
+
+  // 각 영역별 데이터
+  const redData = monthlyData.value.dailyDistribution.map(d => d.area.red || 0)
+  const yellowData = monthlyData.value.dailyDistribution.map(d => d.area.yellow || 0)
+  const blueData = monthlyData.value.dailyDistribution.map(d => d.area.blue || 0)
+  const greenData = monthlyData.value.dailyDistribution.map(d => d.area.green || 0)
+  const noneData = monthlyData.value.dailyDistribution.map(d => d.area.none || 0)
+  const unanalyzedData = monthlyData.value.dailyDistribution.map(d => d.area.unanalyzed || 0)
+
+  const data = {
+    labels,
+    datasets: [
+      {
+        label: '빨강 영역',
+        data: redData,
+        borderColor: '#EF5350',
+        backgroundColor: 'rgba(239, 83, 80, 0.1)',
+        tension: 0.4,
+        fill: false
+      },
+      {
+        label: '노랑 영역',
+        data: yellowData,
+        borderColor: '#FFD54F',
+        backgroundColor: 'rgba(255, 213, 79, 0.1)',
+        tension: 0.4,
+        fill: false
+      },
+      {
+        label: '파랑 영역',
+        data: blueData,
+        borderColor: '#42A5F5',
+        backgroundColor: 'rgba(66, 165, 245, 0.1)',
+        tension: 0.4,
+        fill: false
+      },
+      {
+        label: '초록 영역',
+        data: greenData,
+        borderColor: '#66BB6A',
+        backgroundColor: 'rgba(102, 187, 106, 0.1)',
+        tension: 0.4,
+        fill: false
+      },
+      {
+        label: '미제출',
+        data: noneData,
+        borderColor: '#BDBDBD',
+        backgroundColor: 'rgba(189, 189, 189, 0.1)',
+        tension: 0.4,
+        fill: false,
+        borderDash: [5, 5]
+      },
+      {
+        label: '분석불가',
+        data: unanalyzedData,
+        borderColor: '#9E9E9E',
+        backgroundColor: 'rgba(158, 158, 158, 0.1)',
+        tension: 0.4,
+        fill: false,
+        borderDash: [5, 5]
+      }
+    ]
+  }
+
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false,
+    interaction: {
+      mode: 'index',
+      intersect: false
+    },
+    plugins: {
+      legend: {
+        position: 'top',
+        labels: {
+          color: '#5D4E37',
+          font: {
+            family: '-apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif',
+            size: 12
+          },
+          usePointStyle: true,
+          padding: 15
+        }
+      },
+      tooltip: {
+        enabled: true,
+        backgroundColor: 'rgba(255, 255, 255, 0.95)',
+        titleColor: '#5D4E37',
+        bodyColor: '#5D4E37',
+        borderColor: '#D4C4B0',
+        borderWidth: 1,
+        padding: 12,
+        displayColors: true,
+        callbacks: {
+          title: function(context) {
+            const index = context[0].dataIndex
+            const dateStr = monthlyData.value.dailyDistribution[index].date
+            const dayOfWeek = monthlyData.value.dailyDistribution[index].dayOfWeek
+            return `${dateStr} (${dayOfWeek})`
+          },
+          label: function(context) {
+            return `${context.dataset.label}: ${context.parsed.y}명`
+          }
+        }
+      }
+    },
+    scales: {
+      x: {
+        grid: {
+          color: '#E8DFD0',
+          drawBorder: false
+        },
+        ticks: {
+          color: '#8B7355',
+          font: {
+            size: 11
+          }
+        }
+      },
+      y: {
+        beginAtZero: true,
+        grid: {
+          color: '#E8DFD0',
+          drawBorder: false
+        },
+        ticks: {
+          color: '#8B7355',
+          font: {
+            size: 11
+          },
+          stepSize: 1
+        }
+      }
+    }
+  }
+
+  chartInstance = new Chart(ctx, {
+    type: 'line',
+    data: data,
+    options: options
+  })
+}
+
 // 월별 데이터 로드
 const loadMonthlyData = async () => {
   isLoading.value = true
@@ -264,7 +460,15 @@ const loadMonthlyData = async () => {
 
   try {
     const data = await getClassMonthlyEmotionDistribution(yearMonthString.value)
+    console.log('📊 월별 감정 분포 데이터:', data)
+    console.log('📅 dailyDistribution:', data?.dailyDistribution)
     monthlyData.value = data
+
+    // 그래프형일 때 차트 생성
+    if (currentViewType.value === 'chart') {
+      await nextTick()
+      createLineChart()
+    }
   } catch (error) {
     console.error('월별 감정 분포 조회 실패:', error)
     errorMessage.value = error.message || '데이터를 불러오는데 실패했습니다.'
@@ -296,6 +500,14 @@ const nextMonth = () => {
 // 월이 변경되면 데이터 다시 로드
 watch([currentYear, currentMonth], () => {
   loadMonthlyData()
+})
+
+// 뷰 타입이 변경되면 차트 재생성
+watch(currentViewType, async (newType) => {
+  if (newType === 'chart' && monthlyData.value) {
+    await nextTick()
+    createLineChart()
+  }
 })
 
 // 컴포넌트 마운트 시 데이터 로드
