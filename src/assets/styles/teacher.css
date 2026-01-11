@@ -4053,3 +4053,462 @@
     grid-template-columns: repeat(2, 1fr);
   }
 }
+
+/* ============================================
+   이달의 학급 화단 (ClassEmotionMapView)
+============================================ */
+
+.teacher-classmap-view {
+  padding: 32px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* 헤더 (월 네비게이션 + 범례) */
+.teacher-classmap-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+/* 월 네비게이션 */
+.teacher-month-navigation {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.teacher-month-nav-btn {
+  background: #FFFFFF;
+  border: 1px solid #D4C4B0;
+  border-radius: 8px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #5D4E37;
+}
+
+.teacher-month-nav-btn:hover {
+  background: #F8F3E8;
+  border-color: #C4915C;
+  transform: scale(1.05);
+}
+
+.teacher-month-nav-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+.teacher-current-month {
+  font-size: 24px;
+  font-weight: 700;
+  color: #5D4E37;
+  min-width: 180px;
+  text-align: center;
+}
+
+/* 범례 */
+.teacher-legend-group {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.teacher-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #5D4E37;
+}
+
+.teacher-legend-color {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.teacher-red-legend {
+  background: #EF5350;
+}
+
+.teacher-yellow-legend {
+  background: #FFD54F;
+}
+
+.teacher-blue-legend {
+  background: #42A5F5;
+}
+
+.teacher-green-legend {
+  background: #66BB6A;
+}
+
+.teacher-gray-legend {
+  background: #BDBDBD;
+}
+
+.teacher-unanalyzed-legend {
+  background: #9E9E9E;
+}
+
+/* 캘린더 컨테이너 */
+.teacher-calendar-container {
+  background: #FFFFFF;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 12px rgba(93, 78, 55, 0.08);
+}
+
+/* 캘린더 그리드 (7열) */
+.teacher-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+}
+
+/* 요일 헤더 */
+.teacher-weekday-header {
+  text-align: center;
+  font-weight: 600;
+  font-size: 14px;
+  color: #8B7355;
+  padding: 12px 8px;
+  background: #F8F3E8;
+  border-radius: 8px;
+}
+
+/* 날짜 셀 */
+.teacher-calendar-day {
+  min-height: 120px;
+  background: #FAFAF8;
+  border: 1px solid #E8DFD0;
+  border-radius: 8px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.teacher-calendar-day:hover {
+  background: #F8F3E8;
+  border-color: #D4C4B0;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(93, 78, 55, 0.08);
+}
+
+/* 다른 월 날짜 */
+.teacher-calendar-day.teacher-other-month {
+  background: transparent;
+  border-color: transparent;
+}
+
+.teacher-calendar-day.teacher-other-month:hover {
+  background: transparent;
+  transform: none;
+  box-shadow: none;
+}
+
+.teacher-calendar-day.teacher-other-month .teacher-day-number {
+  color: #C4C4C4;
+}
+
+/* 오늘 날짜 */
+.teacher-calendar-day.teacher-today {
+  border: 2px solid #C4915C;
+  background: linear-gradient(135deg, #FFF9F0 0%, #FFFFFF 100%);
+}
+
+.teacher-calendar-day.teacher-today .teacher-day-number {
+  color: #C4915C;
+  font-weight: 700;
+}
+
+/* 데이터가 있는 날짜 */
+.teacher-calendar-day.teacher-has-data {
+  background: #FFFFFF;
+}
+
+/* 날짜 숫자 */
+.teacher-day-number {
+  font-size: 14px;
+  font-weight: 600;
+  color: #5D4E37;
+  text-align: right;
+  margin-bottom: 4px;
+}
+
+/* 감정 바 컨테이너 */
+.teacher-emotion-bars {
+  flex: 1;
+  display: flex;
+  gap: 3px;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 4px 0;
+}
+
+/* 감정 바 */
+.teacher-emotion-bar {
+  flex: 1;
+  min-height: 10px;
+  border-radius: 3px 3px 0 0;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.teacher-emotion-bar:hover {
+  opacity: 0.8;
+  transform: scaleY(1.05);
+}
+
+.teacher-red-bar {
+  background: #EF5350;
+}
+
+.teacher-yellow-bar {
+  background: #FFD54F;
+}
+
+.teacher-blue-bar {
+  background: #42A5F5;
+}
+
+.teacher-green-bar {
+  background: #66BB6A;
+}
+
+.teacher-gray-bar {
+  background: #BDBDBD;
+}
+
+.teacher-unanalyzed-bar {
+  background: #9E9E9E;
+}
+
+/* 데이터 없음 */
+.teacher-no-data {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.teacher-no-data-text {
+  font-size: 12px;
+  color: #C4C4C4;
+}
+
+/* 요약 정보 */
+.teacher-monthly-summary {
+  margin-top: 24px;
+}
+
+.teacher-summary-card {
+  background: #FFFFFF;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 4px 12px rgba(93, 78, 55, 0.08);
+}
+
+.teacher-summary-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #5D4E37;
+  margin-bottom: 16px;
+}
+
+.teacher-summary-content {
+  display: flex;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+
+.teacher-summary-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.teacher-summary-label {
+  font-size: 14px;
+  color: #8B7355;
+  font-weight: 500;
+}
+
+.teacher-summary-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: #5D4E37;
+}
+
+/* 로딩 스켈레톤 */
+.teacher-calendar-skeleton {
+  background: #FFFFFF;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 12px rgba(93, 78, 55, 0.08);
+}
+
+.teacher-calendar-day-skeleton {
+  min-height: 120px;
+  background: #FAFAF8;
+  border: 1px solid #E8DFD0;
+  border-radius: 8px;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.teacher-skeleton-pulse {
+  width: 100%;
+  height: 80%;
+  background: linear-gradient(
+    135deg,
+    #E8DFD0 0%,
+    #F5F0E8 50%,
+    #E8DFD0 100%
+  );
+  background-size: 200% 200%;
+  border-radius: 8px;
+  animation: teacher-skeleton-pulse 1.5s ease-in-out infinite;
+  position: relative;
+  overflow: hidden;
+}
+
+.teacher-skeleton-pulse::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.6) 50%,
+    transparent 100%
+  );
+  animation: teacher-shimmer 2s infinite;
+}
+
+@keyframes teacher-skeleton-pulse {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* 에러 상태 */
+.teacher-calendar-error {
+  background: #FFFFFF;
+  border-radius: 16px;
+  padding: 64px 24px;
+  box-shadow: 0 4px 12px rgba(93, 78, 55, 0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.teacher-calendar-error .teacher-error-icon {
+  width: 64px;
+  height: 64px;
+  color: #D32F2F;
+}
+
+.teacher-calendar-error .teacher-error-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.teacher-calendar-error .teacher-error-message {
+  font-size: 16px;
+  color: #5D4E37;
+  text-align: center;
+}
+
+/* 반응형 */
+@media (max-width: 1200px) {
+  .teacher-classmap-view {
+    padding: 24px;
+  }
+
+  .teacher-calendar-day {
+    min-height: 100px;
+  }
+
+  .teacher-current-month {
+    font-size: 20px;
+    min-width: 150px;
+  }
+}
+
+@media (max-width: 768px) {
+  .teacher-classmap-view {
+    padding: 16px;
+  }
+
+  .teacher-classmap-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .teacher-month-navigation {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .teacher-legend-group {
+    width: 100%;
+    justify-content: center;
+    gap: 12px;
+  }
+
+  .teacher-calendar-container {
+    padding: 16px;
+    overflow-x: auto;
+  }
+
+  .teacher-calendar-grid {
+    min-width: 600px;
+    gap: 6px;
+  }
+
+  .teacher-calendar-day {
+    min-height: 80px;
+    padding: 6px;
+  }
+
+  .teacher-day-number {
+    font-size: 12px;
+  }
+
+  .teacher-emotion-bars {
+    gap: 2px;
+  }
+
+  .teacher-emotion-bar {
+    min-height: 8px;
+  }
+
+  .teacher-summary-content {
+    flex-direction: column;
+    gap: 16px;
+  }
+}

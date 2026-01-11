@@ -265,6 +265,26 @@ export async function getStudentMonthlyEmotions(studentUserSn, yearMonth) {
   }
 }
 
+/**
+ * 학급 월별 감정 분포 조회
+ * @param {string} yearMonth - 조회할 년월 (YYYY-MM 형식)
+ * @returns {Promise} - 월별 감정 분포 데이터
+ */
+export async function getClassMonthlyEmotionDistribution(yearMonth) {
+  try {
+    const response = await apiClient.get('/teachers/class/monthly-emotion-distribution', {
+      params: { yearMonth }
+    })
+    return response.data
+  } catch (error) {
+    if (error.response?.status === 400) {
+      throw new Error('날짜 형식이 올바르지 않습니다.')
+    }
+    console.error('학급 월별 감정 분포 조회 실패:', error)
+    throw new Error('월별 감정 분포를 불러오는데 실패했습니다.')
+  }
+}
+
 export default {
   getDailyEmotionStatus,
   getAtRiskStudents,
@@ -273,5 +293,6 @@ export default {
   getStudents,
   getStudentWeeklyReports,
   getStudentWeeklyReportDetail,
-  getStudentMonthlyEmotions
+  getStudentMonthlyEmotions,
+  getClassMonthlyEmotionDistribution
 }
