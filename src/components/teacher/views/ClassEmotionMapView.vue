@@ -1,16 +1,5 @@
 <template>
   <div class="teacher-classmap-view">
-    <!-- 디버깅 정보 (임시) -->
-    <div style="background: #ffe6e6; padding: 16px; margin-bottom: 16px; border-radius: 8px; font-size: 12px;">
-      <h4 style="margin: 0 0 8px 0; color: #d32f2f;">🔍 디버깅 정보</h4>
-      <div><strong>isLoading:</strong> {{ isLoading }}</div>
-      <div><strong>errorMessage:</strong> {{ errorMessage }}</div>
-      <div><strong>currentViewType:</strong> {{ currentViewType }}</div>
-      <div><strong>monthlyData:</strong> {{ monthlyData ? '있음' : '없음' }}</div>
-      <div><strong>dailyDistribution 개수:</strong> {{ monthlyData?.dailyDistribution?.length || 0 }}</div>
-      <div><strong>calendarDays 개수:</strong> {{ calendarDays.length }}</div>
-    </div>
-
     <!-- 헤더 (월 네비게이션 + 탭 + 범례) -->
     <div class="teacher-classmap-header">
       <div class="teacher-month-navigation">
@@ -77,6 +66,23 @@
       </div>
     </div>
 
+    <!-- 요약 정보 -->
+    <div v-if="!isLoading && !errorMessage && monthlyData" class="teacher-monthly-summary">
+      <div class="teacher-summary-card">
+        <h3 class="teacher-summary-title">이달의 학급 현황</h3>
+        <div class="teacher-summary-content">
+          <div class="teacher-summary-item">
+            <span class="teacher-summary-label">총 학생 수</span>
+            <span class="teacher-summary-value">{{ monthlyData.totalStudents }}명</span>
+          </div>
+          <div class="teacher-summary-item">
+            <span class="teacher-summary-label">데이터 수집 일수</span>
+            <span class="teacher-summary-value">{{ daysWithData }}일</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- 로딩 상태 -->
     <div v-if="isLoading" class="teacher-loading-container">
       <div class="teacher-loading-spinner"></div>
@@ -121,63 +127,70 @@
           ]"
         >
           <div class="teacher-day-number">{{ day.date }}</div>
-          <div v-if="day.hasData && day.isCurrentMonth && day.area" class="teacher-emotion-bars">
+          <div v-if="day.hasData && day.isCurrentMonth && day.area" class="teacher-calendar-segment-bar">
             <div
               v-if="day.area?.red > 0"
               class="teacher-emotion-bar teacher-red-bar"
-              :style="{ height: getBarHeight(day.area.red, day.total) }"
-              :title="`빨강: ${day.area.red}명`"
-            ></div>
+              :style="{ flexGrow: day.area.red }"
+            >
+              <div class="teacher-bar-tooltip">
+                <strong>빨강 영역</strong><br>
+                {{ day.area.red }}명 ({{ getBarHeight(day.area.red, day.total) }})
+              </div>
+            </div>
             <div
               v-if="day.area?.yellow > 0"
               class="teacher-emotion-bar teacher-yellow-bar"
-              :style="{ height: getBarHeight(day.area.yellow, day.total) }"
-              :title="`노랑: ${day.area.yellow}명`"
-            ></div>
+              :style="{ flexGrow: day.area.yellow }"
+            >
+              <div class="teacher-bar-tooltip">
+                <strong>노랑 영역</strong><br>
+                {{ day.area.yellow }}명 ({{ getBarHeight(day.area.yellow, day.total) }})
+              </div>
+            </div>
             <div
               v-if="day.area?.blue > 0"
               class="teacher-emotion-bar teacher-blue-bar"
-              :style="{ height: getBarHeight(day.area.blue, day.total) }"
-              :title="`파랑: ${day.area.blue}명`"
-            ></div>
+              :style="{ flexGrow: day.area.blue }"
+            >
+              <div class="teacher-bar-tooltip">
+                <strong>파랑 영역</strong><br>
+                {{ day.area.blue }}명 ({{ getBarHeight(day.area.blue, day.total) }})
+              </div>
+            </div>
             <div
               v-if="day.area?.green > 0"
               class="teacher-emotion-bar teacher-green-bar"
-              :style="{ height: getBarHeight(day.area.green, day.total) }"
-              :title="`초록: ${day.area.green}명`"
-            ></div>
+              :style="{ flexGrow: day.area.green }"
+            >
+              <div class="teacher-bar-tooltip">
+                <strong>초록 영역</strong><br>
+                {{ day.area.green }}명 ({{ getBarHeight(day.area.green, day.total) }})
+              </div>
+            </div>
             <div
               v-if="day.area?.none > 0"
               class="teacher-emotion-bar teacher-gray-bar"
-              :style="{ height: getBarHeight(day.area.none, day.total) }"
-              :title="`미제출: ${day.area.none}명`"
-            ></div>
+              :style="{ flexGrow: day.area.none }"
+            >
+              <div class="teacher-bar-tooltip">
+                <strong>미제출</strong><br>
+                {{ day.area.none }}명 ({{ getBarHeight(day.area.none, day.total) }})
+              </div>
+            </div>
             <div
               v-if="day.area?.unanalyzed > 0"
               class="teacher-emotion-bar teacher-unanalyzed-bar"
-              :style="{ height: getBarHeight(day.area.unanalyzed, day.total) }"
-              :title="`분석불가: ${day.area.unanalyzed}명`"
-            ></div>
+              :style="{ flexGrow: day.area.unanalyzed }"
+            >
+              <div class="teacher-bar-tooltip">
+                <strong>분석불가</strong><br>
+                {{ day.area.unanalyzed }}명 ({{ getBarHeight(day.area.unanalyzed, day.total) }})
+              </div>
+            </div>
           </div>
           <div v-else-if="day.isCurrentMonth" class="teacher-no-data">
             <span class="teacher-no-data-text">-</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 요약 정보 -->
-    <div v-if="!isLoading && !errorMessage && monthlyData" class="teacher-monthly-summary">
-      <div class="teacher-summary-card">
-        <h3 class="teacher-summary-title">이달의 학급 현황</h3>
-        <div class="teacher-summary-content">
-          <div class="teacher-summary-item">
-            <span class="teacher-summary-label">총 학생 수</span>
-            <span class="teacher-summary-value">{{ monthlyData.totalStudents }}명</span>
-          </div>
-          <div class="teacher-summary-item">
-            <span class="teacher-summary-label">데이터 수집 일수</span>
-            <span class="teacher-summary-value">{{ daysWithData }}일</span>
           </div>
         </div>
       </div>
@@ -218,9 +231,6 @@ const yearMonthString = computed(() => {
 
 // 캘린더 날짜 배열 생성
 const calendarDays = computed(() => {
-  console.log('📅 calendarDays computed 실행')
-  console.log('📊 monthlyData.value:', monthlyData.value)
-
   const days = []
   const year = currentYear.value
   const month = currentMonth.value
@@ -261,11 +271,6 @@ const calendarDays = computed(() => {
         (area.green || 0) + (area.none || 0) + (area.unanalyzed || 0)
       : 0
 
-    // 디버깅: 첫 번째 데이터가 있는 날짜만 로그
-    if (hasData && date <= 3) {
-      console.log(`📅 ${dateString}:`, { hasData, area, total })
-    }
-
     days.push({
       date,
       isCurrentMonth: true,
@@ -291,9 +296,6 @@ const calendarDays = computed(() => {
     }
   }
 
-  console.log('✅ calendarDays 생성 완료, 총:', days.length, '일')
-  console.log('📊 데이터가 있는 날짜 수:', days.filter(d => d.hasData).length)
-
   return days
 })
 
@@ -305,18 +307,13 @@ const daysWithData = computed(() => {
 
 // 바 높이 계산 (최대 100%)
 const getBarHeight = (count, total) => {
-  if (total === 0) return '0%'
+  if (total === 0) return '0.00%'
   const percent = (count / total) * 100
-  return `${percent}%`
+  return `${percent.toFixed(2)}%`
 }
 
 // 라인 차트 생성
 const createLineChart = () => {
-  console.log('🎨 createLineChart 호출됨')
-  console.log('📊 emotionLineChart.value:', emotionLineChart.value)
-  console.log('📊 monthlyData.value:', monthlyData.value)
-  console.log('📊 dailyDistribution:', monthlyData.value?.dailyDistribution)
-
   if (!emotionLineChart.value) {
     console.error('❌ emotionLineChart ref가 없습니다!')
     return
@@ -327,16 +324,12 @@ const createLineChart = () => {
     return
   }
 
-  console.log('✅ 차트 생성 조건 통과, 차트 생성 진행...')
-
   // 기존 차트 삭제
   if (chartInstance) {
-    console.log('🗑️ 기존 차트 삭제')
     chartInstance.destroy()
   }
 
   const ctx = emotionLineChart.value.getContext('2d')
-  console.log('✅ Canvas context 획득:', ctx)
 
   // 날짜 레이블 (일자만)
   const labels = monthlyData.value.dailyDistribution.map(d => {
@@ -394,7 +387,7 @@ const createLineChart = () => {
         backgroundColor: 'rgba(189, 189, 189, 0.1)',
         tension: 0.4,
         fill: false,
-        borderDash: [5, 5]
+        borderDash: [5, 5] // 점선
       },
       {
         label: '분석불가',
@@ -402,8 +395,8 @@ const createLineChart = () => {
         borderColor: '#9E9E9E',
         backgroundColor: 'rgba(158, 158, 158, 0.1)',
         tension: 0.4,
-        fill: false,
-        borderDash: [5, 5]
+        fill: false
+        // 실선 (borderDash 없음)
       }
     ]
   }
@@ -417,16 +410,7 @@ const createLineChart = () => {
     },
     plugins: {
       legend: {
-        position: 'top',
-        labels: {
-          color: '#5D4E37',
-          font: {
-            family: '-apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif',
-            size: 12
-          },
-          usePointStyle: true,
-          padding: 15
-        }
+        display: false
       },
       tooltip: {
         enabled: true,
@@ -480,45 +464,31 @@ const createLineChart = () => {
     }
   }
 
-  console.log('📊 Chart 데이터:', data)
-  console.log('⚙️ Chart 옵션:', options)
-
   chartInstance = new Chart(ctx, {
     type: 'line',
     data: data,
     options: options
   })
-
-  console.log('🎉 Chart 인스턴스 생성 완료:', chartInstance)
 }
 
 // 월별 데이터 로드
 const loadMonthlyData = async () => {
-  console.log('🔄 loadMonthlyData 시작')
   isLoading.value = true
   errorMessage.value = ''
 
   try {
     const data = await getClassMonthlyEmotionDistribution(yearMonthString.value)
-    console.log('📊 월별 감정 분포 데이터:', data)
-    console.log('📅 dailyDistribution:', data?.dailyDistribution)
     monthlyData.value = data
-
-    console.log('✅ monthlyData.value 설정 완료:', monthlyData.value)
-    console.log('🎯 현재 뷰 타입:', currentViewType.value)
   } catch (error) {
     console.error('월별 감정 분포 조회 실패:', error)
     errorMessage.value = error.message || '데이터를 불러오는데 실패했습니다.'
   } finally {
     isLoading.value = false
-    console.log('🏁 loadMonthlyData 완료, isLoading:', isLoading.value)
 
     // 로딩이 끝난 후 그래프형일 때 차트 생성
     if (!errorMessage.value && currentViewType.value === 'chart' && monthlyData.value) {
-      console.log('📈 차트 생성 시작... (로딩 완료 후)')
       await nextTick()
       createLineChart()
-      console.log('✅ 차트 생성 완료')
     }
   }
 }
@@ -550,20 +520,14 @@ watch([currentYear, currentMonth], () => {
 
 // 뷰 타입이 변경되면 차트 재생성
 watch(currentViewType, async (newType) => {
-  console.log('🔄 뷰 타입 변경됨:', newType)
   if (newType === 'chart' && monthlyData.value) {
-    console.log('📈 그래프형으로 전환, 차트 재생성...')
     await nextTick()
     createLineChart()
-  } else {
-    console.log('📅 달력형으로 전환')
   }
 })
 
 // 컴포넌트 마운트 시 데이터 로드
 onMounted(() => {
-  console.log('🚀 ClassEmotionMapView 마운트됨')
-  console.log('🎯 초기 뷰 타입:', currentViewType.value)
   loadMonthlyData()
 })
 </script>

@@ -1548,19 +1548,7 @@
   gap: 24px;
 }
 
-.teacher-classmap-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 16px;
-}
-
-.teacher-classmap-title {
-  font-size: 20px;
-  font-weight: 700;
-  color: #5D4E37;
-}
+/* .teacher-classmap-header는 4068번째 줄에 정의되어 있음 */
 
 .teacher-legend-group {
   display: flex;
@@ -4069,7 +4057,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 32px;
+  margin-bottom: 16px;
   gap: 24px;
   flex-wrap: wrap;
 }
@@ -4285,6 +4273,7 @@
   border-radius: 16px;
   padding: 24px;
   box-shadow: 0 4px 12px rgba(93, 78, 55, 0.08);
+  overflow: visible;
 }
 
 /* 캘린더 그리드 (7열) */
@@ -4292,6 +4281,7 @@
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 8px;
+  overflow: visible;
 }
 
 /* 요일 헤더 */
@@ -4314,9 +4304,12 @@
   padding: 8px;
   display: flex;
   flex-direction: column;
+  align-items: stretch;
   gap: 4px;
   transition: all 0.2s ease;
   position: relative;
+  overflow: visible;
+  z-index: 1;
 }
 
 .teacher-calendar-day:hover {
@@ -4324,6 +4317,7 @@
   border-color: #D4C4B0;
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(93, 78, 55, 0.08);
+  z-index: 100;
 }
 
 /* 다른 월 날짜 */
@@ -4367,28 +4361,85 @@
   margin-bottom: 4px;
 }
 
-/* 감정 바 컨테이너 */
-.teacher-emotion-bars {
-  flex: 1;
+/* 달력 세그먼트 바 컨테이너 */
+.teacher-calendar-segment-bar {
+  width: 100%;
+  height: 20px;
   display: flex;
-  gap: 3px;
-  align-items: flex-end;
-  justify-content: center;
-  padding: 4px 0;
+  flex-direction: row;
+  gap: 0;
+  align-items: stretch;
+  justify-content: flex-start;
+  padding: 0;
+  align-self: stretch;
+  border-radius: 10px;
+  overflow: visible;
+  box-shadow: 0 2px 4px rgba(93, 78, 55, 0.1);
+  position: relative;
 }
 
-/* 감정 바 */
-.teacher-emotion-bar {
-  flex: 1;
-  min-height: 10px;
-  border-radius: 3px 3px 0 0;
+/* 달력 세그먼트 바 개별 영역 */
+.teacher-calendar-segment-bar .teacher-emotion-bar {
+  height: 100%;
   transition: all 0.2s ease;
   cursor: pointer;
+  position: relative;
+  overflow: visible;
 }
 
-.teacher-emotion-bar:hover {
-  opacity: 0.8;
-  transform: scaleY(1.05);
+/* 첫 번째 바 - 왼쪽 둥근 모서리 */
+.teacher-calendar-segment-bar .teacher-emotion-bar:first-child {
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+/* 마지막 바 - 오른쪽 둥근 모서리 */
+.teacher-calendar-segment-bar .teacher-emotion-bar:last-child {
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.teacher-calendar-segment-bar .teacher-emotion-bar:hover {
+  opacity: 0.85;
+  filter: brightness(1.1);
+}
+
+/* 커스텀 툴팁 */
+.teacher-calendar-segment-bar .teacher-bar-tooltip {
+  visibility: hidden;
+  opacity: 0;
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-8px);
+  background: rgba(0, 0, 0, 0.9);
+  color: #FFFFFF;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  white-space: nowrap;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  z-index: 1001;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* 툴팁 화살표 */
+.teacher-calendar-segment-bar .teacher-bar-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: rgba(0, 0, 0, 0.9);
+}
+
+/* 바에 마우스 오버 시 툴팁 표시 */
+.teacher-calendar-segment-bar .teacher-emotion-bar:hover .teacher-bar-tooltip {
+  visibility: visible;
+  opacity: 1;
+  transform: translateX(-50%) translateY(-12px);
 }
 
 .teacher-red-bar {
@@ -4430,43 +4481,45 @@
 
 /* 요약 정보 */
 .teacher-monthly-summary {
-  margin-top: 24px;
+  margin-top: 0;
+  margin-bottom: 16px;
 }
 
 .teacher-summary-card {
   background: #FFFFFF;
   border-radius: 12px;
-  padding: 24px;
-  box-shadow: 0 4px 12px rgba(93, 78, 55, 0.08);
+  padding: 16px 20px;
+  box-shadow: 0 2px 8px rgba(93, 78, 55, 0.06);
 }
 
 .teacher-summary-title {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 700;
   color: #5D4E37;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 
 .teacher-summary-content {
   display: flex;
   gap: 32px;
   flex-wrap: wrap;
+  align-items: center;
 }
 
 .teacher-summary-item {
   display: flex;
-  flex-direction: column;
-  gap: 8px;
+  align-items: center;
+  gap: 12px;
 }
 
 .teacher-summary-label {
-  font-size: 14px;
+  font-size: 13px;
   color: #8B7355;
   font-weight: 500;
 }
 
 .teacher-summary-value {
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 700;
   color: #5D4E37;
 }
