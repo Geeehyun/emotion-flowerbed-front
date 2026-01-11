@@ -22,7 +22,7 @@
             <button type="button" class="cancel-btn" @click="$emit('close')">취소</button>
 
             <!-- 테스트 버튼 (영역 선택 포함) -->
-            <div class="test-btn-wrapper" @mouseenter="showAreaTooltip = true" @mouseleave="showAreaTooltip = false">
+            <!-- <div class="test-btn-wrapper" @mouseenter="showAreaTooltip = true" @mouseleave="showAreaTooltip = false">
               <button
                 type="button"
                 class="save-btn test-btn"
@@ -31,7 +31,6 @@
                 테스트 (랜덤)
               </button>
 
-              <!-- 영역 선택 툴팁 -->
               <div v-if="showAreaTooltip" class="area-tooltip">
                 <div class="area-tooltip-title">영역 선택 (선택사항)</div>
                 <div class="area-options">
@@ -48,7 +47,7 @@
                   </button>
                 </div>
               </div>
-            </div>
+            </div> -->
 
             <button type="button" class="save-btn" @click="$emit('save', false, null)">AI 분석</button>
           </div>
