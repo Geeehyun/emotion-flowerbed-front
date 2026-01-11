@@ -209,101 +209,17 @@ src/
 
 ```javascript
 const API_BASE_URL = import.meta.env.VITE_APP_API_URL;
+// 개발: http://localhost:8080/api/v1
 ```
 
-### 학생 API
+### API 문서
 
-#### 월별 일기 목록 조회
-```
-GET /diaries?yearMonth=YYYY-MM
-```
+자세한 API 명세는 백엔드 저장소의 문서를 참고하세요:
 
-#### 특정 날짜 일기 조회
-```
-GET /diaries/date/{date}
-```
+- **[학생 API 문서](../emotion-flowerbed-api/docs/api/student.md)** - 일기 작성/조회, 감정 분석, 주간 리포트 등
+- **[선생님 API 문서](../emotion-flowerbed-api/docs/api/teacher.md)** - 학생 관리, 감정 현황, 위험 학생 모니터링 등
 
-#### 일기 작성
-```
-POST /diaries
-Body: { diaryDate, content }
-```
-
-#### 일기 감정 분석 (AI)
-```
-POST /diaries/{diaryId}/analyze
-```
-
-#### 일기 감정 분석 (테스트 - 랜덤)
-```
-POST /diaries/{diaryId}/analyze-test
-```
-
-#### 획득한 감정 목록 조회
-```
-GET /flowers/my-emotions
-```
-
-#### 전체 감정 목록 조회
-```
-GET /flowers/all-emotions
-```
-
-#### 일기 수정 / 삭제
-```
-PUT /diaries/{diaryId}
-DELETE /diaries/{diaryId}
-```
-
-#### 주간 리포트 조회
-```
-GET /weekly-reports
-GET /weekly-reports/{reportId}
-```
-
-### 선생님 API
-
-#### 학생 목록 조회
-```
-GET /teachers/students
-```
-
-#### 일별 감정 현황 조회
-```
-GET /teachers/daily-emotion-status?date=YYYY-MM-DD
-```
-
-#### 위험 학생 리스트 조회
-```
-GET /teachers/students/at-risk?level=ALL|CAUTION|DANGER
-```
-
-#### 위험 상태 해제
-```
-POST /teachers/students/{studentUserSn}/resolve-danger
-Body: { memo }
-```
-
-#### 학생별 위험 히스토리 조회
-```
-GET /teachers/students/{studentUserSn}/risk-history
-```
-
-#### 학생별 감정 레터 조회
-```
-GET /teachers/students/{studentUserSn}/weekly-reports
-GET /teachers/students/{studentUserSn}/weekly-reports/{reportId}
-```
-
-#### 학생 월별 감정 조회
-```
-GET /teachers/students/{studentUserSn}/monthly-emotions?yearMonth=YYYY-MM
-```
-
-#### 학급 월별 감정 분포 조회
-```
-GET /teachers/class/monthly-emotion-distribution?yearMonth=YYYY-MM
-```
+> 📍 백엔드 저장소 위치: `D:\vision\emotion-flowerbed-api\`
 
 ## 감정-꽃 매핑
 
