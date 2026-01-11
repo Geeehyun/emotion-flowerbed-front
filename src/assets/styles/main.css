@@ -8,3 +8,9 @@
     @apply bg-gray-50 text-gray-900;
   }
 }
+
+img.select-none {
+  -webkit-user-drag: none;
+  -khtml-user-drag: none; /* 구형 브라우저 대비 */
+  user-drag: none; /* Firefox 대비 */
+}
