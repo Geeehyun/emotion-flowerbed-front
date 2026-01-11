@@ -506,22 +506,20 @@ const loadMonthlyData = async () => {
 
     console.log('✅ monthlyData.value 설정 완료:', monthlyData.value)
     console.log('🎯 현재 뷰 타입:', currentViewType.value)
-    console.log('⏳ isLoading:', isLoading.value)
-    console.log('❌ errorMessage:', errorMessage.value)
-
-    // 그래프형일 때 차트 생성
-    if (currentViewType.value === 'chart') {
-      console.log('📈 차트 생성 시작...')
-      await nextTick()
-      createLineChart()
-      console.log('✅ 차트 생성 완료')
-    }
   } catch (error) {
     console.error('월별 감정 분포 조회 실패:', error)
     errorMessage.value = error.message || '데이터를 불러오는데 실패했습니다.'
   } finally {
     isLoading.value = false
     console.log('🏁 loadMonthlyData 완료, isLoading:', isLoading.value)
+
+    // 로딩이 끝난 후 그래프형일 때 차트 생성
+    if (!errorMessage.value && currentViewType.value === 'chart' && monthlyData.value) {
+      console.log('📈 차트 생성 시작... (로딩 완료 후)')
+      await nextTick()
+      createLineChart()
+      console.log('✅ 차트 생성 완료')
+    }
   }
 }
 
