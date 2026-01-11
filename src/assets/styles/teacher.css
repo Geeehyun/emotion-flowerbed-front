@@ -3673,6 +3673,7 @@
   border: 1px solid #F0E6D2;
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 5px;
 }
 
