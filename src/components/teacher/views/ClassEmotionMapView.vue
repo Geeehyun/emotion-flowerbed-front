@@ -1,5 +1,16 @@
 <template>
   <div class="teacher-classmap-view">
+    <!-- 디버깅 정보 (임시) -->
+    <div style="background: #ffe6e6; padding: 16px; margin-bottom: 16px; border-radius: 8px; font-size: 12px;">
+      <h4 style="margin: 0 0 8px 0; color: #d32f2f;">🔍 디버깅 정보</h4>
+      <div><strong>isLoading:</strong> {{ isLoading }}</div>
+      <div><strong>errorMessage:</strong> {{ errorMessage }}</div>
+      <div><strong>currentViewType:</strong> {{ currentViewType }}</div>
+      <div><strong>monthlyData:</strong> {{ monthlyData ? '있음' : '없음' }}</div>
+      <div><strong>dailyDistribution 개수:</strong> {{ monthlyData?.dailyDistribution?.length || 0 }}</div>
+      <div><strong>calendarDays 개수:</strong> {{ calendarDays.length }}</div>
+    </div>
+
     <!-- 헤더 (월 네비게이션 + 탭 + 범례) -->
     <div class="teacher-classmap-header">
       <div class="teacher-month-navigation">
@@ -207,6 +218,9 @@ const yearMonthString = computed(() => {
 
 // 캘린더 날짜 배열 생성
 const calendarDays = computed(() => {
+  console.log('📅 calendarDays computed 실행')
+  console.log('📊 monthlyData.value:', monthlyData.value)
+
   const days = []
   const year = currentYear.value
   const month = currentMonth.value
@@ -277,6 +291,9 @@ const calendarDays = computed(() => {
     }
   }
 
+  console.log('✅ calendarDays 생성 완료, 총:', days.length, '일')
+  console.log('📊 데이터가 있는 날짜 수:', days.filter(d => d.hasData).length)
+
   return days
 })
 
@@ -295,14 +312,31 @@ const getBarHeight = (count, total) => {
 
 // 라인 차트 생성
 const createLineChart = () => {
-  if (!emotionLineChart.value || !monthlyData.value?.dailyDistribution) return
+  console.log('🎨 createLineChart 호출됨')
+  console.log('📊 emotionLineChart.value:', emotionLineChart.value)
+  console.log('📊 monthlyData.value:', monthlyData.value)
+  console.log('📊 dailyDistribution:', monthlyData.value?.dailyDistribution)
+
+  if (!emotionLineChart.value) {
+    console.error('❌ emotionLineChart ref가 없습니다!')
+    return
+  }
+
+  if (!monthlyData.value?.dailyDistribution) {
+    console.error('❌ dailyDistribution 데이터가 없습니다!')
+    return
+  }
+
+  console.log('✅ 차트 생성 조건 통과, 차트 생성 진행...')
 
   // 기존 차트 삭제
   if (chartInstance) {
+    console.log('🗑️ 기존 차트 삭제')
     chartInstance.destroy()
   }
 
   const ctx = emotionLineChart.value.getContext('2d')
+  console.log('✅ Canvas context 획득:', ctx)
 
   // 날짜 레이블 (일자만)
   const labels = monthlyData.value.dailyDistribution.map(d => {
@@ -446,15 +480,21 @@ const createLineChart = () => {
     }
   }
 
+  console.log('📊 Chart 데이터:', data)
+  console.log('⚙️ Chart 옵션:', options)
+
   chartInstance = new Chart(ctx, {
     type: 'line',
     data: data,
     options: options
   })
+
+  console.log('🎉 Chart 인스턴스 생성 완료:', chartInstance)
 }
 
 // 월별 데이터 로드
 const loadMonthlyData = async () => {
+  console.log('🔄 loadMonthlyData 시작')
   isLoading.value = true
   errorMessage.value = ''
 
@@ -464,16 +504,24 @@ const loadMonthlyData = async () => {
     console.log('📅 dailyDistribution:', data?.dailyDistribution)
     monthlyData.value = data
 
+    console.log('✅ monthlyData.value 설정 완료:', monthlyData.value)
+    console.log('🎯 현재 뷰 타입:', currentViewType.value)
+    console.log('⏳ isLoading:', isLoading.value)
+    console.log('❌ errorMessage:', errorMessage.value)
+
     // 그래프형일 때 차트 생성
     if (currentViewType.value === 'chart') {
+      console.log('📈 차트 생성 시작...')
       await nextTick()
       createLineChart()
+      console.log('✅ 차트 생성 완료')
     }
   } catch (error) {
     console.error('월별 감정 분포 조회 실패:', error)
     errorMessage.value = error.message || '데이터를 불러오는데 실패했습니다.'
   } finally {
     isLoading.value = false
+    console.log('🏁 loadMonthlyData 완료, isLoading:', isLoading.value)
   }
 }
 
@@ -504,14 +552,20 @@ watch([currentYear, currentMonth], () => {
 
 // 뷰 타입이 변경되면 차트 재생성
 watch(currentViewType, async (newType) => {
+  console.log('🔄 뷰 타입 변경됨:', newType)
   if (newType === 'chart' && monthlyData.value) {
+    console.log('📈 그래프형으로 전환, 차트 재생성...')
     await nextTick()
     createLineChart()
+  } else {
+    console.log('📅 달력형으로 전환')
   }
 })
 
 // 컴포넌트 마운트 시 데이터 로드
 onMounted(() => {
+  console.log('🚀 ClassEmotionMapView 마운트됨')
+  console.log('🎯 초기 뷰 타입:', currentViewType.value)
   loadMonthlyData()
 })
 </script>
