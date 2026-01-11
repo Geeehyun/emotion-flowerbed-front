@@ -44,12 +44,12 @@
           <span v-else>로그인 중...</span>
         </button>
 
-        <button type="button" class="test-login-btn" data-type="STUDENT" @click="handleTestLogin" :disabled="isLoading">
+        <!-- <button type="button" class="test-login-btn" data-type="STUDENT" @click="handleTestLogin" :disabled="isLoading">
           테스트 로그인 (student1)
         </button>
         <button type="button" class="test-login-btn" data-type="TEACHER" @click="handleTestLogin" :disabled="isLoading">
           테스트 로그인 (teacher1)
-        </button>
+        </button> -->
       </form>
     </template>
   </BaseModal>
