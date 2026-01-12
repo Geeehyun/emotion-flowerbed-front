@@ -25,7 +25,7 @@
           <div
             v-for="(day, index) in letter?.weekFlowers"
             :key="index"
-            class="teacher-calendar-day"
+            class="teacher-letter-calendar-day"
           >
             <div class="teacher-day-header">
               <span class="teacher-day-date">{{ day.date }}</span>
@@ -33,20 +33,20 @@
             </div>
             <div class="teacher-day-flower" :class="{ 'has-diary': day.hasEntry }">
               <div v-if="day.hasEntry" class="teacher-flower-wrapper">
-                <LazyImage
+                <img
                   :src="getFlowerPotImage(day.flowerKey)"
                   :alt="day.emotionName"
-                  image-class="teacher-flower-pot-image"
-                  skeleton-type="card"
+                  class="teacher-flower-pot-image"
+                  loading="lazy"
                 />
               </div>
-              <!-- 호버 툴팁 (wrapper 밖으로 이동) -->
-              <div v-if="day.hasEntry" class="teacher-flower-tooltip">
-                <div class="teacher-flower-tooltip-card">
-                  <div class="teacher-flower-tooltip-name">{{ day.flowerName }}</div>
-                  <div class="teacher-flower-tooltip-meaning">"{{ day.flowerMeaning }}"</div>
-                  <div class="teacher-flower-tooltip-emotion">{{ day.emotionName }}</div>
-                </div>
+            </div>
+            <!-- 호버 툴팁 (calendar-day 레벨로 이동) -->
+            <div v-if="day.hasEntry" class="teacher-flower-tooltip">
+              <div class="teacher-flower-tooltip-card">
+                <div class="teacher-flower-tooltip-name">{{ day.flowerName }}</div>
+                <div class="teacher-flower-tooltip-meaning">"{{ day.flowerMeaning }}"</div>
+                <div class="teacher-flower-tooltip-emotion">{{ day.emotionName }}</div>
               </div>
             </div>
             <div v-if="day.hasEntry" class="teacher-day-emotion">
@@ -93,10 +93,10 @@
         <div class="teacher-highlight-main" v-if="letter.highlights.flowerOfTheWeek">
           <div class="teacher-flower-of-week">
             <div class="teacher-flower-of-week-image">
-              <LazyImage
+              <img
                 :src="getFlowerPotImage(letter.highlights.flowerOfTheWeek.imageFile3d.replace('.png', ''))"
                 :alt="letter.highlights.flowerOfTheWeek.flowerNameKr"
-                skeleton-type="card"
+                loading="lazy"
               />
             </div>
             <div class="teacher-flower-of-week-info">
@@ -135,7 +135,6 @@
             <div class="teacher-score-icon">⭐</div>
             <div class="teacher-score-info">
               <div class="teacher-score-level">{{ letter.highlights.gardenDiversity.level }}</div>
-              <div class="teacher-score-point">{{ letter.highlights.gardenDiversity.score }}점</div>
             </div>
           </div>
           <div class="teacher-score-description">{{ letter.highlights.gardenDiversity.description }}</div>
@@ -149,7 +148,7 @@
           <div
             v-for="(keyword, index) in letter.weekKeywords"
             :key="index"
-            class="teacher-keyword-tag"
+            class="teacher-week-keyword-tag"
           >
             {{ keyword }}
           </div>
@@ -222,7 +221,6 @@
 import { ref, watch } from 'vue'
 import { Chart, DoughnutController, ArcElement, Tooltip, Legend } from 'chart.js/auto'
 import { ANIMATION_DELAY } from '@/constants/uiConstants.js'
-import LazyImage from '@/components/common/LazyImage.vue'
 
 // Chart.js 등록
 Chart.register(DoughnutController, ArcElement, Tooltip, Legend)

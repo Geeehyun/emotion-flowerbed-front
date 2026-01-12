@@ -2680,9 +2680,12 @@
   grid-template-columns: repeat(7, 1fr);
   gap: 12px;
   margin-top: 16px;
+  position: relative;
+  z-index: 1;
 }
 
-.teacher-calendar-day {
+/* 레터 상세 화면용 캘린더 */
+.teacher-letter-calendar-day {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -2691,6 +2694,8 @@
   border-radius: 12px;
   border: 1px solid #E8DCC8;
   position: relative;
+  overflow: visible;
+  z-index: 1;
 }
 
 .teacher-day-header {
@@ -2730,37 +2735,21 @@
 
 .teacher-flower-wrapper {
   position: relative;
-  width: 60px;
-  height: 60px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  border-radius: 8px;
-}
-
-.teacher-flower-wrapper .lazy-image-wrapper {
   width: 100%;
   height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s ease;
 }
 
-.teacher-flower-wrapper .flower-skeleton {
-  width: 50px;
-  height: 50px;
+.teacher-flower-wrapper:hover {
+  transform: scale(1.1);
 }
 
 .teacher-flower-pot-image {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  transition: transform 0.2s;
-}
-
-.teacher-flower-wrapper:hover .teacher-flower-pot-image {
-  transform: scale(1.1);
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15));
 }
 
 .teacher-day-emotion {
@@ -2770,52 +2759,67 @@
   font-weight: 500;
 }
 
-/* 꽃 툴팁 */
+/* 꽃 툴팁 (calendar-day 레벨에 배치) */
 .teacher-flower-tooltip {
   position: absolute;
   bottom: 100%;
   left: 50%;
-  transform: translateX(-50%);
-  margin-bottom: 8px;
+  transform: translateX(-50%) translateY(10px);
+  margin-bottom: 10px;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.2s;
-  z-index: 100;
+  z-index: 9999;
+  transition: all 0.3s ease;
   white-space: nowrap;
 }
 
-.teacher-day-flower:hover .teacher-flower-tooltip {
+/* 꽃에 호버 시 툴팁 표시 (형제 선택자) */
+.teacher-day-flower:hover ~ .teacher-flower-tooltip,
+.teacher-flower-tooltip:hover {
   opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
 }
 
 .teacher-flower-tooltip-card {
-  background: white;
-  padding: 12px;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  border: 1px solid #D4C4B0;
+  background: linear-gradient(135deg, #FFFBF0 0%, #FFF4E0 100%);
+  border: 3px solid #E8CD8E;
+  border-radius: 12px;
+  padding: 10px 14px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
   min-width: 150px;
   white-space: normal;
 }
 
 .teacher-flower-tooltip-name {
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 700;
   color: #5A4A3A;
   margin-bottom: 4px;
+  text-align: center;
 }
 
 .teacher-flower-tooltip-meaning {
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 12px;
-  color: #8B6F47;
+  color: #8B7355;
   font-style: italic;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
+  text-align: center;
+  line-height: 1.4;
 }
 
 .teacher-flower-tooltip-emotion {
-  font-size: 12px;
-  color: #6B5537;
-  font-weight: 500;
+  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-size: 13px;
+  color: #5D4E37;
+  font-weight: 600;
+  text-align: center;
+  background: linear-gradient(135deg, #FFE8A3 0%, #FFEFD5 100%);
+  padding: 4px 10px;
+  border-radius: 12px;
+  margin-top: 6px;
 }
 
 /* 감정 차트 */
@@ -3126,18 +3130,8 @@
     gap: 10px;
   }
 
-  .teacher-calendar-day {
+  .teacher-letter-calendar-day {
     padding: 10px 6px;
-  }
-
-  .teacher-day-flower {
-    width: 55px;
-    height: 55px;
-  }
-
-  .teacher-flower-wrapper {
-    width: 55px;
-    height: 55px;
   }
 }
 
@@ -3148,18 +3142,8 @@
     gap: 10px;
   }
 
-  .teacher-calendar-day {
+  .teacher-letter-calendar-day {
     padding: 10px 6px;
-  }
-
-  .teacher-day-flower {
-    width: 58px;
-    height: 58px;
-  }
-
-  .teacher-flower-wrapper {
-    width: 58px;
-    height: 58px;
   }
 }
 
@@ -3168,16 +3152,6 @@
   .teacher-weekly-calendar {
     grid-template-columns: repeat(4, 1fr);
     gap: 10px;
-  }
-
-  .teacher-day-flower {
-    width: 55px;
-    height: 55px;
-  }
-
-  .teacher-flower-wrapper {
-    width: 55px;
-    height: 55px;
   }
 }
 
@@ -3195,16 +3169,6 @@
     flex-direction: column;
     text-align: center;
   }
-
-  .teacher-day-flower {
-    width: 60px;
-    height: 60px;
-  }
-
-  .teacher-flower-wrapper {
-    width: 60px;
-    height: 60px;
-  }
 }
 
 @media (max-width: 640px) {
@@ -3214,8 +3178,13 @@
     gap: 8px;
   }
 
-  .teacher-calendar-day {
+  .teacher-letter-calendar-day {
     padding: 8px 4px;
+  }
+
+  .teacher-day-flower {
+    width: 45px;
+    height: 45px;
   }
 }
 
@@ -4696,7 +4665,7 @@
   gap: 10px;
 }
 
-.teacher-keyword-tag {
+.teacher-week-keyword-tag {
   background: linear-gradient(135deg, #FFE5B4 0%, #FFD89B 100%);
   color: #5D4E37;
   padding: 8px 16px;
