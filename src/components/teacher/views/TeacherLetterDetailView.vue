@@ -207,8 +207,7 @@
           <div
             v-for="(tip, index) in letter.teacherTalkTip"
             :key="index"
-            class="teacher-question-card"
-            :class="`teacher-question-card-${index % 4}`"
+            class="teacher-question-item"
           >
             <div class="teacher-question-badge">Q.</div>
             <div class="teacher-question-text">{{ tip }}</div>
