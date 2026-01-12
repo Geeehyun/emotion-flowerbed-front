@@ -287,6 +287,12 @@ export function transformWeeklyReportData(reportData) {
       flowerOfTheWeek: reportData.highlights.flowerOfTheWeek,
       quickStats: reportData.highlights.quickStats,
       gardenDiversity: reportData.highlights.gardenDiversity
-    } : null
+    } : null,
+
+    // 마인드 가드닝
+    mindGardeningTip: reportData.mindGardeningTip || null,
+
+    // 금주의 키워드
+    weekKeywords: reportData.weekKeywords || null
   };
 }

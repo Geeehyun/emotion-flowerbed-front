@@ -163,9 +163,8 @@
           <div
             v-for="(tip, index) in letter.mindGardeningTip"
             :key="index"
-            class="teacher-tip-card"
+            class="teacher-tip-bubble"
           >
-            <div class="teacher-tip-icon">🌱</div>
             <div class="teacher-tip-text">{{ tip }}</div>
           </div>
         </div>

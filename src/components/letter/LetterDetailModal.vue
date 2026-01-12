@@ -143,7 +143,6 @@
               <div class="score-icon">⭐</div>
               <div class="score-info">
                 <div class="score-level">{{ letter.highlights.gardenDiversity.level }}</div>
-                <div class="score-point">{{ letter.highlights.gardenDiversity.score }}점</div>
               </div>
             </div>
             <div class="score-description">{{ letter.highlights.gardenDiversity.description }}</div>
@@ -171,9 +170,8 @@
             <div
               v-for="(tip, index) in letter.mindGardeningTip"
               :key="index"
-              class="tip-card"
+              class="tip-bubble"
             >
-              <div class="tip-icon">🌱</div>
               <div class="tip-text">{{ tip }}</div>
             </div>
           </div>

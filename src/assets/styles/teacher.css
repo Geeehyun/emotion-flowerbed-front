@@ -4700,43 +4700,76 @@
 }
 
 /* ============================================
-   선생님 레터 상세 - 마음 가드닝 TIP
+   선생님 레터 상세 - 마음 가드닝 TIP (말풍선 스타일)
 ============================================ */
 .teacher-gardening-tips {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 20px;
 }
 
-.teacher-tip-card {
-  display: flex;
-  gap: 16px;
-  padding: 20px;
-  background: linear-gradient(135deg, #F0F8F0 0%, #E8F5E9 100%);
-  border-radius: 16px;
-  border: 2px solid #C8E6C9;
-  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.1);
+.teacher-tip-bubble {
+  position: relative;
+  padding: 18px 24px;
+  background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%);
+  border-radius: 20px;
+  box-shadow: 0 3px 10px rgba(76, 175, 80, 0.15);
   transition: all 0.3s ease;
+  max-width: 90%;
 }
 
-.teacher-tip-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.15);
-  border-color: #A5D6A7;
+/* 짝수 번째 말풍선은 오른쪽 정렬 */
+.teacher-tip-bubble:nth-child(even) {
+  align-self: flex-end;
+  background: linear-gradient(135deg, #FFF9E6 0%, #FFE5B4 100%);
+  box-shadow: 0 3px 10px rgba(255, 193, 7, 0.15);
 }
 
-.teacher-tip-icon {
-  font-size: 32px;
-  flex-shrink: 0;
-  line-height: 1;
+/* 왼쪽 말풍선 꼬리 */
+.teacher-tip-bubble:nth-child(odd)::before {
+  content: '';
+  position: absolute;
+  left: 20px;
+  bottom: -10px;
+  width: 0;
+  height: 0;
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+  border-top: 12px solid #C8E6C9;
 }
 
-.teacher-tip-text {
-  flex: 1;
+/* 오른쪽 말풍선 꼬리 */
+.teacher-tip-bubble:nth-child(even)::before {
+  content: '';
+  position: absolute;
+  right: 20px;
+  bottom: -10px;
+  width: 0;
+  height: 0;
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+  border-top: 12px solid #FFE5B4;
+}
+
+.teacher-tip-bubble:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(76, 175, 80, 0.2);
+}
+
+.teacher-tip-bubble:nth-child(even):hover {
+  box-shadow: 0 5px 15px rgba(255, 193, 7, 0.2);
+}
+
+.teacher-tip-bubble .teacher-tip-text {
   color: #2E7D32;
   font-size: 15px;
-  line-height: 1.7;
+  line-height: 1.8;
   font-weight: 500;
+  margin: 0;
+}
+
+.teacher-tip-bubble:nth-child(even) .teacher-tip-text {
+  color: #6D4C41;
 }
 
 /* ============================================
