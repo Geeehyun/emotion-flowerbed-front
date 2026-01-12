@@ -5025,3 +5025,870 @@
     padding: 20px 32px;
   }
 }
+
+/* ============================================
+   RiskHistoryMobileModal 스타일
+============================================ */
+
+/* 액션 버튼 섹션 */
+.teacher-modal-action-section {
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #D4C4B0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.teacher-detail-analysis-btn-mobile {
+  width: 100%;
+  padding: 12px;
+  background: #C4915C;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.teacher-detail-analysis-btn-mobile:hover {
+  background: #A67B4A;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(196, 145, 92, 0.3);
+}
+
+.teacher-resolve-danger-btn {
+  width: 100%;
+  padding: 12px;
+  background: #D32F2F;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.teacher-resolve-danger-btn:hover {
+  background: #B71C1C;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(211, 47, 47, 0.3);
+}
+
+/* 로딩 상태 */
+.teacher-history-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  gap: 12px;
+}
+
+.teacher-loading-icon {
+  width: 40px;
+  height: 40px;
+  color: #C4915C;
+  animation: teacher-spin 1s linear infinite;
+}
+
+@keyframes teacher-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.teacher-history-loading p {
+  font-size: 14px;
+  color: #8B7355;
+}
+
+/* 히스토리 테이블 */
+.teacher-history-table-wrapper {
+  max-height: 60vh;
+  overflow-y: auto;
+  overflow-x: auto;
+  border-radius: 8px;
+  border: 1px solid #D4C4B0;
+}
+
+.teacher-history-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  min-width: 600px;
+}
+
+.teacher-history-table thead {
+  background: #F0E8D8;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.teacher-history-table th {
+  padding: 10px 8px;
+  text-align: left;
+  font-weight: 600;
+  color: #5D4E37;
+  border-bottom: 2px solid #D4C4B0;
+  white-space: nowrap;
+}
+
+.teacher-history-table td {
+  padding: 10px 8px;
+  border-bottom: 1px solid #E8DCC8;
+  color: #5D4E37;
+}
+
+.teacher-history-row {
+  transition: background-color 0.2s;
+}
+
+.teacher-history-row:hover {
+  background: #F0E8D8;
+}
+
+/* 날짜 셀 */
+.teacher-history-date-cell {
+  white-space: nowrap;
+  font-size: 11px;
+  color: #8B7355;
+}
+
+/* 레벨 변화 셀 */
+.teacher-history-level-cell {
+  min-width: 150px;
+}
+
+.teacher-history-level-change {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.teacher-level-badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.teacher-level-normal {
+  background: #E8F5E9;
+  color: #2E7D32;
+}
+
+.teacher-level-caution {
+  background: #FFF3E0;
+  color: #E65100;
+}
+
+.teacher-level-danger {
+  background: #FFEBEE;
+  color: #C62828;
+}
+
+.teacher-level-none {
+  background: #F5F5F5;
+  color: #9E9E9E;
+}
+
+.teacher-arrow-icon {
+  width: 14px;
+  height: 14px;
+  color: #A68B6A;
+  flex-shrink: 0;
+}
+
+/* 사유 셀 */
+.teacher-history-reason-cell {
+  max-width: 150px;
+}
+
+.teacher-history-reason-cell p {
+  font-size: 11px;
+  line-height: 1.4;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+/* 키워드 셀 */
+.teacher-history-keywords-cell {
+  max-width: 120px;
+}
+
+.teacher-history-keywords {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.teacher-keyword-tag {
+  padding: 3px 6px;
+  background: #FFE0B2;
+  color: #E65100;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* 메모 셀 */
+.teacher-history-memo-cell {
+  max-width: 150px;
+}
+
+.teacher-history-memo {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.teacher-history-memo svg {
+  width: 14px;
+  height: 14px;
+  color: #C4915C;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.teacher-history-memo p {
+  font-size: 11px;
+  line-height: 1.4;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.teacher-empty-cell {
+  color: #A68B6A;
+  font-size: 11px;
+  margin: 0;
+}
+
+/* 히스토리 없음 */
+.teacher-history-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.teacher-history-empty p {
+  font-size: 14px;
+  color: #8B7355;
+}
+
+/* 데스크톱 스타일 개선 */
+@media (min-width: 769px) {
+  .teacher-history-table {
+    font-size: 14px;
+    min-width: 800px;
+  }
+
+  .teacher-history-table th {
+    padding: 14px 12px;
+    font-size: 15px;
+  }
+
+  .teacher-history-table td {
+    padding: 14px 12px;
+  }
+
+  .teacher-history-date-cell {
+    font-size: 13px;
+  }
+
+  .teacher-level-badge {
+    padding: 5px 10px;
+    font-size: 12px;
+  }
+
+  .teacher-arrow-icon {
+    width: 16px;
+    height: 16px;
+  }
+
+  .teacher-history-memo svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .teacher-history-reason-cell p,
+  .teacher-history-memo p {
+    font-size: 13px;
+  }
+
+  .teacher-modal-action-section {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 12px;
+  }
+
+  .teacher-detail-analysis-btn-mobile,
+  .teacher-resolve-danger-btn {
+    padding: 12px 24px;
+    font-size: 15px;
+    width: auto;
+  }
+}
+
+/* ============================================
+   MoodMeterInfoModal 스타일
+============================================ */
+
+/* 선생님용 모달 컨테이너 */
+.teacher-modal-container {
+  position: relative;
+  width: 100%;
+  min-height: 550px;
+  overflow: visible;
+}
+
+/* 상단 페이지 인디케이터 */
+.teacher-page-indicator-top {
+  position: absolute;
+  top: 0;
+  right: 16px;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: linear-gradient(135deg, #C4915C 0%, #8B6F47 100%);
+  padding: 6px 12px;
+  border-radius: 0 0 10px 10px;
+  box-shadow: 0 2px 8px rgba(93, 78, 55, 0.25);
+}
+
+.teacher-page-number {
+  font-size: 18px;
+  font-weight: 700;
+  color: #FFFFFF;
+  line-height: 1;
+}
+
+.teacher-page-divider {
+  font-size: 14px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1;
+}
+
+.teacher-page-total {
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1;
+}
+
+.teacher-card-slider {
+  width: 100%;
+  height: auto;
+  min-height: 500px;
+  overflow-x: hidden;
+  overflow-y: visible;
+  position: relative;
+  user-select: none;
+  cursor: grab;
+}
+
+.teacher-card-slider:active {
+  cursor: grabbing;
+}
+
+.teacher-cards-wrapper {
+  display: flex;
+  height: auto;
+  min-height: 500px;
+  will-change: transform;
+}
+
+.teacher-info-card {
+  width: 100%;
+  height: auto;
+  flex-shrink: 0;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+/* 공통 요소 */
+.card-icon {
+  font-size: 40px;
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.teacher-card-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #5D4E37;
+  text-align: left;
+  margin-bottom: 12px;
+  line-height: 1.3;
+}
+
+/* 카드 1: 감정 무드미터 소개 */
+.teacher-definition-box {
+  background: #F8F3E8;
+  padding: 16px;
+  border-radius: 12px;
+  margin-bottom: 16px;
+  border: 1px solid #D4C4B0;
+}
+
+.teacher-image-container {
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.teacher-definition-image {
+  max-width: 350px;
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.teacher-definition-text {
+  font-size: 13px;
+  line-height: 1.6;
+  color: #5D4E37;
+  margin-bottom: 12px;
+}
+
+.teacher-definition-text:last-child {
+  margin-bottom: 0;
+}
+
+.text-highlight {
+  font-weight: 700;
+  color: #8B6F47;
+  background: linear-gradient(transparent 60%, #F0E8D8 60%);
+  padding: 0 4px;
+}
+
+.teacher-colors-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.teacher-color-box {
+  padding: 16px;
+  border-radius: 12px;
+  border: 2px solid;
+  text-align: center;
+}
+
+.teacher-color-box.red {
+  background: #fef2f2;
+  border-color: #fca5a5;
+}
+
+.teacher-color-box.yellow {
+  background: #fefce8;
+  border-color: #fde047;
+}
+
+.teacher-color-box.blue {
+  background: #eff6ff;
+  border-color: #93c5fd;
+}
+
+.teacher-color-box.green {
+  background: #f0fdf4;
+  border-color: #86efac;
+}
+
+.color-label {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.teacher-color-box.red .color-label {
+  color: #b91c1c;
+}
+
+.teacher-color-box.yellow .color-label {
+  color: #a16207;
+}
+
+.teacher-color-box.blue .color-label {
+  color: #1e40af;
+}
+
+.teacher-color-box.green .color-label {
+  color: #15803d;
+}
+
+.color-desc {
+  font-size: 12px;
+  color: #64748b;
+  margin-bottom: 8px;
+}
+
+.color-example {
+  font-size: 11px;
+  font-weight: 600;
+  color: #475569;
+}
+
+/* 카드 2: 교육적 의의 */
+.teacher-importance-grid {
+  display: grid;
+  gap: 12px;
+}
+
+.importance-item {
+  background: #F8F3E8;
+  padding: 12px;
+  border-radius: 8px;
+  border-left: 4px solid #C4915C;
+}
+
+.importance-icon {
+  font-size: 24px;
+  margin-bottom: 6px;
+}
+
+.importance-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #5D4E37;
+  margin-bottom: 4px;
+}
+
+.importance-desc {
+  font-size: 12px;
+  line-height: 1.5;
+  color: #8B7355;
+  margin: 0;
+}
+
+/* 카드 3: 시스템 구조 */
+.teacher-system-flow {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.flow-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: #F8F3E8;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #D4C4B0;
+}
+
+.flow-number {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #C4915C 0%, #8B6F47 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.flow-content {
+  flex: 1;
+}
+
+.flow-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #5D4E37;
+  margin-bottom: 4px;
+}
+
+.flow-desc {
+  font-size: 11px;
+  line-height: 1.5;
+  color: #8B7355;
+  margin: 0;
+}
+
+.flow-arrow {
+  text-align: center;
+  font-size: 16px;
+  color: #C4915C;
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* 카드 4: 활용 가이드 */
+.teacher-guide-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.guide-item {
+  background: #F8F3E8;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #D4C4B0;
+}
+
+.guide-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #5D4E37;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.guide-badge {
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  color: white;
+}
+
+.guide-badge.red {
+  background: #ef4444;
+}
+
+.guide-badge.yellow {
+  background: #eab308;
+}
+
+.guide-badge.blue {
+  background: #3b82f6;
+}
+
+.guide-badge.green {
+  background: #22c55e;
+}
+
+.guide-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.guide-list li {
+  font-size: 11px;
+  line-height: 1.5;
+  color: #8B7355;
+  padding-left: 16px;
+  position: relative;
+  margin-bottom: 4px;
+}
+
+.guide-list li:last-child {
+  margin-bottom: 0;
+}
+
+.guide-list li::before {
+  content: '•';
+  position: absolute;
+  left: 6px;
+  color: #C4915C;
+  font-weight: 700;
+  font-size: 10px;
+}
+
+/* 카드 5: 유의사항 */
+.teacher-notice-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.notice-box {
+  padding: 12px;
+  border-radius: 8px;
+  border-left: 3px solid;
+}
+
+.notice-box.important {
+  background: #FFF5F5;
+  border-left-color: #D32F2F;
+}
+
+.notice-box.tip {
+  background: #F0F9FF;
+  border-left-color: #4A90E2;
+}
+
+.notice-title {
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.notice-box.important .notice-title {
+  color: #D32F2F;
+}
+
+.notice-box.tip .notice-title {
+  color: #4A90E2;
+}
+
+.notice-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.notice-list li {
+  font-size: 11px;
+  line-height: 1.5;
+  color: #5D4E37;
+  padding-left: 16px;
+  position: relative;
+  margin-bottom: 4px;
+}
+
+.notice-list li:last-child {
+  margin-bottom: 0;
+}
+
+.notice-list li::before {
+  content: '·';
+  position: absolute;
+  left: 6px;
+  font-weight: 700;
+  color: #8B7355;
+  font-size: 10px;
+}
+
+.teacher-reference {
+  background: #F8F3E8;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #D4C4B0;
+  text-align: center;
+}
+
+.reference-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: #8B7355;
+  margin-bottom: 4px;
+}
+
+.reference-link {
+  font-size: 10px;
+  color: #A68B6A;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.reference-link a {
+  color: #4A90E2;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.reference-link a:hover {
+  text-decoration: underline;
+}
+
+/* 네비게이션 */
+.teacher-nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #F8F3E8;
+  border: 1px solid #D4C4B0;
+  color: #8B6F47;
+  font-size: 24px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(93, 78, 55, 0.15);
+}
+
+.teacher-nav-btn:hover {
+  background: #F0E8D8;
+  border-color: #C4915C;
+  transform: translateY(-50%) scale(1.1);
+}
+
+.teacher-nav-btn-prev {
+  left: -20px;
+}
+
+.teacher-nav-btn-next {
+  right: -20px;
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+  .teacher-page-indicator-top {
+    right: 8px;
+    padding: 5px 10px;
+  }
+
+  .teacher-page-number {
+    font-size: 16px;
+  }
+
+  .teacher-page-divider {
+    font-size: 12px;
+  }
+
+  .teacher-page-total {
+    font-size: 12px;
+  }
+
+  .teacher-info-card {
+    padding: 16px;
+  }
+
+  .card-icon {
+    font-size: 40px;
+  }
+
+  .teacher-card-title {
+    font-size: 20px;
+  }
+
+  .teacher-colors-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .teacher-nav-btn-prev {
+    left: -8px;
+  }
+
+  .teacher-nav-btn-next {
+    right: -8px;
+  }
+}
