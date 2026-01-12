@@ -142,6 +142,35 @@
         </div>
       </div>
 
+      <!-- 이번 주 키워드 -->
+      <div class="teacher-letter-section" v-if="letter?.weekKeywords && letter.weekKeywords.length > 0">
+        <h3 class="teacher-section-title">이번 주 키워드</h3>
+        <div class="teacher-week-keywords">
+          <div
+            v-for="(keyword, index) in letter.weekKeywords"
+            :key="index"
+            class="teacher-keyword-tag"
+          >
+            {{ keyword }}
+          </div>
+        </div>
+      </div>
+
+      <!-- 마음 가드닝 TIP -->
+      <div class="teacher-letter-section" v-if="letter?.mindGardeningTip && letter.mindGardeningTip.length > 0">
+        <h3 class="teacher-section-title">마음 가드닝 TIP</h3>
+        <div class="teacher-gardening-tips">
+          <div
+            v-for="(tip, index) in letter.mindGardeningTip"
+            :key="index"
+            class="teacher-tip-card"
+          >
+            <div class="teacher-tip-icon">🌱</div>
+            <div class="teacher-tip-text">{{ tip }}</div>
+          </div>
+        </div>
+      </div>
+
       <!-- 정원사가 전하는 편지 -->
       <div class="teacher-letter-section teacher-gardener-letter">
         <h3 class="teacher-section-title">정원사가 전하는 편지</h3>

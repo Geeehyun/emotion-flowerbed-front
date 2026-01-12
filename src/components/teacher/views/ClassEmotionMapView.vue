@@ -195,6 +195,92 @@
         </div>
       </div>
     </div>
+
+    <!-- 영역별 키워드 -->
+    <div v-if="!isLoading && !errorMessage && monthlyData?.areaKeywords" class="teacher-area-keywords-section">
+      <h3 class="teacher-keywords-title">이달의 영역별 주요 키워드</h3>
+      <div class="teacher-keywords-grid">
+        <!-- 빨강 영역 -->
+        <div class="teacher-keyword-card teacher-red-card">
+          <div class="teacher-keyword-card-header">
+            <div class="teacher-keyword-area-icon" style="background: #EF5350;">🔥</div>
+            <div class="teacher-keyword-area-name">빨강 영역</div>
+          </div>
+          <div class="teacher-keyword-list">
+            <span
+              v-for="(keyword, index) in monthlyData.areaKeywords.red"
+              :key="index"
+              class="teacher-keyword-item teacher-red-keyword"
+            >
+              {{ keyword }}
+            </span>
+            <span v-if="!monthlyData.areaKeywords.red || monthlyData.areaKeywords.red.length === 0" class="teacher-no-keyword">
+              키워드 없음
+            </span>
+          </div>
+        </div>
+
+        <!-- 노랑 영역 -->
+        <div class="teacher-keyword-card teacher-yellow-card">
+          <div class="teacher-keyword-card-header">
+            <div class="teacher-keyword-area-icon" style="background: #FFD54F;">☀️</div>
+            <div class="teacher-keyword-area-name">노랑 영역</div>
+          </div>
+          <div class="teacher-keyword-list">
+            <span
+              v-for="(keyword, index) in monthlyData.areaKeywords.yellow"
+              :key="index"
+              class="teacher-keyword-item teacher-yellow-keyword"
+            >
+              {{ keyword }}
+            </span>
+            <span v-if="!monthlyData.areaKeywords.yellow || monthlyData.areaKeywords.yellow.length === 0" class="teacher-no-keyword">
+              키워드 없음
+            </span>
+          </div>
+        </div>
+
+        <!-- 파랑 영역 -->
+        <div class="teacher-keyword-card teacher-blue-card">
+          <div class="teacher-keyword-card-header">
+            <div class="teacher-keyword-area-icon" style="background: #42A5F5;">💧</div>
+            <div class="teacher-keyword-area-name">파랑 영역</div>
+          </div>
+          <div class="teacher-keyword-list">
+            <span
+              v-for="(keyword, index) in monthlyData.areaKeywords.blue"
+              :key="index"
+              class="teacher-keyword-item teacher-blue-keyword"
+            >
+              {{ keyword }}
+            </span>
+            <span v-if="!monthlyData.areaKeywords.blue || monthlyData.areaKeywords.blue.length === 0" class="teacher-no-keyword">
+              키워드 없음
+            </span>
+          </div>
+        </div>
+
+        <!-- 초록 영역 -->
+        <div class="teacher-keyword-card teacher-green-card">
+          <div class="teacher-keyword-card-header">
+            <div class="teacher-keyword-area-icon" style="background: #66BB6A;">🌿</div>
+            <div class="teacher-keyword-area-name">초록 영역</div>
+          </div>
+          <div class="teacher-keyword-list">
+            <span
+              v-for="(keyword, index) in monthlyData.areaKeywords.green"
+              :key="index"
+              class="teacher-keyword-item teacher-green-keyword"
+            >
+              {{ keyword }}
+            </span>
+            <span v-if="!monthlyData.areaKeywords.green || monthlyData.areaKeywords.green.length === 0" class="teacher-no-keyword">
+              키워드 없음
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 

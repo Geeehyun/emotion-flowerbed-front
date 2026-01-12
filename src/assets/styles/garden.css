@@ -7096,3 +7096,68 @@
   width: 100%;
 }
 
+/* ============================================
+   레터 상세 모달 - 이번 주 키워드
+============================================ */
+.week-keywords {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.keyword-tag {
+  background: linear-gradient(135deg, #FFE5B4 0%, #FFD89B 100%);
+  color: #5D4E37;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(93, 78, 55, 0.1);
+  transition: all 0.3s ease;
+}
+
+.keyword-tag:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(93, 78, 55, 0.15);
+}
+
+/* ============================================
+   레터 상세 모달 - 마음 가드닝 TIP
+============================================ */
+.gardening-tips {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.tip-card {
+  display: flex;
+  gap: 16px;
+  padding: 20px;
+  background: linear-gradient(135deg, #F0F8F0 0%, #E8F5E9 100%);
+  border-radius: 16px;
+  border: 2px solid #C8E6C9;
+  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.1);
+  transition: all 0.3s ease;
+}
+
+.tip-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.15);
+  border-color: #A5D6A7;
+}
+
+.tip-icon {
+  font-size: 32px;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.tip-text {
+  flex: 1;
+  color: #2E7D32;
+  font-size: 15px;
+  line-height: 1.7;
+  font-weight: 500;
+}
+
