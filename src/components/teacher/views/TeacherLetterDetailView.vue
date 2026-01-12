@@ -1,7 +1,7 @@
 <template>
   <div class="teacher-letter-detail-view">
-    <!-- 헤더 -->
-    <div class="teacher-letter-header">
+    <!-- 헤더 (모달이 아닐 때만 표시) -->
+    <div v-if="!isModal" class="teacher-letter-header">
       <button @click="$emit('back')" class="teacher-back-btn">
         ← 목록으로
       </button>
@@ -229,6 +229,10 @@ const props = defineProps({
   letter: {
     type: Object,
     default: null
+  },
+  isModal: {
+    type: Boolean,
+    default: false
   }
 })
 

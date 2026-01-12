@@ -81,14 +81,33 @@
           <p>좌측 목록에서 학생을 선택하면 감정 레터를 확인할 수 있습니다</p>
         </div>
 
-        <!-- 레터 리스트 (학생 선택됨, 레터 미선택) -->
-        <div v-else-if="!selectedLetter" class="teacher-letter-list-view">
+        <!-- 레터 리스트 (학생 선택됨) -->
+        <div v-else class="teacher-letter-list-view">
           <div class="teacher-letter-list-header">
             <div class="teacher-letter-list-title-row">
-              <h2>{{ selectedStudent.name }}</h2>
-              <button @click="emit('open-monthly-garden')" class="teacher-monthly-garden-btn">
-                월간 감정 화단
-              </button>
+              <div class="teacher-student-header-info">
+                <h2>{{ selectedStudent.name }}</h2>
+                <span
+                  v-if="selectedStudent.riskLevel === 'DANGER'"
+                  class="teacher-risk-badge danger"
+                >
+                  위험
+                </span>
+                <span
+                  v-else-if="selectedStudent.riskLevel === 'CAUTION'"
+                  class="teacher-risk-badge caution"
+                >
+                  주의
+                </span>
+              </div>
+              <div class="teacher-student-action-btns">
+                <button @click="emit('open-risk-history')" class="teacher-risk-history-btn">
+                  위험도 이력
+                </button>
+                <button @click="emit('open-monthly-garden')" class="teacher-monthly-garden-btn">
+                  월간 감정 화단
+                </button>
+              </div>
             </div>
           </div>
 
@@ -148,20 +167,12 @@
             </table>
           </div>
         </div>
-
-        <!-- 레터 상세 (레터 선택됨) -->
-        <TeacherLetterDetailView
-          v-if="selectedLetter"
-          :letter="selectedLetter"
-          @back="emit('deselect-letter')"
-        />
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import TeacherLetterDetailView from './TeacherLetterDetailView.vue'
 import StudentListSkeleton from '../dashboard/StudentListSkeleton.vue'
 import LazyImage from '@/components/common/LazyImage.vue'
 
@@ -200,7 +211,7 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['update:searchQuery', 'reload', 'select-student', 'select-letter', 'deselect-letter', 'open-monthly-garden'])
+const emit = defineEmits(['update:searchQuery', 'reload', 'select-student', 'select-letter', 'deselect-letter', 'open-monthly-garden', 'open-risk-history'])
 
 // 감정 영역에 따른 아바타 색상 클래스
 const getEmotionAreaClass = (student) => {

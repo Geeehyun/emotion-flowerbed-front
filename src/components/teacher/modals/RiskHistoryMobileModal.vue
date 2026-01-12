@@ -15,8 +15,12 @@
 
       <div class="teacher-modal-body">
         <!-- 액션 버튼들 -->
-        <div class="teacher-modal-action-section">
-          <button @click="handleDetailAnalysisClick" class="teacher-detail-analysis-btn-mobile">
+        <div v-if="showDetailAnalysis || riskLevel === 'DANGER'" class="teacher-modal-action-section">
+          <button
+            v-if="showDetailAnalysis"
+            @click="handleDetailAnalysisClick"
+            class="teacher-detail-analysis-btn-mobile"
+          >
             상세 분석 보기
           </button>
           <button
@@ -131,6 +135,10 @@ const props = defineProps({
   isLoading: {
     type: Boolean,
     default: false
+  },
+  showDetailAnalysis: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -179,7 +187,7 @@ const formatLevel = (level) => {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(93, 78, 55, 0.5);
+  background: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
@@ -201,7 +209,7 @@ const formatLevel = (level) => {
 .teacher-modal-content {
   background: #F8F3E8;
   border-radius: 16px;
-  box-shadow: 0 8px 32px rgba(93, 78, 55, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
   max-width: 95vw;
   width: 100%;
   max-height: 90vh;
@@ -211,7 +219,15 @@ const formatLevel = (level) => {
 }
 
 .teacher-risk-history-modal {
-  max-width: 95vw;
+  max-width: 1200px;
+}
+
+/* 데스크톱에서 더 넓게 */
+@media (min-width: 769px) {
+  .teacher-risk-history-modal {
+    max-width: 1200px;
+    width: 90vw;
+  }
 }
 
 @keyframes slideUp {
@@ -540,5 +556,76 @@ const formatLevel = (level) => {
 .teacher-history-empty p {
   font-size: 14px;
   color: #8B7355;
+}
+
+/* 데스크톱 스타일 개선 */
+@media (min-width: 769px) {
+  .teacher-modal-header {
+    padding: 24px 32px;
+  }
+
+  .teacher-modal-title {
+    font-size: 22px;
+  }
+
+  .teacher-modal-subtitle {
+    font-size: 15px;
+  }
+
+  .teacher-modal-body {
+    padding: 24px 32px;
+  }
+
+  .teacher-history-table {
+    font-size: 14px;
+    min-width: 800px;
+  }
+
+  .teacher-history-table th {
+    padding: 14px 12px;
+    font-size: 15px;
+  }
+
+  .teacher-history-table td {
+    padding: 14px 12px;
+  }
+
+  .teacher-history-date-cell {
+    font-size: 13px;
+  }
+
+  .teacher-level-badge {
+    padding: 5px 10px;
+    font-size: 12px;
+  }
+
+  .teacher-arrow-icon {
+    width: 16px;
+    height: 16px;
+  }
+
+  .teacher-history-memo svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .teacher-history-reason-cell p,
+  .teacher-history-memo p {
+    font-size: 13px;
+  }
+
+  .teacher-modal-action-section {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 12px;
+  }
+
+  .teacher-detail-analysis-btn-mobile,
+  .teacher-resolve-danger-btn {
+    padding: 12px 24px;
+    font-size: 15px;
+    width: auto;
+  }
 }
 </style>

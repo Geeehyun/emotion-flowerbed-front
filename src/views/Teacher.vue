@@ -72,14 +72,13 @@
           :errorMessage="letterErrorMessage"
           :filteredStudents="filteredLetterStudents"
           :selectedStudent="selectedStudent"
-          :selectedLetter="selectedLetter"
           :weeklyReports="weeklyReports"
           :isLoadingReports="isLoadingReports"
           @reload="loadStudentsForLetter()"
           @select-student="selectStudent"
-          @select-letter="selectLetter"
-          @deselect-letter="selectedLetter = null"
+          @select-letter="openLetterDetailModal"
           @open-monthly-garden="openMonthlyGarden"
+          @open-risk-history="openRiskHistoryForSelectedStudent"
         />
       </div>
     </main>
@@ -93,6 +92,13 @@
       :error-message="monthlyEmotionsError"
       @close="showMonthlyGardenModal = false"
       @change-month="changeMonthlyGardenMonth"
+    />
+
+    <!-- 선생님 감정 레터 상세 모달 -->
+    <TeacherLetterDetailModal
+      v-model="isLetterDetailModalOpen"
+      :letter="selectedLetter"
+      @close="closeLetterDetailModal"
     />
 
     <!-- 감정 무드미터 안내 모달 -->
@@ -112,6 +118,7 @@
       :risk-level="selectedRiskStudent?.riskLevel || ''"
       :history="riskHistory?.histories || []"
       :is-loading="isLoadingHistory"
+      :show-detail-analysis="isFromDashboard"
       @resolve="openResolveDangerModal"
       @detail-analysis="goToStudentDetailAnalysis(selectedRiskStudent)"
     />
@@ -138,6 +145,7 @@ import MoodMeterInfoModal from '@/components/teacher/modals/MoodMeterInfoModal.v
 import ResolveDangerModal from '@/components/teacher/modals/ResolveDangerModal.vue'
 import RiskHistoryMobileModal from '@/components/teacher/modals/RiskHistoryMobileModal.vue'
 import StudentMonthlyGardenModal from '@/components/teacher/modals/StudentMonthlyGardenModal.vue'
+import TeacherLetterDetailModal from '@/components/teacher/modals/TeacherLetterDetailModal.vue'
 
 // 선생님 정보 로드
 const getUserInfo = () => {
@@ -160,6 +168,8 @@ const isUserTooltipOpen = ref(false)
 const isMoodMeterModalOpen = ref(false)
 const isResolveDangerModalOpen = ref(false)
 const isRiskHistoryMobileModalOpen = ref(false)
+const isLetterDetailModalOpen = ref(false)
+const isFromDashboard = ref(false)
 const selectedStudent = ref(null)
 const selectedLetter = ref(null)
 const searchQuery = ref('')
@@ -363,18 +373,20 @@ const loadWeeklyReports = async (studentUserSn) => {
   }
 }
 
-// 화면 크기 확인 (모바일 여부)
+// 화면 크기 확인 (모바일 모달 표시 여부)
 const isMobile = () => {
-  return window.innerWidth <= 768
+  // 1400px 미만에서는 데스크톱 히스토리를 숨기고 모달 사용
+  return window.innerWidth < 1400
 }
 
-// 위험 학생 선택 핸들러
+// 위험 학생 선택 핸들러 (대시보드에서)
 const selectRiskStudent = async (student) => {
   selectedRiskStudent.value = student
   await loadStudentRiskHistory(student.userSn)
 
   // 모바일에서는 모달 열기
   if (isMobile()) {
+    isFromDashboard.value = true
     isRiskHistoryMobileModalOpen.value = true
   }
 }
@@ -524,12 +536,12 @@ const selectStudent = async (student) => {
   }
 }
 
-const selectLetter = async (letter) => {
+// 레터 상세 모달 열기
+const openLetterDetailModal = async (letter) => {
   if (!letter || !selectedStudent.value) return
 
   try {
     isLoadingReports.value = true
-    reportsErrorMessage.value = ''
 
     // 상세 데이터 로드
     const detailData = await getStudentWeeklyReportDetail(selectedStudent.value.id, letter.reportId)
@@ -537,6 +549,9 @@ const selectLetter = async (letter) => {
     // 상세 데이터 변환 (weeklyReportApi의 transformWeeklyReportData와 유사)
     const transformedData = transformTeacherReportData(detailData)
     selectedLetter.value = transformedData
+
+    // 모달 열기
+    isLetterDetailModalOpen.value = true
   } catch (error) {
     console.error('감정 레터 상세 조회 실패:', error)
     reportsErrorMessage.value = error.message || '감정 레터를 불러오는데 실패했습니다.'
@@ -544,6 +559,12 @@ const selectLetter = async (letter) => {
   } finally {
     isLoadingReports.value = false
   }
+}
+
+// 레터 상세 모달 닫기
+const closeLetterDetailModal = () => {
+  isLetterDetailModalOpen.value = false
+  selectedLetter.value = null
 }
 
 // 선생님용 리포트 데이터 변환
@@ -630,6 +651,25 @@ const openMonthlyGarden = async () => {
   const yearMonth = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}`
 
   await loadMonthlyEmotions(yearMonth)
+}
+
+// 선택된 학생의 위험도 히스토리 모달 열기 (학생별 감정 레터에서)
+const openRiskHistoryForSelectedStudent = async () => {
+  if (!selectedStudent.value) return
+
+  // selectedRiskStudent에 할당
+  selectedRiskStudent.value = {
+    userSn: selectedStudent.value.id,
+    name: selectedStudent.value.name,
+    riskLevel: selectedStudent.value.riskLevel
+  }
+
+  // 히스토리 로드
+  await loadStudentRiskHistory(selectedStudent.value.id)
+
+  // 모달 열기 (상세 분석 버튼 숨김)
+  isFromDashboard.value = false
+  isRiskHistoryMobileModalOpen.value = true
 }
 
 // 월간 감정 데이터 로드
