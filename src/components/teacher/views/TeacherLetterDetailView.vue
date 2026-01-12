@@ -200,17 +200,18 @@
         </div>
       </div>
 
-      <!-- 대화 팁 -->
+      <!-- 학생 말걸기 TIP -->
       <div class="teacher-letter-section" v-if="letter?.teacherTalkTip?.length > 0">
-        <h3 class="teacher-section-title">대화 팁</h3>
-        <div class="teacher-talk-tips">
+        <h3 class="teacher-section-title">학생 말걸기 TIP</h3>
+        <div class="teacher-talk-questions">
           <div
             v-for="(tip, index) in letter.teacherTalkTip"
             :key="index"
-            class="teacher-tip-card"
+            class="teacher-question-card"
+            :class="`teacher-question-card-${index % 4}`"
           >
-            <div class="teacher-tip-number">{{ index + 1 }}</div>
-            <div class="teacher-tip-content">{{ tip }}</div>
+            <div class="teacher-question-badge">Q.</div>
+            <div class="teacher-question-text">{{ tip }}</div>
           </div>
         </div>
       </div>

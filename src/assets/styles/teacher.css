@@ -3067,42 +3067,87 @@
   font-family: inherit;
 }
 
-/* 대화 팁 */
-.teacher-talk-tips {
+/* 학생 말걸기 TIP - Q. 질문 형식 */
+.teacher-talk-questions {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
-.teacher-tip-card {
+.teacher-question-card {
   display: flex;
   gap: 16px;
-  background: #FFFCF5;
-  padding: 16px;
-  border-radius: 8px;
-  border: 1px solid #E8DCC8;
+  background: #FFFFFF;
+  padding: 20px;
+  border-radius: 12px;
+  border-left: 4px solid;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   align-items: flex-start;
+  transition: all 0.3s ease;
 }
 
-.teacher-tip-number {
-  width: 28px;
-  height: 28px;
-  background: linear-gradient(135deg, #FF9800 0%, #F57C00 100%);
-  color: white;
+.teacher-question-card:hover {
+  transform: translateX(4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+/* 질문 카드 색상 테마 (4가지 순환) */
+.teacher-question-card-0 {
+  border-left-color: #42A5F5;
+  background: linear-gradient(to right, rgba(66, 165, 245, 0.05) 0%, #FFFFFF 10%);
+}
+
+.teacher-question-card-1 {
+  border-left-color: #66BB6A;
+  background: linear-gradient(to right, rgba(102, 187, 106, 0.05) 0%, #FFFFFF 10%);
+}
+
+.teacher-question-card-2 {
+  border-left-color: #FFA726;
+  background: linear-gradient(to right, rgba(255, 167, 38, 0.05) 0%, #FFFFFF 10%);
+}
+
+.teacher-question-card-3 {
+  border-left-color: #AB47BC;
+  background: linear-gradient(to right, rgba(171, 71, 188, 0.05) 0%, #FFFFFF 10%);
+}
+
+.teacher-question-badge {
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 700;
+  color: #FFFFFF;
   flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
-.teacher-tip-content {
+.teacher-question-card-0 .teacher-question-badge {
+  background: linear-gradient(135deg, #42A5F5 0%, #1E88E5 100%);
+}
+
+.teacher-question-card-1 .teacher-question-badge {
+  background: linear-gradient(135deg, #66BB6A 0%, #43A047 100%);
+}
+
+.teacher-question-card-2 .teacher-question-badge {
+  background: linear-gradient(135deg, #FFA726 0%, #FB8C00 100%);
+}
+
+.teacher-question-card-3 .teacher-question-badge {
+  background: linear-gradient(135deg, #AB47BC 0%, #8E24AA 100%);
+}
+
+.teacher-question-text {
   flex: 1;
-  font-size: 14px;
+  font-size: 15px;
   line-height: 1.7;
-  color: #5A4A3A;
+  color: #37474F;
+  font-weight: 500;
 }
 
 /* 반응형 (사이드바 256px 고려) */
