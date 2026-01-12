@@ -1,8 +1,8 @@
 <template>
-  <BaseModal
+  <BaseTeacherModal
     v-model="isOpen"
     title="감정 무드미터란?"
-    max-width="900px"
+    max-width="1000px"
     @close="handleClose"
   >
     <template #default>
@@ -245,12 +245,12 @@
         </button>
       </div>
     </template>
-  </BaseModal>
+  </BaseTeacherModal>
 </template>
 
 <script setup>
 import { computed, ref, watch, onMounted, onUnmounted } from 'vue'
-import BaseModal from '@/components/common/modals/BaseModal.vue'
+import BaseTeacherModal from './BaseTeacherModal.vue'
 
 const props = defineProps({
   modelValue: {

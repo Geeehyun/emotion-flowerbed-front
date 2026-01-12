@@ -1,8 +1,8 @@
 <template>
-  <BaseModal
+  <BaseTeacherModal
     v-model="isOpen"
     :title="`${studentName}의 감정 화단`"
-    max-width="900px"
+    max-width="1200px"
     @close="handleClose"
   >
     <template #default>
@@ -183,12 +183,12 @@
         </div>
       </div>
     </template>
-  </BaseModal>
+  </BaseTeacherModal>
 </template>
 
 <script setup>
 import { ref, computed, watch } from 'vue'
-import BaseModal from '@/components/common/modals/BaseModal.vue'
+import BaseTeacherModal from './BaseTeacherModal.vue'
 import LazyImage from '@/components/common/LazyImage.vue'
 
 const props = defineProps({
