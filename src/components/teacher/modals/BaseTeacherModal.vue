@@ -91,7 +91,7 @@ const handleClose = () => {
 
 /* 모달 컨텐츠 */
 .teacher-modal-content {
-  background: #F8F3E8;
+  background: #FFFFFF;
   border-radius: 16px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
   max-width: 95vw;
@@ -100,6 +100,7 @@ const handleClose = () => {
   display: flex;
   flex-direction: column;
   animation: slideUp 0.3s ease-out;
+  overflow: hidden;
 }
 
 @keyframes slideUp {
@@ -120,6 +121,8 @@ const handleClose = () => {
   justify-content: space-between;
   padding: 20px;
   border-bottom: 1px solid #D4C4B0;
+  background: #F8F3E8;
+  border-radius: 16px 16px 0 0;
 }
 
 .teacher-modal-title {
@@ -164,6 +167,8 @@ const handleClose = () => {
   padding: 16px;
   flex: 1;
   overflow-y: auto;
+  background: #FFFFFF;
+  border-radius: 0 0 16px 16px;
 }
 
 /* 모달 푸터 */
@@ -174,6 +179,8 @@ const handleClose = () => {
   align-items: center;
   justify-content: flex-end;
   gap: 10px;
+  background: #FFFFFF;
+  border-radius: 0 0 16px 16px;
 }
 
 /* 데스크톱 스타일 */
