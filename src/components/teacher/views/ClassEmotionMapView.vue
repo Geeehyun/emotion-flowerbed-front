@@ -69,11 +69,17 @@
         </div>
         <div class="teacher-legend-item">
           <div class="teacher-legend-color teacher-gray-legend"></div>
-          <span>미제출</span>
+          <div class="teacher-legend-text">
+            <span class="teacher-legend-name">미제출</span>
+            <span class="teacher-legend-desc">일기 미제출</span>
+          </div>
         </div>
         <div class="teacher-legend-item">
           <div class="teacher-legend-color teacher-unanalyzed-legend"></div>
-          <span>분석불가</span>
+          <div class="teacher-legend-text">
+            <span class="teacher-legend-name">분석불가</span>
+            <span class="teacher-legend-desc">감정 분석 불가</span>
+          </div>
         </div>
       </div>
     </div>

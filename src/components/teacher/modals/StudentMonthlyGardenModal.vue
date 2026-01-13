@@ -57,6 +57,20 @@
               <span class="teacher-legend-desc">낮은 에너지 + 쾌적</span>
             </div>
           </div>
+          <div class="teacher-area-legend-item">
+            <div class="teacher-legend-color teacher-gray-legend"></div>
+            <div class="teacher-legend-text">
+              <span class="teacher-legend-name">미제출</span>
+              <span class="teacher-legend-desc">일기 미제출</span>
+            </div>
+          </div>
+          <div class="teacher-area-legend-item">
+            <div class="teacher-legend-color teacher-unanalyzed-legend"></div>
+            <div class="teacher-legend-text">
+              <span class="teacher-legend-name">분석불가</span>
+              <span class="teacher-legend-desc">감정 분석 불가</span>
+            </div>
+          </div>
         </div>
 
         <!-- 좌우 분할 레이아웃 -->

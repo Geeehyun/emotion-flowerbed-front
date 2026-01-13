@@ -160,8 +160,8 @@ const zones = [
   { key: 'yellow', label: '노랑 영역', description: '높은 에너지 + 쾌적', className: 'teacher-yellow-zone' },
   { key: 'blue', label: '파랑 영역', description: '낮은 에너지 + 불쾌', className: 'teacher-blue-zone' },
   { key: 'green', label: '초록 영역', description: '낮은 에너지 + 쾌적', className: 'teacher-green-zone' },
-  { key: 'none', label: '미제출', description: '', className: 'teacher-gray-zone' },
-  { key: 'unanalyzed', label: '분석불가', description: '', className: 'teacher-unanalyzed-zone' }
+  { key: 'none', label: '미제출', description: '일기 미제출', className: 'teacher-gray-zone' },
+  { key: 'unanalyzed', label: '분석불가', description: '감정 분석 불가', className: 'teacher-unanalyzed-zone' }
 ]
 
 const getZoneCount = (zone) => {
