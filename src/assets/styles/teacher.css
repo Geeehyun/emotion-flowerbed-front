@@ -2500,9 +2500,9 @@
 
 /* 섹션 네비게이션 */
 .teacher-letter-nav {
-  position: fixed;
-  top: 120px;
-  right: 40px;
+  position: absolute;
+  top: 20px;
+  right: 20px;
   width: 180px;
   background: #FFFFFF;
   border-radius: 12px;
@@ -2510,8 +2510,16 @@
   box-shadow: 0 4px 12px rgba(93, 78, 55, 0.1);
   padding: 16px 12px;
   z-index: 100;
-  max-height: calc(100vh - 160px);
+  max-height: calc(100vh - 200px);
   overflow-y: auto;
+}
+
+/* 일반 페이지에서는 fixed */
+.teacher-letter-detail-view:not(.is-modal) .teacher-letter-nav {
+  position: fixed;
+  top: 120px;
+  right: 40px;
+  max-height: calc(100vh - 160px);
 }
 
 .teacher-letter-nav-inner {
