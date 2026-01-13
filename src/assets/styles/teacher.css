@@ -3340,6 +3340,8 @@
   position: relative;
   width: 100%;
   min-height: 500px;
+  padding: 20px 0;
+  overflow: visible;
 }
 
 /* 화단 배경 이미지 */
@@ -3367,6 +3369,7 @@
   gap: 5px;
   padding: 2% 4%;
   z-index: 2;
+  overflow: visible;
 }
 
 /* 그리드 셀 */
@@ -3388,6 +3391,7 @@
   transition: all 0.3s ease;
   width: 50px;
   height: 50px;
+  overflow: visible;
 }
 
 @keyframes pulse {
@@ -3467,21 +3471,10 @@
 
 /* 툴팁 */
 .teacher-tooltip {
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%) translateY(10px);
-  margin-bottom: 10px;
-  opacity: 0;
+  position: fixed;
   pointer-events: none;
-  transition: all 0.3s ease;
-  z-index: 1000;
+  z-index: 99999;
   white-space: nowrap;
-}
-
-.teacher-flower:hover .teacher-tooltip {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
 }
 
 .teacher-tooltip-card {
@@ -3792,8 +3785,17 @@
 
 /* 반응형 - 중간 화면 (1024px 이하) */
 @media (max-width: 1024px) and (min-width: 769px) {
+  /* 화단 래퍼 높이 자동 조정 */
+  .teacher-garden-wrapper {
+    min-height: 0;
+  }
+
   /* 화단 배경 이미지 비율 조정 */
   .teacher-garden-bg-image {
+    position: relative;
+    left: 0;
+    transform: none;
+    display: block;
     width: 100%;
     height: auto;
     object-fit: contain;
@@ -3849,8 +3851,17 @@
     width: 100%;
   }
 
+  /* 화단 래퍼 높이 자동 조정 */
+  .teacher-garden-wrapper {
+    min-height: 0;
+  }
+
   /* 화단 배경 이미지 비율 조정 */
   .teacher-garden-bg-image {
+    position: relative;
+    left: 0;
+    transform: none;
+    display: block;
     width: 100%;
     height: auto;
     object-fit: contain;
@@ -3900,18 +3911,27 @@
     width: 100%;
   }
 
+  /* 화단 래퍼 높이 자동 조정 */
+  .teacher-garden-wrapper {
+    min-height: 0;
+  }
+
   /* 화단 배경 이미지 비율 조정 */
   .teacher-garden-bg-image {
+    position: relative;
+    left: 0;
+    transform: none;
+    display: block;
     width: 100%;
     height: auto;
     object-fit: contain;
   }
 
   .teacher-flower-grid {
-    top: 18%;
+    top: 15%;
     left: 8%;
     width: 84%;
-    height: 49%;
+    height: 55%;
     gap: 2px;
     padding: 2% 4%;
   }
@@ -3951,18 +3971,27 @@
     width: 100%;
   }
 
+  /* 화단 래퍼 높이 자동 조정 */
+  .teacher-garden-wrapper {
+    min-height: 0;
+  }
+
   /* 화단 배경 이미지 비율 조정 */
   .teacher-garden-bg-image {
+    position: relative;
+    left: 0;
+    transform: none;
+    display: block;
     width: 100%;
     height: auto;
     object-fit: contain;
   }
 
   .teacher-flower-grid {
-    top: 21%;
-    left: 8%;
-    width: 84%;
-    height: 49%;
+    top: 15%;
+    left: 9%;
+    width: 82%;
+    height: 60%;
     gap: 2px;
     padding: 2% 4%;
   }

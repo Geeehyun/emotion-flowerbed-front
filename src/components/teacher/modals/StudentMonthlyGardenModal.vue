@@ -7,6 +7,21 @@
   >
     <template #default>
       <div class="teacher-garden-modal-content">
+        <!-- 공유 툴팁 (화단 그리드 밖) -->
+        <div
+          v-if="hoveredDay"
+          class="teacher-tooltip"
+          ref="sharedTooltip"
+          :style="tooltipStyle"
+        >
+          <div class="teacher-tooltip-card">
+            <div class="teacher-tooltip-flower-name">{{ getFlowerName(hoveredDay) }}</div>
+            <div class="teacher-tooltip-meaning">"{{ getFlowerMeaning(hoveredDay) }}"</div>
+            <div class="teacher-tooltip-date">{{ currentYear }}.{{ String(currentMonth).padStart(2, '0') }}.{{ String(hoveredDay).padStart(2, '0') }}</div>
+            <div class="teacher-tooltip-emotion">{{ getEmotionName(hoveredDay) }}</div>
+          </div>
+        </div>
+
         <!-- 에러 상태 -->
         <div v-if="errorMessage" class="teacher-garden-error">
           <p>{{ errorMessage }}</p>
@@ -64,6 +79,8 @@
                     class="teacher-flower"
                     :class="{ 'selected': selectedDay === day }"
                     @click="selectDay(day)"
+                    @mouseenter="handleFlowerHover($event, day)"
+                    @mouseleave="handleFlowerLeave"
                   >
                     <LazyImage
                       :src="getFlowerImageUrl(day)"
@@ -71,14 +88,6 @@
                       :image-class="isUnknownEmotion(day) ? 'teacher-flower-image unknown-flower' : 'teacher-flower-image'"
                       skeleton-type="default"
                     />
-                    <div class="teacher-tooltip">
-                      <div class="teacher-tooltip-card">
-                        <div class="teacher-tooltip-flower-name">{{ getFlowerName(day) }}</div>
-                        <div class="teacher-tooltip-meaning">"{{ getFlowerMeaning(day) }}"</div>
-                        <div class="teacher-tooltip-date">{{ currentYear }}.{{ String(currentMonth).padStart(2, '0') }}.{{ String(day).padStart(2, '0') }}</div>
-                        <div class="teacher-tooltip-emotion">{{ getEmotionName(day) }}</div>
-                      </div>
-                    </div>
                   </div>
                 </div>
                 <!-- 빈 칸 (일기 없음) -->
@@ -234,6 +243,34 @@ const selectedDay = ref(null)
 // 날짜 선택
 const selectDay = (day) => {
   selectedDay.value = day
+}
+
+// 툴팁 상태
+const hoveredDay = ref(null)
+const tooltipStyle = ref({})
+
+// 툴팁 표시 및 위치 계산
+const handleFlowerHover = (event, day) => {
+  hoveredDay.value = day
+
+  const flowerEl = event.currentTarget
+  const rect = flowerEl.getBoundingClientRect()
+
+  // 툴팁을 꽃의 중앙 위에 배치
+  const left = rect.left + rect.width / 2
+  const top = rect.top - 20 // 꽃 위 20px 간격
+
+  tooltipStyle.value = {
+    left: `${left}px`,
+    top: `${top}px`,
+    transform: 'translate(-50%, -100%)',
+    opacity: '1'
+  }
+}
+
+// 툴팁 숨김
+const handleFlowerLeave = () => {
+  hoveredDay.value = null
 }
 
 // 현재 년월 (monthlyEmotions에서 추출)
