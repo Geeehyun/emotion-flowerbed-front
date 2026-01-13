@@ -154,7 +154,7 @@
                   </td>
                   <td class="teacher-letter-count-cell">{{ report.diaryCount }}개</td>
                   <td class="teacher-letter-status-cell">
-                    <span v-if="!report.isAnalyzed" class="teacher-analysis-status analyzing">분석 중</span>
+                    <span v-if="!report.isAnalyzed" class="teacher-analysis-status unanalyzed">분석 불가</span>
                     <span v-else class="teacher-analysis-status analyzed">분석 완료</span>
                   </td>
                   <td class="teacher-letter-arrow-cell">

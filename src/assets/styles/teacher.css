@@ -2042,9 +2042,9 @@
   font-weight: 600;
 }
 
-.teacher-analysis-status.analyzing {
-  background: #FEF3C7;
-  color: #92400E;
+.teacher-analysis-status.unanalyzed {
+  background: #e5e5e5;
+  color: #494949;
 }
 
 .teacher-analysis-status.analyzed {
@@ -6057,24 +6057,27 @@
 /* ============================================
    감정레터 - 미분석 메시지
 ============================================ */
-.teacher-not-analyzed-message {
+.teacher-not-analyzed-full-message {
   background: #FFF9F0;
-  border: 1px solid #FFE0B2;
-  border-radius: 12px;
-  padding: 24px;
+  border: 2px solid #FFE0B2;
+  border-radius: 16px;
+  padding: 60px 40px;
   text-align: center;
   color: #8B7355;
+  margin: 40px auto;
+  max-width: 500px;
 }
 
-.teacher-not-analyzed-message p {
+.teacher-not-analyzed-full-message p {
   margin: 0;
-  font-size: 15px;
-  line-height: 1.6;
+  font-size: 18px;
+  line-height: 1.8;
+  font-weight: 500;
 }
 
-.teacher-not-analyzed-message .teacher-diary-count {
-  margin-top: 8px;
-  font-size: 13px;
+.teacher-not-analyzed-full-message .teacher-diary-count {
+  margin-top: 16px;
+  font-size: 15px;
   color: #A68B6A;
   font-weight: 600;
 }

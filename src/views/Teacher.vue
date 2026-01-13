@@ -609,6 +609,7 @@ const transformTeacherReportData = (reportData) => {
   // UI용 데이터 반환
   return {
     reportId: reportData.reportId,
+    isAnalyzed: reportData.isAnalyzed,
     title: `${startDate.getFullYear()}년 ${startDate.getMonth() + 1}월 ${Math.ceil(startDate.getDate() / 7)}주차 감정 레터`,
     period: `${reportData.startDate.replace(/-/g, '.')} - ${reportData.endDate.replace(/-/g, '.')}`,
     date: reportData.endDate.replace(/-/g, '.'),
