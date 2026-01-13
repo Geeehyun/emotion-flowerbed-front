@@ -3791,15 +3791,15 @@
 }
 
 /* 반응형 - 중간 화면 (1024px 이하) */
-@media (max-width: 1024px) {
+@media (max-width: 1024px) and (min-width: 769px) {
   /* 화단 배경과 그리드 비율 조정 */
   .teacher-flower-grid {
-    top: 21%;
-    left: 8%;
-    width: 84%;
-    height: 48%;
+    top: 23%;
+    left: 10%;
+    width: 80%;
+    height: 46%;
     gap: 3px;
-    padding: 1.5% 3.5%;
+    padding: 1.5% 3%;
   }
 
   /* 툴팁이 우측 꽃에 가려지지 않도록 조정 */
@@ -3814,6 +3814,7 @@
     left: auto;
     transform: none;
     margin: 0;
+    z-index: 100;
   }
 
   .teacher-flower:hover .teacher-tooltip {
@@ -3822,8 +3823,8 @@
   }
 }
 
-/* 반응형 - 모바일 */
-@media (max-width: 768px) {
+/* 반응형 - 모바일 (768px 이하 ~ 431px) */
+@media (max-width: 768px) and (min-width: 431px) {
   .teacher-letter-list-title-row {
     flex-direction: column;
     align-items: flex-start;
@@ -3842,12 +3843,71 @@
   }
 
   .teacher-flower-grid {
+    top: 21%;
+    left: 8%;
+    width: 84%;
+    height: 49%;
     gap: 2px;
-    padding: 8px;
+    padding: 2% 4%;
   }
 
   .teacher-emotion-detail-section {
     padding: 16px;
+  }
+
+  /* 툴팁 조정 */
+  .teacher-grid-cell {
+    position: relative;
+    overflow: visible;
+  }
+
+  .teacher-tooltip {
+    position: fixed;
+    z-index: 100;
+  }
+}
+
+/* 반응형 - 작은 모바일 (430px 이하) */
+@media (max-width: 430px) {
+  .teacher-letter-list-title-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .teacher-student-action-btns {
+    width: 100%;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .teacher-risk-history-btn,
+  .teacher-monthly-garden-btn {
+    width: 100%;
+  }
+
+  .teacher-flower-grid {
+    top: 22%;
+    left: 9%;
+    width: 82%;
+    height: 47%;
+    gap: 2px;
+    padding: 1.5% 3.5%;
+  }
+
+  .teacher-emotion-detail-section {
+    padding: 16px;
+  }
+
+  /* 툴팁 조정 */
+  .teacher-grid-cell {
+    position: relative;
+    overflow: visible;
+  }
+
+  .teacher-tooltip {
+    position: fixed;
+    z-index: 100;
   }
 }
 
