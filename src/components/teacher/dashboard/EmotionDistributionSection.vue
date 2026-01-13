@@ -72,6 +72,7 @@
             :class="['teacher-zone-stat-item', zone.className]"
           >
             <h4>{{ zone.label }}</h4>
+            <p v-if="zone.description" class="teacher-zone-description">{{ zone.description }}</p>
             <div class="teacher-stat-value">{{ getZoneCount(zone.key) }}<span class="teacher-stat-percent">명 ({{ getZonePercent(zone.key) }}%)</span></div>
             <div v-if="getZoneStudents(zone.key).length > 0" class="teacher-zone-tooltip">
               <div class="teacher-zone-tooltip-arrow"></div>
@@ -155,12 +156,12 @@ const chartCanvas = ref(null)
 let emotionChart = null
 
 const zones = [
-  { key: 'red', label: '빨강 영역', className: 'teacher-red-zone' },
-  { key: 'yellow', label: '노랑 영역', className: 'teacher-yellow-zone' },
-  { key: 'blue', label: '파랑 영역', className: 'teacher-blue-zone' },
-  { key: 'green', label: '초록 영역', className: 'teacher-green-zone' },
-  { key: 'none', label: '미제출', className: 'teacher-gray-zone' },
-  { key: 'unanalyzed', label: '분석불가', className: 'teacher-unanalyzed-zone' }
+  { key: 'red', label: '빨강 영역', description: '높은 에너지 + 불쾌', className: 'teacher-red-zone' },
+  { key: 'yellow', label: '노랑 영역', description: '높은 에너지 + 쾌적', className: 'teacher-yellow-zone' },
+  { key: 'blue', label: '파랑 영역', description: '낮은 에너지 + 불쾌', className: 'teacher-blue-zone' },
+  { key: 'green', label: '초록 영역', description: '낮은 에너지 + 쾌적', className: 'teacher-green-zone' },
+  { key: 'none', label: '미제출', description: '', className: 'teacher-gray-zone' },
+  { key: 'unanalyzed', label: '분석불가', description: '', className: 'teacher-unanalyzed-zone' }
 ]
 
 const getZoneCount = (zone) => {

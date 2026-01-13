@@ -27,8 +27,40 @@
           <p>{{ errorMessage }}</p>
         </div>
 
+        <!-- 영역별 범례 -->
+        <div v-if="!isLoading && !errorMessage" class="teacher-area-legend-section">
+          <div class="teacher-area-legend-item">
+            <div class="teacher-legend-color teacher-red-legend"></div>
+            <div class="teacher-legend-text">
+              <span class="teacher-legend-name">빨강</span>
+              <span class="teacher-legend-desc">높은 에너지 + 불쾌</span>
+            </div>
+          </div>
+          <div class="teacher-area-legend-item">
+            <div class="teacher-legend-color teacher-yellow-legend"></div>
+            <div class="teacher-legend-text">
+              <span class="teacher-legend-name">노랑</span>
+              <span class="teacher-legend-desc">높은 에너지 + 쾌적</span>
+            </div>
+          </div>
+          <div class="teacher-area-legend-item">
+            <div class="teacher-legend-color teacher-blue-legend"></div>
+            <div class="teacher-legend-text">
+              <span class="teacher-legend-name">파랑</span>
+              <span class="teacher-legend-desc">낮은 에너지 + 불쾌</span>
+            </div>
+          </div>
+          <div class="teacher-area-legend-item">
+            <div class="teacher-legend-color teacher-green-legend"></div>
+            <div class="teacher-legend-text">
+              <span class="teacher-legend-name">초록</span>
+              <span class="teacher-legend-desc">낮은 에너지 + 쾌적</span>
+            </div>
+          </div>
+        </div>
+
         <!-- 좌우 분할 레이아웃 -->
-        <div v-else class="teacher-garden-split-layout" :class="{ 'loading': isLoading }">
+        <div v-if="!errorMessage" class="teacher-garden-split-layout" :class="{ 'loading': isLoading }">
           <!-- 로딩 오버레이 -->
           <div v-if="isLoading" class="teacher-garden-loading-overlay">
             <div class="teacher-loading-spinner"></div>

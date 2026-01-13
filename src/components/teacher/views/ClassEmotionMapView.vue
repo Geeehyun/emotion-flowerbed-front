@@ -41,19 +41,31 @@
       <div class="teacher-legend-group">
         <div class="teacher-legend-item">
           <div class="teacher-legend-color teacher-red-legend"></div>
-          <span>빨강</span>
+          <div class="teacher-legend-text">
+            <span class="teacher-legend-name">빨강</span>
+            <span class="teacher-legend-desc">높은 에너지 + 불쾌</span>
+          </div>
         </div>
         <div class="teacher-legend-item">
           <div class="teacher-legend-color teacher-yellow-legend"></div>
-          <span>노랑</span>
+          <div class="teacher-legend-text">
+            <span class="teacher-legend-name">노랑</span>
+            <span class="teacher-legend-desc">높은 에너지 + 쾌적</span>
+          </div>
         </div>
         <div class="teacher-legend-item">
           <div class="teacher-legend-color teacher-blue-legend"></div>
-          <span>파랑</span>
+          <div class="teacher-legend-text">
+            <span class="teacher-legend-name">파랑</span>
+            <span class="teacher-legend-desc">낮은 에너지 + 불쾌</span>
+          </div>
         </div>
         <div class="teacher-legend-item">
           <div class="teacher-legend-color teacher-green-legend"></div>
-          <span>초록</span>
+          <div class="teacher-legend-text">
+            <span class="teacher-legend-name">초록</span>
+            <span class="teacher-legend-desc">낮은 에너지 + 쾌적</span>
+          </div>
         </div>
         <div class="teacher-legend-item">
           <div class="teacher-legend-color teacher-gray-legend"></div>
@@ -204,7 +216,10 @@
         <div class="teacher-keyword-card teacher-red-card">
           <div class="teacher-keyword-card-header">
             <div class="teacher-keyword-area-icon" style="background: #EF5350;">🔥</div>
-            <div class="teacher-keyword-area-name">빨강 영역</div>
+            <div class="teacher-keyword-area-info">
+              <div class="teacher-keyword-area-name">빨강 영역</div>
+              <div class="teacher-keyword-area-desc">높은 에너지 + 불쾌</div>
+            </div>
           </div>
           <div class="teacher-keyword-list">
             <span
@@ -224,7 +239,10 @@
         <div class="teacher-keyword-card teacher-yellow-card">
           <div class="teacher-keyword-card-header">
             <div class="teacher-keyword-area-icon" style="background: #FFD54F;">☀️</div>
-            <div class="teacher-keyword-area-name">노랑 영역</div>
+            <div class="teacher-keyword-area-info">
+              <div class="teacher-keyword-area-name">노랑 영역</div>
+              <div class="teacher-keyword-area-desc">높은 에너지 + 쾌적</div>
+            </div>
           </div>
           <div class="teacher-keyword-list">
             <span
@@ -244,7 +262,10 @@
         <div class="teacher-keyword-card teacher-blue-card">
           <div class="teacher-keyword-card-header">
             <div class="teacher-keyword-area-icon" style="background: #42A5F5;">💧</div>
-            <div class="teacher-keyword-area-name">파랑 영역</div>
+            <div class="teacher-keyword-area-info">
+              <div class="teacher-keyword-area-name">파랑 영역</div>
+              <div class="teacher-keyword-area-desc">낮은 에너지 + 불쾌</div>
+            </div>
           </div>
           <div class="teacher-keyword-list">
             <span
@@ -264,7 +285,10 @@
         <div class="teacher-keyword-card teacher-green-card">
           <div class="teacher-keyword-card-header">
             <div class="teacher-keyword-area-icon" style="background: #66BB6A;">🌿</div>
-            <div class="teacher-keyword-area-name">초록 영역</div>
+            <div class="teacher-keyword-area-info">
+              <div class="teacher-keyword-area-name">초록 영역</div>
+              <div class="teacher-keyword-area-desc">낮은 에너지 + 쾌적</div>
+            </div>
           </div>
           <div class="teacher-keyword-list">
             <span
