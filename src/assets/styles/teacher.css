@@ -6053,3 +6053,28 @@
     right: -8px;
   }
 }
+
+/* ============================================
+   감정레터 - 미분석 메시지
+============================================ */
+.teacher-not-analyzed-message {
+  background: #FFF9F0;
+  border: 1px solid #FFE0B2;
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+  color: #8B7355;
+}
+
+.teacher-not-analyzed-message p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.teacher-not-analyzed-message .teacher-diary-count {
+  margin-top: 8px;
+  font-size: 13px;
+  color: #A68B6A;
+  font-weight: 600;
+}

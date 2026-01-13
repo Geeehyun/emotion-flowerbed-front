@@ -59,34 +59,44 @@
       <!-- 마음의 색깔들 (감정 차트) -->
       <div class="teacher-letter-section">
         <h3 class="teacher-section-title">마음의 색깔들</h3>
-        <div class="teacher-emotion-chart">
-          <canvas ref="chartCanvas"></canvas>
+        <div v-if="!letter?.isAnalyzed" class="teacher-not-analyzed-message">
+          <p>데이터가 충분하지 않아 분석할 수 없습니다.</p>
+          <p class="teacher-diary-count">일기 {{ letter?.diaryCount || 0 }}건 작성</p>
         </div>
-        <div class="teacher-chart-legend">
-          <div
-            v-for="emotion in letter?.emotions"
-            :key="emotion.name"
-            class="teacher-legend-item"
-          >
-            <span
-              class="teacher-legend-color"
-              :style="{ backgroundColor: emotion.color }"
-            ></span>
-            <span class="teacher-legend-text">{{ emotion.name }} ({{ emotion.count }}일)</span>
+        <template v-else>
+          <div class="teacher-emotion-chart">
+            <canvas ref="chartCanvas"></canvas>
           </div>
-        </div>
+          <div class="teacher-chart-legend">
+            <div
+              v-for="emotion in letter?.emotions"
+              :key="emotion.name"
+              class="teacher-legend-item"
+            >
+              <span
+                class="teacher-legend-color"
+                :style="{ backgroundColor: emotion.color }"
+              ></span>
+              <span class="teacher-legend-text">{{ emotion.name }} ({{ emotion.count }}일)</span>
+            </div>
+          </div>
+        </template>
       </div>
 
       <!-- 정원사의 관찰 노트 -->
       <div class="teacher-letter-section">
         <h3 class="teacher-section-title">정원사의 관찰 노트</h3>
-        <div class="teacher-analysis-content">
+        <div v-if="!letter?.isAnalyzed" class="teacher-not-analyzed-message">
+          <p>데이터가 충분하지 않아 분석할 수 없습니다.</p>
+          <p class="teacher-diary-count">일기 {{ letter?.diaryCount || 0 }}건 작성</p>
+        </div>
+        <div v-else class="teacher-analysis-content">
           <p>{{ letter?.studentReport }}</p>
         </div>
       </div>
 
       <!-- 주간 하이라이트 -->
-      <div class="teacher-letter-section" v-if="letter?.highlights">
+      <div class="teacher-letter-section" v-if="letter?.isAnalyzed && letter?.highlights">
         <h3 class="teacher-section-title">반짝이는 순간들</h3>
 
         <!-- 이번 주의 꽃 -->
@@ -142,7 +152,7 @@
       </div>
 
       <!-- 이번 주 키워드 -->
-      <div class="teacher-letter-section" v-if="letter?.weekKeywords && letter.weekKeywords.length > 0">
+      <div class="teacher-letter-section" v-if="letter?.isAnalyzed && letter?.weekKeywords && letter.weekKeywords.length > 0">
         <h3 class="teacher-section-title">이번 주 키워드</h3>
         <div class="teacher-week-keywords">
           <div
@@ -156,7 +166,7 @@
       </div>
 
       <!-- 마음 가드닝 TIP -->
-      <div class="teacher-letter-section" v-if="letter?.mindGardeningTip && letter.mindGardeningTip.length > 0">
+      <div class="teacher-letter-section" v-if="letter?.isAnalyzed && letter?.mindGardeningTip && letter.mindGardeningTip.length > 0">
         <h3 class="teacher-section-title">마음 가드닝 TIP</h3>
         <div class="teacher-gardening-tips">
           <div
@@ -172,7 +182,11 @@
       <!-- 정원사가 전하는 편지 -->
       <div class="teacher-letter-section teacher-gardener-letter">
         <h3 class="teacher-section-title">정원사가 전하는 편지</h3>
-        <div class="teacher-letter-paper">
+        <div v-if="!letter?.isAnalyzed" class="teacher-not-analyzed-message">
+          <p>데이터가 충분하지 않아 분석할 수 없습니다.</p>
+          <p class="teacher-diary-count">일기 {{ letter?.diaryCount || 0 }}건 작성</p>
+        </div>
+        <div v-else class="teacher-letter-paper">
           <p class="teacher-letter-content">
             {{ letter?.studentEncouragement }}
           </p>
@@ -194,13 +208,17 @@
       <!-- 선생님용 주간 분석 -->
       <div class="teacher-letter-section">
         <h3 class="teacher-section-title">주간 감정 분석</h3>
-        <div class="teacher-exclusive-analysis">
+        <div v-if="!letter?.isAnalyzed" class="teacher-not-analyzed-message">
+          <p>데이터가 충분하지 않아 분석할 수 없습니다.</p>
+          <p class="teacher-diary-count">일기 {{ letter?.diaryCount || 0 }}건 작성</p>
+        </div>
+        <div v-else class="teacher-exclusive-analysis">
           <pre class="teacher-analysis-text">{{ letter?.teacherReport }}</pre>
         </div>
       </div>
 
       <!-- 학생 말걸기 TIP -->
-      <div class="teacher-letter-section" v-if="letter?.teacherTalkTip?.length > 0">
+      <div class="teacher-letter-section" v-if="letter?.isAnalyzed && letter?.teacherTalkTip?.length > 0">
         <h3 class="teacher-section-title">학생 말걸기 TIP</h3>
         <div class="teacher-talk-questions">
           <div
