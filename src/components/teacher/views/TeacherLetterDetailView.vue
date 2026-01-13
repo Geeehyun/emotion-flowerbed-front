@@ -1,5 +1,5 @@
 <template>
-  <div class="teacher-letter-detail-view">
+  <div class="teacher-letter-detail-view" :class="{ 'is-modal': isModal }">
     <!-- 섹션 네비게이션 -->
     <nav v-if="letter?.isAnalyzed" class="teacher-letter-nav">
       <div class="teacher-letter-nav-inner">
@@ -354,12 +354,15 @@ const scrollToSection = (sectionId) => {
   const element = document.getElementById(sectionId)
   if (!element) return
 
-  // 모달인 경우 모달 컨테이너 스크롤
+  // 모달인 경우 모달 body 스크롤
   if (props.isModal) {
-    const modalContent = element.closest('.base-modal-content')
-    if (modalContent) {
-      const offsetTop = element.offsetTop - 80
-      modalContent.scrollTo({
+    const modalBody = document.querySelector('.base-modal-body')
+    if (modalBody) {
+      const modalBodyRect = modalBody.getBoundingClientRect()
+      const elementRect = element.getBoundingClientRect()
+      const offsetTop = elementRect.top - modalBodyRect.top + modalBody.scrollTop - 20
+
+      modalBody.scrollTo({
         top: offsetTop,
         behavior: 'smooth'
       })
@@ -381,27 +384,41 @@ const handleScroll = (event) => {
   // 스크롤 위치 가져오기
   let scrollPosition
   if (props.isModal && event?.target) {
-    scrollPosition = event.target.scrollTop + 150
+    scrollPosition = event.target.scrollTop + 100
   } else {
     scrollPosition = window.scrollY + 150
   }
 
   for (let i = sections.length - 1; i >= 0; i--) {
     const element = document.getElementById(sections[i])
-    if (element && element.offsetTop <= scrollPosition) {
-      activeSection.value = sections[i]
-      break
+    if (element) {
+      let elementTop
+      if (props.isModal) {
+        const modalBody = document.querySelector('.base-modal-body')
+        if (modalBody) {
+          const modalBodyRect = modalBody.getBoundingClientRect()
+          const elementRect = element.getBoundingClientRect()
+          elementTop = elementRect.top - modalBodyRect.top + modalBody.scrollTop
+        }
+      } else {
+        elementTop = element.offsetTop
+      }
+
+      if (elementTop && elementTop <= scrollPosition) {
+        activeSection.value = sections[i]
+        break
+      }
     }
   }
 }
 
 onMounted(() => {
-  // 모달인 경우 모달 컨테이너에 이벤트 리스너 추가
+  // 모달인 경우 모달 body에 이벤트 리스너 추가
   if (props.isModal) {
     setTimeout(() => {
-      const modalContent = document.querySelector('.base-modal-content')
-      if (modalContent) {
-        modalContent.addEventListener('scroll', handleScroll)
+      const modalBody = document.querySelector('.base-modal-body')
+      if (modalBody) {
+        modalBody.addEventListener('scroll', handleScroll)
       }
     }, 100)
   } else {
@@ -411,9 +428,9 @@ onMounted(() => {
 
 onUnmounted(() => {
   if (props.isModal) {
-    const modalContent = document.querySelector('.base-modal-content')
-    if (modalContent) {
-      modalContent.removeEventListener('scroll', handleScroll)
+    const modalBody = document.querySelector('.base-modal-body')
+    if (modalBody) {
+      modalBody.removeEventListener('scroll', handleScroll)
     }
   } else {
     window.removeEventListener('scroll', handleScroll)
