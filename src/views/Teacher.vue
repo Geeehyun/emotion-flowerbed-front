@@ -477,13 +477,17 @@ watch(currentView, async (newView, oldView) => {
 
   // 학생별 감정 레터 뷰로 진입할 때
   if (newView === 'studentMap' && oldView !== 'studentMap') {
-    // 선택된 학생 및 레터 초기화
-    selectedStudent.value = null
+    // 레터 초기화
     selectedLetter.value = null
     searchQuery.value = ''
 
-    // 학생 목록 로드
-    await loadStudentsForLetter()
+    // 학생 목록 로드 (아직 로드되지 않았다면)
+    if (letterStudents.value.length === 0) {
+      await loadStudentsForLetter()
+    }
+
+    // goToStudentDetailAnalysis에서 이미 학생을 선택한 경우가 아니라면 초기화
+    // (selectedStudent가 이미 설정되어 있으면 유지)
   }
 })
 
@@ -699,21 +703,28 @@ const changeMonthlyGardenMonth = (yearMonth) => {
 }
 
 // 위험 학생 -> 상세 분석 이동
-const goToStudentDetailAnalysis = (riskStudent) => {
+const goToStudentDetailAnalysis = async (riskStudent) => {
   if (!riskStudent) return
-
-  // students 배열에서 해당 학생 찾기 (userSn으로 매칭)
-  const student = students.value.find(s => s.id === riskStudent.userSn)
-
-  if (student) {
-    selectedStudent.value = student
-  }
 
   // 학생별 감정 레터 뷰로 이동
   currentView.value = 'studentMap'
 
   // 모바일 모달이 열려있다면 닫기
   isRiskHistoryMobileModalOpen.value = false
+
+  // 학생 목록 로드 (아직 로드되지 않았다면)
+  if (letterStudents.value.length === 0) {
+    await loadStudentsForLetter()
+  }
+
+  // letterStudents 배열에서 해당 학생 찾기 (userSn으로 매칭)
+  const student = letterStudents.value.find(s => s.id === riskStudent.userSn)
+
+  if (student) {
+    selectedStudent.value = student
+    // 학생의 주간 리포트 로드
+    await loadWeeklyReports(student.id)
+  }
 }
 
 const handleLogout = async () => {

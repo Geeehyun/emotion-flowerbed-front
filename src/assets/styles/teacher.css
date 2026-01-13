@@ -2495,6 +2495,51 @@
   overflow-y: auto;
   background: #FFFCF5;
   padding: 24px;
+  position: relative;
+}
+
+/* 섹션 네비게이션 */
+.teacher-letter-nav {
+  position: fixed;
+  top: 120px;
+  right: 40px;
+  width: 180px;
+  background: #FFFFFF;
+  border-radius: 12px;
+  border: 1px solid #D4C4B0;
+  box-shadow: 0 4px 12px rgba(93, 78, 55, 0.1);
+  padding: 16px 12px;
+  z-index: 100;
+  max-height: calc(100vh - 160px);
+  overflow-y: auto;
+}
+
+.teacher-letter-nav-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.teacher-nav-item {
+  padding: 10px 12px;
+  font-size: 13px;
+  color: #8B7355;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.2s;
+  border-left: 3px solid transparent;
+}
+
+.teacher-nav-item:hover {
+  background: #F8F3E8;
+  color: #5D4E37;
+}
+
+.teacher-nav-item.active {
+  background: #FFF9F0;
+  color: #C4915C;
+  font-weight: 600;
+  border-left-color: #C4915C;
 }
 
 /* 헤더 */
@@ -5553,7 +5598,7 @@
   .teacher-modal-action-section {
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: end;
     gap: 12px;
   }
 
@@ -6135,4 +6180,19 @@
   font-size: 15px;
   color: #A68B6A;
   font-weight: 600;
+}
+
+/* ============================================
+   감정레터 네비게이션 반응형
+============================================ */
+@media (max-width: 1200px) {
+  .teacher-letter-nav {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .teacher-letter-detail-view {
+    padding: 16px;
+  }
 }

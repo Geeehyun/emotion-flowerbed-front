@@ -1,5 +1,19 @@
 <template>
   <div class="teacher-letter-detail-view">
+    <!-- 섹션 네비게이션 -->
+    <nav v-if="letter?.isAnalyzed" class="teacher-letter-nav">
+      <div class="teacher-letter-nav-inner">
+        <div
+          v-for="section in availableSections"
+          :key="section.id"
+          @click="scrollToSection(section.id)"
+          :class="['teacher-nav-item', { active: activeSection === section.id }]"
+        >
+          {{ section.label }}
+        </div>
+      </div>
+    </nav>
+
     <!-- 헤더 (모달이 아닐 때만 표시) -->
     <div v-if="!isModal" class="teacher-letter-header">
       <button @click="$emit('back')" class="teacher-back-btn">
@@ -25,7 +39,7 @@
       </div>
 
       <!-- 한 주간 피운 꽃들 -->
-      <div class="teacher-letter-section">
+      <div id="section-flowers" class="teacher-letter-section">
         <h3 class="teacher-section-title">한 주간 피운 꽃들</h3>
         <div class="teacher-weekly-calendar">
           <div
@@ -63,7 +77,7 @@
       </div>
 
       <!-- 마음의 색깔들 (감정 차트) -->
-      <div class="teacher-letter-section">
+      <div id="section-emotions" class="teacher-letter-section">
         <h3 class="teacher-section-title">마음의 색깔들</h3>
         <div class="teacher-emotion-chart">
           <canvas ref="chartCanvas"></canvas>
@@ -84,7 +98,7 @@
       </div>
 
       <!-- 정원사의 관찰 노트 -->
-      <div class="teacher-letter-section">
+      <div id="section-observation" class="teacher-letter-section">
         <h3 class="teacher-section-title">정원사의 관찰 노트</h3>
         <div class="teacher-analysis-content">
           <p>{{ letter?.studentReport }}</p>
@@ -92,7 +106,7 @@
       </div>
 
       <!-- 주간 하이라이트 -->
-      <div class="teacher-letter-section" v-if="letter?.highlights">
+      <div id="section-highlights" class="teacher-letter-section" v-if="letter?.highlights">
         <h3 class="teacher-section-title">반짝이는 순간들</h3>
 
         <!-- 이번 주의 꽃 -->
@@ -148,7 +162,7 @@
       </div>
 
       <!-- 이번 주 키워드 -->
-      <div class="teacher-letter-section" v-if="letter?.weekKeywords && letter.weekKeywords.length > 0">
+      <div id="section-keywords" class="teacher-letter-section" v-if="letter?.weekKeywords && letter.weekKeywords.length > 0">
         <h3 class="teacher-section-title">이번 주 키워드</h3>
         <div class="teacher-week-keywords">
           <div
@@ -162,7 +176,7 @@
       </div>
 
       <!-- 마음 가드닝 TIP -->
-      <div class="teacher-letter-section" v-if="letter?.mindGardeningTip && letter.mindGardeningTip.length > 0">
+      <div id="section-tips" class="teacher-letter-section" v-if="letter?.mindGardeningTip && letter.mindGardeningTip.length > 0">
         <h3 class="teacher-section-title">마음 가드닝 TIP</h3>
         <div class="teacher-gardening-tips">
           <div
@@ -176,7 +190,7 @@
       </div>
 
       <!-- 정원사가 전하는 편지 -->
-      <div class="teacher-letter-section teacher-gardener-letter">
+      <div id="section-letter" class="teacher-letter-section teacher-gardener-letter">
         <h3 class="teacher-section-title">정원사가 전하는 편지</h3>
         <div class="teacher-letter-paper">
           <p class="teacher-letter-content">
@@ -198,7 +212,7 @@
       </div>
 
       <!-- 선생님용 주간 분석 -->
-      <div class="teacher-letter-section">
+      <div id="section-analysis" class="teacher-letter-section">
         <h3 class="teacher-section-title">주간 감정 분석</h3>
         <div class="teacher-exclusive-analysis">
           <pre class="teacher-analysis-text">{{ letter?.teacherReport }}</pre>
@@ -206,7 +220,7 @@
       </div>
 
       <!-- 학생 말걸기 TIP -->
-      <div class="teacher-letter-section" v-if="letter?.teacherTalkTip?.length > 0">
+      <div id="section-talk-tips" class="teacher-letter-section" v-if="letter?.teacherTalkTip?.length > 0">
         <h3 class="teacher-section-title">학생 말걸기 TIP</h3>
         <div class="teacher-talk-questions">
           <div
@@ -224,7 +238,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
+import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 import { Chart, DoughnutController, ArcElement, Tooltip, Legend } from 'chart.js/auto'
 import { ANIMATION_DELAY } from '@/constants/uiConstants.js'
 
@@ -246,6 +260,7 @@ const emit = defineEmits(['back'])
 
 const chartCanvas = ref(null)
 let chartInstance = null
+const activeSection = ref('section-flowers')
 
 // 화분 이미지 가져오기
 const getFlowerPotImage = (flowerKey) => {
@@ -301,4 +316,107 @@ watch(() => props.letter, () => {
     }, ANIMATION_DELAY.CHART_RENDER)
   }
 }, { deep: true, immediate: true })
+
+// 사용 가능한 섹션 목록
+const availableSections = computed(() => {
+  if (!props.letter?.isAnalyzed) return []
+
+  const sections = [
+    { id: 'section-flowers', label: '피운 꽃들' },
+    { id: 'section-emotions', label: '마음의 색깔' },
+    { id: 'section-observation', label: '관찰 노트' }
+  ]
+
+  if (props.letter?.highlights) {
+    sections.push({ id: 'section-highlights', label: '반짝이는 순간' })
+  }
+
+  if (props.letter?.weekKeywords?.length > 0) {
+    sections.push({ id: 'section-keywords', label: '주간 키워드' })
+  }
+
+  if (props.letter?.mindGardeningTip?.length > 0) {
+    sections.push({ id: 'section-tips', label: '가드닝 TIP' })
+  }
+
+  sections.push({ id: 'section-letter', label: '정원사 편지' })
+  sections.push({ id: 'section-analysis', label: '주간 분석' })
+
+  if (props.letter?.teacherTalkTip?.length > 0) {
+    sections.push({ id: 'section-talk-tips', label: '말걸기 TIP' })
+  }
+
+  return sections
+})
+
+// 섹션으로 스크롤
+const scrollToSection = (sectionId) => {
+  const element = document.getElementById(sectionId)
+  if (!element) return
+
+  // 모달인 경우 모달 컨테이너 스크롤
+  if (props.isModal) {
+    const modalContent = element.closest('.base-modal-content')
+    if (modalContent) {
+      const offsetTop = element.offsetTop - 80
+      modalContent.scrollTo({
+        top: offsetTop,
+        behavior: 'smooth'
+      })
+    }
+  } else {
+    // 일반 페이지인 경우 window 스크롤
+    const offsetTop = element.offsetTop - 80
+    window.scrollTo({
+      top: offsetTop,
+      behavior: 'smooth'
+    })
+  }
+}
+
+// 스크롤 감지하여 현재 섹션 업데이트
+const handleScroll = (event) => {
+  const sections = availableSections.value.map(s => s.id)
+
+  // 스크롤 위치 가져오기
+  let scrollPosition
+  if (props.isModal && event?.target) {
+    scrollPosition = event.target.scrollTop + 150
+  } else {
+    scrollPosition = window.scrollY + 150
+  }
+
+  for (let i = sections.length - 1; i >= 0; i--) {
+    const element = document.getElementById(sections[i])
+    if (element && element.offsetTop <= scrollPosition) {
+      activeSection.value = sections[i]
+      break
+    }
+  }
+}
+
+onMounted(() => {
+  // 모달인 경우 모달 컨테이너에 이벤트 리스너 추가
+  if (props.isModal) {
+    setTimeout(() => {
+      const modalContent = document.querySelector('.base-modal-content')
+      if (modalContent) {
+        modalContent.addEventListener('scroll', handleScroll)
+      }
+    }, 100)
+  } else {
+    window.addEventListener('scroll', handleScroll)
+  }
+})
+
+onUnmounted(() => {
+  if (props.isModal) {
+    const modalContent = document.querySelector('.base-modal-content')
+    if (modalContent) {
+      modalContent.removeEventListener('scroll', handleScroll)
+    }
+  } else {
+    window.removeEventListener('scroll', handleScroll)
+  }
+})
 </script>
