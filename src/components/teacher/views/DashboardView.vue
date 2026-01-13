@@ -23,7 +23,7 @@
 
       <!-- 위험 히스토리 패널 -->
       <RiskHistorySection
-        v-if="selectedRiskStudent"
+        v-if="selectedRiskStudent && !isRiskHistoryMobileModalOpen"
         :selectedRiskStudent="selectedRiskStudent"
         :riskHistory="riskHistory"
         :isLoadingHistory="isLoadingHistory"
@@ -81,6 +81,10 @@ const props = defineProps({
     default: null
   },
   isLoadingHistory: {
+    type: Boolean,
+    default: false
+  },
+  isRiskHistoryMobileModalOpen: {
     type: Boolean,
     default: false
   }

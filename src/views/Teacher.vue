@@ -55,6 +55,7 @@
           :selectedRiskStudent="selectedRiskStudent"
           :riskHistory="riskHistory"
           :isLoadingHistory="isLoadingHistory"
+          :isRiskHistoryMobileModalOpen="isRiskHistoryMobileModalOpen"
           @date-change="handleDateChange"
           @select-risk-student="selectRiskStudent"
           @detail-analysis="goToStudentDetailAnalysis"
