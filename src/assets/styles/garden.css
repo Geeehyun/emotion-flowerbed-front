@@ -34,6 +34,13 @@
   box-sizing: border-box;
 }
 
+/* 전역 폰트 설정 - 웹폰트에 없는 글자를 위한 fallback */
+html,
+body,
+#app {
+  font-family: var(--font-body);
+}
+
 /* ============================================
    2. 배경 및 레이아웃
 ============================================ */
@@ -526,7 +533,6 @@
   border: 2px dashed rgba(139, 111, 71, 0.2);
   color: rgba(232, 205, 142, 0.4);
   cursor: not-allowed;
-  opacity: 0.5;
 }
 
 .empty-slot.future-date:hover {
