@@ -38,7 +38,10 @@
           <img src="../assets/images/garden-bg-rectangle.png" alt="화단" class="garden-bg-image" loading="lazy">
 
           <!-- 격자 그리드로 꽃 배치 -->
-          <div class="flower-grid">
+          <div
+            class="flower-grid"
+            :style="{ gridTemplateRows: `repeat(${totalWeeks}, 1fr)` }"
+          >
             <!-- 1일 이전 빈 칸 -->
             <div class="grid-cell" v-for="i in emptyDaysBeforeFirst" :key="`before-${i}`">
               <div class="empty-slot" style="opacity: 0; cursor: default;"></div>
@@ -76,7 +79,7 @@
                   <div class="date-tooltip">
                     <div class="date-tooltip-card">
                       <template v-if="isFutureDate(day)">
-                        오늘까지의 일기만 작성할 수 있어요
+                        아직 오지 않은 날의 이야기는 나중에 적어요
                       </template>
                       <template v-else>
                         {{ currentMonth }}월 {{ day }}일
@@ -534,6 +537,12 @@ const emptyDaysAfterLast = computed(() => {
   const totalCells = emptyDaysBeforeFirst.value + daysInCurrentMonth.value
   const remainder = totalCells % 7
   return remainder === 0 ? 0 : 7 - remainder
+})
+
+// 현재 월에 필요한 주(행) 수 계산
+const totalWeeks = computed(() => {
+  const totalCells = emptyDaysBeforeFirst.value + daysInCurrentMonth.value + emptyDaysAfterLast.value
+  return Math.ceil(totalCells / 7)
 })
 
 // 기존 빈 칸 개수 계산 (그리드 총 칸 수 - 현재 월의 일 수)
