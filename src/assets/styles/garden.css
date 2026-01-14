@@ -4,6 +4,9 @@
 ===============================================
 */
 
+/* Noto Sans KR 웹폰트 임포트 (모든 한글 지원) */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
+
 /* ============================================
    1. 폰트 및 기본 스타일
 ============================================ */
@@ -24,8 +27,8 @@
 
 /* CSS 변수로 폰트 스택 정의 */
 :root {
-  --font-title: 'Cafe24Ssurround', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
-  --font-body: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  --font-title: 'Cafe24Ssurround', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  --font-body: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
 }
 
 * {
@@ -128,7 +131,7 @@ body,
 .page-title {
   position: absolute;
   left: 50%;
-  font-family: 'Cafe24Ssurround', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'Cafe24Ssurround', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 40px;
   font-weight: 900;
   color: #FFFEF7;
@@ -329,7 +332,7 @@ body,
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
   text-align: center;
   white-space: nowrap;
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   min-width: 140px;
   position: relative;
 }
@@ -420,7 +423,7 @@ body,
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 15px;
   font-weight: 700;
   color: #8B6F47;
@@ -575,7 +578,7 @@ body,
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
   text-align: center;
   white-space: nowrap;
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 14px;
   font-weight: bold;
   color: #A68B6A; /* 꽃 툴팁 날짜와 동일한 색상 */
@@ -1044,20 +1047,20 @@ body,
 }
 
 .modal-header h2 {
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 28px;
   color: #5D4E37;
   text-shadow: none;
 }
 
 .modal-header p {
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   color: #8B7355;
 }
 
 .modal-body {
   padding: 20px 0 0 0;
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   line-height: 2.2;
   flex: 1;
   overflow-y: auto; /* 내부 스크롤 */
@@ -1107,7 +1110,7 @@ body,
   margin-bottom: 20px;
   padding: 8px 12px;
   background: #ffe29f ;
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.05);
 }
 
@@ -1142,7 +1145,7 @@ body,
   cursor: pointer;
   transition: all 0.2s ease;
   box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
 }
 
 .reanalyze-btn:hover {
@@ -1171,7 +1174,7 @@ body,
   cursor: pointer;
   transition: all 0.2s ease;
   box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
 }
 
 .delete-btn:hover {
@@ -1188,7 +1191,7 @@ body,
 }
 
 .analysis-title {
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 24px;
   font-weight: bold;
   color: #8B6F47;
@@ -1201,7 +1204,7 @@ body,
 }
 
 .analysis-label {
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 16px;
   font-weight: 700;
   color: #8B6F47;
@@ -1209,7 +1212,7 @@ body,
 }
 
 .analysis-value {
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 18px;
   color: #5D4E37;
   line-height: 1.6;
@@ -1292,7 +1295,7 @@ body,
 }
 
 .legend-text {
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 15px;
   color: #5D4E37;
   font-weight: 600;
@@ -1396,7 +1399,7 @@ body,
   box-shadow:
     0 2px 4px rgba(0,0,0,0.1),
     0 4px 8px rgba(0,0,0,0.05);
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   transform: rotate(-3deg);
   transition: box-shadow 0.2s ease;
 }
@@ -1494,7 +1497,7 @@ body,
 }
 
 .detail-title {
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 13px;
   font-weight: 700;
   color: #8B6F47;
@@ -1502,7 +1505,7 @@ body,
 }
 
 .detail-text {
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 15px;
   color: #5D4E37;
   line-height: 1.5;
@@ -1664,7 +1667,7 @@ body,
   font-size: 20px;
   line-height: 1.5;
   resize: none;
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   color: #5D4E37;
   margin-bottom: 20px;
 }
@@ -1679,12 +1682,12 @@ body,
 }
 
 .diary-form button {
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 18px;
 }
 
 .cancel-btn {
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   background: transparent;
   color: #8B7355;
   padding: 8px 16px;
@@ -1915,7 +1918,7 @@ body,
   color: #8B6F47;
   min-width: 90px;
   text-align: center;
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
 }
 
 /* 캘린더 그리드 (일 선택) */
@@ -1968,7 +1971,7 @@ body,
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
 }
 
 .calendar-day-btn:hover {
@@ -2072,7 +2075,7 @@ body,
 }
 
 .letter-title {
-  font-family: 'Cafe24Ssurround', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'Cafe24Ssurround', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 22px;
   color: #8B6F47;
   margin-bottom: 12px;
@@ -2080,7 +2083,7 @@ body,
 }
 
 .letter-message {
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 16px;
   color: #5D4E37;
   margin-bottom: 25px;
@@ -2094,7 +2097,7 @@ body,
 }
 
 .letter-btn {
-  font-family: 'Cafe24Ssurround', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'Cafe24Ssurround', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   padding: 12px 30px;
   border: none;
   border-radius: 10px;
@@ -2158,7 +2161,7 @@ body,
 .base-modal-header h2 {
   color: #8B6F47;
   font-weight: 800;
-  font-family: 'Cafe24Ssurround', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'Cafe24Ssurround', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
 }
 
 .base-modal-body {
@@ -2263,7 +2266,7 @@ body,
 }
 
 .card-title {
-  font-family: 'Cafe24Ssurround', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'Cafe24Ssurround', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 18px;
   font-weight: 700;
   color: #6D4C41;
@@ -2272,7 +2275,7 @@ body,
 }
 
 .card-subtitle {
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 13px;
   color: #8B6F47;
   margin-bottom: 8px;
@@ -2307,7 +2310,7 @@ body,
 }
 
 .benefit-text {
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 12px;
   color: #6D4C41;
   line-height: 1.3;
@@ -2320,7 +2323,7 @@ body,
 }
 
 .story-text {
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 13px;
   color: #6D4C41;
   line-height: 1.4;
@@ -2338,7 +2341,7 @@ body,
   background: rgba(255, 255, 255, 0.8);
   padding: 6px 10px;
   border-radius: 14px;
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 12px;
   color: #6D4C41;
   border: 2px solid #FFCC80;
@@ -2364,7 +2367,7 @@ body,
 }
 
 .question-text {
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 12px;
   color: #6D4C41;
   line-height: 1.4;
@@ -2384,7 +2387,7 @@ body,
 }
 
 .answer-text {
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 13px;
   color: #6D4C41;
   line-height: 1.35;
@@ -2422,7 +2425,7 @@ body,
 }
 
 .definition-text {
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 12px;
   color: #6D4C41;
   line-height: 1.4;
@@ -2479,7 +2482,7 @@ body,
 }
 
 .color-item span {
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 11px;
   color: #6D4C41;
   font-weight: 600;
@@ -2501,7 +2504,7 @@ body,
 }
 
 .badge-text {
-  font-family: 'Cafe24Ssurround', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'Cafe24Ssurround', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 13px;
   color: #6D4C41;
   font-weight: 700;
@@ -2542,7 +2545,7 @@ body,
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'Cafe24Ssurround', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'Cafe24Ssurround', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 14px;
   font-weight: 700;
   box-shadow: 0 3px 8px rgba(174, 213, 129, 0.4);
@@ -2559,7 +2562,7 @@ body,
 }
 
 .step-title {
-  font-family: 'Cafe24Ssurround', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'Cafe24Ssurround', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 12px;
   color: #6D4C41;
   font-weight: 700;
@@ -2567,7 +2570,7 @@ body,
 }
 
 .step-desc {
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 11px;
   color: #8B6F47;
   line-height: 1.3;
@@ -2591,7 +2594,7 @@ body,
 }
 
 .final-title {
-  font-family: 'Cafe24Ssurround', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'Cafe24Ssurround', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 20px;
   color: #6D4C41;
   font-weight: 700;
@@ -2627,7 +2630,7 @@ body,
 }
 
 .message-item p {
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 12px;
   color: #6D4C41;
   margin: 0;
@@ -2722,7 +2725,7 @@ body,
 }
 
 .section-title {
-  font-family: 'Cafe24Ssurround', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'Cafe24Ssurround', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 18px;
   font-weight: 700;
   color: #8B6F47;
@@ -2730,7 +2733,7 @@ body,
 }
 
 .section-text {
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 15px;
   color: #5D4E37;
   line-height: 1.7;
@@ -2785,7 +2788,7 @@ body,
 }
 
 .quadrant-name {
-  font-family: 'Cafe24Ssurround', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'Cafe24Ssurround', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 16px;
   font-weight: 700;
   color: #8B6F47;
@@ -2793,14 +2796,14 @@ body,
 }
 
 .quadrant-desc {
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 13px;
   color: #666;
   margin-bottom: 8px;
 }
 
 .quadrant-emotions {
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 12px;
   color: #999;
 }
@@ -2828,7 +2831,7 @@ body,
 }
 
 .step-number {
-  font-family: 'Cafe24Ssurround', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'Cafe24Ssurround', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   flex-shrink: 0;
   width: 32px;
   height: 32px;
@@ -2847,7 +2850,7 @@ body,
 }
 
 .step-title {
-  font-family: 'Cafe24Ssurround', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'Cafe24Ssurround', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 15px;
   color: #8B6F47;
   font-weight: 700;
@@ -2855,14 +2858,14 @@ body,
 }
 
 .step-desc {
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 14px;
   color: #666;
 }
 
 /* 하단 메시지 */
 .footer-message {
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 14px;
   color: #8B6F47;
   text-align: center;
@@ -2879,7 +2882,7 @@ body,
 }
 
 .benefit-item {
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 14px;
   color: #5D4E37;
   line-height: 1.6;
@@ -2898,7 +2901,7 @@ body,
 }
 
 .important-message {
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 14px;
   color: #8B6F47;
   line-height: 1.7;
@@ -2914,7 +2917,7 @@ body,
 /* 도입부 섹션 (section-intro 클래스로 스타일 적용됨) */
 
 .intro-text {
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 15px;
   color: #5D4E37;
   line-height: 1.8;
@@ -2926,7 +2929,7 @@ body,
 }
 
 .intro-highlight {
-  font-family: 'Cafe24Ssurround', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'Cafe24Ssurround', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 15px;
   color: #8B6F47;
   font-weight: 700;
@@ -2939,7 +2942,7 @@ body,
 
 /* 공통 확인 버튼 (무드미터 가이드용) */
 .confirm-btn {
-  font-family: 'Cafe24Ssurround', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'Cafe24Ssurround', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   padding: 14px 36px;
   background: linear-gradient(135deg, #8B6F47 0%, #6D4C41 100%);
   color: white;
@@ -3266,7 +3269,7 @@ body,
 }
 
 .alert-message {
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 22px;
   color: #5D4E37;
   margin-bottom: 30px;
@@ -3285,7 +3288,7 @@ body,
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
 }
 
 .alert-button:hover {
@@ -3327,7 +3330,7 @@ body,
 
 .image-preview-header h3 {
   margin: 0;
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   color: #5D4E37;
 }
 
@@ -3368,7 +3371,7 @@ body,
   font-size: 14px;
   font-weight: 500;
   color: #5D4E37;
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
 }
 
 .option-label input[type="checkbox"] {
@@ -3413,7 +3416,7 @@ body,
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   width: 100%;
 }
 
@@ -3534,7 +3537,7 @@ body,
 }
 
 .loading-text {
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 24px;
   color: #5D4E37;
   font-weight: bold;
@@ -3627,7 +3630,7 @@ body,
   font-size: 14px;
   font-weight: 600;
   color: #A68B6A;
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   margin-top: 4px;
 }
 
@@ -3641,7 +3644,7 @@ body,
   gap: 6px;
   cursor: pointer;
   transition: all 0.3s ease;
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 13px;
   font-weight: 600;
   color: #8B7355;
@@ -3673,7 +3676,7 @@ body,
 }
 
 .filter-label-text {
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 14px;
   font-weight: 600;
   color: #8B7355;
@@ -3925,7 +3928,7 @@ body,
 }
 
 .card-flower-name {
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 13px;
   font-weight: bold;
   color: #5D4E37;
@@ -3933,7 +3936,7 @@ body,
 }
 
 .card-emotion-name {
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 11px;
   color: #8B7355;
 }
@@ -4039,7 +4042,7 @@ body,
 }
 
 .detail-title {
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 28px;
   font-weight: bold;
   color: #5D4E37;
@@ -4054,7 +4057,7 @@ body,
 }
 
 .detail-subtitle {
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 16px;
   color: #8B7355;
 }
@@ -4117,14 +4120,14 @@ body,
 }
 
 .detail-label {
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 14px;
   font-weight: 700;
   color: #8B6F47;
 }
 
 .detail-value {
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 16px;
   color: #5D4E37;
   padding: 8px 10px;
@@ -4193,7 +4196,7 @@ body,
   border: 2px dashed #FFC107;
   border-radius: 12px;
   text-align: center;
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 14px;
   color: #F57C00;
   font-weight: bold;
@@ -4550,7 +4553,7 @@ body,
 
 /* 사이드바 "메뉴" 텍스트 - 넓은 화면에서만 표시 */
 .sidebar-menu-text {
-  font-family: 'Cafe24Ssurround', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'Cafe24Ssurround', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   color: #8B6F47;
   margin: 0;
 }
@@ -4625,7 +4628,7 @@ body,
     align-items: center;
     justify-content: flex-start;
     gap: 12px; /* 요소 간 간격 */
-    font-family: 'Cafe24Ssurround', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+    font-family: 'Cafe24Ssurround', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
     font-size: 26px;
     font-weight: 900;
     color: #FFFEF7;
@@ -4740,13 +4743,13 @@ body,
 }
 
 .footer-text {
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   color: #A68B6A;
 }
 
 /* 메뉴 아이템 스타일 */
 .menu-item {
-  font-family: 'Cafe24Ssurround', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'Cafe24Ssurround', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   border-radius: 12px;
   background-color: transparent;
   border: none;
@@ -4794,7 +4797,7 @@ body,
 }
 
 .badge-text {
-  font-family: 'Cafe24Ssurround', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'Cafe24Ssurround', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 0.7rem;
   background: #8B6F47;
   color: white;
@@ -4839,7 +4842,7 @@ body,
 }
 
 .filter-btn {
-  font-family: 'Cafe24Ssurround', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'Cafe24Ssurround', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   padding: 8px 16px;
   background: #F9F6F0;
   border: 2px solid #E8CD8E;
@@ -4917,7 +4920,7 @@ body,
   font-weight: 700;
   padding: 2px 6px;
   border-radius: 8px;
-  font-family: 'Cafe24Ssurround', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'Cafe24Ssurround', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
 }
 
 .letter-info {
@@ -4934,7 +4937,7 @@ body,
 }
 
 .letter-title {
-  font-family: 'Cafe24Ssurround', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'Cafe24Ssurround', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 16px;
   font-weight: 700;
   color: #8B6F47;
@@ -4942,14 +4945,14 @@ body,
 }
 
 .letter-date {
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 13px;
   color: #A68B6A;
   flex-shrink: 0;
 }
 
 .letter-preview {
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 14px;
   color: #5D4E37;
   line-height: 1.6;
@@ -4970,7 +4973,7 @@ body,
 
 .letter-period,
 .letter-emotion-count {
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
 }
 
 /* 빈 상태 */
@@ -4985,7 +4988,7 @@ body,
 }
 
 .empty-message {
-  font-family: 'Cafe24Ssurround', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'Cafe24Ssurround', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 18px;
   color: #8B6F47;
   margin: 0 0 10px 0;
@@ -4993,7 +4996,7 @@ body,
 }
 
 .empty-sub {
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 14px;
   color: #A68B6A;
   margin: 0;
@@ -5002,7 +5005,7 @@ body,
 
 /* 레터 상세 */
 .letter-detail-content {
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
 }
 
 .letter-section {
@@ -5016,7 +5019,7 @@ body,
 }
 
 .section-title {
-  font-family: 'Cafe24Ssurround', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'Cafe24Ssurround', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 18px;
   font-weight: 700;
   color: #8B6F47;
@@ -5131,14 +5134,14 @@ body,
 }
 
 .flower-of-week-title {
-  font-family: 'Cafe24Ssurround', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'Cafe24Ssurround', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 14px;
   color: #A68B6A;
   margin-bottom: 8px;
 }
 
 .flower-of-week-name {
-  font-family: 'Cafe24Ssurround', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'Cafe24Ssurround', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 24px;
   font-weight: 700;
   color: #8B6F47;
@@ -5146,14 +5149,14 @@ body,
 }
 
 .flower-of-week-emotion {
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 16px;
   color: #5D4E37;
   margin-bottom: 8px;
 }
 
 .flower-of-week-meaning {
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 14px;
   color: #8B7355;
   font-style: italic;
@@ -5187,14 +5190,14 @@ body,
 }
 
 .stat-label {
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 13px;
   color: #A68B6A;
   margin-bottom: 6px;
 }
 
 .stat-value {
-  font-family: 'Cafe24Ssurround', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'Cafe24Ssurround', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 18px;
   font-weight: 700;
   color: #8B6F47;
@@ -5230,7 +5233,7 @@ body,
 }
 
 .score-level {
-  font-family: 'Cafe24Ssurround', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'Cafe24Ssurround', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 20px;
   font-weight: 700;
   color: #2E7D32;
@@ -5238,13 +5241,13 @@ body,
 }
 
 .score-point {
-  font-family: 'Cafe24Ssurround', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'Cafe24Ssurround', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 16px;
   color: #388E3C;
 }
 
 .score-description {
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 15px;
   color: #1B5E20;
   line-height: 1.8;
@@ -5280,14 +5283,14 @@ body,
 }
 
 .day-date {
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 12px;
   color: #A68B6A;
   font-weight: 600;
 }
 
 .day-name {
-  font-family: 'Cafe24Ssurround', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'Cafe24Ssurround', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 14px;
   color: #8B6F47;
   font-weight: 700;
@@ -5312,7 +5315,7 @@ body,
 }
 
 .day-emotion {
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 11px;
   color: #5D4E37;
   text-align: center;
@@ -5359,7 +5362,7 @@ body,
   padding: 10px 14px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
   text-align: center;
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   min-width: 140px;
   position: relative;
 }
@@ -5441,7 +5444,7 @@ body,
 }
 
 .letter-content {
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 16px;
   color: #5D4E37;
   line-height: 2;
@@ -5461,7 +5464,7 @@ body,
 }
 
 .signature-text {
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 15px;
   color: #8B6F47;
   margin: 0 0 5px 0;
@@ -5470,7 +5473,7 @@ body,
 }
 
 .signature-date {
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 13px;
   color: #A68B6A;
   margin: 0;
@@ -5665,7 +5668,7 @@ body,
 }
 
 .service-title {
-  font-family: 'Cafe24Ssurround', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'Cafe24Ssurround', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 44px;
   font-weight: 900;
   color: #FFFEF7;
@@ -5733,7 +5736,7 @@ body,
 }
 
 .service-subtitle {
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 16px;
   font-weight: 500;
   color: #8B7355;
@@ -5751,7 +5754,7 @@ body,
 }
 
 .intro-text {
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 18px;
   line-height: 1.8;
   color: #5D4E37;
@@ -5772,7 +5775,7 @@ body,
   background: linear-gradient(135deg, #FFE9AE 0%, #FFD88A 100%);
   border: 3px solid #E8CD8E;
   border-radius: 16px;
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 18px;
   font-weight: bold;
   color: #5D4E37;
@@ -5810,7 +5813,7 @@ body,
   background: rgba(255, 255, 255, 0.5);
   border: 2px solid #E8CD8E;
   border-radius: 14px;
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 16px;
   font-weight: 600;
   color: #8B7355;
@@ -5831,7 +5834,7 @@ body,
 }
 
 .footer-text {
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 14px;
   color: #A68B6A;
 }
@@ -5854,7 +5857,7 @@ body,
 }
 
 .login-modal-title {
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 28px;
   font-weight: bold;
   color: #5D4E37;
@@ -5862,7 +5865,7 @@ body,
 }
 
 .login-modal-subtitle {
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 14px;
   color: #8B7355;
   font-weight: 500;
@@ -5878,7 +5881,7 @@ body,
 
 .form-label {
   display: block;
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 15px;
   font-weight: 600;
   color: #5D4E37;
@@ -5888,7 +5891,7 @@ body,
 .form-input {
   width: 100%;
   padding: 14px 16px;
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 15px;
   color: #5D4E37;
   background: rgba(255, 255, 255, 0.9);
@@ -5914,7 +5917,7 @@ body,
   background: rgba(255, 107, 107, 0.1);
   border: 2px solid #FF6B6B;
   border-radius: 12px;
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 14px;
   color: #C62828;
   text-align: center;
@@ -5927,7 +5930,7 @@ body,
   background: #8B6F47;
   border: none;
   border-radius: 14px;
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 17px;
   font-weight: bold;
   color: white;
@@ -5958,7 +5961,7 @@ body,
   background: rgba(255, 255, 255, 0.5);
   border: 2px solid #E8CD8E;
   border-radius: 14px;
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 15px;
   font-weight: 600;
   color: #8B7355;
@@ -6025,7 +6028,7 @@ body,
 }
 
 .feature-title {
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 20px;
   font-weight: bold;
   color: #5D4E37;
@@ -6033,7 +6036,7 @@ body,
 }
 
 .feature-desc {
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 14px;
   line-height: 1.6;
   color: #8B7355;
@@ -6048,7 +6051,7 @@ body,
 }
 
 .footer-message {
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 16px;
   line-height: 1.8;
   color: #5D4E37;
@@ -6241,7 +6244,7 @@ body,
   color: white;
   border: none;
   border-radius: 10px;
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;
@@ -6298,7 +6301,7 @@ body,
   display: flex;
   align-items: center;
   gap: 8px;
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 15px;
   color: #2D3748;
 }
@@ -6319,7 +6322,7 @@ body,
   padding: 12px 16px;
   background: #FFF9E6;
   border-radius: 12px;
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 14px;
   color: #2D3748;
   border: 1px solid #E8CD8E;
@@ -6446,14 +6449,14 @@ body,
 }
 
 .emotion-control-subtitle {
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 14px;
   color: #8B7355;
   margin-top: 8px;
 }
 
 .emotion-control-notice {
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 13px;
   color: #8B6F47;
   margin-top: 12px;
@@ -6485,7 +6488,7 @@ body,
   align-items: center;
   gap: 8px;
   margin-bottom: 16px;
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
 }
 
 .area-icon {
@@ -6609,7 +6612,7 @@ body,
 }
 
 .activity-name {
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 16px;
   font-weight: 700;
   color: #2D3748;
@@ -6654,7 +6657,7 @@ body,
   border: 1px solid #E8CD8E;
   border-radius: 12px;
   text-align: center;
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   color: #8B7355;
   font-size: 14px;
 }
@@ -6669,7 +6672,7 @@ body,
 .emotion-control-footer .save-btn {
   padding: 12px 24px;
   border-radius: 12px;
-  font-family: 'LeeSeoyun', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'LeeSeoyun', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;
