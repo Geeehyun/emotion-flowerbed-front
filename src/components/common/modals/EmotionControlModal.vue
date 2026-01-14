@@ -32,7 +32,7 @@
                 class="activity-card red"
               >
                 <div class="activity-icon">
-                  <img v-if="activity.iconImage" :src="activity.iconImage" :alt="activity.name" class="select-none" loading="lazy" />
+                  <img v-if="activity.iconImage" :src="activity.iconImage" :alt="activity.name" class="select-none" loading="lazy" draggable="false" />
                   <span v-else>{{ activity.icon }}</span>
                 </div>
                 <div class="activity-name">{{ activity.name }}</div>
@@ -55,7 +55,7 @@
                 class="activity-card yellow"
               >
                 <div class="activity-icon">
-                  <img v-if="activity.iconImage" :src="activity.iconImage" :alt="activity.name" class="select-none" loading="lazy" />
+                  <img v-if="activity.iconImage" :src="activity.iconImage" :alt="activity.name" class="select-none" loading="lazy" draggable="false" />
                   <span v-else>{{ activity.icon }}</span>
                 </div>
                 <div class="activity-name">{{ activity.name }}</div>
@@ -78,7 +78,7 @@
                 class="activity-card blue"
               >
                 <div class="activity-icon">
-                  <img v-if="activity.iconImage" :src="activity.iconImage" :alt="activity.name" class="select-none" loading="lazy" />
+                  <img v-if="activity.iconImage" :src="activity.iconImage" :alt="activity.name" class="select-none" loading="lazy" draggable="false" />
                   <span v-else>{{ activity.icon }}</span>
                 </div>
                 <div class="activity-name">{{ activity.name }}</div>
@@ -101,7 +101,7 @@
                 class="activity-card green"
               >
                 <div class="activity-icon">
-                  <img v-if="activity.iconImage" :src="activity.iconImage" :alt="activity.name" class="select-none" loading="lazy" />
+                  <img v-if="activity.iconImage" :src="activity.iconImage" :alt="activity.name" class="select-none" loading="lazy" draggable="false" />
                   <span v-else>{{ activity.icon }}</span>
                 </div>
                 <div class="activity-name">{{ activity.name }}</div>
