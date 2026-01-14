@@ -66,12 +66,21 @@
               </div>
               <!-- 빈 칸 -->
               <div class="grid-cell" v-else :data-day="day">
-                <div class="empty-slot" @click="startPlanting(day)">
+                <div
+                  class="empty-slot"
+                  :class="{ 'future-date': isFutureDate(day) }"
+                  @click="!isFutureDate(day) && startPlanting(day)"
+                >
                   {{ day }}
                   <!-- 날짜 툴팁 -->
                   <div class="date-tooltip">
                     <div class="date-tooltip-card">
-                      {{ currentMonth }}월 {{ day }}일
+                      <template v-if="isFutureDate(day)">
+                        오늘까지의 일기만 작성할 수 있어요
+                      </template>
+                      <template v-else>
+                        {{ currentMonth }}월 {{ day }}일
+                      </template>
                     </div>
                   </div>
                 </div>
@@ -532,6 +541,17 @@ const emptyDaysAfterLast = computed(() => {
 const emptySlotCount = computed(() => {
   return GARDEN_GRID_SIZE - daysInCurrentMonth.value
 })
+
+// 미래 날짜인지 확인
+const isFutureDate = (day) => {
+  const today = new Date()
+  today.setHours(0, 0, 0, 0) // 시간을 0으로 설정하여 날짜만 비교
+
+  const targetDate = new Date(currentYear.value, currentMonth.value - 1, day)
+  targetDate.setHours(0, 0, 0, 0)
+
+  return targetDate > today
+}
 
 // 월별 일기 목록 로드
 const loadMonthlyDiaries = async () => {
