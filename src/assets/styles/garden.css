@@ -16,6 +16,7 @@
        url('../fonts/Cafe24Ssurround-v2.0.woff') format('woff');
   font-weight: normal;
   font-display: swap;
+  unicode-range: U+AC00-D7A3; /* 기본 한글 음절 (가-힣) */
 }
 
 @font-face {
@@ -23,6 +24,7 @@
   src: url('../fonts/LeeSeoyun.woff') format('woff');
   font-weight: normal;
   font-display: swap;
+  unicode-range: U+AC00-D7A3; /* 기본 한글 음절 (가-힣) */
 }
 
 /* CSS 변수로 폰트 스택 정의 */
