@@ -1,21 +1,9 @@
 <template>
   <div class="teacher-letter-detail-view" :class="{ 'is-modal': isModal }">
-    <!-- 섹션 네비게이션 -->
-    <nav v-if="letter?.isAnalyzed" class="teacher-letter-nav">
-      <div class="teacher-letter-nav-inner">
-        <div
-          v-for="section in availableSections"
-          :key="section.id"
-          @click="scrollToSection(section.id)"
-          :class="['teacher-nav-item', { active: activeSection === section.id }]"
-        >
-          {{ section.label }}
-        </div>
-      </div>
-    </nav>
-
-    <!-- 헤더 (모달이 아닐 때만 표시) -->
-    <div v-if="!isModal" class="teacher-letter-header">
+    <!-- 콘텐츠 영역 (스크롤 가능) -->
+    <div class="teacher-letter-content-wrapper">
+      <!-- 헤더 (모달이 아닐 때만 표시) -->
+      <div v-if="!isModal" class="teacher-letter-header">
       <button @click="$emit('back')" class="teacher-back-btn">
         ← 목록으로
       </button>
@@ -234,6 +222,40 @@
         </div>
       </div>
     </div>
+    </div> <!-- teacher-letter-content-wrapper 끝 -->
+
+    <!-- 섹션 네비게이션 -->
+    <nav v-if="letter?.isAnalyzed" class="teacher-letter-nav" :class="{ expanded: isNavExpanded }">
+      <!-- 토글 버튼 (모바일에서만 표시) -->
+      <button class="teacher-nav-toggle" @click="toggleNav">
+        <span>목차</span>
+        <span class="teacher-nav-toggle-icon">{{ isNavExpanded ? '▲' : '▼' }}</span>
+      </button>
+
+      <div class="teacher-letter-nav-inner">
+        <!-- 학생 내용 섹션 -->
+        <div class="teacher-nav-section-label">학생 내용</div>
+        <div
+          v-for="section in studentSections"
+          :key="section.id"
+          @click="scrollToSection(section.id)"
+          :class="['teacher-nav-item', { active: activeSection === section.id }]"
+        >
+          {{ section.label }}
+        </div>
+
+        <!-- 선생님 전용 섹션 -->
+        <div class="teacher-nav-section-label teacher-exclusive-label">선생님 전용</div>
+        <div
+          v-for="section in teacherSections"
+          :key="section.id"
+          @click="scrollToSection(section.id)"
+          :class="['teacher-nav-item', { active: activeSection === section.id }]"
+        >
+          {{ section.label }}
+        </div>
+      </div>
+    </nav>
   </div>
 </template>
 
@@ -261,6 +283,7 @@ const emit = defineEmits(['back'])
 const chartCanvas = ref(null)
 let chartInstance = null
 const activeSection = ref('section-flowers')
+const isNavExpanded = ref(false)
 
 // 화분 이미지 가져오기
 const getFlowerPotImage = (flowerKey) => {
@@ -317,8 +340,8 @@ watch(() => props.letter, () => {
   }
 }, { deep: true, immediate: true })
 
-// 사용 가능한 섹션 목록
-const availableSections = computed(() => {
+// 학생 내용 섹션 목록
+const studentSections = computed(() => {
   if (!props.letter?.isAnalyzed) return []
 
   const sections = [
@@ -340,7 +363,17 @@ const availableSections = computed(() => {
   }
 
   sections.push({ id: 'section-letter', label: '정원사 편지' })
-  sections.push({ id: 'section-analysis', label: '주간 분석' })
+
+  return sections
+})
+
+// 선생님 전용 섹션 목록
+const teacherSections = computed(() => {
+  if (!props.letter?.isAnalyzed) return []
+
+  const sections = [
+    { id: 'section-analysis', label: '주간 분석' }
+  ]
 
   if (props.letter?.teacherTalkTip?.length > 0) {
     sections.push({ id: 'section-talk-tips', label: '말걸기 TIP' })
@@ -349,23 +382,31 @@ const availableSections = computed(() => {
   return sections
 })
 
+// 전체 섹션 목록 (스크롤 감지용)
+const availableSections = computed(() => {
+  return [...studentSections.value, ...teacherSections.value]
+})
+
 // 섹션으로 스크롤
 const scrollToSection = (sectionId) => {
   const element = document.getElementById(sectionId)
   if (!element) return
 
-  // 모달인 경우 모달 body 스크롤
+  // 모달인 경우 콘텐츠 래퍼 스크롤
   if (props.isModal) {
-    const modalBody = document.querySelector('.base-modal-body')
-    if (modalBody) {
-      const modalBodyRect = modalBody.getBoundingClientRect()
+    const contentWrapper = document.querySelector('.teacher-letter-content-wrapper')
+    if (contentWrapper) {
+      // getBoundingClientRect를 사용한 정확한 위치 계산
+      const wrapperRect = contentWrapper.getBoundingClientRect()
       const elementRect = element.getBoundingClientRect()
-      const offsetTop = elementRect.top - modalBodyRect.top + modalBody.scrollTop - 20
+      const scrollTop = contentWrapper.scrollTop
 
-      modalBody.scrollTo({
-        top: offsetTop,
-        behavior: 'smooth'
-      })
+      // 모바일에서는 목차 버튼 높이 고려 (약 50px)
+      const isMobile = window.innerWidth <= 768
+      const offsetAdjustment = isMobile ? 70 : 20
+      const offset = elementRect.top - wrapperRect.top + scrollTop - offsetAdjustment
+
+      contentWrapper.scrollTop = offset
     }
   } else {
     // 일반 페이지인 경우 window 스크롤
@@ -375,6 +416,16 @@ const scrollToSection = (sectionId) => {
       behavior: 'smooth'
     })
   }
+
+  // 모바일에서 네비게이션 자동으로 닫기
+  if (window.innerWidth <= 768) {
+    isNavExpanded.value = false
+  }
+}
+
+// 네비게이션 토글
+const toggleNav = () => {
+  isNavExpanded.value = !isNavExpanded.value
 }
 
 // 스크롤 감지하여 현재 섹션 업데이트
@@ -394,11 +445,16 @@ const handleScroll = (event) => {
     if (element) {
       let elementTop
       if (props.isModal) {
-        const modalBody = document.querySelector('.base-modal-body')
-        if (modalBody) {
-          const modalBodyRect = modalBody.getBoundingClientRect()
-          const elementRect = element.getBoundingClientRect()
-          elementTop = elementRect.top - modalBodyRect.top + modalBody.scrollTop
+        const contentWrapper = document.querySelector('.teacher-letter-content-wrapper')
+        if (contentWrapper) {
+          // contentWrapper 기준으로 offsetTop 계산
+          let offset = 0
+          let current = element
+          while (current && current !== contentWrapper) {
+            offset += current.offsetTop
+            current = current.offsetParent
+          }
+          elementTop = offset
         }
       } else {
         elementTop = element.offsetTop
@@ -413,12 +469,12 @@ const handleScroll = (event) => {
 }
 
 onMounted(() => {
-  // 모달인 경우 모달 body에 이벤트 리스너 추가
+  // 모달인 경우 콘텐츠 래퍼에 이벤트 리스너 추가
   if (props.isModal) {
     setTimeout(() => {
-      const modalBody = document.querySelector('.base-modal-body')
-      if (modalBody) {
-        modalBody.addEventListener('scroll', handleScroll)
+      const contentWrapper = document.querySelector('.teacher-letter-content-wrapper')
+      if (contentWrapper) {
+        contentWrapper.addEventListener('scroll', handleScroll)
       }
     }, 100)
   } else {
@@ -428,9 +484,9 @@ onMounted(() => {
 
 onUnmounted(() => {
   if (props.isModal) {
-    const modalBody = document.querySelector('.base-modal-body')
-    if (modalBody) {
-      modalBody.removeEventListener('scroll', handleScroll)
+    const contentWrapper = document.querySelector('.teacher-letter-content-wrapper')
+    if (contentWrapper) {
+      contentWrapper.removeEventListener('scroll', handleScroll)
     }
   } else {
     window.removeEventListener('scroll', handleScroll)

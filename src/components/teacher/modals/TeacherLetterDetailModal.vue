@@ -1,7 +1,7 @@
 <template>
-  <BaseModal
+  <BaseTeacherModal
     v-model="isOpen"
-    max-width="900px"
+    max-width="1200px"
     @close="handleClose"
   >
     <template #header>
@@ -20,12 +20,12 @@
         :is-modal="true"
       />
     </template>
-  </BaseModal>
+  </BaseTeacherModal>
 </template>
 
 <script setup>
 import { computed } from 'vue'
-import BaseModal from '@/components/common/modals/BaseModal.vue'
+import BaseTeacherModal from '@/components/teacher/modals/BaseTeacherModal.vue'
 import TeacherLetterDetailView from '@/components/teacher/views/TeacherLetterDetailView.vue'
 
 const props = defineProps({

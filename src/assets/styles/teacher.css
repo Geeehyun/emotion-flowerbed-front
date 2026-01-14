@@ -1088,33 +1088,35 @@
   justify-content: center;
   padding: 48px 24px;
   text-align: center;
-  background: #F8F3E8;
-  border-radius: 12px;
-  border: 1px solid #D4C4B0;
+  min-height: 200px;
 }
 
-.teacher-attention-empty-icon {
-  width: 64px;
-  height: 64px;
+.teacher-attention-empty-state .teacher-empty-icon {
+  width: 80px;
+  height: 80px;
   background: #F0E8D8;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
 }
 
-.teacher-attention-empty-icon svg {
-  width: 32px;
-  height: 32px;
-  color: #66BB6A;
+.teacher-attention-empty-state .teacher-empty-icon svg {
+  width: 40px;
+  height: 40px;
+  color: #A68B6A;
 }
 
-.teacher-attention-empty-message {
+.teacher-attention-empty-state .teacher-empty-message {
   font-size: 16px;
-  font-weight: 600;
-  color: #8B7355;
-  margin: 0;
+  font-weight: 700;
+  color: #5D4E37;
+}
+
+/* 케어 필요 없음 상태는 초록색 체크 표시 */
+.teacher-no-care-needed .teacher-empty-icon svg {
+  color: #66BB6A;
 }
 
 .teacher-attention-card {
@@ -2498,19 +2500,53 @@
   position: relative;
 }
 
+/* teacher-modal-body의 overflow를 제거하여 sticky가 작동하도록 */
+.teacher-modal-body:has(.teacher-letter-detail-view.is-modal) {
+  overflow: hidden; /* visible 대신 hidden - sticky는 작동하되 높이 제한 유지 */
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 0; /* flex item의 자동 min-height 제거 */
+}
+
+/* 모달일 때 flex 레이아웃 */
+.teacher-letter-detail-view.is-modal {
+  display: flex;
+  gap: 16px;
+  flex: 1 1 0%; /* flex-basis를 0으로 설정 */
+  min-height: 0; /* flex item의 자동 min-height 제거 */
+  max-height: 100%; /* 부모 높이를 초과하지 않도록 */
+  align-items: stretch; /* flex-start 대신 stretch */
+  padding: 24px;
+}
+
+/* 콘텐츠 래퍼 (스크롤 가능) */
+.teacher-letter-content-wrapper {
+  flex: 1 1 0%; /* flex-basis를 0으로 설정 */
+  min-width: 0;
+  min-height: 0; /* flex item의 자동 min-height 제거 */
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative; /* offsetTop 계산을 위한 기준점 */
+}
+
 /* 섹션 네비게이션 */
 .teacher-letter-nav {
-  position: absolute;
-  top: 20px;
-  right: 20px;
   width: 180px;
   background: #FFFFFF;
   border-radius: 12px;
   border: 1px solid #D4C4B0;
   box-shadow: 0 4px 12px rgba(93, 78, 55, 0.1);
-  padding: 16px 12px;
-  z-index: 100;
-  max-height: calc(100vh - 200px);
+  padding: 12px 8px;
+  flex-shrink: 0;
+}
+
+/* 모달에서는 sticky로 상단 고정 */
+.teacher-letter-detail-view.is-modal .teacher-letter-nav {
+  position: sticky;
+  top: 0;
+  align-self: flex-start;
+  max-height: 100vh;
   overflow-y: auto;
 }
 
@@ -2525,17 +2561,38 @@
 .teacher-letter-nav-inner {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 2px;
+}
+
+.teacher-nav-section-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: #8B7355;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 8px 8px 4px 8px;
+  margin-top: 4px;
+}
+
+.teacher-nav-section-label:first-child {
+  margin-top: 0;
+}
+
+.teacher-nav-section-label.teacher-exclusive-label {
+  color: #C4915C;
+  border-top: 1px solid #EDE3D0;
+  padding-top: 12px;
+  margin-top: 8px;
 }
 
 .teacher-nav-item {
-  padding: 10px 12px;
-  font-size: 13px;
+  padding: 8px 10px;
+  font-size: 12px;
   color: #8B7355;
   cursor: pointer;
-  border-radius: 8px;
+  border-radius: 6px;
   transition: all 0.2s;
-  border-left: 3px solid transparent;
+  border-left: 2px solid transparent;
 }
 
 .teacher-nav-item:hover {
@@ -2548,6 +2605,88 @@
   color: #C4915C;
   font-weight: 600;
   border-left-color: #C4915C;
+}
+
+/* 네비게이션 토글 버튼 (기본적으로 숨김) */
+.teacher-nav-toggle {
+  display: none;
+  width: 100%;
+  padding: 10px 12px;
+  background: #F8F3E8;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #5D4E37;
+  cursor: pointer;
+  align-items: center;
+  justify-content: space-between;
+  transition: background 0.2s;
+  margin-bottom: 8px;
+}
+
+.teacher-nav-toggle:hover {
+  background: #EDE3D0;
+}
+
+.teacher-nav-toggle-icon {
+  font-size: 11px;
+  margin-left: 8px;
+}
+
+/* 모바일 대응 (768px 이하) */
+@media (max-width: 768px) {
+  /* teacher-modal-body 패딩 유지 */
+  .teacher-modal-body:has(.teacher-letter-detail-view.is-modal) {
+    padding: 0 !important;
+  }
+
+  /* 모달일 때 세로 배치 */
+  .teacher-letter-detail-view.is-modal {
+    flex-direction: column;
+    gap: 0;
+    /* height: auto 제거 - flex가 제대로 작동하도록 */
+  }
+
+  /* 콘텐츠 래퍼는 스크롤 유지 */
+  .teacher-letter-content-wrapper {
+    /* overflow-y: visible 제거 - 스크롤이 작동하도록 */
+  }
+
+  /* 네비게이션을 전체 너비로, 상단에 배치 */
+  .teacher-letter-detail-view.is-modal .teacher-letter-nav {
+    position: static !important;
+    width: 100% !important;
+    order: -1 !important; /* 콘텐츠보다 먼저 표시 */
+    margin-bottom: 16px !important;
+    max-height: none !important;
+    flex-shrink: 0 !important; /* 네비게이션 높이 유지 */
+    display: block !important; /* 네비게이션 표시 */
+  }
+
+  /* 토글 버튼 표시 */
+  .teacher-nav-toggle {
+    display: flex !important;
+  }
+
+  /* 기본적으로 내용 숨김 */
+  .teacher-letter-nav-inner {
+    display: none !important;
+    margin-top: 8px;
+  }
+
+  /* expanded 클래스가 있을 때만 내용 표시 */
+  .teacher-letter-nav.expanded .teacher-letter-nav-inner {
+    display: flex !important;
+  }
+
+  /* 일반 페이지에서도 동일하게 적용 */
+  .teacher-letter-detail-view:not(.is-modal) .teacher-letter-nav {
+    position: static !important;
+    width: 100% !important;
+    margin-bottom: 16px !important;
+    max-height: none !important;
+  }
 }
 
 /* 헤더 */
@@ -4209,6 +4348,297 @@
 .teacher-skeleton-line.skeleton-emotion {
   width: 60%;
   height: 14px;
+}
+
+.teacher-skeleton-line.skeleton-reason {
+  width: 80%;
+  height: 14px;
+  margin-top: 8px;
+}
+
+.teacher-skeleton-line.skeleton-meta {
+  width: 50%;
+  height: 12px;
+  margin-top: 8px;
+}
+
+/* 집중 케어 스켈레톤 */
+.teacher-attention-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px 0;
+}
+
+.teacher-skeleton-attention-card {
+  position: relative;
+  background: #F8F3E8;
+  border-radius: 12px;
+  padding: 16px;
+  overflow: hidden;
+  min-height: 100px;
+}
+
+/* 이달의 학급화단 스켈레톤 */
+.teacher-classmap-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.teacher-skeleton-summary {
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.teacher-skeleton-summary-card {
+  background: #FFFFFF;
+  border-radius: 12px;
+  padding: 24px;
+  border: 1px solid #D4C4B0;
+  width: 100%;
+  max-width: 100%;
+}
+
+.teacher-skeleton-line.skeleton-summary-title {
+  width: 150px;
+  height: 20px;
+  margin-bottom: 16px;
+}
+
+.teacher-skeleton-summary-items {
+  display: flex;
+  gap: 32px;
+}
+
+.teacher-skeleton-summary-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.teacher-skeleton-line.skeleton-label {
+  width: 100px;
+  height: 14px;
+}
+
+.teacher-skeleton-line.skeleton-value {
+  width: 60px;
+  height: 24px;
+}
+
+/* 그래프형 스켈레톤 */
+.teacher-skeleton-chart-view {
+  background: #FFFFFF;
+  border-radius: 12px;
+  padding: 24px;
+  border: 1px solid #D4C4B0;
+  width: 100%;
+  overflow: hidden;
+}
+
+.teacher-skeleton-chart-container {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  height: 400px;
+  background: #F8F3E8;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* 달력형 스켈레톤 */
+.teacher-skeleton-calendar-view {
+  background: #FFFFFF;
+  border-radius: 12px;
+  padding: 24px;
+  border: 1px solid #D4C4B0;
+  width: 100%;
+  overflow: hidden;
+}
+
+.teacher-skeleton-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  width: 100%;
+}
+
+.teacher-skeleton-weekday {
+  height: 30px;
+  background: #F0E8D8;
+  border-radius: 4px;
+  min-width: 0;
+}
+
+.teacher-skeleton-calendar-day {
+  aspect-ratio: 1;
+  background: #F8F3E8;
+  border-radius: 8px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+  min-height: 0;
+}
+
+.teacher-skeleton-day-number {
+  width: 30px;
+  max-width: 100%;
+  height: 16px;
+  background: #E8DFD0;
+  border-radius: 4px;
+}
+
+.teacher-skeleton-day-bar {
+  flex: 1;
+  background: #E8DFD0;
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+  min-height: 20px;
+}
+
+/* 좁은 화면 대응 */
+@media (max-width: 768px) {
+  .teacher-classmap-skeleton {
+    gap: 16px;
+  }
+
+  .teacher-skeleton-summary-card {
+    padding: 16px;
+  }
+
+  .teacher-skeleton-summary-items {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .teacher-skeleton-calendar-view {
+    padding: 16px;
+    overflow-x: auto;
+  }
+
+  .teacher-skeleton-calendar-grid {
+    min-width: 600px;
+    gap: 4px;
+  }
+
+  .teacher-skeleton-calendar-day {
+    padding: 4px;
+    gap: 4px;
+  }
+
+  .teacher-skeleton-day-number {
+    width: 20px;
+    height: 12px;
+  }
+
+  .teacher-skeleton-day-bar {
+    min-height: 12px;
+  }
+
+  .teacher-skeleton-weekday {
+    height: 24px;
+  }
+
+  .teacher-skeleton-chart-container {
+    height: 300px;
+  }
+
+  .teacher-skeleton-keywords-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .teacher-skeleton-keyword-card {
+    padding: 12px;
+  }
+
+  .teacher-skeleton-chart-view,
+  .teacher-skeleton-calendar-view {
+    padding: 12px;
+  }
+}
+
+/* 키워드 스켈레톤 */
+.teacher-skeleton-keywords {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.teacher-skeleton-line.skeleton-keywords-title {
+  width: 200px;
+  height: 20px;
+}
+
+.teacher-skeleton-keywords-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr));
+  gap: 16px;
+  width: 100%;
+}
+
+.teacher-skeleton-keyword-card {
+  background: #F8F3E8;
+  border-radius: 12px;
+  padding: 16px;
+  border: 1px solid #E8DFD0;
+  min-width: 0;
+}
+
+.teacher-skeleton-keyword-header {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.teacher-skeleton-keyword-icon {
+  width: 48px;
+  height: 48px;
+  background: #E8DFD0;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.teacher-skeleton-keyword-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  justify-content: center;
+}
+
+.teacher-skeleton-line.skeleton-keyword-name {
+  width: 80px;
+  height: 16px;
+}
+
+.teacher-skeleton-line.skeleton-keyword-desc {
+  width: 120px;
+  height: 12px;
+}
+
+.teacher-skeleton-keyword-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.teacher-skeleton-tag {
+  width: 60px;
+  height: 28px;
+  background: #E8DFD0;
+  border-radius: 14px;
 }
 
 /* Shimmer 애니메이션 */
@@ -6194,7 +6624,8 @@
    감정레터 네비게이션 반응형
 ============================================ */
 @media (max-width: 1200px) {
-  .teacher-letter-nav {
+  /* 일반 페이지에서만 네비게이션 숨김 (모달은 유지) */
+  .teacher-letter-detail-view:not(.is-modal) .teacher-letter-nav {
     display: none;
   }
 }

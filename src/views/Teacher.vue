@@ -56,10 +56,13 @@
           :riskHistory="riskHistory"
           :isLoadingHistory="isLoadingHistory"
           :isRiskHistoryMobileModalOpen="isRiskHistoryMobileModalOpen"
+          :isLoadingRisk="isLoadingRisk"
+          :riskErrorMessage="riskErrorMessage"
           @date-change="handleDateChange"
           @select-risk-student="selectRiskStudent"
           @detail-analysis="goToStudentDetailAnalysis"
           @resolve-danger="openResolveDangerModal"
+          @retry-risk-students="loadAtRiskStudents"
         />
 
         <!-- 이달의 학급 화단  뷰 -->
@@ -123,6 +126,9 @@
       @resolve="openResolveDangerModal"
       @detail-analysis="goToStudentDetailAnalysis(selectedRiskStudent)"
     />
+
+    <!-- 전역 로딩 오버레이 -->
+    <LoadingOverlay :is-loading="isModalLoading" />
   </div>
 </template>
 
@@ -147,6 +153,7 @@ import ResolveDangerModal from '@/components/teacher/modals/ResolveDangerModal.v
 import RiskHistoryMobileModal from '@/components/teacher/modals/RiskHistoryMobileModal.vue'
 import StudentMonthlyGardenModal from '@/components/teacher/modals/StudentMonthlyGardenModal.vue'
 import TeacherLetterDetailModal from '@/components/teacher/modals/TeacherLetterDetailModal.vue'
+import LoadingOverlay from '@/components/common/LoadingOverlay.vue'
 
 // 선생님 정보 로드
 const getUserInfo = () => {
@@ -528,6 +535,11 @@ const filteredStudents = computed(() => {
 const filteredLetterStudents = computed(() => {
   if (!searchQuery.value) return letterStudents.value
   return letterStudents.value.filter(s => s.name.includes(searchQuery.value))
+})
+
+// 모달 데이터 로딩 중인지 확인
+const isModalLoading = computed(() => {
+  return isLoadingReports.value || isLoadingMonthlyEmotions.value || isLoadingHistory.value
 })
 
 // 메서드

@@ -18,7 +18,10 @@
         :dangerStudents="dangerStudents"
         :attentionStudents="attentionStudents"
         :selectedRiskStudent="selectedRiskStudent"
+        :isLoading="isLoadingRisk"
+        :errorMessage="riskErrorMessage"
         @select-student="emit('select-risk-student', $event)"
+        @retry="emit('retry-risk-students')"
       />
 
       <!-- 위험 히스토리 패널 -->
@@ -87,8 +90,16 @@ const props = defineProps({
   isRiskHistoryMobileModalOpen: {
     type: Boolean,
     default: false
+  },
+  isLoadingRisk: {
+    type: Boolean,
+    default: false
+  },
+  riskErrorMessage: {
+    type: String,
+    default: ''
   }
 })
 
-const emit = defineEmits(['update:selectedDate', 'date-change', 'select-risk-student', 'detail-analysis', 'resolve-danger'])
+const emit = defineEmits(['update:selectedDate', 'date-change', 'select-risk-student', 'detail-analysis', 'resolve-danger', 'retry-risk-students'])
 </script>

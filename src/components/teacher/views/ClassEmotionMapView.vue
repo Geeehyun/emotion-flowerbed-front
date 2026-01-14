@@ -102,10 +102,7 @@
     </div>
 
     <!-- 로딩 상태 -->
-    <div v-if="isLoading" class="teacher-loading-container">
-      <div class="teacher-loading-spinner"></div>
-      <p class="teacher-loading-text">데이터를 불러오는 중...</p>
-    </div>
+    <ClassEmotionMapSkeleton v-if="isLoading" :viewType="currentViewType" />
 
     <!-- 에러 상태 -->
     <div v-else-if="errorMessage" class="teacher-error-container">
@@ -318,6 +315,7 @@
 import { ref, computed, onMounted, watch, nextTick } from 'vue'
 import { Chart, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler } from 'chart.js/auto'
 import { getClassMonthlyEmotionDistribution } from '@/services/teacherApi.js'
+import ClassEmotionMapSkeleton from './ClassEmotionMapSkeleton.vue'
 
 // Chart.js 등록
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler)
