@@ -797,7 +797,8 @@ const saveDiary = async (isTest = true, area = null) => {
   } catch (error) {
     console.error('일기 저장 에러:', error)
     showLoading.value = false
-    showCustomAlert(`일기 저장에 실패했습니다.\n${error.message}`, 'error')
+    // 서버에서 반환한 구체적인 에러 메시지 표시
+    showCustomAlert(error.message, 'error')
     currentDay.value = null
     diaryContent.value = ''
   }

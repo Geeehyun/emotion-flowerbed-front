@@ -124,6 +124,27 @@ const handleLogout = () => {
 };
 
 /**
+ * API 에러에서 사용자에게 표시할 메시지 추출
+ * @param {Error} error - axios 에러 객체
+ * @param {string} defaultMessage - 기본 메시지 (서버 메시지가 없을 때)
+ * @returns {string} 사용자에게 표시할 에러 메시지
+ */
+const getErrorMessage = (error, defaultMessage = '처리 중 오류가 발생하였습니다. 지속적으로 발생 시 관리자에게 문의해주세요.') => {
+  // 서버 응답에 message가 있으면 사용
+  if (error.response?.data?.message) {
+    return error.response.data.message;
+  }
+
+  // 네트워크 에러 (서버 응답 없음)
+  if (error.request && !error.response) {
+    return '네트워크 연결을 확인해주세요.';
+  }
+
+  // 그 외의 경우 기본 메시지
+  return defaultMessage;
+};
+
+/**
  * 일기 감정 분석 요청 (테스트용 - 랜덤)
  * @param {number} diaryId - 일기 ID
  * @returns {Promise} - 감정 분석 결과
@@ -136,14 +157,15 @@ export async function analyzeDiaryTest(diaryId, area = null) {
     const response = await apiClient.post(url);
     return response.data;
   } catch (error) {
-    if (error.response?.status === 400) {
-      throw new Error('일기 내용이 너무 길거나 잘못되었습니다.');
-    } else if (error.response?.status === 429) {
-      throw new Error('너무 많은 요청을 보냈습니다. 잠시 후 다시 시도해주세요.');
-    } else if (error.response?.status === 500) {
-      throw new Error('감정 분석에 실패했습니다. 다시 시도해주세요.');
-    }
-    throw new Error('일기 분석 중 문제가 발생했습니다.');
+    // 서버 에러 메시지 또는 기본 메시지 사용
+    const errorMessage = getErrorMessage(error);
+    console.error('일기 분석(테스트) 에러:', {
+      status: error.response?.status,
+      code: error.response?.data?.code,
+      message: error.response?.data?.message,
+      error
+    });
+    throw new Error(errorMessage);
   }
 }
 
@@ -157,14 +179,15 @@ export async function analyzeDiary(diaryId) {
     const response = await apiClient.post(`/diaries/${diaryId}/analyze`);
     return response.data;
   } catch (error) {
-    if (error.response?.status === 400) {
-      throw new Error('일기 내용이 너무 길거나 잘못되었습니다.');
-    } else if (error.response?.status === 429) {
-      throw new Error('너무 많은 요청을 보냈습니다. 잠시 후 다시 시도해주세요.');
-    } else if (error.response?.status === 500) {
-      throw new Error('감정 분석에 실패했습니다. 다시 시도해주세요.');
-    }
-    throw new Error('일기 분석 중 문제가 발생했습니다.');
+    // 서버 에러 메시지 또는 기본 메시지 사용
+    const errorMessage = getErrorMessage(error);
+    console.error('일기 분석(AI) 에러:', {
+      status: error.response?.status,
+      code: error.response?.data?.code,
+      message: error.response?.data?.message,
+      error
+    });
+    throw new Error(errorMessage);
   }
 }
 
@@ -214,10 +237,15 @@ export async function createDiary(diaryData) {
     const response = await apiClient.post('/diaries', diaryData);
     return response.data;
   } catch (error) {
-    if (error.response?.status === 400) {
-      throw new Error('일기 내용이 올바르지 않습니다.');
-    }
-    throw new Error('일기 작성 중 문제가 발생했습니다.');
+    // 서버 에러 메시지 또는 기본 메시지 사용
+    const errorMessage = getErrorMessage(error);
+    console.error('일기 작성 에러:', {
+      status: error.response?.status,
+      code: error.response?.data?.code,
+      message: error.response?.data?.message,
+      error
+    });
+    throw new Error(errorMessage);
   }
 }
 
@@ -249,10 +277,15 @@ export async function updateDiary(diaryId, diaryData) {
     const response = await apiClient.put(`/diaries/${diaryId}`, diaryData);
     return response.data;
   } catch (error) {
-    if (error.response?.status === 404) {
-      throw new Error('일기를 찾을 수 없습니다.');
-    }
-    throw new Error('일기 수정 중 문제가 발생했습니다.');
+    // 서버 에러 메시지 또는 기본 메시지 사용
+    const errorMessage = getErrorMessage(error);
+    console.error('일기 수정 에러:', {
+      status: error.response?.status,
+      code: error.response?.data?.code,
+      message: error.response?.data?.message,
+      error
+    });
+    throw new Error(errorMessage);
   }
 }
 
@@ -266,10 +299,15 @@ export async function deleteDiary(diaryId) {
     const response = await apiClient.delete(`/diaries/${diaryId}`);
     return response.data;
   } catch (error) {
-    if (error.response?.status === 404) {
-      throw new Error('일기를 찾을 수 없습니다.');
-    }
-    throw new Error('일기 삭제 중 문제가 발생했습니다.');
+    // 서버 에러 메시지 또는 기본 메시지 사용
+    const errorMessage = getErrorMessage(error);
+    console.error('일기 삭제 에러:', {
+      status: error.response?.status,
+      code: error.response?.data?.code,
+      message: error.response?.data?.message,
+      error
+    });
+    throw new Error(errorMessage);
   }
 }
 
