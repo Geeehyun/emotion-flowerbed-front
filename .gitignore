@@ -35,5 +35,8 @@ study/
 # Claude Code settings (personal)
 .claude/settings.local.json
 
+# Claude Code temporary files
+tmpclaude-*-cwd
+
 # Claude Code hooks (keep in Git for security)
 # .claude/hooks/ 폴더는 Git에 포함됩니다
