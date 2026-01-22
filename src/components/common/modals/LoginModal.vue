@@ -14,7 +14,7 @@
     <template #default>
       <form class="login-modal-form" @submit.prevent="handleSubmit">
         <div class="test-login-btn-area">
-          <button type="button" class="test-login-btn" data-id="chunjae1" data-password="1234" @click="handleTestLogin" :disabled="isLoading">
+          <button type="button" class="test-login-btn" data-id="chunjae2" data-password="1234" @click="handleTestLogin" :disabled="isLoading">
             이천재 (학생)
           </button>
           <button type="button" class="test-login-btn" data-id="teacher1" data-password="1234" @click="handleTestLogin" :disabled="isLoading">
