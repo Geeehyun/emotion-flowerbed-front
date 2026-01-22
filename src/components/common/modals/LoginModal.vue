@@ -18,7 +18,7 @@
             이천재 (학생)
           </button>
           <button type="button" class="test-login-btn" data-id="teacher1" data-password="1234" @click="handleTestLogin" :disabled="isLoading">
-            김교육 (선생님)
+            이교육 (선생님)
           </button>
         </div>
         
