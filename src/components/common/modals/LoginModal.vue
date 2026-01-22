@@ -13,6 +13,16 @@
 
     <template #default>
       <form class="login-modal-form" @submit.prevent="handleSubmit">
+        <div class="test-login-btn-area">
+          <button type="button" class="test-login-btn" data-id="chunjae1" data-password="1234" @click="handleTestLogin" :disabled="isLoading">
+            이천재 (학생)
+          </button>
+          <button type="button" class="test-login-btn" data-id="teacher1" data-password="1234" @click="handleTestLogin" :disabled="isLoading">
+            김교육 (선생님)
+          </button>
+        </div>
+        
+
         <div class="form-group">
           <label class="form-label">아이디</label>
           <input
@@ -44,12 +54,6 @@
           <span v-else>로그인 중...</span>
         </button>
 
-        <!-- <button type="button" class="test-login-btn" data-type="STUDENT" @click="handleTestLogin" :disabled="isLoading">
-          테스트 로그인 (student1)
-        </button>
-        <button type="button" class="test-login-btn" data-type="TEACHER" @click="handleTestLogin" :disabled="isLoading">
-          테스트 로그인 (teacher1)
-        </button> -->
       </form>
     </template>
   </BaseModal>
@@ -116,11 +120,12 @@ const handleSubmit = async () => {
 
 const handleTestLogin = (event) => {
   const target = event.target;
-  const type = target.dataset.type;
-  console.log(type);
+  const id = target.dataset.id;
+  const password = target.dataset.password;
+  console.log(id, password);
   // 환경변수에서 테스트 계정 정보 가져오기
-  loginForm.value.userId = import.meta.env[`VITE_TEST_${type}_USER_ID`];
-  loginForm.value.password = import.meta.env[`VITE_TEST_${type}_PASSWORD`];
+  loginForm.value.userId = id;
+  loginForm.value.password = password;
   handleSubmit()
 }
 
