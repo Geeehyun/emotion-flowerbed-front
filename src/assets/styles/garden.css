@@ -393,14 +393,20 @@ body,
 .garden-wrapper {
   position: relative;
   width: 100%;
-  max-width: 100%;
+  max-width: 480px;
+  height: 55vh; /* 화면 높이의 55% 차지 */
+  min-height: 300px;
+  max-height: 500px;
+  margin: 0 auto;
 }
 
+/* 화단 이미지 - 화면 비율에 맞게 채우기 */
 .garden-bg-image {
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: fill; /* 컨테이너에 맞게 늘리기 */
   display: block;
-  border-radius: 12px;
+  border-radius: 16px;
 }
 
 /* 요일 헤더 컨테이너 (화단과 분리, 화단 그리드와 정확히 정렬) */
