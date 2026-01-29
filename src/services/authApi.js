@@ -78,8 +78,47 @@ export async function logout() {
   }
 }
 
+/**
+ * 회원가입
+ * @param {object} userData - { userId, password, name, userTypeCd, schoolCode, schoolNm, classCode }
+ * @returns {Promise} - { userSn, userId, name, userTypeCd }
+ */
+export async function signup(userData) {
+  try {
+    const response = await axios.post(`${API_BASE_URL}/auth/signup`, userData)
+    return response.data
+  } catch (error) {
+    if (error.response?.status === 400) {
+      const code = error.response.data?.code
+      if (code === 'DUPLICATE_USER_ID') {
+        throw new Error('이미 사용 중인 아이디입니다.')
+      }
+      throw new Error(error.response.data?.message || '입력 값을 확인해주세요.')
+    }
+    throw new Error('회원가입에 실패했습니다.')
+  }
+}
+
+/**
+ * 아이디 중복 확인
+ * @param {string} userId - 확인할 아이디
+ * @returns {Promise} - { userId, isDuplicate }
+ */
+export async function checkDuplicate(userId) {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/auth/check-duplicate`, {
+      params: { userId }
+    })
+    return response.data
+  } catch (error) {
+    throw new Error('중복 확인에 실패했습니다.')
+  }
+}
+
 export default {
   login,
   refreshAccessToken,
-  logout
+  logout,
+  signup,
+  checkDuplicate
 }

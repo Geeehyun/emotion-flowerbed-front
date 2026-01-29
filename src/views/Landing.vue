@@ -26,19 +26,22 @@
           <span class="btn-text">로그인하고 시작하기</span>
         </button>
 
-        <button class="about-btn" @click="showAbout = true">
-          <span class="btn-text">나의 감정 화단이란?</span>
+        <button class="signup-btn" @click="showSignup = true">
+          <span class="btn-text">회원가입</span>
         </button>
       </div>
 
-      <!-- 푸터 -->
+      <!-- 소개 링크 -->
       <div class="landing-footer">
-        <p class="footer-text">감정을 꽃으로 피워보세요</p>
+        <span class="about-link" @click="showAbout = true">나의 감정 화단이란?</span>
       </div>
     </div>
 
     <!-- 로그인 모달 -->
     <LoginModal v-model="showLogin" />
+
+    <!-- 회원가입 모달 -->
+    <SignupModal v-model="showSignup" />
 
     <!-- 소개 모달 -->
     <AboutModal v-model="showAbout" />
@@ -48,9 +51,11 @@
 <script setup>
 import { ref } from 'vue'
 import LoginModal from '@/components/common/modals/LoginModal.vue'
+import SignupModal from '@/components/common/modals/SignupModal.vue'
 import AboutModal from '@/components/landing/AboutModal.vue'
 import '@/assets/styles/garden.css'
 
 const showLogin = ref(false)
+const showSignup = ref(false)
 const showAbout = ref(false)
 </script>
