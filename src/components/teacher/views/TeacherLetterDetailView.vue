@@ -46,6 +46,7 @@
                   :alt="day.emotionName"
                   class="teacher-flower-pot-image"
                   loading="lazy"
+                  @error="handleImageError"
                 />
               </div>
             </div>
@@ -59,6 +60,24 @@
             </div>
             <div v-if="day.hasEntry" class="teacher-day-emotion">
               {{ day.emotionName }}
+            </div>
+          </div>
+        </div>
+
+        <!-- 감정 설명 토글 -->
+        <div class="teacher-emotion-toggle-section" v-if="weekEmotionDescriptions.length > 0">
+          <button class="teacher-emotion-toggle-btn" @click="showEmotionDescriptions = !showEmotionDescriptions">
+            <span>감정 설명 보기</span>
+            <span class="teacher-toggle-arrow" :class="{ 'is-open': showEmotionDescriptions }">▼</span>
+          </button>
+          <div class="teacher-emotion-toggle-content" v-if="showEmotionDescriptions">
+            <div
+              v-for="emotion in weekEmotionDescriptions"
+              :key="emotion.name"
+              class="teacher-emotion-toggle-item"
+            >
+              <div class="teacher-emotion-toggle-name">{{ emotion.name }}</div>
+              <div class="teacher-emotion-toggle-desc">{{ emotion.description }}</div>
             </div>
           </div>
         </div>
@@ -105,6 +124,7 @@
                 :src="getFlowerPotImage(letter.highlights.flowerOfTheWeek.imageFile3d.replace('.png', ''))"
                 :alt="letter.highlights.flowerOfTheWeek.flowerNameKr"
                 loading="lazy"
+                @error="handleImageError"
               />
             </div>
             <div class="teacher-flower-of-week-info">
@@ -285,10 +305,35 @@ let chartInstance = null
 const activeSection = ref('section-flowers')
 const isNavExpanded = ref(false)
 
-// 화분 이미지 가져오기
+// 감정 설명 토글 상태
+const showEmotionDescriptions = ref(false)
+
+// 주간 감정 설명 목록 (중복 제거)
+const weekEmotionDescriptions = computed(() => {
+  if (!props.letter?.weekFlowers) return []
+  const seen = new Set()
+  return props.letter.weekFlowers
+    .filter(day => day.hasEntry && day.emotionDescription)
+    .filter(day => {
+      if (seen.has(day.emotionName)) return false
+      seen.add(day.emotionName)
+      return true
+    })
+    .map(day => ({
+      name: day.emotionName,
+      description: day.emotionDescription
+    }))
+})
+
+// 화분 이미지 가져오기 (fallback 처리)
 const getFlowerPotImage = (flowerKey) => {
-  if (!flowerKey) return ''
+  if (!flowerKey) return '/flowers/3d_pot/unknown.png'
   return `/flowers/3d_pot/${flowerKey}.png`
+}
+
+// 이미지 로딩 실패 시 fallback 처리
+const handleImageError = (event) => {
+  event.target.src = '/flowers/3d_pot/unknown.png'
 }
 
 // 차트 생성

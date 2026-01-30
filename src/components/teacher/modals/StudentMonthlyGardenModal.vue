@@ -17,7 +17,6 @@
           <div class="teacher-tooltip-card">
             <div class="teacher-tooltip-flower-name">{{ getFlowerName(hoveredDay) }}</div>
             <div class="teacher-tooltip-meaning">"{{ getFlowerMeaning(hoveredDay) }}"</div>
-            <div class="teacher-tooltip-date">{{ currentYear }}.{{ String(currentMonth).padStart(2, '0') }}.{{ String(hoveredDay).padStart(2, '0') }}</div>
             <div class="teacher-tooltip-emotion">{{ getEmotionName(hoveredDay) }}</div>
           </div>
         </div>
@@ -97,9 +96,14 @@
             </div>
           </div>
 
-          <div class="teacher-garden-wrapper">
+          <div class="teacher-garden-wrapper" :style="{ backgroundColor: gardenBgColor }">
+            <!-- 움직이는 땡땡이 배경 -->
+            <div class="teacher-garden-dots">
+              <div class="teacher-dots-layer teacher-dots-layer-1" :style="dotsLayer1Style"></div>
+              <div class="teacher-dots-layer teacher-dots-layer-2" :style="dotsLayer2Style"></div>
+            </div>
             <!-- 화단 배경 이미지 -->
-            <img src="@/assets/images/garden-bg-rectangle.png" alt="화단" class="teacher-garden-bg-image" loading="lazy">
+            <img :src="gardenBgImage" alt="화단" class="teacher-garden-bg-image" loading="lazy">
 
             <!-- 격자 그리드로 꽃 배치 -->
             <div class="teacher-flower-grid" :style="gardenGridStyle">
@@ -216,7 +220,10 @@
                     class="teacher-emotion-bar-item"
                   >
                     <div class="teacher-emotion-bar-header">
-                      <span class="teacher-emotion-bar-name">{{ emotion.emotionNameKr }}</span>
+                      <span class="teacher-emotion-bar-name">
+                        {{ emotion.emotionNameKr }}
+                        <span v-if="emotion.emotion === getCoreEmotionCode(selectedDay)">⭐</span>
+                      </span>
                       <span class="teacher-emotion-bar-percent">{{ emotion.percent }}%</span>
                     </div>
                     <div class="teacher-emotion-bar-track">
@@ -226,6 +233,19 @@
                       ></div>
                     </div>
                   </div>
+                </div>
+              </div>
+
+              <!-- 감정 설명 -->
+              <div v-if="getEmotionDescriptions(selectedDay).length > 0" class="teacher-emotion-description-card">
+                <div class="teacher-emotion-label">감정 설명</div>
+                <div
+                  v-for="desc in getEmotionDescriptions(selectedDay)"
+                  :key="desc.name"
+                  class="teacher-emotion-description-item"
+                >
+                  <div class="teacher-emotion-description-name">{{ desc.name }}</div>
+                  <p class="teacher-emotion-description-text">{{ desc.description }}</p>
                 </div>
               </div>
             </div>
@@ -245,6 +265,7 @@
 import { ref, computed, watch } from 'vue'
 import BaseTeacherModal from './BaseTeacherModal.vue'
 import LazyImage from '@/components/common/LazyImage.vue'
+import { gardenBackgrounds, themeColors } from '@/composables/useTheme.js'
 
 const props = defineProps({
   modelValue: {
@@ -279,6 +300,42 @@ const isOpen = computed({
 const handleClose = () => {
   emit('close')
 }
+
+// 학생 테마 설정에 따른 화단 배경 이미지
+const gardenBgImage = computed(() => {
+  const bgId = props.monthlyEmotions?.themeGardenBg || 'default'
+  const bg = gardenBackgrounds.find(b => b.id === bgId)
+  return bg?.src || gardenBackgrounds[0].src
+})
+
+// 학생 테마 색상 가져오기
+const studentThemeColor = computed(() => {
+  const colorId = props.monthlyEmotions?.themeColor || 'yellow'
+  return themeColors.find(c => c.id === colorId) || themeColors[0]
+})
+
+// 화단 배경색
+const gardenBgColor = computed(() => studentThemeColor.value.background)
+
+// 땡땡이 레이어 1 (연한)
+const dotsLayer1Style = computed(() => {
+  const dotLight = studentThemeColor.value.dot.replace('{{opacity}}', '0.35')
+  return {
+    backgroundImage: `radial-gradient(circle at center, ${dotLight} 6px, transparent 6px)`,
+    backgroundSize: '50px 50px',
+    backgroundPosition: '0 0'
+  }
+})
+
+// 땡땡이 레이어 2 (진한, 대각선)
+const dotsLayer2Style = computed(() => {
+  const dotDark = studentThemeColor.value.dot.replace('{{opacity}}', '0.5')
+  return {
+    backgroundImage: `radial-gradient(circle at center, ${dotDark} 6px, transparent 6px)`,
+    backgroundSize: '50px 50px',
+    backgroundPosition: '25px 25px'
+  }
+})
 
 // 요일
 const weekDays = ['일', '월', '화', '수', '목', '금', '토']
@@ -464,6 +521,15 @@ const getEmotionAreaName = (day) => {
   return areaNames[emotion.coreEmotionDetail.emotionArea] || '알 수 없음'
 }
 
+// 핵심 감정 코드 가져오기
+const getCoreEmotionCode = (day) => {
+  const emotion = getEmotionForDay(day)
+  if (!emotion?.isAnalyzed || !emotion?.coreEmotionDetail) {
+    return null
+  }
+  return emotion.coreEmotionDetail.emotionCode
+}
+
 // 감정 분포 가져오기
 const getEmotionDistribution = (day) => {
   const emotion = getEmotionForDay(day)
@@ -471,6 +537,20 @@ const getEmotionDistribution = (day) => {
     return null
   }
   return emotion.emotions
+}
+
+// 감정 설명 목록 가져오기 (emotions 배열 내 emotionDescription)
+const getEmotionDescriptions = (day) => {
+  const emotion = getEmotionForDay(day)
+  if (!emotion?.isAnalyzed || !emotion?.emotions) {
+    return []
+  }
+  return emotion.emotions
+    .filter(e => e.emotionDescription)
+    .map(e => ({
+      name: e.emotionNameKr,
+      description: e.emotionDescription
+    }))
 }
 
 // 날짜의 요일 가져오기

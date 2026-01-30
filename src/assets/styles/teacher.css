@@ -3577,10 +3577,10 @@
 /* 꽃 그리드 */
 .teacher-flower-grid {
   position: absolute;
-  top: 21%;
+  top: 20%;
   left: 8%;
   width: 84%;
-  height: 49%;
+  height: 55%;
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 5px;
@@ -4023,7 +4023,7 @@
     top: 21%;
     left: 8%;
     width: 84%;
-    height: 49%;
+    height: 60%;
     gap: 3px;
     padding: 2% 4%;
   }
@@ -4088,7 +4088,7 @@
     top: 21%;
     left: 8%;
     width: 84%;
-    height: 49%;
+    height: 55%;
     gap: 2px;
     padding: 2% 4%;
   }
@@ -4148,7 +4148,7 @@
     top: 15%;
     left: 8%;
     width: 84%;
-    height: 55%;
+    height: 65%;
     gap: 2px;
     padding: 2% 4%;
   }
@@ -4208,7 +4208,7 @@
     top: 15%;
     left: 9%;
     width: 82%;
-    height: 60%;
+    height: 65%;
     gap: 2px;
     padding: 2% 4%;
   }
@@ -6634,4 +6634,144 @@
   .teacher-letter-detail-view {
     padding: 16px;
   }
+}
+
+/* ============================================
+   감정레터 상세 - 감정 설명 토글
+============================================ */
+.teacher-emotion-toggle-section {
+  margin-top: 16px;
+  border-top: 1px solid #E8DED0;
+  padding-top: 16px;
+}
+
+.teacher-emotion-toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 12px 16px;
+  background: #F8F3E8;
+  border: 1px solid #E8DED0;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #5D4E37;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.teacher-emotion-toggle-btn:hover {
+  background: #F0E8D8;
+}
+
+.teacher-toggle-arrow {
+  margin-left: auto;
+  font-size: 10px;
+  transition: transform 0.2s ease;
+}
+
+.teacher-toggle-arrow.is-open {
+  transform: rotate(180deg);
+}
+
+.teacher-emotion-toggle-content {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.teacher-emotion-toggle-item {
+  background: #FFFDF8;
+  border: 1px solid #E8DED0;
+  border-radius: 8px;
+  padding: 12px 16px;
+}
+
+.teacher-emotion-toggle-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #5D4E37;
+  margin-bottom: 6px;
+}
+
+.teacher-emotion-toggle-desc {
+  font-size: 13px;
+  color: #8B7355;
+  line-height: 1.6;
+}
+
+/* ============================================
+   월별 감정화단 - 움직이는 땡땡이 배경
+============================================ */
+.teacher-garden-dots {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.teacher-dots-layer {
+  position: absolute;
+  top: -50px;
+  left: -50px;
+  width: calc(100% + 100px);
+  height: calc(100% + 100px);
+}
+
+.teacher-dots-layer-1 {
+  animation: teacherMoveDots1 28s linear infinite;
+}
+
+.teacher-dots-layer-2 {
+  animation: teacherMoveDots2 28s linear infinite;
+}
+
+@keyframes teacherMoveDots1 {
+  0% { background-position: 0 0; }
+  100% { background-position: -500px 500px; }
+}
+
+@keyframes teacherMoveDots2 {
+  0% { background-position: 25px 25px; }
+  100% { background-position: -475px 525px; }
+}
+
+/* ============================================
+   월별 감정화단 - 감정 설명 카드
+============================================ */
+.teacher-emotion-description-card {
+  background: #FFFDF8;
+  border-radius: 12px;
+  padding: 16px;
+  margin-top: 12px;
+  border: 1px solid #E8DED0;
+}
+
+.teacher-emotion-description-item {
+  padding: 8px 0;
+}
+
+.teacher-emotion-description-item + .teacher-emotion-description-item {
+  border-top: 1px solid #E8DED0;
+}
+
+.teacher-emotion-description-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #5D4E37;
+  margin-bottom: 4px;
+}
+
+.teacher-emotion-description-text {
+  font-size: 13px;
+  color: #8B7355;
+  line-height: 1.7;
+  margin: 0;
 }
