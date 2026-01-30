@@ -217,6 +217,9 @@
       v-model="showLetterList"
       @select-letter="handleSelectLetter"
       @close="showLetterList = false"
+      @generate-success="handleGenerateSuccess"
+      @show-loading="handleShowLoading"
+      @hide-loading="handleHideLoading"
     />
 
     <!-- 감정 레터 상세 모달 -->
@@ -1579,6 +1582,22 @@ const handleBackToLetterList = () => {
   showLetterDetail.value = false
   showLetterList.value = true
   directDiary.value = null // 레터에서 조회한 일기 데이터 초기화
+}
+
+// 레터 발행 신청 성공
+const handleGenerateSuccess = () => {
+  showCustomAlert('감정 레터가 발행되었습니다!', 'success')
+}
+
+// 로딩 모달 표시
+const handleShowLoading = (message) => {
+  loadingMessage.value = message
+  showLoading.value = true
+}
+
+// 로딩 모달 숨김
+const handleHideLoading = () => {
+  showLoading.value = false
 }
 
 // ESC 키로 모달 닫기

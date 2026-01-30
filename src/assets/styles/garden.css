@@ -2294,6 +2294,7 @@ body,
 }
 
 .base-modal-body {
+  position: relative;
   padding: 25px;
   overflow-y: auto;
   flex: 1;
@@ -3354,6 +3355,7 @@ body,
 /* 커스텀 알럿 */
 .alert-modal {
   background: rgba(0, 0, 0, 0.6);
+  z-index: 99999;
 }
 
 .alert-content {
@@ -4978,6 +4980,272 @@ body,
 /* ============================================
    18. 감정 레터 관련
 ============================================ */
+
+/* 레터 목록 헤더 */
+.letter-list-header {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.letter-title-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.letter-list-title {
+  font-family: var(--font-title);
+  font-size: 20px;
+  color: #5D4E37;
+  margin: 0;
+}
+
+/* 헤더 발행 신청 버튼 */
+.header-generate-btn {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #E8D5B5 0%, #D4C4A8 100%);
+  border: 1px solid #C9B896;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.header-generate-btn:hover {
+  background: linear-gradient(135deg, #FFB74D 0%, #FF9800 100%);
+  border-color: #FF9800;
+  box-shadow: 0 2px 8px rgba(255, 152, 0, 0.3);
+}
+
+.header-btn-icon {
+  width: 18px;
+  height: 18px;
+  color: #8B7355;
+  transition: color 0.3s ease;
+}
+
+.header-generate-btn:hover .header-btn-icon {
+  color: #fff;
+}
+
+.header-btn-plus {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 14px;
+  height: 14px;
+  background: #A5D6A7;
+  color: #2E7D32;
+  border-radius: 50%;
+  font-size: 11px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.header-generate-btn:hover .header-btn-plus {
+  background: #4CAF50;
+  color: #fff;
+}
+
+/* 발행 신청 뷰 */
+.generate-view {
+  padding: 10px 0;
+}
+
+.generate-view .back-to-list-btn {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: #8B7355;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 16px;
+  border-radius: 0%;
+}
+
+.generate-view .back-to-list-btn:hover {
+  color: #5D4E37;
+  background: none;
+  border-bottom: 2px solid #5D4037;
+  border-radius: 0%;
+}
+
+.generate-guide {
+  background: linear-gradient(135deg, #FFF9E6 0%, #FFF4E0 100%);
+  border: 1px dashed #E8CD8E;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.generate-guide-text {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: #6B5B45;
+  line-height: 1.6;
+  margin: 0;
+  text-align: center;
+}
+
+.generate-limit-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px dashed #E8CD8E;
+}
+
+.limit-label {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: #8B7355;
+}
+
+.limit-value {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 700;
+  color: #4CAF50;
+  background: rgba(76, 175, 80, 0.1);
+  padding: 4px 10px;
+  border-radius: 12px;
+}
+
+.limit-value.no-remaining {
+  color: #E57373;
+  background: rgba(229, 115, 115, 0.1);
+}
+
+.generate-loading {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: #8B7355;
+  text-align: center;
+  padding: 40px 0;
+}
+
+/* 발행 횟수 초과 안내 */
+.generate-limit-exceeded {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.generate-limit-exceeded .limit-exceeded-message {
+  font-family: var(--font-title);
+  font-size: 18px;
+  color: #5D4E37;
+  margin: 0 0 8px 0;
+}
+
+.generate-limit-exceeded .limit-exceeded-sub {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: #8B7355;
+  margin: 0;
+}
+
+/* 신청 가능 주 목록 */
+.generate-week-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.generate-week-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid #E8CD8E;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+}
+
+.generate-week-item:hover {
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.week-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.week-period {
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 600;
+  color: #5D4E37;
+}
+
+.week-diary-count {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: #8B7355;
+}
+
+.week-generate-btn {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 18px;
+  background: linear-gradient(135deg, #FFE082 0%, #FFD54F 100%);
+  color: #5D4E37;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.week-generate-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(255, 213, 79, 0.4);
+}
+
+.week-generate-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* 신청 가능 주 없을 때 */
+.generate-empty {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.generate-empty .empty-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.generate-empty .empty-message {
+  font-family: var(--font-title);
+  font-size: 18px;
+  color: #5D4E37;
+  margin: 0 0 8px 0;
+}
+
+.generate-empty .empty-sub {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: #8B7355;
+  margin: 0;
+}
 
 /* 레터 필터 */
 .letter-filter {

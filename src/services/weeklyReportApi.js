@@ -297,3 +297,41 @@ export function transformWeeklyReportData(reportData) {
     weekKeywords: reportData.weekKeywords || null
   };
 }
+
+/**
+ * 발행 신청 가능한 주 목록 조회
+ * @returns {Promise<Object>} - { dailyLimit, usedCount, remainingCount, weeks }
+ */
+export async function getGenerableWeeks() {
+  try {
+    const response = await apiClient.get('/weekly-reports/generable');
+    return response.data;
+  } catch (error) {
+    console.error('발행 가능 주 목록 조회 실패:', error);
+    throw new Error('발행 가능한 주 목록을 불러오는 중 문제가 발생했습니다.');
+  }
+}
+
+/**
+ * 주간 리포트 발행 신청
+ * @param {string} startDate - 시작일 (YYYY-MM-DD)
+ * @param {string} endDate - 종료일 (YYYY-MM-DD)
+ * @returns {Promise<Object>} - 생성된 리포트 정보
+ */
+export async function generateWeeklyReport(startDate, endDate) {
+  try {
+    const response = await apiClient.post('/weekly-reports/generate', null, {
+      params: { startDate, endDate }
+    });
+    return response.data;
+  } catch (error) {
+    if (error.response?.status === 429) {
+      throw new Error('오늘의 레터 발행 횟수를 모두 사용했어요. 내일 다시 시도해주세요!');
+    }
+    if (error.response?.status === 400) {
+      throw new Error(error.response.data?.message || '발행 조건을 충족하지 못했습니다.');
+    }
+    console.error('주간 리포트 발행 실패:', error);
+    throw new Error('주간 리포트 발행 중 문제가 발생했습니다.');
+  }
+}
