@@ -68,13 +68,10 @@
     <div class="report-section">
       <h2 class="section-title">💭 감정 분석 정보</h2>
 
-      <div class="info-item">
-        <div class="info-label">대표 감정</div>
-        <div class="info-value highlight">
-          <p class="highlight-content">
-            {{ emotionName }}
-          </p>
-        </div>
+      <!-- 일기 요약 -->
+      <div class="info-item" v-if="diary?.summary">
+        <div class="info-label">일기 요약</div>
+        <div class="info-value">{{ diary.summary }}</div>
       </div>
 
       <!-- 감정 분포 차트 -->
@@ -86,7 +83,10 @@
             :key="emotion.emotion"
             class="emotion-bar-row"
           >
-            <div class="emotion-label">{{ emotion.emotionNameKr || emotion.emotion }}</div>
+            <div class="emotion-label">
+              {{ emotion.emotionNameKr || emotion.emotion }}
+              <span v-if="emotion.emotion === flowerDetail?.emotionCode">⭐</span>
+            </div>
             <div class="emotion-bar-wrapper">
               <div
                 class="emotion-bar"
@@ -97,18 +97,27 @@
               ></div>
               <span class="emotion-percent">{{ emotion.percent }}%</span>
             </div>
+            <div class="emotion-bar-description" v-if="emotion.emotionDescription">
+              {{ emotion.emotionDescription }}
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="info-item" v-if="diary?.reason">
-        <div class="info-label">분석 이유</div>
-        <div class="info-value">{{ diary.reason }}</div>
+      <!-- 대표 감정 -->
+      <div class="info-item">
+        <div class="info-label">대표 감정</div>
+        <div class="info-value highlight">
+          <p class="highlight-content">
+            {{ emotionName }}
+          </p>
+        </div>
       </div>
 
-      <div class="info-item" v-if="diary?.summary">
-        <div class="info-label">일기 요약</div>
-        <div class="info-value">{{ diary.summary }}</div>
+      <!-- 대표 감정 선정 이유 -->
+      <div class="info-item" v-if="diary?.reason">
+        <div class="info-label">선정 이유</div>
+        <div class="info-value">{{ diary.reason }}</div>
       </div>
     </div>
 
@@ -287,6 +296,20 @@ const flowerName = computed(() => {
   color: #5D4E37;
   margin-bottom: 6px;
   font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.emotion-bar-description {
+  margin-top: 4px;
+  padding: 8px 12px;
+  font-size: 14px;
+  color: #6B5B45;
+  line-height: 1.5;
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 6px;
+  border-left: 3px solid #E8CD8E;
 }
 
 .emotion-bar-wrapper {

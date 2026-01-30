@@ -62,6 +62,24 @@
               </div>
             </div>
           </div>
+
+          <!-- 감정 설명 토글 -->
+          <div class="emotion-toggle-section" v-if="weekEmotionDescriptions.length > 0">
+            <button class="emotion-toggle-btn" @click="showEmotionDescriptions = !showEmotionDescriptions">
+              <span>감정 설명 보기</span>
+              <span class="toggle-arrow" :class="{ 'is-open': showEmotionDescriptions }">▼</span>
+            </button>
+            <div class="emotion-toggle-content" v-if="showEmotionDescriptions">
+              <div
+                v-for="emotion in weekEmotionDescriptions"
+                :key="emotion.name"
+                class="emotion-toggle-item"
+              >
+                <div class="emotion-toggle-name">{{ emotion.name }}</div>
+                <div class="emotion-toggle-desc">{{ emotion.description }}</div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <!-- 주간 감정 그래프 -->
@@ -233,6 +251,26 @@ const handleBackToList = () => {
 const chartCanvas = ref(null)
 let chartInstance = null
 
+// 감정 설명 토글 상태
+const showEmotionDescriptions = ref(false)
+
+// 주간 감정 설명 목록 (중복 제거)
+const weekEmotionDescriptions = computed(() => {
+  if (!props.letter?.weekFlowers) return []
+  const seen = new Set()
+  return props.letter.weekFlowers
+    .filter(day => day.hasEntry && day.emotionDescription)
+    .filter(day => {
+      if (seen.has(day.emotionName)) return false
+      seen.add(day.emotionName)
+      return true
+    })
+    .map(day => ({
+      name: day.emotionName,
+      description: day.emotionDescription
+    }))
+})
+
 // 화분 이미지 가져오기
 const getFlowerPotImage = (flowerKey) => {
   if (!flowerKey) return ''
@@ -300,6 +338,8 @@ watch(() => props.modelValue, (newValue) => {
     setTimeout(() => {
       createChart()
     }, ANIMATION_DELAY.CHART_RENDER)
+  } else {
+    showEmotionDescriptions.value = false
   }
 })
 </script>

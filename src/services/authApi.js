@@ -21,7 +21,9 @@ export async function login(credentials) {
       userTypeCd: data.userTypeCd,
       schoolCode: data.schoolCode,
       schoolNm: data.schoolNm,
-      classCode: data.classCode
+      classCode: data.classCode,
+      themeColor: data.themeColor || 'yellow',
+      themeGardenBg: data.themeGardenBg || 'default'
     }
     localStorage.setItem('userInfo', JSON.stringify(userInfo))
 
@@ -115,10 +117,45 @@ export async function checkDuplicate(userId) {
   }
 }
 
+/**
+ * 내 정보 조회
+ * @returns {Promise} - { userSn, userId, name, userTypeCd, schoolCode, schoolNm, classCode, themeColor, themeGardenBg }
+ */
+export async function getMyInfo() {
+  try {
+    const accessToken = localStorage.getItem('accessToken')
+    const response = await axios.get(`${API_BASE_URL}/users/me`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    })
+
+    // userInfo를 localStorage에 저장
+    const data = response.data
+    const userInfo = {
+      userSn: data.userSn,
+      userId: data.userId,
+      name: data.name,
+      userTypeCd: data.userTypeCd,
+      schoolCode: data.schoolCode,
+      schoolNm: data.schoolNm,
+      classCode: data.classCode,
+      themeColor: data.themeColor || 'yellow',
+      themeGardenBg: data.themeGardenBg || 'default'
+    }
+    localStorage.setItem('userInfo', JSON.stringify(userInfo))
+
+    return data
+  } catch (error) {
+    throw new Error('사용자 정보 조회에 실패했습니다.')
+  }
+}
+
 export default {
   login,
   refreshAccessToken,
   logout,
   signup,
-  checkDuplicate
+  checkDuplicate,
+  getMyInfo
 }

@@ -250,6 +250,7 @@ export function transformWeeklyReportData(reportData) {
         day: dayOfWeek,
         flowerKey: diaryDetail.imageFile3d.replace('.png', ''), // .png 제거
         emotionName: diaryDetail.emotionNameKr,
+        emotionDescription: diaryDetail.emotionDescription || '',
         flowerName: diaryDetail.flowerNameKr,
         flowerMeaning: diaryDetail.flowerMeaning,
         diaryId: diaryDetail.diaryId,

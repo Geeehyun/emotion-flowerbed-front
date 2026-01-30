@@ -97,3 +97,122 @@ Claude가 직접 수행할 수 없는 작업(서버 설정, 배포, 인프라 �
 - "~~와 ~~의 차이가 뭔가요?"
 - "~~ 는 어떻게 동작하나요?"
 - "이게 왜 필요한가요?"
+
+---
+
+# API 명세서
+
+API 명세서는 백엔드 프로젝트에 위치합니다:
+- **경로**: `D:\vision\emotion-flowerbed-api\docs\api\`
+
+## API 문서 목록
+
+| 파일 | 설명 |
+|-----|------|
+| `auth.md` | 인증 API (로그인, 로그아웃, 회원가입, 토큰 갱신, 내 정보 조회) |
+| `student.md` | 학생 API (일기 CRUD, 감정 분석, 주간 리포트, 감정/꽃 정보, 설정) |
+| `teacher.md` | 선생님 API (학생 목록, 감정 현황, 위험 학생, 주간 리포트) |
+| `error.md` | 공통 에러 응답 명세 |
+
+## 주요 API 엔드포인트
+
+### 인증 (auth.md)
+- `POST /api/v1/auth/login` - 로그인
+- `POST /api/v1/auth/logout` - 로그아웃
+- `POST /api/v1/auth/signup` - 회원가입
+- `POST /api/v1/auth/refresh` - 토큰 갱신
+- `GET /api/v1/auth/check-duplicate` - ID 중복 확인
+- `GET /api/v1/users/me` - 내 정보 조회
+
+### 학생 (student.md)
+- `POST /api/v1/diaries` - 일기 작성
+- `POST /api/v1/diaries/{id}/analyze` - 일기 감정 분석
+- `GET /api/v1/diaries` - 월별 일기 목록
+- `GET /api/v1/diaries/{id}` - 일기 상세
+- `PUT /api/v1/diaries/{id}` - 일기 수정
+- `DELETE /api/v1/diaries/{id}` - 일기 삭제
+- `GET /api/v1/weekly-reports/list` - 주간 리포트 목록
+- `GET /api/v1/weekly-reports/{id}` - 주간 리포트 상세
+- `GET /api/v1/flowers/my-emotions` - 나의 감정 통계
+- `GET /api/v1/flowers/all-emotions` - 전체 감정-꽃 정보
+- `GET /api/v1/students/settings` - 내 설정 조회
+- `PUT /api/v1/students/settings` - 설정 수정
+
+### 선생님 (teacher.md)
+- `GET /api/v1/teachers/students` - 내 학생 목록
+- `GET /api/v1/teachers/daily-emotion-status` - 날짜별 감정 현황
+- `GET /api/v1/teachers/students/at-risk` - 위험 학생 리스트
+- `GET /api/v1/teachers/students/{sn}/weekly-reports` - 학생별 주간 리포트
+- `GET /api/v1/teachers/class/monthly-emotion-distribution` - 학급 월별 감정 분포
+
+## 주요 응답 필드
+
+### FlowerDetail (감정-꽃 상세)
+| 필드 | 설명 |
+|-----|------|
+| emotionCode | 감정 코드 (E001, E002 등) |
+| emotionNameKr | 감정 이름 (한글) |
+| emotionNameEn | 감정 이름 (영문) |
+| emotionDescription | 감정 설명 (정의, 상황 예시, 대처법) |
+| flowerNameKr | 꽃 이름 (한글) |
+| flowerNameEn | 꽃 이름 (영문) |
+| flowerMeaning | 꽃말 |
+| imageFile3d | 3D 이미지 파일명 |
+| area | 감정 영역 (RED/YELLOW/BLUE/GREEN) |
+
+---
+
+# 프로젝트 파일 구조
+
+## 프론트엔드 (emotion-flowerbed-front)
+
+```
+src/
+├── assets/
+│   ├── fonts/             # 폰트 파일
+│   ├── images/            # 이미지 파일
+│   │   ├── flowers/       # 꽃 3D 이미지
+│   │   └── thems/         # 테마 관련 이미지
+│   │       └── garden-bg/ # 화단 배경 이미지
+│   └── styles/            # CSS 파일
+│       ├── garden.css     # 학생 화면 스타일
+│       └── teacher.css    # 선생님 화면 스타일
+├── components/            # 재사용 컴포넌트
+│   ├── common/            # 공통 컴포넌트
+│   ├── diary/             # 일기 관련 컴포넌트
+│   ├── layout/            # 레이아웃 컴포넌트
+│   ├── modals/            # 모달 컴포넌트
+│   ├── report/            # 리포트 관련 컴포넌트
+│   └── settings/          # 설정 관련 컴포넌트
+├── composables/           # Vue Composables
+│   └── useTheme.js        # 테마 상태 관리
+├── config/                # 설정 파일
+│   └── menuConfig.js      # 메뉴 설정
+├── router/                # Vue Router 설정
+├── services/              # API 서비스
+│   ├── authApi.js         # 인증 API
+│   ├── diaryApi.js        # 일기 API
+│   ├── flowerApi.js       # 꽃/감정 API
+│   ├── studentApi.js      # 학생 설정 API
+│   ├── teacherApi.js      # 선생님 API
+│   └── weeklyReportApi.js # 주간 리포트 API
+├── stores/                # Pinia 스토어
+│   └── auth.js            # 인증 상태 관리
+└── views/                 # 페이지 뷰
+    ├── Garden.vue         # 학생 메인 화면
+    ├── Teacher.vue        # 선생님 화면
+    ├── Landing.vue        # 랜딩 페이지
+    ├── Login.vue          # 로그인 페이지
+    └── Signup.vue         # 회원가입 페이지
+```
+
+## 백엔드 API 문서 (emotion-flowerbed-api)
+
+```
+docs/
+└── api/
+    ├── auth.md      # 인증 API 명세
+    ├── student.md   # 학생 API 명세
+    ├── teacher.md   # 선생님 API 명세
+    └── error.md     # 공통 에러 응답 명세
+```

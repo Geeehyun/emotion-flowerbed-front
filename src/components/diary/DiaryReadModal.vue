@@ -43,6 +43,39 @@
                 <div class="analysis-value">{{ diary.summary || '요약 정보가 없습니다.' }}</div>
               </div>
 
+              <!-- 감정 분포 차트 -->
+              <div class="analysis-item emotion-chart-section" v-if="diary.emotions && diary.emotions.length > 0">
+                <div class="analysis-label section-label">감정 분포</div>
+                <div class="emotion-chart-wrapper">
+                  <Bar
+                    :data="emotionChartData"
+                    :options="emotionChartOptions"
+                  />
+                </div>
+                <!-- 감정별 설명 -->
+                <div class="emotion-descriptions">
+                  <div
+                    v-for="emotion in diary.emotions"
+                    :key="emotion.emotion"
+                    class="emotion-description-item"
+                    :class="{ 'is-core-emotion': emotion.emotion === flowerDetail?.emotionCode }"
+                  >
+                    <div class="emotion-description-header">
+                      <span
+                        class="emotion-color-dot"
+                        :style="{ backgroundColor: emotion.color }"
+                      ></span>
+                      <span class="emotion-name">{{ emotion.emotionNameKr }}</span>
+                      <span class="core-emotion-badge" v-if="emotion.emotion === flowerDetail?.emotionCode">대표</span>
+                      <span class="emotion-percent">{{ emotion.percent }}%</span>
+                    </div>
+                    <div class="emotion-description-text" v-if="emotion.emotionDescription">
+                      {{ emotion.emotionDescription }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               <!-- 대표 감정 -->
               <div class="analysis-item">
                 <div class="analysis-label section-label">대표 감정</div>
@@ -53,17 +86,6 @@
               <div class="analysis-item" v-if="diary.reason">
                 <div class="analysis-label section-label">선정 이유</div>
                 <div class="analysis-value">{{ diary.reason }}</div>
-              </div>
-
-              <!-- 감정 분포 차트 -->
-              <div class="analysis-item emotion-chart-section" v-if="diary.emotions && diary.emotions.length > 0">
-                <div class="analysis-label section-label">감정 분포</div>
-                <div class="emotion-chart-wrapper">
-                  <Bar
-                    :data="emotionChartData"
-                    :options="emotionChartOptions"
-                  />
-                </div>
               </div>
             </div>
 
@@ -311,6 +333,12 @@ const postitColor = computed(() => {
 const getEmotionName = (emotionCode) => {
   const emotionData = getEmotionData(props.allEmotionsData, emotionCode)
   return emotionData?.emotionNameKr || emotionCode
+}
+
+// 감정 코드로 감정 설명 가져오기
+const getEmotionDescription = (emotionCode) => {
+  const emotionData = getEmotionData(props.allEmotionsData, emotionCode)
+  return emotionData?.emotionDescription || ''
 }
 
 // 감정 차트 데이터

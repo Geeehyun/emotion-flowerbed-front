@@ -29,6 +29,16 @@
 :root {
   --font-title: 'Cafe24Ssurround', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   --font-body: 'Ownglyph_corncorn', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+
+  /* 테마 색상 변수 (기본값: 노랑) */
+  --theme-bg: #fff3d1;
+  --theme-dot-light: rgba(255, 193, 7, 0.35);
+  --theme-dot-dark: rgba(255, 193, 7, 0.5);
+  --theme-dot-base: #ffc107;
+  --theme-accent: rgba(139, 111, 71, 0.95);
+  --theme-accent-solid: #8B6F47;
+  --theme-accent-light: rgba(139, 111, 71, 0.15);
+  --theme-accent-border: #E8CD8E;
 }
 
 * {
@@ -56,7 +66,7 @@ body,
   width: 100%;
   height: 100%;
   z-index: 0;
-  background-color: #fff3d1;
+  background-color: var(--theme-bg);
   overflow: hidden;
 }
 
@@ -69,19 +79,19 @@ body,
   background-size: 50px 50px;
 }
 
-/* 레이어 1 - 진한 노랑 */
+/* 레이어 1 - 연한 땡땡이 */
 .dots-layer-1 {
   background-image:
-    radial-gradient(circle at center, rgba(255, 193, 7, 0.35) 6px, transparent 6px);
+    radial-gradient(circle at center, var(--theme-dot-light) 6px, transparent 6px);
   background-size: 50px 50px;
   background-position: 0 0;
   animation: moveDots1 28s linear infinite;
 }
 
-/* 레이어 2 - 더 진한 노랑 (대각선 배치) */
+/* 레이어 2 - 진한 땡땡이 (대각선 배치) */
 .dots-layer-2 {
   background-image:
-    radial-gradient(circle at center, rgba(255, 193, 7, 0.5) 6px, transparent 6px);
+    radial-gradient(circle at center, var(--theme-dot-dark) 6px, transparent 6px);
   background-size: 50px 50px;
   background-position: 25px 25px;
   animation: moveDots2 28s linear infinite;
@@ -240,6 +250,32 @@ body,
     inset 0 2px 4px rgba(255, 255, 255, 0.3);
 }
 
+/* 테마 설정 버튼 (우측) */
+.theme-btn {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  background: #FFF9E6;
+  border: 2px solid #E8CD8E;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  color: #8B6F47;
+  z-index: 30;
+}
+
+.theme-btn:hover {
+  transform: translateY(-50%) scale(1.1) rotate(45deg);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
 /* 물뿌리개 버튼 (제거됨) */
 .watering-can-btn {
   position: absolute;
@@ -331,9 +367,10 @@ body,
   padding: 10px 14px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
   text-align: center;
-  white-space: nowrap;
+  white-space: normal;
   font-family: 'Ownglyph_corncorn', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   min-width: 140px;
+  max-width: 280px;
   position: relative;
 }
 
@@ -351,10 +388,13 @@ body,
 }
 
 .tooltip-flower-name {
-  font-size: 18px;
-  font-weight: bold;
+  font-size: 12px;
   color: #5D4E37;
-  margin-bottom: 6px;
+  background: rgba(232, 205, 142, 0.3);
+  padding: 2px 10px;
+  border-radius: 10px;
+  display: inline-block;
+  margin-top: 4px;
 }
 
 .tooltip-meaning {
@@ -364,6 +404,17 @@ body,
   line-height: 1.4;
 }
 
+.tooltip-description {
+  font-size: 12px;
+  color: #5D4E37;
+  margin: 8px 0;
+  padding: 8px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 6px;
+  line-height: 1.5;
+  text-align: left;
+}
+
 .tooltip-date {
   font-size: 13px;
   color: #A68B6A;
@@ -371,13 +422,10 @@ body,
 }
 
 .tooltip-emotion {
-  font-size: 12px;
+  font-size: 18px;
+  font-weight: bold;
   color: #5D4E37;
-  background: rgba(232, 205, 142, 0.3);
-  padding: 2px 10px;
-  border-radius: 10px;
-  display: inline-block;
-  margin-top: 4px;
+  margin-bottom: 6px;
 }
 
 .garden-section {
@@ -418,9 +466,9 @@ body,
   display: grid;
   grid-template-columns: repeat(7, 1fr); /* 화단과 동일한 7열 그리드 */
   gap: 2%; /* 화단과 동일한 간격 */
-  background: linear-gradient(135deg, rgba(255, 249, 232, 0.95) 0%, rgba(255, 243, 205, 0.95) 100%);
+  background: var(--theme-bg);
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(139, 111, 71, 0.15);
+  box-shadow: 0 2px 8px var(--theme-accent-light);
   box-sizing: border-box;
 }
 
@@ -449,10 +497,10 @@ body,
 /* 격자 그리드 - 고정 레이어 구조 */
 .flower-grid {
   position: absolute;
-  top: 13%;
+  top: 15%;
   left: 8%;
   width: 84%;
-  height: 63%;
+  height: 68%;
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   /* grid-template-rows는 Vue에서 동적으로 설정 */
@@ -514,12 +562,12 @@ body,
   height: 45px;
   border-radius: 50%;
   background: linear-gradient(145deg, rgba(139, 111, 71, 0.25), rgba(107, 84, 57, 0.25));
-  border: 2px dashed rgba(139, 111, 71, 0.4);
+  border: 2px dashed rgba(182, 157, 123, 0.4);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 16px;
-  color: rgba(232, 205, 142, 0.9); /* 밝은 베이지색 */
+  color: rgba(248, 225, 172, 0.9); /* 밝은 베이지색 */
   font-weight: bold;
   box-shadow:
     inset 0 2px 4px rgba(0,0,0,0.15),
@@ -540,7 +588,7 @@ body,
 .empty-slot.future-date {
   background: linear-gradient(145deg, rgba(139, 111, 71, 0.1), rgba(107, 84, 57, 0.1));
   border: 2px dashed rgba(139, 111, 71, 0.2);
-  color: rgba(232, 205, 142, 0.4);
+  color: rgba(248, 225, 172, 0.5);
   cursor: not-allowed;
 }
 
@@ -587,7 +635,7 @@ body,
   font-family: 'Ownglyph_corncorn', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   font-size: 14px;
   font-weight: bold;
-  color: #A68B6A; /* 꽃 툴팁 날짜와 동일한 색상 */
+  color: #A68B6A;
   position: relative;
 }
 
@@ -1237,6 +1285,18 @@ body,
   border: 2px solid #E8CD8E;
 }
 
+/* 감정 설명 */
+.analysis-description {
+  margin-top: 12px;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 8px;
+  font-size: 14px;
+  color: #5D4E37;
+  line-height: 1.6;
+  border-left: 3px solid #E8CD8E;
+}
+
 /* 감정 차트 섹션 */
 .emotion-chart-section {
   margin-top: 24px;
@@ -1254,6 +1314,69 @@ body,
 /* 차트가 1개일 때 */
 .emotion-chart-wrapper:has(canvas) {
   min-height: 100px;
+}
+
+/* 감정별 설명 영역 */
+.emotion-descriptions {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.emotion-description-item {
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 8px;
+  border-left: 3px solid #E8CD8E;
+}
+
+.emotion-description-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.emotion-color-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.emotion-description-header .emotion-name {
+  font-size: 15px;
+  font-weight: bold;
+  color: #5D4E37;
+}
+
+.emotion-description-header .emotion-percent {
+  font-size: 13px;
+  color: #8B7355;
+  margin-left: auto;
+}
+
+.emotion-description-text {
+  font-size: 13px;
+  color: #5D4E37;
+  line-height: 1.6;
+}
+
+/* 대표 감정 표시 */
+.emotion-description-item.is-core-emotion {
+  border-left-color: #8B6F47;
+  background: rgba(232, 205, 142, 0.2);
+}
+
+.core-emotion-badge {
+  font-size: 11px;
+  font-weight: bold;
+  color: #fff;
+  background: #8B6F47;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-left: 4px;
 }
 
 /* 차트 컨테이너 */
@@ -4068,6 +4191,17 @@ body,
   color: #8B7355;
 }
 
+.detail-emotion-description {
+  margin: 16px 0;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 8px;
+  font-size: 14px;
+  color: #5D4E37;
+  line-height: 1.6;
+  text-align: left;
+}
+
 .detail-body {
   display: flex;
   flex-direction: column;
@@ -4506,8 +4640,8 @@ body,
   }
 
   .tooltip-flower-name {
-    font-size: 16px;
-    margin-bottom: 4px;
+    font-size: 10px;
+    padding: 2px 6px;
   }
 
   .tooltip-meaning {
@@ -4515,13 +4649,19 @@ body,
     margin-bottom: 4px;
   }
 
+  .tooltip-description {
+    font-size: 10px;
+    margin: 6px 0;
+    padding: 6px;
+  }
+
   .tooltip-date {
     font-size: 11px;
   }
 
   .tooltip-emotion {
-    font-size: 10px;
-    padding: 2px 6px;
+    font-size: 16px;
+    margin-bottom: 4px;
   }
 }
 
@@ -5265,6 +5405,71 @@ body,
   padding: 20px;
   border-radius: 12px;
   border: 2px solid #FFE082;
+}
+
+/* 감정 설명 토글 */
+.emotion-toggle-section {
+  margin-top: 16px;
+}
+
+.emotion-toggle-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  padding: 10px 16px;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px dashed #E8CD8E;
+  border-radius: 8px;
+  color: #8B6F47;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.emotion-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.toggle-arrow {
+  font-size: 10px;
+  transition: transform 0.3s ease;
+}
+
+.toggle-arrow.is-open {
+  transform: rotate(180deg);
+}
+
+.emotion-toggle-content {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.emotion-toggle-item {
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 8px;
+  border-left: 3px solid #E8CD8E;
+}
+
+.emotion-toggle-name {
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 700;
+  color: #5D4E37;
+  margin-bottom: 4px;
+}
+
+.emotion-toggle-desc {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: #6B5B45;
+  line-height: 1.5;
 }
 
 .weekly-calendar {
@@ -7214,7 +7419,8 @@ body,
   transition: opacity 0.3s ease-in-out;
 }
 
-.lazy-image-wrapper img.image-loaded {
+.lazy-image-wrapper img.image-loaded,
+.lazy-image-wrapper img.fallback-image {
   opacity: 1;
 }
 

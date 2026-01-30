@@ -29,12 +29,18 @@
           :class="`detail-${selectedEmotionData.area}`"
         >
           <div class="detail-header">
-            <h3 class="detail-title">
+            <h3 class="detail-title">{{ selectedEmotionData.emotionNameKr }}</h3>
+            <p class="detail-subtitle">
               {{ selectedEmotionData.flowerNameKr }}
               <span class="detail-name-en">({{ selectedEmotionData.flowerNameEn }})</span>
-            </h3>
-            <p class="detail-subtitle">{{ selectedEmotionData.emotionNameKr }}</p>
+            </p>
           </div>
+
+          <!-- 감정 설명 -->
+          <div class="detail-emotion-description" v-if="selectedEmotionData.emotionDescription">
+            {{ selectedEmotionData.emotionDescription }}
+          </div>
+
           <div class="detail-body">
             <div class="detail-image">
               <LazyImage
@@ -146,8 +152,8 @@
               />
             </div>
             <div class="card-info">
-              <div class="card-flower-name">{{ emotion.flowerNameKr }}</div>
               <div class="card-emotion-name">{{ emotion.emotionNameKr }}</div>
+              <div class="card-flower-name">{{ emotion.flowerNameKr }}</div>
             </div>
             <div v-if="!isAcquired(emotion.emotionCode)" class="lock-icon">🔒</div>
           </div>

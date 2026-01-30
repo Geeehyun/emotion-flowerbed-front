@@ -20,6 +20,14 @@
       <h1 class="page-title desktop-title">나의 감정 화단</h1>
       <!-- 모바일: 두 줄 타이틀 -->
       <h1 class="page-title mobile-title">나의<br>감정 화단</h1>
+      <!-- 테마 설정 버튼 (우측) -->
+      <button
+        class="theme-btn"
+        @click="showThemeSettings = true"
+        title="테마 설정"
+      >
+        <Cog6ToothIcon class="w-7 h-7" />
+      </button>
     </div>
 
     <div class="main-container">
@@ -35,7 +43,7 @@
 
         <div class="garden-wrapper">
           <!-- 화단 배경 이미지 -->
-          <img src="../assets/images/garden-bg-rectangle.png" alt="화단" class="garden-bg-image" loading="lazy">
+          <img :src="getCurrentGardenBg().src" alt="화단" class="garden-bg-image" loading="lazy">
 
           <!-- 격자 그리드로 꽃 배치 -->
           <div
@@ -59,10 +67,9 @@
                   />
                   <div class="tooltip">
                     <div class="tooltip-card">
-                      <div class="tooltip-flower-name">{{ getFlowerName(day) }}</div>
-                      <div class="tooltip-meaning">"{{ getFlowerMeaning(day) }}"</div>
                       <div class="tooltip-date">{{ diaryData[day].date }}</div>
                       <div class="tooltip-emotion">{{ getEmotionNameKr(day) }}</div>
+                      <div class="tooltip-flower-name">{{ getFlowerName(day) }}</div>
                     </div>
                   </div>
                 </div>
@@ -196,6 +203,9 @@
       @menu-select="handleMenuSelect"
     />
 
+    <!-- 테마 설정 모달 -->
+    <ThemeSettings v-model="showThemeSettings" />
+
     <!-- 레터 알림 모달 -->
     <LetterNotificationModal
       v-model="showLetterNotification"
@@ -256,12 +266,13 @@
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted, nextTick, watch } from 'vue'
+import { useTheme } from '@/composables/useTheme.js'
 import { get3dImageFromDetail, get3dPotImageFromDetail, getRealisticImageFromDetail, getEmotionData, UNKNOWN_EMOTION } from '../utils/flowerMapper.js'
 import { AREA_EMOJIS, AREA_SHORT_NAMES } from '../utils/emotionAreaMapper.js'
 import * as diaryApi from '../services/diaryApi.js'
 import * as weeklyReportApi from '../services/weeklyReportApi.js'
 import { logout } from '../services/authApi.js'
-import { ArrowPathIcon, XMarkIcon, PlusCircleIcon, ArrowDownTrayIcon, BookOpenIcon, Bars3Icon } from '@heroicons/vue/24/outline'
+import { ArrowPathIcon, XMarkIcon, PlusCircleIcon, ArrowDownTrayIcon, BookOpenIcon, Bars3Icon, Cog6ToothIcon } from '@heroicons/vue/24/outline'
 import html2canvas from 'html2canvas'
 
 // 컴포넌트 import
@@ -286,6 +297,7 @@ import LetterDetailModal from '@/components/letter/LetterDetailModal.vue'
 import MoodMeterGuideModal from '@/components/guide/MoodMeterGuideModal.vue'
 import EmotionControlModal from '@/components/common/modals/EmotionControlModal.vue'
 import EmotionContinuousToast from '@/components/common/EmotionContinuousToast.vue'
+import ThemeSettings from '@/components/settings/ThemeSettings.vue'
 
 // 유틸리티
 import * as dateUtils from '@/utils/dateUtils.js'
@@ -353,6 +365,10 @@ const continuousEmotionData = ref({
   activityIcon: '',
   emotionArea: 'red'
 })
+const showThemeSettings = ref(false) // 테마 설정 모달 표시 상태
+
+// 테마 관리
+const { state: themeState, getCurrentGardenBg, initTheme } = useTheme()
 
 // 포스트잇 드래그 상태
 const postitPositions = ref({
@@ -483,6 +499,12 @@ const getFlowerMeaning = (day) => {
 const getEmotionNameKr = (day) => {
   const flowerData = getFlowerDataForDay(day)
   return flowerData.emotionNameKr || '알 수 없음'
+}
+
+// 특정 날짜의 감정 설명 가져오기
+const getEmotionDescription = (day) => {
+  const flowerData = getFlowerDataForDay(day)
+  return flowerData.emotionDescription || ''
 }
 
 // Computed
@@ -1442,6 +1464,9 @@ const handleMenuSelect = (menuId) => {
     case 'emotion-care':
       openEmotionControl()
       break
+    case 'theme-settings':
+      showThemeSettings.value = true
+      break
     case 'logout':
       handleLogout()
       break
@@ -1619,6 +1644,9 @@ watch(showLetterNotification, async (isOpen) => {
 
 onMounted(async () => {
   document.addEventListener('keydown', handleEscKey)
+
+  // 테마 초기화 (userInfo 없으면 API에서 가져옴)
+  await initTheme()
 
   // 페이지 로드 시 현재 월의 일기 목록 로드
   await loadMonthlyDiaries()
