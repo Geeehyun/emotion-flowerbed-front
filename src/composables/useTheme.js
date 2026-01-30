@@ -9,8 +9,8 @@ import { getSettings, updateSettings } from '@/services/studentApi'
 import { getMyInfo } from '@/services/authApi'
 
 // 화단 배경 이미지 import (Vite 정적 import)
-import gardenBgDefault from '@/assets/images/thems/garden-bg/default.png'
-import gardenBgStone from '@/assets/images/thems/garden-bg/stone.png'
+import gardenBgDefault from '@/assets/images/thems/garden-bg/default.webp'
+import gardenBgStone from '@/assets/images/thems/garden-bg/stone.webp'
 
 // 테마 색상 옵션
 export const themeColors = [
