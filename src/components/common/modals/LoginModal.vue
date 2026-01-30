@@ -122,7 +122,6 @@ const handleTestLogin = (event) => {
   const target = event.target;
   const id = target.dataset.id;
   const password = target.dataset.password;
-  console.log(id, password);
   // 환경변수에서 테스트 계정 정보 가져오기
   loginForm.value.userId = id;
   loginForm.value.password = password;

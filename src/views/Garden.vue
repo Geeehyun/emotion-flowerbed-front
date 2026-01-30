@@ -595,7 +595,6 @@ const loadMonthlyDiaries = async () => {
     const yearMonth = dateUtils.formatYearMonth(currentYear.value, currentMonth.value)
     const response = await diaryApi.getDiaries(yearMonth)
 
-    console.log('월별 일기 목록:', response)
 
     // 일기 데이터 초기화 후 새로 채우기
     diaryData.value = {}
@@ -764,10 +763,6 @@ const saveDiary = async (isTest = true, area = null) => {
     return
   }
 
-  console.log(`${currentDay.value}일 일기 저장:`, diaryContent.value)
-  console.log(`분석 모드: ${isTest ? '테스트(랜덤)' : 'AI LLM'}`)
-  if (area) console.log(`선택 영역: ${area}`)
-
   // 로딩 화면 표시
   showWriteModal.value = false
   loadingMessage.value = 'AI가 당신의 감정을 분석하고 있어요...'
@@ -790,14 +785,10 @@ const saveDiary = async (isTest = true, area = null) => {
       isAnalyzed: false
     }
 
-    console.log('일기 생성 성공:', createdDiary)
-
     // 3. 감정 분석 API 호출 (테스트 or Claude AI)
     const analyzedDiary = isTest
       ? await diaryApi.analyzeDiaryTest(createdDiary.diaryId, area)
       : await diaryApi.analyzeDiary(createdDiary.diaryId)
-
-    console.log('감정 분석 결과:', analyzedDiary)
 
     // 4. 화면에 표시
     diaryData.value[currentDay.value] = {
@@ -985,9 +976,6 @@ const saveFlowerAsImage = async () => {
     // iOS 감지
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream
 
-    console.log('리포트 생성 시작 (iOS:', isIOS, ')')
-    console.log('reportCaptureRef:', reportCaptureRef.value)
-
     // 로딩 모달 표시
     loadingMessage.value = '리포트를 생성하는 중...'
     showLoading.value = true
@@ -997,12 +985,10 @@ const saveFlowerAsImage = async () => {
 
     // iOS에서는 이미지 로딩을 추가로 대기
     if (isIOS) {
-      console.log('#0 iOS 이미지 로딩 대기 시작 (2초)')
       await new Promise(resolve => setTimeout(resolve, 2000)) // iOS는 더 길게 대기 (2초)
 
       // 모든 이미지가 로드될 때까지 대기
       const images = reportCaptureRef.value.querySelectorAll('img')
-      console.log('#0-1 이미지 로드 확인:', images.length, '개')
 
       await Promise.all(
         Array.from(images).map((img) => {
@@ -1016,7 +1002,6 @@ const saveFlowerAsImage = async () => {
         })
       )
 
-      console.log('#0-2 모든 이미지 로드 완료 또는 타임아웃')
     }
 
     // iOS Safari 호환 설정
@@ -1026,7 +1011,7 @@ const saveFlowerAsImage = async () => {
       scale: isIOS ? 1 : REPORT_CAPTURE.SCALE, // iOS는 scale을 더 낮춤 (메모리 절약)
       useCORS: true,
       allowTaint: false, // Safari에서 CORS 문제 회피 (중요!)
-      logging: true, // 디버깅을 위해 항상 로그 활성화
+      logging: false,
       width: REPORT_CAPTURE.WIDTH,
       windowWidth: REPORT_CAPTURE.WIDTH,
       scrollY: 0, // 명시적으로 0 설정
@@ -1036,7 +1021,6 @@ const saveFlowerAsImage = async () => {
       removeContainer: true, // 렌더링 후 임시 컨테이너 제거
       // Safari 전용 콜백
       onclone: (clonedDoc) => {
-        console.log('#2 onclone 콜백 실행')
         const clonedElement = clonedDoc.querySelector('.report-capture-container')
         if (clonedElement) {
           // Safari에서 스타일 강제 적용
@@ -1048,12 +1032,8 @@ const saveFlowerAsImage = async () => {
 
           // 모든 이미지에 대해 로드 완료 보장
           const images = clonedElement.querySelectorAll('img')
-          console.log('#3 이미지 개수:', images.length)
-          images.forEach((img, index) => {
-            if (img.complete) {
-              console.log(`#4-${index} 이미지 로드 완료:`, img.src.substring(0, 50))
-            } else {
-              console.warn(`#4-${index} 이미지 미완료:`, img.src.substring(0, 50))
+          images.forEach((img) => {
+            if (!img.complete) {
               // 이미지가 로드되지 않았으면 강제로 빈 이미지 대체
               img.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg"%3E%3C/svg%3E'
             }
@@ -1062,17 +1042,11 @@ const saveFlowerAsImage = async () => {
       }
     }
 
-    console.log('html2canvas 옵션:', canvasOptions)
-
     const canvas = await html2canvas(element, canvasOptions)
-
-    console.log('캔버스 생성 완료:', canvas.width, 'x', canvas.height)
 
     // 캔버스를 Data URL로 변환하여 미리보기에 표시
     const quality = isIOS ? 0.8 : 0.95 // iOS는 품질을 더 낮춤
     previewImageUrl.value = canvas.toDataURL('image/png', quality)
-
-    console.log('이미지 데이터 생성 완료')
 
     // 로딩 모달 숨김
     showLoading.value = false
@@ -1080,12 +1054,8 @@ const saveFlowerAsImage = async () => {
     // 미리보기 모달 표시
     showImagePreview.value = true
 
-    console.log('이미지 생성 성공 (iOS:', isIOS, ')')
   } catch (error) {
     console.error('이미지 저장 에러:', error)
-    console.error('에러 타입:', error.name)
-    console.error('에러 메시지:', error.message)
-    console.error('에러 스택:', error.stack)
 
     // 로딩 모달 숨김
     showLoading.value = false
@@ -1319,8 +1289,6 @@ const reanalyzeDiary = async () => {
 // 일기 삭제
 const deleteDiaryEntry = async () => {
   if (!currentDiary.value?.id) {
-    console.log('삭제불가');
-    console.log(currentDiary.value);
     return;
   }
 
@@ -1362,8 +1330,6 @@ const loadMyEmotions = async () => {
   try {
     const response = await diaryApi.getMyEmotions()
     myEmotionsData.value = response.items || []
-    console.log('[내 감정 데이터]', myEmotionsData.value)
-    console.log('[획득한 감정 코드]', Array.from(acquiredEmotions.value))
   } catch (error) {
     console.error('내 감정 로드 에러:', error)
     myEmotionsData.value = []
